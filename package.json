@@ -1,0 +1,12 @@
+{
+  "name": "careerlens",
+  "private": true,
+  "packageManager": "pnpm@10.12.3",
+  "scripts": {
+    "gen:client": "openapi-typescript contracts/openapi.yaml -o packages/api-client/schema.d.ts"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.4.0",
+    "typescript": "^5.6.0"
+  }
+}

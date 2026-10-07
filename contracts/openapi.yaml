@@ -32,6 +32,7 @@ paths:
       operationId: getHealth
       security: []
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: OK
           content:
@@ -49,6 +50,7 @@ paths:
       tags: [meta]
       operationId: listRoles
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: Role catalogue
           content:
@@ -60,6 +62,7 @@ paths:
       tags: [profiles]
       operationId: getMe
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: Current user's profile (demo profile when DEV_AUTH=1)
           content:
@@ -77,6 +80,7 @@ paths:
           application/json:
             schema: { $ref: "#/components/schemas/ProfileCreate" }
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "201":
           description: Created
           content:
@@ -90,6 +94,7 @@ paths:
       tags: [profiles]
       operationId: getProfile
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: OK
           content:
@@ -105,6 +110,7 @@ paths:
           application/json:
             schema: { $ref: "#/components/schemas/ProfileUpdate" }
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: OK
           content:
@@ -116,6 +122,7 @@ paths:
       operationId: deleteProfile
       description: Deletes the profile and all its documents, analyses and applications ("delete my data").
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "204": { description: Deleted }
         "404": { $ref: "#/components/responses/NotFound" }
 
@@ -136,6 +143,7 @@ paths:
                 kind: { type: string, enum: [resume, linkedin] }
                 file: { type: string, format: binary }
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: Stored and text-extracted
           content:
@@ -160,6 +168,7 @@ paths:
                 role_id: { type: string, examples: [sde-backend] }
                 force_refresh: { type: boolean, default: false, description: Bypass cache }
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "202":
           description: Accepted; poll GET /v1/analyses/{analysis_id}
           content:
@@ -175,6 +184,7 @@ paths:
       operationId: listAnalyses
       description: History, newest first (for progress-over-time chart)
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: OK
           content:
@@ -187,6 +197,7 @@ paths:
       tags: [analyses]
       operationId: getAnalysis
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: Status, plus report when status=done
           content:
@@ -206,11 +217,38 @@ paths:
           application/json:
             schema: { $ref: "#/components/schemas/SimulationRequest" }
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: OK
           content:
             application/json:
               schema: { $ref: "#/components/schemas/SimulationResult" }
+
+  /v1/analyses/{analysis_id}/roadmap/{milestone_id}:
+    parameters:
+      - { $ref: "#/components/parameters/AnalysisId" }
+      - { name: milestone_id, in: path, required: true, schema: { type: string } }
+    patch:
+      tags: [analyses]
+      operationId: updateMilestone
+      description: Tick a roadmap milestone. Does not change the score; a re-scan does.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [done]
+              properties:
+                done: { type: boolean }
+      responses:
+        default: { $ref: "#/components/responses/Error" }
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RoadmapMilestone" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /v1/analyses/{analysis_id}/quizzes:
     parameters: [{ $ref: "#/components/parameters/AnalysisId" }]
@@ -226,6 +264,7 @@ paths:
           application/json:
             schema: { $ref: "#/components/schemas/QuizCreate" }
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "201":
           description: Created
           content:
@@ -233,7 +272,7 @@ paths:
               schema: { $ref: "#/components/schemas/Quiz" }
         "404": { $ref: "#/components/responses/NotFound" }
         "429":
-          description: Verify cooldown active (details.retry_at) or LLM quota exhausted
+          description: Verify cooldown active (details.retake_available_at) or LLM quota exhausted
           content:
             application/json:
               schema: { $ref: "#/components/schemas/Error" }
@@ -245,6 +284,7 @@ paths:
       operationId: getQuiz
       description: Resume a quiz. In verify mode returns only answered questions plus the current one, and records served_at for it.
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: OK
           content:
@@ -264,6 +304,7 @@ paths:
           application/json:
             schema: { $ref: "#/components/schemas/QuizAnswer" }
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: OK
           content:
@@ -282,6 +323,7 @@ paths:
       operationId: submitQuiz
       description: Grades remaining answers, sets the project's understanding (verify mode) and re-runs scoring.
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: OK
           content:
@@ -293,12 +335,33 @@ paths:
             application/json:
               schema: { $ref: "#/components/schemas/Error" }
 
+  /v1/quizzes/{quiz_id}/result:
+    parameters: [{ $ref: "#/components/parameters/QuizId" }]
+    get:
+      tags: [quizzes]
+      operationId: getQuizResult
+      description: Result of a submitted (or auto-submitted) quiz. Same body as submit returned.
+      responses:
+        default: { $ref: "#/components/responses/Error" }
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/QuizResult" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409":
+          description: Quiz not submitted yet
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+
   /v1/profiles/{profile_id}/quizzes:
     parameters: [{ $ref: "#/components/parameters/ProfileId" }]
     get:
       tags: [quizzes]
       operationId: listQuizzes
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: Newest first
           content:
@@ -321,6 +384,7 @@ paths:
                 profile_id: { type: string, format: uuid }
                 posting: { $ref: "#/components/schemas/JobPosting" }
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: OK
           content:
@@ -339,6 +403,7 @@ paths:
       parameters:
         - { name: profile_id, in: query, required: true, schema: { type: string, format: uuid } }
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: OK
           content:
@@ -353,6 +418,7 @@ paths:
           application/json:
             schema: { $ref: "#/components/schemas/ApplicationCreate" }
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "201":
           description: Created
           content:
@@ -371,6 +437,7 @@ paths:
           application/json:
             schema: { $ref: "#/components/schemas/ApplicationUpdate" }
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: OK
           content:
@@ -381,6 +448,7 @@ paths:
       tags: [applications]
       operationId: deleteApplication
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "204": { description: Deleted }
 
   /v1/applications/{application_id}/tailored-resume:
@@ -391,6 +459,7 @@ paths:
       operationId: tailorResume
       description: P2. Rewrites using verified facts only.
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: OK
           content:
@@ -402,6 +471,7 @@ paths:
       tags: [cohorts]
       operationId: listCohorts
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: OK
           content:
@@ -416,6 +486,7 @@ paths:
       tags: [cohorts]
       operationId: getCohortInsights
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: OK
           content:
@@ -431,6 +502,7 @@ paths:
       tags: [cohorts]
       operationId: listCohortStudents
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: OK
           content:
@@ -445,6 +517,7 @@ paths:
       tags: [cohorts]
       operationId: exportCohort
       responses:
+        default: { $ref: "#/components/responses/Error" }
         "200":
           description: CSV file
           content:
@@ -504,6 +577,19 @@ components:
               skill_id: { type: string }
               skill_name: { type: string }
               importance: { type: integer, minimum: 1, maximum: 3 }
+      examples:
+        - id: sde-backend
+          name: Backend Developer
+          category: engineering
+          skills:
+            - { skill_id: python, skill_name: Python, importance: 3 }
+            - { skill_id: sql, skill_name: SQL, importance: 3 }
+            - { skill_id: fastapi, skill_name: FastAPI, importance: 2 }
+            - { skill_id: docker, skill_name: Docker, importance: 2 }
+            - { skill_id: ci-cd, skill_name: CI/CD, importance: 2 }
+            - { skill_id: redis, skill_name: Redis, importance: 2 }
+            - { skill_id: aws, skill_name: AWS, importance: 2 }
+            - { skill_id: kubernetes, skill_name: Kubernetes, importance: 1 }
 
     Resource:
       type: object
@@ -553,6 +639,21 @@ components:
             latest_analysis_id: { type: [string, "null"], format: uuid }
             latest_score: { type: [number, "null"] }
             created_at: { type: string, format: date-time }
+      examples:
+        - id: 3f2b8c1e-5d47-4a9b-8e21-7c6a0f9d1b34
+          name: Demo Student
+          email: null
+          github_username: careerlens-demo
+          portfolio_urls: []
+          linkedin_text: null
+          target_role_id: sde-backend
+          department: CSE
+          cohort_id: 6b1f4c2a-9d3e-4f7a-8c55-2e0a7d9b1c44
+          has_resume: true
+          has_linkedin: true
+          latest_analysis_id: 9a7d2e40-1c3b-4f58-b6a9-0d5e8c2f7a11
+          latest_score: 65.1
+          created_at: "2026-10-01T09:30:00Z"
 
     # ---------- analyses ----------
     AnalysisStage:
@@ -561,7 +662,7 @@ components:
 
     AnalysisStatus:
       type: object
-      required: [id, profile_id, role_id, status, created_at]
+      required: [id, profile_id, role_id, status, progress, created_at]
       properties:
         id: { type: string, format: uuid }
         profile_id: { type: string, format: uuid }
@@ -571,6 +672,15 @@ components:
         error: { type: [string, "null"] }
         created_at: { type: string, format: date-time }
         finished_at: { type: [string, "null"], format: date-time }
+      examples:
+        - id: 9a7d2e40-1c3b-4f58-b6a9-0d5e8c2f7a11
+          profile_id: 3f2b8c1e-5d47-4a9b-8e21-7c6a0f9d1b34
+          role_id: sde-backend
+          status: done
+          progress: 100
+          error: null
+          created_at: "2026-10-07T10:15:00Z"
+          finished_at: "2026-10-07T10:15:48Z"
 
     AnalysisSummary:
       type: object
@@ -581,7 +691,16 @@ components:
         status: { $ref: "#/components/schemas/AnalysisStage" }
         score: { type: [number, "null"] }
         coverage: { type: [number, "null"] }
+        verified_skills: { type: [integer, "null"], description: Claimed skills at strong or moderate }
         created_at: { type: string, format: date-time }
+      examples:
+        - id: 9a7d2e40-1c3b-4f58-b6a9-0d5e8c2f7a11
+          role_id: sde-backend
+          status: done
+          score: 65.1
+          coverage: 62.5
+          verified_skills: 5
+          created_at: "2026-10-07T10:15:00Z"
 
     Analysis:
       allOf:
@@ -617,7 +736,368 @@ components:
             - $ref: "#/components/schemas/ConsistencySummary"
             - type: "null"
         evidence: { type: array, items: { $ref: "#/components/schemas/Evidence" } }
-        notes: { type: array, items: { type: string }, description: Data gaps, reweighting, caps applied }
+        notes: { type: array, items: { type: string }, description: "Data gaps, reweighting, caps applied" }
+      # Synthetic persona used by every example: B.Tech CSE student targeting sde-backend.
+      # The &ex_* anchors are reused by the examples of the nested schemas below.
+      examples:
+        - score: &ex_score
+            total: 65.1
+            band: developing
+            confidence: high
+            capped: false
+            components:
+              - key: skill_evidence
+                label: Skill evidence
+                weight: 0.4
+                score: 58
+                contribution: 23.2
+                reasons:
+                  - text: "Python, FastAPI, SQL and Docker verified in repo 'campus-api' (34 authored commits)"
+                    delta: 44
+                    evidence_ids: [ev-campus-api-repo, ev-campus-api-dockerfile]
+                  - text: "pytest is used in 'campus-api' tests, credited at moderate"
+                    delta: 8
+                    evidence_ids: [ev-campus-api-tests]
+                  - text: "React, Kubernetes and AWS are claimed without a linked artifact yet"
+                    delta: 6
+                    evidence_ids: [ev-resume-skills]
+                  - text: "Redis and CI/CD are required for this role and have no evidence yet"
+                    delta: -28
+                    evidence_ids: []
+              - key: project_quality
+                label: Project quality
+                weight: 0.25
+                score: 64
+                contribution: 16
+                reasons:
+                  - text: "'campus-api' scored 83/100: tests, lockfile and Dockerfile present; no CI workflow"
+                    delta: 41.5
+                    evidence_ids: [ev-campus-api-repo]
+                  - text: "'weather-dashboard' scored 45/100: README is still the framework default"
+                    delta: 22.5
+                    evidence_ids: [ev-weather-repo]
+              - key: consistency
+                label: Consistency
+                weight: 0.15
+                score: 72.3
+                contribution: 10.8
+                reasons:
+                  - text: "Active in 18 of the last 26 weeks"
+                    delta: 34.6
+                    evidence_ids: []
+                  - text: "Weekly activity is fairly even (variation 0.82)"
+                    delta: 17.7
+                    evidence_ids: []
+                  - text: "Last activity 6 days ago"
+                    delta: 20
+                    evidence_ids: []
+              - key: experience
+                label: Experience
+                weight: 0.1
+                score: 72
+                contribution: 7.2
+                reasons:
+                  - text: "2 roles found: one internship and one freelance project"
+                    delta: 100
+                    evidence_ids: [ev-exp-internship]
+                  - text: "3 of 10 experience bullets include a number"
+                    delta: -28
+                    evidence_ids: [ev-exp-internship]
+              - key: resume_quality
+                label: Resume quality
+                weight: 0.1
+                score: 79
+                contribution: 7.9
+                reasons:
+                  - text: "All five required sections found"
+                    delta: 40
+                    evidence_ids: []
+                  - text: "3 of 10 bullets are quantified"
+                    delta: 9
+                    evidence_ids: []
+                  - text: "Length is one page"
+                    delta: 15
+                    evidence_ids: []
+                  - text: "8 skills listed, 2 of them unverified"
+                    delta: 15
+                    evidence_ids: [ev-resume-skills]
+          coverage: 62.5
+          claims:
+            - &ex_claim
+              skill_id: docker
+              skill_name: Docker
+              claimed: true
+              level: strong
+              reason: "Dockerfile and compose.yaml in 'campus-api', where you authored 34 of 36 commits"
+              evidence_ids: [ev-campus-api-dockerfile, ev-campus-api-repo]
+            - skill_id: python
+              skill_name: Python
+              claimed: true
+              level: strong
+              reason: "Primary language of 'campus-api' (34 authored commits)"
+              evidence_ids: [ev-campus-api-repo]
+            - skill_id: fastapi
+              skill_name: FastAPI
+              claimed: true
+              level: strong
+              reason: "fastapi is a dependency of 'campus-api' and its routers import it"
+              evidence_ids: [ev-campus-api-repo]
+            - skill_id: sql
+              skill_name: SQL
+              claimed: true
+              level: strong
+              reason: "SQLAlchemy and psycopg in 'campus-api' dependencies"
+              evidence_ids: [ev-campus-api-repo]
+            - skill_id: pytest
+              skill_name: pytest
+              claimed: true
+              level: moderate
+              reason: "Tests found in 'campus-api/tests'; also named in an internship bullet"
+              evidence_ids: [ev-campus-api-tests, ev-exp-internship]
+            - skill_id: react
+              skill_name: React
+              claimed: true
+              level: weak
+              reason: "Mentioned in the 'weather-dashboard' description; no React dependency found in the repo"
+              evidence_ids: [ev-weather-repo]
+            - skill_id: kubernetes
+              skill_name: Kubernetes
+              claimed: true
+              level: unverified
+              reason: "Appears only in the skills list"
+              evidence_ids: [ev-resume-skills]
+            - skill_id: aws
+              skill_name: AWS
+              claimed: true
+              level: unverified
+              reason: "Appears only in the skills list"
+              evidence_ids: [ev-resume-skills]
+            - skill_id: redis
+              skill_name: Redis
+              claimed: false
+              level: missing
+              reason: "Required for Backend Developer; not claimed and not found in any repository"
+              evidence_ids: []
+          gaps:
+            - gap_id: gap-ci-cd
+              skill_id: ci-cd
+              skill_name: CI/CD
+              importance: 2
+              claimed: false
+              level: missing
+              estimated_gain: 4.5
+            - gap_id: gap-redis
+              skill_id: redis
+              skill_name: Redis
+              importance: 2
+              claimed: false
+              level: missing
+              estimated_gain: 3.1
+            - gap_id: gap-aws
+              skill_id: aws
+              skill_name: AWS
+              importance: 2
+              claimed: true
+              level: unverified
+              estimated_gain: 2.4
+            - gap_id: gap-kubernetes
+              skill_id: kubernetes
+              skill_name: Kubernetes
+              importance: 1
+              claimed: true
+              level: unverified
+              estimated_gain: 1.2
+          projects:
+            - &ex_project
+              project_id: proj-campus-api
+              title: campus-api
+              kind: code
+              url: https://github.com/careerlens-demo/campus-api
+              demo_url: null
+              score: 83
+              counted_in_score: true
+              subscores: { hygiene: 16, engineering: 22, authorship: 30, depth: 15 }
+              design_subscores: null
+              signals:
+                tests: true
+                ci: false
+                demo_url: false
+                license: true
+                readme: true
+                deploy_config: true
+                authored_commits: 34
+                total_commits: 36
+              detected_skills: [python, fastapi, sql, docker, pytest]
+              what_it_does: "REST API for campus event registration with a PostgreSQL database."
+              honest_rewrite: "Built a FastAPI service for campus event registration backed by PostgreSQL, with pytest tests and a Docker setup."
+              issues:
+                - issue: "The description gives no measured result."
+                  fix: "Add one number you can reproduce, such as the response time from a local load test."
+              flags: []
+              self_reported: false
+              understanding: not_taken
+              latest_quiz_id: null
+            - project_id: proj-weather-dashboard
+              title: weather-dashboard
+              kind: code
+              url: https://github.com/careerlens-demo/weather-dashboard
+              demo_url: null
+              score: 45
+              counted_in_score: true
+              subscores: { hygiene: 3, engineering: 8, authorship: 25, depth: 9 }
+              design_subscores: null
+              signals:
+                tests: false
+                ci: false
+                demo_url: false
+                license: false
+                readme: false
+                deploy_config: false
+                authored_commits: 14
+                total_commits: 14
+              detected_skills: [javascript]
+              what_it_does: "Web page that shows the current weather for a searched city."
+              honest_rewrite: "Built a JavaScript weather page that fetches forecasts for a searched city."
+              issues: []
+              flags:
+                - flag_id: flag-weather-default-readme
+                  code: default_readme
+                  severity: medium
+                  reason: "The README is still the starter template, so a reader can't see what you built."
+                  fix: "Write a README: problem, architecture diagram, setup, screenshots, results."
+                  estimated_gain: 1.6
+              self_reported: false
+              understanding: not_taken
+              latest_quiz_id: null
+          role_fits:
+            - role_id: sde-backend
+              role_name: Backend Developer
+              score: 65.1
+              reasons: ["Python, FastAPI, SQL and Docker are backed by your own repository", "Tests present in your main project"]
+              top_missing: [CI/CD, Redis]
+            - role_id: full-stack
+              role_name: Full-Stack Developer
+              score: 55.2
+              reasons: ["Backend skills are well evidenced", "Frontend skills are claimed with little evidence so far"]
+              top_missing: [React, TypeScript]
+            - role_id: devops-cloud
+              role_name: DevOps / Cloud Engineer
+              score: 47.9
+              reasons: ["Docker is verified", "Cloud and orchestration skills have no linked work yet"]
+              top_missing: [Kubernetes, AWS, CI/CD]
+          roadmap:
+            - &ex_milestone
+              id: ms-1
+              order: 1
+              title: Add CI to campus-api
+              deliverable: "A GitHub Actions workflow in campus-api that runs pytest on every push, with a passing badge in the README"
+              addresses: [gap-ci-cd]
+              resources:
+                - id: github-actions-docs
+                  title: GitHub Actions documentation
+                  url: https://docs.github.com/en/actions
+                  type: documentation
+                  skill_id: ci-cd
+                  hours: 2
+              effort_hours: 3
+              estimated_gain: 4.5
+              done: false
+            - id: ms-2
+              order: 2
+              title: Write a real README for weather-dashboard
+              deliverable: "README with the problem, how it works, setup steps and two screenshots"
+              addresses: [flag-weather-default-readme]
+              resources: []
+              effort_hours: 2
+              estimated_gain: 1.6
+              done: false
+            - id: ms-3
+              order: 3
+              title: Add Redis caching to campus-api
+              deliverable: "Cached event-list endpoint in campus-api with a test that proves the cache is hit"
+              addresses: [gap-redis]
+              resources:
+                - id: redis-docs
+                  title: Redis documentation
+                  url: https://redis.io/docs/latest/
+                  type: documentation
+                  skill_id: redis
+                  hours: 3
+              effort_hours: 6
+              estimated_gain: 3.1
+              done: false
+          consistency:
+            weeks:
+              - { week_start: "2026-04-06", count: 3 }
+              - { week_start: "2026-04-13", count: 0 }
+              - { week_start: "2026-04-20", count: 5 }
+              - { week_start: "2026-04-27", count: 7 }
+              - { week_start: "2026-05-04", count: 2 }
+              - { week_start: "2026-05-11", count: 0 }
+              - { week_start: "2026-05-18", count: 0 }
+              - { week_start: "2026-05-25", count: 4 }
+              - { week_start: "2026-06-01", count: 9 }
+              - { week_start: "2026-06-08", count: 6 }
+              - { week_start: "2026-06-15", count: 0 }
+              - { week_start: "2026-06-22", count: 3 }
+              - { week_start: "2026-06-29", count: 8 }
+              - { week_start: "2026-07-06", count: 12 }
+              - { week_start: "2026-07-13", count: 5 }
+              - { week_start: "2026-07-20", count: 0 }
+              - { week_start: "2026-07-27", count: 2 }
+              - { week_start: "2026-08-03", count: 6 }
+              - { week_start: "2026-08-10", count: 0 }
+              - { week_start: "2026-08-17", count: 4 }
+              - { week_start: "2026-08-24", count: 7 }
+              - { week_start: "2026-08-31", count: 3 }
+              - { week_start: "2026-09-07", count: 0 }
+              - { week_start: "2026-09-14", count: 5 }
+              - { week_start: "2026-09-21", count: 0 }
+              - { week_start: "2026-09-28", count: 4 }
+            active_weeks: 18
+            cv: 0.82
+            last_active_date: "2026-10-01"
+            score: 72.3
+          evidence:
+            - id: ev-campus-api-repo
+              kind: repo
+              source: github
+              label: "campus-api (34 of 36 commits authored)"
+              url: https://github.com/careerlens-demo/campus-api
+              details: { authored_commits: 34, total_commits: 36, is_fork: false }
+            - id: ev-campus-api-dockerfile
+              kind: file
+              source: github
+              label: campus-api/Dockerfile
+              url: https://github.com/careerlens-demo/campus-api/blob/main/Dockerfile
+              details: null
+            - id: ev-campus-api-tests
+              kind: file
+              source: github
+              label: campus-api/tests
+              url: https://github.com/careerlens-demo/campus-api/tree/main/tests
+              details: null
+            - id: ev-weather-repo
+              kind: repo
+              source: github
+              label: "weather-dashboard (14 of 14 commits authored)"
+              url: https://github.com/careerlens-demo/weather-dashboard
+              details: { authored_commits: 14, total_commits: 14, is_fork: false }
+            - id: ev-exp-internship
+              kind: experience
+              source: resume
+              label: "Backend intern, 2 months"
+              url: null
+              details: null
+            - id: ev-resume-skills
+              kind: resume_text
+              source: resume
+              label: Skills section of the resume
+              url: null
+              details: null
+          notes:
+            - "All five components had data, so no weights were redistributed."
+            - "Confidence is high: resume, GitHub and a LinkedIn export were analysed."
 
     ScoreBreakdown:
       type: object
@@ -630,6 +1110,7 @@ components:
         components:
           type: array
           items: { $ref: "#/components/schemas/ScoreComponent" }
+      examples: [*ex_score]
 
     ScoreComponent:
       type: object
@@ -638,7 +1119,7 @@ components:
         key: { type: string, enum: [skill_evidence, project_quality, consistency, experience, resume_quality] }
         label: { type: string }
         weight: { type: number, description: Effective weight after reweighting }
-        score: { type: [number, "null"], description: 0-100, null when no data }
+        score: { type: [number, "null"], description: "0-100, null when no data" }
         contribution: { type: number, description: weight × score }
         reasons:
           type: array
@@ -671,15 +1152,17 @@ components:
         level: { $ref: "#/components/schemas/EvidenceLevel" }
         reason: { type: string }
         evidence_ids: { type: array, items: { type: string } }
+      examples: [*ex_claim]
 
     SkillGap:
       type: object
-      required: [gap_id, skill_id, skill_name, importance, level, estimated_gain]
+      required: [gap_id, skill_id, skill_name, importance, claimed, level, estimated_gain]
       properties:
         gap_id: { type: string }
         skill_id: { type: string }
         skill_name: { type: string }
         importance: { type: integer, minimum: 1, maximum: 3 }
+        claimed: { type: boolean, description: "true = on the resume but under-evidenced; false = not claimed" }
         level: { $ref: "#/components/schemas/EvidenceLevel" }
         estimated_gain: { type: number }
 
@@ -696,29 +1179,64 @@ components:
 
     ProjectAudit:
       type: object
-      required: [project_id, title, kind, score, detected_skills, flags, self_reported]
+      required: [project_id, title, kind, score, counted_in_score, detected_skills, flags, self_reported]
       properties:
         project_id: { type: string }
         title: { type: string }
         kind: { type: string, enum: [code, design] }
-        repo_url: { type: [string, "null"], format: uri }
+        url: { type: [string, "null"], format: uri, description: Repository URL (code) or portfolio page URL (design) }
+        demo_url: { type: [string, "null"], format: uri }
         score: { type: number, minimum: 0, maximum: 100 }
+        counted_in_score: { type: boolean, description: One of the top 3 projects by role relevance used for the project_quality component }
         subscores:
           type: [object, "null"]
+          description: "Code projects only. Maxima: hygiene 20, engineering 30, authorship 30, depth 20"
           properties:
             hygiene: { type: number }
             engineering: { type: number }
             authorship: { type: number }
             depth: { type: number }
+        design_subscores:
+          type: [object, "null"]
+          description: "Design projects only. Maxima: 25, 30, 20, 15, 10"
+          properties:
+            problem_statement: { type: number }
+            process_evidence: { type: number }
+            outcome_or_metrics: { type: number }
+            tool_evidence: { type: number }
+            presentation: { type: number }
+        signals:
+          type: [object, "null"]
+          description: Code projects only. Boolean keys match SimulationRequest add_signals.
+          required: [tests, ci, demo_url, license, readme, deploy_config, authored_commits, total_commits]
+          properties:
+            tests: { type: boolean }
+            ci: { type: boolean }
+            demo_url: { type: boolean }
+            license: { type: boolean }
+            readme: { type: boolean }
+            deploy_config: { type: boolean }
+            authored_commits: { type: integer }
+            total_commits: { type: integer }
         detected_skills: { type: array, items: { type: string } }
         what_it_does: { type: [string, "null"] }
         honest_rewrite: { type: [string, "null"] }
+        issues:
+          type: array
+          description: From the project judgement (PIPELINE stage 5); each issue comes with a fix
+          items:
+            type: object
+            required: [issue, fix]
+            properties:
+              issue: { type: string }
+              fix: { type: string }
         flags: { type: array, items: { $ref: "#/components/schemas/ProjectFlag" } }
         self_reported: { type: boolean, description: true for link-based design evidence (capped at 80) }
         understanding:
           $ref: "#/components/schemas/Understanding"
           description: From the latest verify quiz on this project (stored per project on the profile, carried across analyses)
         latest_quiz_id: { type: [string, "null"], format: uuid }
+      examples: [*ex_project]
 
     RoleFit:
       type: object
@@ -728,7 +1246,7 @@ components:
         role_name: { type: string }
         score: { type: number }
         reasons: { type: array, items: { type: string } }
-        top_missing: { type: array, items: { type: string } }
+        top_missing: { type: array, items: { type: string }, description: Skill display names }
 
     RoadmapMilestone:
       type: object
@@ -743,6 +1261,7 @@ components:
         effort_hours: { type: integer }
         estimated_gain: { type: number }
         done: { type: boolean, default: false }
+      examples: [*ex_milestone]
 
     ConsistencySummary:
       type: object
@@ -773,7 +1292,7 @@ components:
               project_id: { type: [string, "null"] }
               add_signals:
                 type: array
-                items: { type: string, enum: [tests, ci, demo_url, license, readme, more_commits, deploy_config] }
+                items: { type: string, enum: [tests, ci, demo_url, license, readme, deploy_config] }
               resolve_flags: { type: array, items: { type: string } }
               set_understanding:
                 oneOf:
@@ -796,6 +1315,7 @@ components:
     # ---------- quizzes (docs/QUIZ.md) ----------
     Understanding: { type: string, enum: [not_taken, demonstrated, partial, not_demonstrated] }
     QuizMode: { type: string, enum: [practice, verify] }
+    QuizStatus: { type: string, enum: [in_progress, submitted] }
 
     SourceRef:
       type: object
@@ -806,7 +1326,7 @@ components:
         start_line: { type: [integer, "null"] }
         end_line: { type: [integer, "null"] }
         section: { type: [string, "null"] }
-        url: { type: [string, "null"], format: uri, description: GitHub blob URL with line anchor, or the page URL }
+        url: { type: [string, "null"], format: uri, description: "GitHub blob URL with line anchor, or the page URL" }
 
     QuizCreate:
       type: object
@@ -846,6 +1366,7 @@ components:
         hint: { type: [string, "null"], description: Practice mode only }
         time_limit_s: { type: [integer, "null"], description: Verify mode only }
         served_at: { type: [string, "null"], format: date-time }
+        time_remaining_s: { type: [integer, "null"], description: "Verify mode, current question only: seconds left as computed by the server at response time" }
         answered: { type: boolean, default: false }
         skill_ids: { type: array, items: { type: string } }
 
@@ -858,7 +1379,7 @@ components:
         project_id: { type: string }
         project_title: { type: string }
         mode: { $ref: "#/components/schemas/QuizMode" }
-        status: { type: string, enum: [in_progress, submitted] }
+        status: { $ref: "#/components/schemas/QuizStatus" }
         total_questions: { type: integer }
         questions: { type: array, items: { $ref: "#/components/schemas/QuizQuestion" } }
         created_at: { type: string, format: date-time }
@@ -869,7 +1390,7 @@ components:
       properties:
         question_id: { type: string }
         choice_id: { type: [string, "null"], description: MCQ }
-        text: { type: [string, "null"], description: Short answer, max 2000 chars }
+        text: { type: [string, "null"], description: "Short answer, max 2000 chars" }
         time_taken_ms: { type: integer }
         focus_lost_count: { type: integer, default: 0 }
 
@@ -890,6 +1411,8 @@ components:
         question_id: { type: string }
         recorded: { type: boolean }
         timed_out: { type: boolean, default: false }
+        choice_id: { type: [string, "null"], description: The student's own MCQ answer }
+        text: { type: [string, "null"], description: The student's own short answer }
         score: { type: [number, "null"], description: "0-1; null in verify mode until submitted" }
         correct_choice_id: { type: [string, "null"] }
         key_points: { type: array, items: { $ref: "#/components/schemas/KeyPointResult" } }
@@ -945,7 +1468,7 @@ components:
         project_id: { type: string }
         project_title: { type: string }
         mode: { $ref: "#/components/schemas/QuizMode" }
-        status: { type: string, enum: [in_progress, submitted] }
+        status: { $ref: "#/components/schemas/QuizStatus" }
         score: { type: [number, "null"] }
         understanding:
           oneOf:
@@ -962,7 +1485,7 @@ components:
         company: { type: [string, "null"] }
         location: { type: [string, "null"] }
         url: { type: [string, "null"], format: uri }
-        description: { type: string, description: Plain text, max 20k chars }
+        description: { type: string, description: "Plain text, max 20k chars" }
         required_skills: { type: array, items: { type: string } }
         nice_to_have: { type: array, items: { type: string } }
         deadline: { type: [string, "null"], format: date }
@@ -983,10 +1506,33 @@ components:
               skill_id: { type: string }
               skill_name: { type: string }
               level: { $ref: "#/components/schemas/EvidenceLevel" }
-        missing: { type: array, items: { type: string } }
-        unverified: { type: array, items: { type: string } }
+        missing: { type: array, items: { type: string }, description: Skill display names required by the posting with no claim or evidence }
+        unverified: { type: array, items: { type: string }, description: Skill display names claimed at weak or unverified }
         summary: { type: string }
         normalized_posting: { $ref: "#/components/schemas/JobPosting" }
+      examples:
+        - keyword_match: 85.7
+          evidence_match: 60
+          matched:
+            - { skill_id: python, skill_name: Python, level: strong }
+            - { skill_id: fastapi, skill_name: FastAPI, level: strong }
+            - { skill_id: sql, skill_name: SQL, level: strong }
+            - { skill_id: docker, skill_name: Docker, level: strong }
+            - { skill_id: kubernetes, skill_name: Kubernetes, level: unverified }
+            - { skill_id: aws, skill_name: AWS, level: unverified }
+          missing: [Redis]
+          unverified: [Kubernetes, AWS]
+          summary: "You mention 6 of the 7 required skills and 4 are backed by your own repositories. Kubernetes and AWS are claimed without evidence yet; Redis is not on your profile."
+          normalized_posting:
+            title: Backend Engineer Intern
+            company: Northwind Labs
+            location: Chennai, India
+            url: null
+            description: "We are looking for a backend intern to build and maintain REST APIs in Python (FastAPI) on PostgreSQL, packaged with Docker and deployed to Kubernetes on AWS. Experience with Redis caching is required."
+            required_skills: [Python, FastAPI, SQL, Docker, Kubernetes, AWS, Redis]
+            nice_to_have: []
+            deadline: null
+            source: jsonld
 
     ApplicationStatus: { type: string, enum: [saved, applied, interviewing, offer, rejected] }
 
@@ -1050,6 +1596,12 @@ components:
         department: { type: [string, "null"] }
         year: { type: [integer, "null"] }
         student_count: { type: integer }
+      examples:
+        - id: 6b1f4c2a-9d3e-4f7a-8c55-2e0a7d9b1c44
+          name: B.Tech CSE 2027
+          department: CSE
+          year: 2027
+          student_count: 40
 
     CohortInsights:
       type: object
@@ -1125,6 +1677,51 @@ components:
               department: { type: string }
               students: { type: integer }
               median_score: { type: [number, "null"] }
+      examples:
+        - cohort_id: 6b1f4c2a-9d3e-4f7a-8c55-2e0a7d9b1c44
+          role_id: sde-backend
+          student_count: 40
+          analysed_count: 38
+          median_score: 56.5
+          median_coverage: 48
+          bands: { not_ready: 12, developing: 20, ready: 6 }
+          histogram:
+            - { bucket: "0-9", count: 0 }
+            - { bucket: "10-19", count: 0 }
+            - { bucket: "20-29", count: 2 }
+            - { bucket: "30-39", count: 4 }
+            - { bucket: "40-49", count: 6 }
+            - { bucket: "50-59", count: 10 }
+            - { bucket: "60-69", count: 7 }
+            - { bucket: "70-79", count: 6 }
+            - { bucket: "80-89", count: 3 }
+            - { bucket: "90-100", count: 0 }
+          top_missing_skills:
+            - { skill_id: ci-cd, skill_name: CI/CD, students: 24 }
+            - { skill_id: redis, skill_name: Redis, students: 21 }
+            - { skill_id: kubernetes, skill_name: Kubernetes, students: 19 }
+            - { skill_id: system-design, skill_name: System Design, students: 17 }
+            - { skill_id: aws, skill_name: AWS, students: 15 }
+          unverified_rate_by_skill:
+            - { skill_id: kubernetes, skill_name: Kubernetes, claimed_by: 14, unverified_rate: 78.6 }
+            - { skill_id: aws, skill_name: AWS, claimed_by: 16, unverified_rate: 68.8 }
+            - { skill_id: docker, skill_name: Docker, claimed_by: 22, unverified_rate: 36.4 }
+            - { skill_id: react, skill_name: React, claimed_by: 18, unverified_rate: 33.3 }
+            - { skill_id: sql, skill_name: SQL, claimed_by: 34, unverified_rate: 17.6 }
+          at_risk_count: 14
+          understanding:
+            quizzed: 15
+            demonstrated: 8
+            partial: 4
+            not_demonstrated: 3
+            by_skill:
+              - { skill_id: python, skill_name: Python, claimed_by: 36, built_and_explained_rate: 19.4 }
+              - { skill_id: sql, skill_name: SQL, claimed_by: 34, built_and_explained_rate: 14.7 }
+              - { skill_id: docker, skill_name: Docker, claimed_by: 22, built_and_explained_rate: 13.6 }
+          by_department:
+            - { department: CSE, students: 24, median_score: 58.2 }
+            - { department: IT, students: 10, median_score: 54 }
+            - { department: ECE, students: 6, median_score: 47.5 }
 
     CohortStudent:
       type: object
@@ -1132,12 +1729,26 @@ components:
       properties:
         profile_id: { type: string, format: uuid }
         name: { type: string }
+        github_username: { type: [string, "null"] }
+        analysis_id: { type: string, format: uuid, description: The analysis this row is computed from }
         department: { type: [string, "null"] }
         score: { type: number }
         band: { $ref: "#/components/schemas/Band" }
         coverage: { type: number }
-        top_gap: { type: [string, "null"] }
+        top_gap: { type: [string, "null"], description: Skill display name }
         at_risk: { type: boolean }
         understanding:
           $ref: "#/components/schemas/Understanding"
           description: Latest verify result on the student's top project for this role
+      examples:
+        - profile_id: 3f2b8c1e-5d47-4a9b-8e21-7c6a0f9d1b34
+          name: Demo Student
+          github_username: careerlens-demo
+          analysis_id: 9a7d2e40-1c3b-4f58-b6a9-0d5e8c2f7a11
+          department: CSE
+          score: 65.1
+          band: developing
+          coverage: 62.5
+          top_gap: CI/CD
+          at_risk: false
+          understanding: not_taken

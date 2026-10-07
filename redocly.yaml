@@ -1,0 +1,11 @@
+# Lint: npx @redocly/cli lint contracts/openapi.yaml
+extends: [minimal]
+rules:
+  struct: error
+  no-unresolved-refs: error
+  no-invalid-schema-examples: error
+  no-invalid-media-type-examples: error
+  operation-summary: off
+  tag-description: off
+  info-license: off
+  no-server-example.com: off

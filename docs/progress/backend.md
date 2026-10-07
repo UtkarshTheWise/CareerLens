@@ -52,3 +52,6 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - `apps/api/.env` keys set: GEMINI ☐ GROQ ☐ GITHUB_TOKEN ☐ DATABASE_URL ☐ (never paste values here)
 - Run: `uv run fastapi dev app/main.py` → :8000
 - Gemini model IDs confirmed in AI Studio: —
+- Phase 0 (2026-10-07): `apps/api/.env.example` exists; copy it to `apps/api/.env` and fill in keys. It defaults `DATABASE_URL` to `sqlite:///./dev.db`.
+- This machine: Python 3.11.4 and no `uv` on PATH. Install `uv` first (`uv python install 3.12`).
+- Contract frozen at v0.2.0; lint with `npx @redocly/cli lint contracts/openapi.yaml` (config in `redocly.yaml`). Freeze changes are listed in `docs/handoff/integration.md`.

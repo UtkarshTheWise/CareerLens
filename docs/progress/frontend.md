@@ -50,5 +50,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 
 ## Environment
 - API base: `NEXT_PUBLIC_API_URL` = http://localhost:4010 (mock) until Phase 3
-- Mock: `npx @stoplight/prism-cli mock contracts/openapi.yaml -p 4010 -d`
+- Mock: `npx @stoplight/prism-cli mock contracts/openapi.yaml -p 4010` (no `-d`: dynamic mode ignores the contract examples and randomly returns 500)
+- Client: workspace package `@careerlens/api-client` (`createApiClient(baseUrl, token = "dev")`, types `paths`, `components`); it ships TypeScript source, so Next needs `transpilePackages: ["@careerlens/api-client"]`
+- Root `package.json`, `pnpm-workspace.yaml`, `pnpm-lock.yaml` created in Phase 0 (pnpm 10.12.3, Node 22); `pnpm gen:client` regenerates `packages/api-client/schema.d.ts`
 - Contract version built against: v0.2.0
