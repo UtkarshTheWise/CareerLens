@@ -183,3 +183,20 @@ def test_reports_all_problems_at_once(broken):
 
     problems = broken("resources", mutate)
     assert len(problems) >= 3
+
+
+# ---- free-text skill finder (used for experience bullets, project descriptions, certificates)
+
+
+def test_find_skills_in_text_matches_whole_words_and_names():
+    text = "Built a FastAPI service on PostgreSQL with Docker, deployed to AWS. Used Node.js and C++. CI/CD via GitHub Actions."
+    found = catalogue.find_skills_in_text(text)
+    assert {"fastapi", "sql", "docker", "aws", "nodejs", "cpp", "ci-cd", "git"} <= found
+
+
+def test_find_skills_in_text_skips_ambiguous_words_and_lookalikes():
+    text = "Next steps: express interest in the spring term; node of a graph; caching headers; Reactive streams; Dockerfile-like"
+    found = catalogue.find_skills_in_text(text)
+    assert not found & {"nextjs", "express", "spring-boot", "nodejs", "redis", "react"}
+    assert catalogue.find_skills_in_text("") == set()
+    assert catalogue.find_skills_in_text("I used golang and Go to learn") == {"go"}  # 'golang' is unambiguous

@@ -10,18 +10,18 @@ Keep under ~150 lines. Commit it together with the code it describes.
 ## Status
 - **Track:** backend · **Owns:** `apps/api/`, `data/`
 - **Branch / worktree:** `backend/claude` · `../careerlens-api`
-- **Last updated:** 2026-10-07 19:10 IST by Claude Code (Sonnet 5.5)
-- **Current task:** B4 done (collector, detectors, signals, flags, recorded fixture). Next: B5 (scoring engine).
+- **Last updated:** 2026-10-07 21:00 IST by Claude Code (Sonnet 5.5)
+- **Current task:** B5 done (scoring engine + what-if). Next: B6 (pipeline and analysis endpoints).
 - **State:** done   <!-- not started | in progress | blocked | done -->
-- **Last green checks:** 2026-10-07 19:05 IST, from `apps/api`: `uv run pytest -q` (217 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (8/29 routed, 0 mismatches)
+- **Last green checks:** 2026-10-07 20:55 IST, from `apps/api`: `uv run pytest -q` (323 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (8/29 routed, 0 mismatches)
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
-1. Start B5: paste its prompt from PROMPTS.md (plan with Opus, build with Sonnet: `/model opusplan`). New file `app/services/scoring.py` (pure functions, no I/O, no LLM) + `tests/test_scoring.py`.
-2. B5 consumes these B4 shapes (all in `app/services/detectors.py`): `RepoSignals` (per repo: readme/license/demo/tests/ci/lockfile/manifest/module_count/deploy flags, authored/total commits, authored_share, active_span_weeks, code_kb, is_fork, fork_authored_commits), `RepoAnalysis.skills` (`skill_id -> [DetectorHit(kind, detail)]`), `RepoAnalysis.language_skills`, `RuleFlag(code, severity, reason, fix)` (no estimated_gain yet: B5/B6 add it via simulate), and `depth_points(signals)` (SCORING §2B Depth, reuse it, don't re-derive). Consistency inputs: `GithubSnapshot.weeks` (26 `WeekCount`) and `last_active_date`.
-3. B5 also needs `catalogue.get_role(id).weights` (`RoleWeights`), `catalogue.load_skills()` / `normalize_skill()`, and the quiz-effects table in SCORING §6.
+1. Start B6: paste its prompt from PROMPTS.md (plan with Opus, build with Sonnet: `/model opusplan`). New: `app/services/pipeline.py`, `app/services/planner.py`, `app/routers/analyses.py`, `prompts/judge_project.md`, `judge_design.md`, `plan_roadmap.md`, `tests`. Needs live keys and the hotspot only for the final live run (token expires 2026-10-14).
+2. B6 builds `ScoringInputs` (`app/services/scoring_inputs.py`) and stores `inputs.model_dump(mode="json")` in `analyses.signals`: `resume` = `resume.extract_resume()` result; `has_contact` from a regex over the RAW resume text (before PII stripping); `linkedin_skill_ids` = `catalogue.find_skills_in_text(linkedin text)`; `github_linked`, `weeks` (from `GithubSnapshot.weeks`, convert to `schemas.api.WeekCount` if needed), `last_active_date`, `today` = request date; one `ProjectInput` per analysed repo (`project_id=scoring.project_id_for(title)`, `signals`, `skills`, `language_skills`, `flags` from `RuleFlag` plus `vague_description`/`claim_mismatch`, `claimed_skill_ids` after matching resume projects to repos by URL or fuzzy name) and per portfolio URL (`kind="design"`, `design=DesignInput` from the judge). Carry `understanding`/`covered_skill_ids`/`latest_quiz_id` over from `profiles.project_understanding`.
+3. Then `result = scoring.score(inputs)` gives `breakdown`, `coverage`, `claims`, `gaps`, `projects` (numeric `ProjectAudit` fields; B6 fills `what_it_does`, `honest_rewrite`, `issues` from the judge), `consistency`, `evidence`, `notes`; `scoring.role_fits(inputs)`; roadmap gains via `scoring.changes_gain(inputs, [SimulationChange(...)])` (gap: `skill_gain`, flag: `flag_gain`, milestone: one call with all addressed changes). The simulate route calls `scoring.simulate(ScoringInputs.model_validate(analysis.signals), request)` and maps `SimulationError` to a 422 `validation_error`.
 4. After any route or schema change: `cd apps/api && uv run python scripts/check_contract.py --only-implemented`.
-5. Human: the GitHub token expires 2026-10-14; renew it in `careerlens-api/apps/api/.env` before B6's live run.
+5. Human: renew the GitHub token (expires 2026-10-14) in `careerlens-api/apps/api/.env` before B6's live run.
 
 ## Task board
 <!-- status: todo | doing | done | blocked · commit = short sha of the commit that finished it -->
@@ -31,7 +31,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | B2 | Catalogues: skills.yaml, roles.yaml, resources.yaml + loaders/tests | done | e67462c | 63 skills, 7 roles, 130 resources; all links checked live |
 | B3 | Ingest, PII stripping, LLM gateway, resume extraction | done | 1ced9ff | verified live 2026-10-07: Gemini fast and Groq both extract the fixture resume |
 | B4 | GitHub collector, detectors, repo signals, rule flags | done | 024b6f8 | fixture: UtkarshTheWise (14 repos, 768 KB); `claim_mismatch` and `vague_description` flags are B6 |
-| B5 | scoring.py + what-if + unit tests | todo | | |
+| B5 | scoring.py + what-if + unit tests | done | SHA_B5 | 106 new tests; run on the recorded real profile and checked by hand |
 | B6 | Pipeline, analyses endpoints, judging, roadmap planner, role-fit | todo | | also `PATCH /v1/analyses/{id}/roadmap/{milestone_id}` (added at freeze) |
 | B7 | Jobs match, applications, cohorts, seed_demo.py | todo | | |
 | B9 | Project Understanding Check (quiz) | todo | | also `GET /v1/quizzes/{id}/result`; 429 detail key is `retake_available_at`, not `retry_at` as the B9 prompt says |
@@ -68,6 +68,13 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - `default_readme` is a heuristic (starter marker in the first 500 chars, <= 4000 chars, none of the sections a student writes) because `readme_templates.txt` holds markers, not full starter text.
 - An untouched fork gets `unmodified_fork` only, not also `single_dump` (one fact, one penalty). `.d.ts` files count as generated, not code.
 - Flag severities are one fixed map (`FLAG_SEVERITY` in `detectors.py`); `RuleFlag` carries no id or estimated_gain, B6 adds `flag_id` and gain.
+- Scoring is `scoring.score(ScoringInputs)`; inputs hold derived facts only (no raw resume/LinkedIn text), `today` is a parameter, so output is deterministic and re-scoring after a quiz needs no LLM or GitHub.
+- `reasons[]` convention: `delta` = points (on the component's 0-100 scale) an item earned (+), or for an item that earned nothing the points it could have added (-). Positive deltas sum to the component score. A partially credited item has one + entry whose text names the shortfall, so + and - do NOT total 100.
+- Coverage and claims use catalogue skills only; unknown listed skills ("Communication") are reported in `notes` as not scored. Required-but-unclaimed skills appear in `claims` with `claimed=false`.
+- Untouched forks (0 own commits since forking) give no skill evidence; forks cap at `moderate`. Quiz effects use only artifact evidence when deciding "sole evidence" (a skills-list mention is not evidence).
+- Confidence: others = GitHub + LinkedIn + readable portfolio item; >= 2 others (and GitHub, unless a design role) = high, 1+ = medium, else low (cap 60). Design roles with no portfolio score project quality 0 (penalised); engineering roles with no projects are "no data" (reweighted).
+- Simulate: `ci` also adds a `ci-cd` hit to that project; a null `project_id` applies `add_signals` to every code project; resolving an `understanding_gap` flag assumes `demonstrated`; unknown ids raise `SimulationError`. Ids: project `proj-<slug>`, flag `flag-<slug>-<code-with-dashes>`, gap `gap-<skill_id>`.
+- Free-text skill matching (`catalogue.find_skills_in_text`) skips a stoplist of ambiguous words ("next", "spring", "node", "caching" ...); it feeds only weak/moderate evidence.
 - Recorded fixtures: `tests/fixtures/github/<login>/<fingerprint>.json` (status + body, never headers), replayed by `scripts/github_fixtures.py:ReplayTransport`; re-record with `uv run python scripts/record_github.py <login>` (needs token + a network that reaches api.github.com). Changing a GraphQL query changes its fingerprint, so re-record after editing `OVERVIEW_QUERY`, `commit_facts_query` or `files_query`.
 
 ## Gotchas learned (one line each, append)
