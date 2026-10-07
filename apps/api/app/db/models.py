@@ -1,4 +1,4 @@
-"""Tables for the prototype. Quiz tables (quizzes, quiz_questions, quiz_answers) arrive with B9.
+"""Tables for the prototype.
 
 Ids are UUID strings so the same models run on SQLite and Postgres.
 """
@@ -76,6 +76,7 @@ class Profile(Base):
     applications: Mapped[list["Application"]] = relationship(
         back_populates="profile", cascade="all, delete-orphan"
     )
+    quizzes: Mapped[list["Quiz"]] = relationship(back_populates="profile", cascade="all, delete-orphan")
 
     @property
     def has_resume(self) -> bool:
@@ -118,6 +119,7 @@ class Analysis(Base):
     finished_at: Mapped[datetime | None] = mapped_column(UtcDateTime)
 
     profile: Mapped[Profile] = relationship(back_populates="analyses")
+    quizzes: Mapped[list["Quiz"]] = relationship(back_populates="analysis", cascade="all, delete-orphan")
 
 
 class Application(Base):
@@ -139,6 +141,90 @@ class Application(Base):
     updated_at: Mapped[datetime] = mapped_column(UtcDateTime, default=utcnow, onupdate=utcnow)
 
     profile: Mapped[Profile] = relationship(back_populates="applications")
+
+
+class Quiz(Base):
+    """A Project Understanding Check (docs/QUIZ.md): one project, one attempt."""
+
+    __tablename__ = "quizzes"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    analysis_id: Mapped[str] = mapped_column(ForeignKey("analyses.id", ondelete="CASCADE"), index=True)
+    profile_id: Mapped[str] = mapped_column(ForeignKey("profiles.id", ondelete="CASCADE"), index=True)
+    project_id: Mapped[str] = mapped_column(String(200))
+    project_title: Mapped[str] = mapped_column(String(300))
+    project_url: Mapped[str | None] = mapped_column(Text)
+    kind: Mapped[str] = mapped_column(String(10), default="code")  # code | design
+    mode: Mapped[str] = mapped_column(String(10))  # practice | verify
+    status: Mapped[str] = mapped_column(String(20), default="in_progress")  # in_progress | submitted
+    attempt: Mapped[int] = mapped_column(Integer, default=1)
+    auto_submitted: Mapped[bool] = mapped_column(Boolean, default=False)
+    abandoned: Mapped[bool] = mapped_column(Boolean, default=False)  # never started: no effect on evidence
+    score: Mapped[float | None] = mapped_column(Float)
+    understanding: Mapped[str | None] = mapped_column(String(20))
+    result: Mapped[dict[str, Any] | None] = mapped_column(JSON)  # the QuizResult returned by submit
+    created_at: Mapped[datetime] = mapped_column(UtcDateTime, default=utcnow)
+    submitted_at: Mapped[datetime | None] = mapped_column(UtcDateTime)
+
+    profile: Mapped[Profile] = relationship(back_populates="quizzes")
+    analysis: Mapped[Analysis] = relationship(back_populates="quizzes")
+    questions: Mapped[list["QuizQuestion"]] = relationship(
+        back_populates="quiz", cascade="all, delete-orphan", order_by="QuizQuestion.order"
+    )
+
+
+class QuizQuestion(Base):
+    """A question with its answer key. The key columns are never put in a response before grading."""
+
+    __tablename__ = "quiz_questions"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    quiz_id: Mapped[str] = mapped_column(ForeignKey("quizzes.id", ondelete="CASCADE"), index=True)
+    order: Mapped[int] = mapped_column(Integer)
+    type: Mapped[str] = mapped_column(String(20))  # mcq | short_answer
+    category: Mapped[str] = mapped_column(String(30))
+    prompt: Mapped[str] = mapped_column(Text)
+    code_snippet: Mapped[dict[str, Any] | None] = mapped_column(JSON)
+    options: Mapped[list[dict[str, Any]]] = mapped_column(JSON, default=list)
+    hint: Mapped[str | None] = mapped_column(Text)
+    skill_ids: Mapped[list[str]] = mapped_column(JSON, default=list)
+    time_limit_s: Mapped[int | None] = mapped_column(Integer)
+    served_at: Mapped[datetime | None] = mapped_column(UtcDateTime)
+    # answer key (server side only until graded)
+    source_ref: Mapped[dict[str, Any] | None] = mapped_column(JSON)
+    correct_choice_id: Mapped[str | None] = mapped_column(String(10))
+    key_points: Mapped[list[str]] = mapped_column(JSON, default=list)
+    acceptable_alternatives: Mapped[list[str]] = mapped_column(JSON, default=list)
+    model_answer: Mapped[str | None] = mapped_column(Text)
+
+    quiz: Mapped[Quiz] = relationship(back_populates="questions")
+    answer: Mapped["QuizAnswer | None"] = relationship(
+        back_populates="question", cascade="all, delete-orphan", uselist=False
+    )
+
+
+class QuizAnswer(Base):
+    """What the student answered. Focus-loss counts live here only: no cohort code reads this table."""
+
+    __tablename__ = "quiz_answers"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    question_id: Mapped[str] = mapped_column(
+        ForeignKey("quiz_questions.id", ondelete="CASCADE"), unique=True, index=True
+    )
+    choice_id: Mapped[str | None] = mapped_column(String(10))
+    text: Mapped[str | None] = mapped_column(Text)
+    time_taken_ms: Mapped[int] = mapped_column(Integer, default=0)
+    focus_lost_count: Mapped[int] = mapped_column(Integer, default=0)
+    timed_out: Mapped[bool] = mapped_column(Boolean, default=False)
+    answered_at: Mapped[datetime] = mapped_column(UtcDateTime, default=utcnow)
+    # grading (set when graded)
+    score: Mapped[float | None] = mapped_column(Float)  # 0-1
+    key_results: Mapped[list[dict[str, Any]]] = mapped_column(JSON, default=list)
+    incorrect_statements: Mapped[list[str]] = mapped_column(JSON, default=list)
+    feedback: Mapped[str | None] = mapped_column(Text)
+
+    question: Mapped[QuizQuestion] = relationship(back_populates="answer")
 
 
 class CacheEntry(Base):

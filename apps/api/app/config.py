@@ -24,6 +24,8 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///./dev.db"
     supabase_jwt_secret: str = ""
     dev_auth: bool = False
+    # Wait between verify quizzes on one project (docs/QUIZ.md): 1 h for the hackathon, 24 h in production.
+    quiz_cooldown_minutes: int = 60
     # Comma-separated; extension origins are allowed by regex in main.py.
     cors_origins: str = "http://localhost:3000"
 
