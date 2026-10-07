@@ -10,17 +10,17 @@ Keep under ~150 lines. Commit it together with the code it describes.
 ## Status
 - **Track:** backend · **Owns:** `apps/api/`, `data/`
 - **Branch / worktree:** `backend/claude` · `../careerlens-api`
-- **Last updated:** 2026-10-07 23:00 IST by Claude Code (Sonnet 5.5)
-- **Current task:** B6 done and verified live. Next: B7 (jobs, applications, cohorts, seed).
+- **Last updated:** 2026-10-07 23:59 IST by Claude Code (Sonnet 5.5)
+- **Current task:** B7 done and verified (live job extraction + seeded cohort). Next: B9 (quiz), then B8.
 - **State:** done   <!-- not started | in progress | blocked | done -->
-- **Last green checks:** 2026-10-07 22:50 IST, from `apps/api`: `uv run pytest -q` (425 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (13/29 routed, 0 mismatches) · live analysis on real GitHub + Gemini + Groq (65-125 s)
+- **Last green checks:** 2026-10-07 23:55 IST, from `apps/api`: `uv run pytest -q` (474 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (22/29 routed, 0 mismatches) · live `matchJob` with Gemini extraction
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
-1. Start B7: paste its prompt from PROMPTS.md (plan with Opus, build with Sonnet: `/model opusplan`). New: `app/services/matching.py` (+ `prompts/extract_job.md`), `app/routers/jobs.py`, `applications.py`, `cohorts.py`, `app/services/cohorts.py`, `scripts/seed_demo.py`. Contract endpoints still unrouted after B6: matchJob, applications CRUD + tailorResume (P2), cohorts (4), quizzes (B9).
-2. B7 reads finished analyses from the DB: `analyses.report` (full `AnalysisReport` JSON) and `analyses.signals` (`ScoringInputs` JSON, rescore with `scoring.score`). `matchJob`: use the profile's latest `done` analysis (409 `analysis`-less profile per contract); skills via `catalogue.normalize_skill`; credit per level from `scoring.CREDIT`. The seed script builds synthetic students by running `scoring.score` over generated `ScoringInputs` and storing `report`/`signals` rows (no LLM, no GitHub): construct them with `tests/scoring_helpers.py`-style builders and `scoring.role_fits`.
-3. B9 (quiz) contract with this code: `profiles.project_understanding` is a dict keyed by project URL (repo URL or portfolio URL) with values `{"understanding": "demonstrated|partial|not_demonstrated", "covered_skill_ids": [...], "quiz_id": "<uuid>"}`; `analysis_inputs.carry_understanding` reads it and a re-analysis keeps it. B9's submit re-scores via `ScoringInputs.model_validate(analysis.signals)` with updated projects, then rebuilds the stored report's `score`, `claims`, `gaps`, `projects` the same way `pipeline._run` assembles them.
-4. After any route or schema change: `cd apps/api && uv run python scripts/check_contract.py --only-implemented`.
+1. Start B9: paste its prompt from PROMPTS.md (plan with Opus, build with Sonnet: `/model opusplan`). New: `app/services/quiz_context.py`, `quiz.py`, `routers/quizzes.py`, `prompts/quiz_generate.md` + `quiz_grade.md`, quiz tables in `db/models.py`. Unrouted after B7: the 6 quiz operations (createQuiz, getQuiz, answerQuizQuestion, submitQuiz, getQuizResult, listQuizzes) and `tailorResume` (P2).
+2. B9 contract with this code: `profiles.project_understanding` is a dict keyed by project URL (repo URL or portfolio URL) with values `{"understanding": "demonstrated|partial|not_demonstrated", "covered_skill_ids": [...], "quiz_id": "<uuid>"}`; `analysis_inputs.carry_understanding` reads it and a re-analysis keeps it. B9's submit re-scores via `ScoringInputs.model_validate(analysis.signals)` with updated projects, then rebuilds the stored report's `score`, `claims`, `gaps`, `projects` as `scripts/seed_demo.py:build_report` and `pipeline._run` do, and stores it with `pipeline.save_report(analysis, inputs, report)`.
+3. B9 item 5 (seed gives ~60 % of students a verify result): set `ProjectInput.understanding` / `covered_skill_ids` on the generated inputs in `scripts/seed_demo.py:generate_inputs` before scoring. Seeded projects have no URLs, so key by `project_id` there. Cohort insights already read `ProjectAudit.understanding` of each student's top counted project, and `tests/test_seed.py` asserts the 12/18/10 bands, which a quiz bonus can shift: re-check it.
+4. After any route or schema change: `cd apps/api && uv run python scripts/check_contract.py --only-implemented`. Seed locally with `cd apps/api && uv run python scripts/seed_demo.py` (uses `DATABASE_URL`).
 5. Human: the GitHub token expires 2026-10-14; renew it in `careerlens-api/apps/api/.env`. Supabase needs the hotspot (college Wi-Fi blocks the DB ports).
 
 ## Task board
@@ -33,7 +33,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | B4 | GitHub collector, detectors, repo signals, rule flags | done | 024b6f8 | fixture: UtkarshTheWise (14 repos, 768 KB); `claim_mismatch` and `vague_description` flags are B6 |
 | B5 | scoring.py + what-if + unit tests | done | c5b479d | 106 new tests; run on the recorded real profile and checked by hand |
 | B6 | Pipeline, analyses endpoints, judging, roadmap planner, role-fit | done | 70d91bc | 5 endpoints incl. the milestone PATCH; live run verified; 102 new tests |
-| B7 | Jobs match, applications, cohorts, seed_demo.py | todo | | |
+| B7 | Jobs match, applications, cohorts, seed_demo.py | done | e0dc64d | 9 ops routed (22/29); live extract_job check passed; 49 new tests |
 | B9 | Project Understanding Check (quiz) | todo | | also `GET /v1/quizzes/{id}/result`; 429 detail key is `retake_available_at`, not `retry_at` as the B9 prompt says |
 | B8 | Hardening, contract check green, deploy, keep-alive | todo | | Supabase JWT verification lands here |
 
@@ -79,6 +79,9 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - Reviews: max 6 per analysis, resume-matched repos first then by role relevance; untouched forks never reviewed; a repo not on the resume is judged on its tagline plus the first 600 chars of its README.
 - Portfolio pages (`services/portfolio.py`) are fetched with SSRF protection (public addresses only, standard ports, hand-followed redirects re-checked, 1 MB, HTML only); residual DNS-rebinding risk is documented in the module.
 - Roadmap (`services/planner.py`): the model picks ids and writes deliverables, Python validates ids, strips URLs, attaches catalogue resources, computes gains with `scoring.changes_gain`, orders by gain per hour, 4-7 milestones (top-up from a deterministic fallback), and always keeps an `understanding_gap` milestone.
+- Matching (`services/matching.py`): skills resolve by alias, then by text scan ("Docker and Kubernetes"); unknown strings are not counted but named in `summary`; `scoring.skill_levels` gives levels for skills outside the analysed role. Cohort views re-score a student's stored signals when the requested role differs from the analysed one.
+- Cohorts: plain Python over ORM rows (same on SQLite and Postgres); unverified rate needs >= 2 claimants; `understanding` is always returned (zeros and empty `by_skill` until quizzes exist); CSV cells starting with `= + - @` get a leading `'`.
+- Seed: seeded RNG (2027) draws synthetic `ScoringInputs` until `scoring.score` lands in the wanted band, so 12/18/10 holds exactly; analyses are saved through `pipeline.save_report`; roadmaps come from the planner's no-LLM fallback; no usernames or URLs are invented.
 - Recorded fixtures: `tests/fixtures/github/<login>/<fingerprint>.json` (status + body, never headers), replayed by `scripts/github_fixtures.py:ReplayTransport`; re-record with `uv run python scripts/record_github.py <login>` (needs token + a network that reaches api.github.com). Changing a GraphQL query changes its fingerprint, so re-record after editing `OVERVIEW_QUERY`, `commit_facts_query` or `files_query`.
 
 ## Gotchas learned (one line each, append)
@@ -105,6 +108,9 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - Tests set `DATABASE_URL=sqlite:///:memory:` and `DEV_AUTH=1` in `tests/conftest.py` before importing the app, so they never read the real `.env` database.
 - `Settings.cors_origins` is a comma-separated string (a `list[str]` field would make pydantic-settings expect JSON in `.env`); use `settings.cors_origin_list`.
 - Starlette prints a deprecation warning about `httpx` in `TestClient`; harmless.
+
+- Tests import the seed as `scripts.seed_demo` (the rootdir is on the path); the script itself only imports from `app`.
+- Bash tool heredocs with apostrophes sometimes fail with "unexpected EOF"; write files with the Write/Edit tools instead.
 
 ## Blocked on / open questions
 - none
