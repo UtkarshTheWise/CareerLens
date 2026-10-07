@@ -20,6 +20,18 @@ from app.schemas.api import (
 )
 from app.services.quiz_timing import current_question, time_remaining_s
 
+CATEGORY_TOPIC = {
+    "code_reading": "how the code behaves",
+    "architecture": "the flow through the project",
+    "design_decision": "a design decision",
+    "debugging": "a failure case",
+    "extension": "how to extend it",
+    "claim_check": "where a technology is used",
+    "process": "your process",
+    "outcome": "the outcome",
+    "critique": "a critique of the design",
+}
+
 
 def question_out(question: models.QuizQuestion, now: datetime) -> QuizQuestion:
     practice = question.quiz.mode == "practice"
@@ -106,3 +118,15 @@ def feedback_out(question: models.QuizQuestion, *, reveal: bool) -> QuizAnswerFe
         model_answer=question.model_answer,
         source_ref=SourceRef(**ref) if ref else None,
     )
+
+
+def topic_text(question: models.QuizQuestion) -> str:
+    """What to review for a question: its first missing (else partial) key point, else the model answer."""
+    answer = question.answer
+    for wanted in ("missing", "partial"):
+        for point in answer.key_results if answer else []:
+            if point["status"] == wanted:
+                return point["text"]
+    if question.model_answer:
+        return question.model_answer.split(". ")[0].rstrip(".")[:140]
+    return CATEGORY_TOPIC.get(question.category, question.category)

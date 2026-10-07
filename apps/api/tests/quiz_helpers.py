@@ -1,10 +1,16 @@
 """Fakes and builders for the quiz tests: a GitHub client over a dict of files, scripted LLM replies."""
 
+import json
 import re
+from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 
 from app.db import models
-from app.services.pipeline import PipelineDeps
+from app.db.base import SessionLocal
+from app.main import app
+from app.routers.analyses import get_pipeline_deps
+from app.routers.quizzes import get_clock
+from app.services.pipeline import PipelineDeps, save_report
 from app.services.scoring_inputs import ScoringInputs
 from tests.llm_fakes import SchemaProvider
 from tests.scoring_helpers import code_project, rich_inputs
@@ -99,7 +105,11 @@ def inputs_with_repo() -> ScoringInputs:
     return base.model_copy(update={"projects": [project]})
 
 
-def make_analysis(db, inputs: ScoringInputs | None = None, status: str = "done") -> models.Analysis:
+def make_analysis(
+    db, inputs: ScoringInputs | None = None, status: str = "done", *, with_report: bool = False
+) -> models.Analysis:
+    """A finished analysis row. With `with_report` it also has the full stored report (as the pipeline saves
+    it) and is the profile's latest, which verify results re-score."""
     inputs = inputs or inputs_with_repo()
     profile = models.Profile(name="Quiz Student", target_role_id="sde-backend")
     db.add(profile)
@@ -109,6 +119,12 @@ def make_analysis(db, inputs: ScoringInputs | None = None, status: str = "done")
         signals=inputs.model_dump(mode="json"),
     )  # fmt: skip
     db.add(analysis)
+    db.flush()
+    if with_report:
+        from scripts.seed_demo import build_report
+
+        analysis.profile = profile
+        save_report(analysis, inputs, build_report(inputs, db))
     db.commit()
     return analysis
 
@@ -155,3 +171,76 @@ def grading_reply(status: str = "covered", incorrect: list[str] | None = None, s
         return {"answers": answers}
 
     return respond
+
+
+PROJECT = "proj-campus-api"
+
+
+@dataclass
+class Env:
+    client: object
+    provider: SchemaProvider
+    clock: Clock
+    analysis_id: str
+    profile_id: str
+
+    def create(self, mode: str = "verify", **kw):
+        return self.client.post(
+            f"/v1/analyses/{self.analysis_id}/quizzes", json={"project_id": PROJECT, "mode": mode, **kw}
+        )
+
+    def get(self, quiz_id: str):
+        return self.client.get(f"/v1/quizzes/{quiz_id}")
+
+    def answer(self, quiz_id: str, question_id: str, **kw):
+        body = {"question_id": question_id, "time_taken_ms": 4000, **kw}
+        return self.client.post(f"/v1/quizzes/{quiz_id}/answers", json=body)
+
+    def submit(self, quiz_id: str):
+        return self.client.post(f"/v1/quizzes/{quiz_id}/submit")
+
+    def result(self, quiz_id: str):
+        return self.client.get(f"/v1/quizzes/{quiz_id}/result")
+
+    def questions(self, quiz_id: str) -> list[dict]:
+        """The stored questions, answer keys included: for the test to know what a right answer is."""
+        with SessionLocal() as db:
+            rows = db.get(models.Quiz, quiz_id).questions
+            return [
+                {"id": q.id, "type": q.type, "correct": q.correct_choice_id, "limit": q.time_limit_s,
+                 "key_points": q.key_points, "model_answer": q.model_answer}
+                for q in rows
+            ]  # fmt: skip
+
+    def answer_all(
+        self, quiz_id: str, text: str = "Each request opens a connection and closes it afterwards."
+    ) -> None:
+        for q in self.questions(quiz_id):
+            self.get(quiz_id)  # serves the current question (verify)
+            kw = {"choice_id": q["correct"]} if q["type"] == "mcq" else {"text": text}
+            assert self.answer(quiz_id, q["id"], **kw).status_code == 200
+
+
+def leaks(payload) -> list[str]:
+    """Answer-key strings found anywhere in a response body."""
+    text = json.dumps(payload)
+    return [
+        s
+        for s in (
+            "Opens one connection per request",
+            "Closes it in a finally block",
+            "It returns an empty list because",
+        )
+        if s in text
+    ]
+
+
+def new_env(
+    client, provider: SchemaProvider, *, inputs: ScoringInputs | None = None, with_report: bool = False
+):
+    clock = Clock()
+    app.dependency_overrides[get_pipeline_deps] = lambda: deps(provider, FakeGitHub())
+    app.dependency_overrides[get_clock] = lambda: clock
+    with SessionLocal() as db:
+        analysis = make_analysis(db, inputs, with_report=with_report)
+        return Env(client, provider, clock, analysis.id, analysis.profile_id)

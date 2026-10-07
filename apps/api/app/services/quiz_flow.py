@@ -27,6 +27,7 @@ from app.schemas.api import (
 from app.services import quiz as quiz_service
 from app.services.llm import LLMError
 from app.services.pipeline import PipelineDeps
+from app.services.quiz_effects import apply_verify_result
 from app.services.quiz_grading import (
     grade_mcq,
     grade_short_answers,
@@ -42,24 +43,13 @@ from app.services.quiz_timing import (
     timed_out_answer,
     total_deadline,
 )
-from app.services.quiz_views import feedback_out, quiz_out, summary_out
+from app.services.quiz_views import CATEGORY_TOPIC, feedback_out, quiz_out, summary_out, topic_text
 
 logger = logging.getLogger("careerlens.quiz")
 
 STRONG_Q = 0.7  # a question at or above this is a strength; below it is a review topic
 MAX_STRENGTHS = 5
 MAX_REVIEW_TOPICS = 6
-CATEGORY_TOPIC = {
-    "code_reading": "how the code behaves",
-    "architecture": "the flow through the project",
-    "design_decision": "a design decision",
-    "debugging": "a failure case",
-    "extension": "how to extend it",
-    "claim_check": "where a technology is used",
-    "process": "your process",
-    "outcome": "the outcome",
-    "critique": "a critique of the design",
-}
 
 
 def iso(moment: datetime) -> str:
@@ -247,16 +237,6 @@ def answer_question(
 # ---------------------------------------------------------------- submitting and the result
 
 
-def _topic(question: models.QuizQuestion, answer: models.QuizAnswer | None) -> str:
-    for wanted in ("missing", "partial"):
-        for point in answer.key_results if answer else []:
-            if point["status"] == wanted:
-                return point["text"]
-    if question.model_answer:
-        return question.model_answer.split(". ")[0].rstrip(".")[:140]
-    return CATEGORY_TOPIC.get(question.category, question.category)
-
-
 def build_result(quiz: models.Quiz, settings: Settings) -> QuizResult:
     strengths: list[str] = []
     weak: list[tuple[float, models.QuizQuestion]] = []
@@ -271,7 +251,7 @@ def build_result(quiz: models.Quiz, settings: Settings) -> QuizResult:
             weak.append((score, question))
     weak.sort(key=lambda pair: (pair[0], pair[1].order))
     topics = [
-        ReviewTopic(topic=_topic(q, q.answer), source_ref=SourceRef(**q.source_ref) if q.source_ref else None)
+        ReviewTopic(topic=topic_text(q), source_ref=SourceRef(**q.source_ref) if q.source_ref else None)
         for _, q in weak[:MAX_REVIEW_TOPICS]
     ]
     verify = quiz.mode == "verify"
@@ -328,7 +308,10 @@ def submit_quiz(
     quiz.score = quiz_score([(q.type, q.answer.score or 0.0) for q in quiz.questions])
     quiz.understanding = understanding_for(quiz.score).value if verify else None
     quiz.status, quiz.submitted_at, quiz.auto_submitted = "submitted", now, auto
+    effects = apply_verify_result(db, quiz, deps) if verify else None  # practice never changes evidence
     result = build_result(quiz, settings)
+    if effects is not None:
+        result = result.model_copy(update={"score_update": effects[0], "flag": effects[1]})
     quiz.result = result.model_dump(mode="json")
     db.commit()
     return result

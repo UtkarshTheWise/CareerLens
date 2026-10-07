@@ -1,96 +1,26 @@
 import json
-from dataclasses import dataclass
 
 import pytest
 
 from app.db import models
 from app.db.base import SessionLocal
-from app.main import app
-from app.routers.analyses import get_pipeline_deps
-from app.routers.quizzes import get_clock
 from app.services.llm import ProviderUnavailable
 from tests.conftest import assert_error_shape
 from tests.llm_fakes import SchemaProvider
 from tests.quiz_helpers import (
-    Clock,
-    FakeGitHub,
-    deps,
+    PROJECT,
     full_verify_reply,
     grading_reply,
+    leaks,
     make_analysis,
+    new_env,
 )
-
-PROJECT = "proj-campus-api"
-
-
-@dataclass
-class Env:
-    client: object
-    provider: SchemaProvider
-    clock: Clock
-    analysis_id: str
-    profile_id: str
-
-    def create(self, mode: str = "verify", **kw):
-        return self.client.post(
-            f"/v1/analyses/{self.analysis_id}/quizzes", json={"project_id": PROJECT, "mode": mode, **kw}
-        )
-
-    def get(self, quiz_id: str):
-        return self.client.get(f"/v1/quizzes/{quiz_id}")
-
-    def answer(self, quiz_id: str, question_id: str, **kw):
-        body = {"question_id": question_id, "time_taken_ms": 4000, **kw}
-        return self.client.post(f"/v1/quizzes/{quiz_id}/answers", json=body)
-
-    def submit(self, quiz_id: str):
-        return self.client.post(f"/v1/quizzes/{quiz_id}/submit")
-
-    def result(self, quiz_id: str):
-        return self.client.get(f"/v1/quizzes/{quiz_id}/result")
-
-    def questions(self, quiz_id: str) -> list[dict]:
-        """The stored questions, answer keys included: for the test to know what a right answer is."""
-        with SessionLocal() as db:
-            rows = db.get(models.Quiz, quiz_id).questions
-            return [
-                {"id": q.id, "type": q.type, "correct": q.correct_choice_id, "limit": q.time_limit_s,
-                 "key_points": q.key_points, "model_answer": q.model_answer}
-                for q in rows
-            ]  # fmt: skip
-
-    def answer_all(
-        self, quiz_id: str, text: str = "Each request opens a connection and closes it afterwards."
-    ) -> None:
-        for q in self.questions(quiz_id):
-            self.get(quiz_id)  # serves the current question (verify)
-            kw = {"choice_id": q["correct"]} if q["type"] == "mcq" else {"text": text}
-            assert self.answer(quiz_id, q["id"], **kw).status_code == 200
 
 
 @pytest.fixture
 def env(client):
     provider = SchemaProvider({"GeneratedQuiz": full_verify_reply(), "QuizGrading": grading_reply()})
-    clock = Clock()
-    app.dependency_overrides[get_pipeline_deps] = lambda: deps(provider, FakeGitHub())
-    app.dependency_overrides[get_clock] = lambda: clock
-    with SessionLocal() as db:
-        analysis = make_analysis(db)
-        return Env(client, provider, clock, analysis.id, analysis.profile_id)
-
-
-def leaks(payload) -> list[str]:
-    """Answer-key strings found anywhere in a response body."""
-    text = json.dumps(payload)
-    return [
-        s
-        for s in (
-            "Opens one connection per request",
-            "Closes it in a finally block",
-            "It returns an empty list because",
-        )
-        if s in text
-    ]
+    return new_env(client, provider)
 
 
 # ---------------------------------------------------------------- verify: the happy path

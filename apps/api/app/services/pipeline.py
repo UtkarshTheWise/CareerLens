@@ -221,11 +221,8 @@ def _with_text(projects, texts: dict[str, ProjectText]):
     return out
 
 
-def save_report(analysis: models.Analysis, inputs: ScoringInputs, report: AnalysisReport) -> None:
-    """Store a finished report with its scoring inputs and update the profile's latest score.
-
-    Does not set `status` or commit: the pipeline does that through `_set_stage`, the seed script directly.
-    """
+def store_report(analysis: models.Analysis, inputs: ScoringInputs, report: AnalysisReport) -> None:
+    """Put a report, its scoring inputs and the headline numbers on the analysis row."""
     analysis.report = report.model_dump(mode="json")
     analysis.signals = inputs.model_dump(mode="json")
     analysis.score = report.score.total
@@ -233,6 +230,14 @@ def save_report(analysis: models.Analysis, inputs: ScoringInputs, report: Analys
     analysis.verified_skills = sum(
         1 for c in report.claims if c.claimed and c.level.value in ("strong", "moderate")
     )
+
+
+def save_report(analysis: models.Analysis, inputs: ScoringInputs, report: AnalysisReport) -> None:
+    """Store a finished report and make it the profile's latest.
+
+    Does not set `status` or commit: the pipeline does that through `_set_stage`, the seed script directly.
+    """
+    store_report(analysis, inputs, report)
     analysis.finished_at = datetime.now(UTC)
     profile = analysis.profile
     profile.latest_analysis_id = analysis.id
