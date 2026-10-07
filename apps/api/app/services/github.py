@@ -197,12 +197,14 @@ class GitHubClient:
         *,
         transport: httpx.BaseTransport | None = None,
         sleep: Callable[[float], None] = time.sleep,
+        refresh: bool = False,
     ):
         token = (settings or get_settings()).github_token
         if not token:
             raise ApiError(503, "github_not_configured", "GitHub access is not configured on the server")
         self._db = db
         self._sleep = sleep
+        self._refresh = refresh  # bypass cached responses (they are still refreshed in the cache)
         self.calls = 0  # real HTTP requests made (cache hits excluded)
         self._http = httpx.Client(
             transport=transport,
@@ -224,7 +226,7 @@ class GitHubClient:
         """Run a GraphQL query and return `data`. Raises ApiError for failures."""
         body = {"query": query, "variables": variables}
         key = request_fingerprint("POST", GRAPHQL_URL, body)
-        cached = cache_get(self._db, key)
+        cached = None if self._refresh else cache_get(self._db, key)
         if cached is not None:
             return cached
         payload = self._send("POST", GRAPHQL_URL, body)
@@ -236,7 +238,7 @@ class GitHubClient:
         """GET a REST path. With `missing_ok`, 404 and 409 (empty repo) return None."""
         url = f"{API}{path}"
         key = request_fingerprint("GET", url)
-        cached = cache_get(self._db, key)
+        cached = None if self._refresh else cache_get(self._db, key)
         if cached is not None:
             return cached
         payload = self._send("GET", url, None, missing_ok=missing_ok)

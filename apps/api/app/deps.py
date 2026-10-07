@@ -1,4 +1,5 @@
 from collections.abc import Iterator
+from uuid import UUID
 
 from fastapi import Depends, Request
 from sqlalchemy import select
@@ -7,7 +8,7 @@ from sqlalchemy.orm import Session
 from app.config import Settings, get_settings
 from app.db import models
 from app.db.base import SessionLocal
-from app.errors import ApiError
+from app.errors import ApiError, not_found
 
 DEV_SUBJECT = "dev"
 
@@ -60,3 +61,23 @@ def get_current_profile(
     if profile is None:
         raise ApiError(404, "not_found", "No profile for this user yet")
     return profile
+
+
+def get_profile_for(
+    profile_id: UUID, subject: str = Depends(get_auth_subject), db: Session = Depends(get_db)
+) -> models.Profile:
+    """The profile in the path, if the caller may see it. DEV_AUTH sees every profile."""
+    profile = db.get(models.Profile, str(profile_id))
+    if profile is None or (subject != DEV_SUBJECT and profile.auth_subject != subject):
+        raise not_found("Profile")
+    return profile
+
+
+def get_analysis_for(
+    analysis_id: UUID, subject: str = Depends(get_auth_subject), db: Session = Depends(get_db)
+) -> models.Analysis:
+    """The analysis in the path, if the caller owns its profile."""
+    analysis = db.get(models.Analysis, str(analysis_id))
+    if analysis is None or (subject != DEV_SUBJECT and analysis.profile.auth_subject != subject):
+        raise not_found("Analysis")
+    return analysis

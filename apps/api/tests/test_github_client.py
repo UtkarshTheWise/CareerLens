@@ -205,3 +205,17 @@ def test_token_never_reaches_logs_or_cache(db, caplog):
     assert TOKEN not in caplog.text
     assert all(TOKEN not in str(e.value) for e in db.query(CacheEntry))
     assert "github graphql ok" in caplog.text
+
+
+def test_refresh_bypasses_the_cache_but_still_updates_it(db):
+    script = Script(OK)
+    make_client(db, script).graphql(QUERY, {"a": 1})
+    assert len(script.requests) == 1
+    cache_hit = make_client(db, script).graphql(QUERY, {"a": 1})
+    assert cache_hit == OK["data"] and len(script.requests) == 1
+    client = GitHubClient(
+        db, Settings(_env_file=None, github_token=TOKEN), transport=httpx.MockTransport(script), refresh=True
+    )
+    client.graphql(QUERY, {"a": 1})
+    assert len(script.requests) == 2  # fetched again despite the cache entry
+    assert db.query(CacheEntry).count() == 1  # and written back to the same key

@@ -1,6 +1,5 @@
 import logging
 from typing import Literal
-from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, Form, Response, UploadFile
 from sqlalchemy import select
@@ -8,8 +7,8 @@ from sqlalchemy.orm import Session
 
 from app import catalogue
 from app.db import models
-from app.deps import DEV_SUBJECT, get_auth_subject, get_current_profile, get_db
-from app.errors import ApiError, not_found
+from app.deps import DEV_SUBJECT, get_auth_subject, get_current_profile, get_db, get_profile_for
+from app.errors import ApiError
 from app.routers import ERROR_RESPONSES
 from app.schemas.api import Error, Profile, ProfileCreate, ProfileUpdate
 from app.services.ingest import MAX_UPLOAD_BYTES, extract_text
@@ -17,16 +16,6 @@ from app.services.ingest import MAX_UPLOAD_BYTES, extract_text
 logger = logging.getLogger("careerlens.profiles")
 
 router = APIRouter(tags=["profiles"], responses=ERROR_RESPONSES)
-
-
-def get_profile_for(
-    profile_id: UUID, subject: str = Depends(get_auth_subject), db: Session = Depends(get_db)
-) -> models.Profile:
-    """The profile in the path, if the caller may see it. DEV_AUTH sees every profile."""
-    profile = db.get(models.Profile, str(profile_id))
-    if profile is None or (subject != DEV_SUBJECT and profile.auth_subject != subject):
-        raise not_found("Profile")
-    return profile
 
 
 def _check_references(db: Session, fields: dict) -> None:

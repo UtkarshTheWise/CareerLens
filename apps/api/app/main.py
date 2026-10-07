@@ -5,15 +5,18 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.catalogue import validate_catalogue
 from app.config import API_VERSION, get_settings
-from app.db.base import create_all
+from app.db.base import SessionLocal, create_all
 from app.errors import register_error_handlers
-from app.routers import meta, profiles
+from app.routers import analyses, meta, profiles
+from app.services.pipeline import recover_interrupted
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     validate_catalogue()  # refuse to start on broken data/*.yaml
     create_all()  # prototype: no migrations yet
+    with SessionLocal() as db:
+        recover_interrupted(db)  # a restart can't resume a half-done analysis
     yield
 
 
@@ -37,6 +40,7 @@ def create_app() -> FastAPI:
     register_error_handlers(app)
     app.include_router(meta.router)
     app.include_router(profiles.router)
+    app.include_router(analyses.router)
     return app
 
 
