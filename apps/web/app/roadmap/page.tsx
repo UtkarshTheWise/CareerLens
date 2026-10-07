@@ -1,2 +1,4 @@
-import { SectionShell } from "@/components/layout/section-shell";
-export default function Page() { return <SectionShell title="Roadmap" description="Turn evidence gaps into practical next steps."/>; }
+import { RoadmapScreen } from "@/components/roadmap/roadmap-screen";
+export default function Page() {
+  return <RoadmapScreen />;
+}
