@@ -240,6 +240,22 @@ def _source_ref(q: GeneratedQuestion, ctx: QuizContext) -> dict | None:
     }
 
 
+GRADING_CONTEXT_LINES = 60
+GRADING_CONTEXT_CHARS = 1_500
+
+
+def _grading_context(q: GeneratedQuestion, ctx: QuizContext) -> str | None:
+    """What the grader may check an answer against: the cited lines, or the page text near the section."""
+    ref = q.source_ref
+    if ref is None:
+        return None
+    if ctx.kind == "code":
+        return ctx.excerpt(ref.path, ref.start_line, ref.end_line, GRADING_CONTEXT_LINES)
+    text = " ".join(ctx.page_text.split())
+    at = text.lower().find(_clean(ref.section).lower())
+    return text[max(0, at - 200) : at + GRADING_CONTEXT_CHARS] if at >= 0 else text[:GRADING_CONTEXT_CHARS]
+
+
 def to_rows(
     questions: list[GeneratedQuestion], ctx: QuizContext, mode: str, quiz_id: str
 ) -> list[models.QuizQuestion]:
@@ -272,6 +288,7 @@ def to_rows(
                 key_points=q.key_points,
                 acceptable_alternatives=[_clean(a) for a in q.acceptable_alternatives if _clean(a)],
                 model_answer=_clean(q.model_answer) or None,
+                grading_context=_grading_context(q, ctx),
             )
         )
     return rows

@@ -7,7 +7,7 @@ from app.catalogue import validate_catalogue
 from app.config import API_VERSION, get_settings
 from app.db.base import SessionLocal, create_all
 from app.errors import register_error_handlers
-from app.routers import analyses, applications, cohorts, jobs, meta, profiles
+from app.routers import analyses, applications, cohorts, jobs, meta, profiles, quizzes
 from app.services.pipeline import recover_interrupted
 
 
@@ -44,6 +44,7 @@ def create_app() -> FastAPI:
     app.include_router(jobs.router)
     app.include_router(applications.router)
     app.include_router(cohorts.router)
+    app.include_router(quizzes.router)
     return app
 
 

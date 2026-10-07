@@ -96,3 +96,13 @@ def get_analysis_for(
     if analysis is None or (subject != DEV_SUBJECT and analysis.profile.auth_subject != subject):
         raise not_found("Analysis")
     return analysis
+
+
+def get_quiz_for(
+    quiz_id: UUID, subject: str = Depends(get_auth_subject), db: Session = Depends(get_db)
+) -> models.Quiz:
+    """The quiz in the path, if the caller owns its profile."""
+    quiz = db.get(models.Quiz, str(quiz_id))
+    if quiz is None or (subject != DEV_SUBJECT and quiz.profile.auth_subject != subject):
+        raise not_found("Quiz")
+    return quiz

@@ -1,6 +1,7 @@
 """Fakes and builders for the quiz tests: a GitHub client over a dict of files, scripted LLM replies."""
 
-from datetime import UTC, datetime
+import re
+from datetime import UTC, datetime, timedelta
 
 from app.db import models
 from app.services.pipeline import PipelineDeps
@@ -115,3 +116,42 @@ def make_analysis(db, inputs: ScoringInputs | None = None, status: str = "done")
 def deps(provider: SchemaProvider, github: FakeGitHub | None = None) -> PipelineDeps:
     github = github or FakeGitHub()
     return PipelineDeps(providers=[provider], github_client=lambda db, fresh: github)
+
+
+class Clock:
+    """A settable time source for the quiz routes."""
+
+    def __init__(self, now: datetime = T0):
+        self.now = now
+
+    def __call__(self) -> datetime:
+        return self.now
+
+    def advance(self, seconds: float) -> None:
+        self.now = self.now + timedelta(seconds=seconds)
+
+
+def grading_reply(status: str = "covered", incorrect: list[str] | None = None, skip: set[str] | None = None):
+    """A scripted QuizGrading reply: reads the QUESTION_IDs and key points out of the prompt it is given."""
+
+    def respond(user: str) -> dict:
+        answers = []
+        for block in user.split("\n\n---\n\n"):
+            match = re.search(r"QUESTION_ID: (\S+)", block)
+            if match is None or match.group(1) in (skip or set()):
+                continue
+            points = re.findall(
+                r"^\d+\. (.+)$", block.split("Key points, in order:")[1].split("Student")[0], re.M
+            )
+            points = [p for p in points if not p.startswith("Acceptable")]
+            answers.append(
+                {
+                    "question_id": match.group(1),
+                    "key_points": [{"text": p, "status": status} for p in points],
+                    "incorrect_statements": incorrect or [],
+                    "feedback": "Nice work; review the connection handling once more.",
+                }
+            )
+        return {"answers": answers}
+
+    return respond

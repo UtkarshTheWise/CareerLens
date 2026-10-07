@@ -196,6 +196,7 @@ class QuizQuestion(Base):
     key_points: Mapped[list[str]] = mapped_column(JSON, default=list)
     acceptable_alternatives: Mapped[list[str]] = mapped_column(JSON, default=list)
     model_answer: Mapped[str | None] = mapped_column(Text)
+    grading_context: Mapped[str | None] = mapped_column(Text)  # the cited code or page text, for the grader
 
     quiz: Mapped[Quiz] = relationship(back_populates="questions")
     answer: Mapped["QuizAnswer | None"] = relationship(
