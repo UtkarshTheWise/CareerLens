@@ -108,3 +108,19 @@ def test_seed_gives_the_demo_profile_an_analysis_once(client):
     _seed()
     with SessionLocal() as db:
         assert db.get(models.Profile, summary["demo_profile_id"]).latest_analysis_id == first
+
+
+def test_seed_gives_most_students_with_a_repo_a_verify_result(client):
+    summary = _seed()
+    with SessionLocal() as db:
+        rows, profiles = cohorts.load_rows(db, summary["cohort_id"], "sde-backend")
+        insights = cohorts.aggregate(rows, profiles, summary["cohort_id"], "sde-backend")
+    u = insights.understanding
+    assert 16 <= u.quizzed <= 32  # roughly half to three quarters of 40
+    assert u.demonstrated > 0 and u.partial > 0 and u.not_demonstrated > 0
+    assert u.demonstrated + u.partial + u.not_demonstrated == u.quizzed
+    assert u.by_skill and all(0 <= s.built_and_explained_rate <= 100 for s in u.by_skill)
+    unverified = {r.skill_id: r for r in insights.unverified_rate_by_skill}
+    for s in u.by_skill:  # explained can never exceed built: it needs a strong/moderate claim first
+        built = 100 - unverified[s.skill_id].unverified_rate if s.skill_id in unverified else 100
+        assert s.built_and_explained_rate <= built + 0.1

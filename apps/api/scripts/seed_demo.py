@@ -31,7 +31,7 @@ from app import catalogue  # noqa: E402
 from app.db import models  # noqa: E402
 from app.db.base import SessionLocal, create_all  # noqa: E402
 from app.deps import demo_profile  # noqa: E402
-from app.schemas.api import AnalysisReport  # noqa: E402
+from app.schemas.api import AnalysisReport, Understanding  # noqa: E402
 from app.schemas.llm import (  # noqa: E402
     ResumeCertification,
     ResumeEducation,
@@ -161,6 +161,31 @@ def _weeks(rng: random.Random, t: float, today: date) -> tuple[list[WeekCount], 
     return weeks, min(last, today) if last else None
 
 
+QUIZ_SHARE = 0.95  # of students with a repository: about half of the whole cohort has a verify result
+
+
+def _add_verify_result(rng: random.Random, projects: list[ProjectInput], t: float) -> None:
+    """A verify quiz on the student's top project, as if taken (docs/QUIZ.md). Stronger students tend to
+    explain their code well; the result enters scoring exactly as a real one does."""
+    if not projects or not _pick(rng, QUIZ_SHARE):
+        return
+    top = max(projects, key=lambda p: (p.signals.authored_commits if p.signals else 0, p.project_id))
+    weights = {
+        Understanding.demonstrated: 0.2 + 0.6 * t,
+        Understanding.partial: 0.2,
+        Understanding.not_demonstrated: 0.4 * (1 - t) + 0.1,
+    }
+    pick = rng.uniform(0, sum(weights.values()))
+    chosen = Understanding.not_demonstrated
+    for candidate, weight in weights.items():
+        pick -= weight
+        if pick <= 0:
+            chosen = candidate
+            break
+    top.understanding = chosen
+    top.covered_skill_ids = sorted(top.skills)[:3]
+
+
 def generate_inputs(
     rng: random.Random, role_id: str, t: float, today: date, department: str
 ) -> ScoringInputs:
@@ -218,6 +243,8 @@ def generate_inputs(
                     mentioned_technologies=tech,
                 )
             )
+
+    _add_verify_result(rng, projects, t)
 
     experience = []
     if _pick(rng, 0.1 + 0.6 * t):
