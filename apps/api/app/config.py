@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     groq_api_key: str = ""
     groq_model: str = "openai/gpt-oss-120b"
     ollama_url: str = ""
+    ollama_model: str = "llama3.2"
     github_token: str = ""
     database_url: str = "sqlite:///./dev.db"
     supabase_jwt_secret: str = ""

@@ -1,0 +1,44 @@
+{
+  "headline": null,
+  "education": [
+    {
+      "institution": "Example Institute of Technology",
+      "degree": "B.Tech",
+      "field": "Computer Science and Engineering",
+      "start": "2023",
+      "end": "2027",
+      "grade": "CGPA 8.4"
+    }
+  ],
+  "skills": ["Python", "FastAPI", "SQL", "Docker", "pytest", "React", "Kubernetes", "AWS"],
+  "experience": [
+    {
+      "org": "Northwind Labs",
+      "role": "Backend Intern",
+      "start": "2025-05",
+      "end": "2025-07",
+      "bullets": [
+        "Reduced API response time by 35% by adding Redis caching to two endpoints",
+        "Wrote 40 pytest tests for the booking service",
+        "Documented the deployment steps for new interns"
+      ],
+      "mentioned_technologies": ["Redis", "pytest"]
+    }
+  ],
+  "projects": [
+    {
+      "title": "campus-api",
+      "description": "REST API for campus event registration built with FastAPI and PostgreSQL. Handled 10,000 requests in a local load test. Packaged with Docker.",
+      "links": ["[URL_4]"],
+      "mentioned_technologies": ["FastAPI", "PostgreSQL", "Docker"]
+    },
+    {
+      "title": "weather-dashboard",
+      "description": "Web page that shows the weather for a searched city using React.",
+      "links": ["[URL_5]"],
+      "mentioned_technologies": ["React"]
+    }
+  ],
+  "certifications": [{ "name": "Intro to SQL", "issuer": "Kaggle" }],
+  "page_count_hint": null
+}
