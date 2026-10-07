@@ -32,7 +32,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | B3 | Ingest, PII stripping, LLM gateway, resume extraction | done | 1ced9ff | verified live 2026-10-07: Gemini fast and Groq both extract the fixture resume |
 | B4 | GitHub collector, detectors, repo signals, rule flags | done | 024b6f8 | fixture: UtkarshTheWise (14 repos, 768 KB); `claim_mismatch` and `vague_description` flags are B6 |
 | B5 | scoring.py + what-if + unit tests | done | c5b479d | 106 new tests; run on the recorded real profile and checked by hand |
-| B6 | Pipeline, analyses endpoints, judging, roadmap planner, role-fit | done | SHA_B6 | 5 endpoints incl. the milestone PATCH; live run verified; 102 new tests |
+| B6 | Pipeline, analyses endpoints, judging, roadmap planner, role-fit | done | 70d91bc | 5 endpoints incl. the milestone PATCH; live run verified; 102 new tests |
 | B7 | Jobs match, applications, cohorts, seed_demo.py | todo | | |
 | B9 | Project Understanding Check (quiz) | todo | | also `GET /v1/quizzes/{id}/result`; 429 detail key is `retake_available_at`, not `retry_at` as the B9 prompt says |
 | B8 | Hardening, contract check green, deploy, keep-alive | todo | | Supabase JWT verification lands here |
