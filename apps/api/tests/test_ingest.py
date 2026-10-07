@@ -138,3 +138,10 @@ def test_restore_round_trips_through_nested_structures():
     assert restored["links"] == [stripped.mapping["[URL_1]"]]
     assert restored["inner"][0]["note"] == "mail aarav.mehta@example.com"
     assert restored["n"] == 3
+
+
+def test_header_name_detection_can_be_switched_off_for_titles():
+    text = "Campus API\nA REST API for events"
+    assert strip_pii(text, ["Priya Raman"]).text.startswith("[NAME]")  # a resume: the first line is the name
+    kept = strip_pii(text, ["Priya Raman"], header_name=False).text
+    assert kept == text  # a README or description: the first line is a title

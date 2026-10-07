@@ -135,8 +135,14 @@ def _header_name(text: str) -> str | None:
     return None
 
 
-def strip_pii(text: str, known_names: tuple[str, ...] | list[str] = ()) -> StrippedText:
-    """Replace emails, phone numbers, URLs and the person's name with placeholders."""
+def strip_pii(
+    text: str, known_names: tuple[str, ...] | list[str] = (), *, header_name: bool = True
+) -> StrippedText:
+    """Replace emails, phone numbers, URLs and the person's name with placeholders.
+
+    `header_name` also treats a name-like first line as the person's name: right for a resume, wrong
+    for a README or a project description, whose first line is a title.
+    """
     rep = _Replacer()
 
     def sub_trimmed(kind: str):
@@ -160,7 +166,9 @@ def strip_pii(text: str, known_names: tuple[str, ...] | list[str] = ()) -> Strip
 
     out = _PHONE.sub(_phone, out)
 
-    names = [n.strip() for n in (*known_names, _header_name(out) or "") if n and n.strip()]
+    names = [
+        n.strip() for n in (*known_names, (_header_name(out) if header_name else "") or "") if n and n.strip()
+    ]
     if names:
         rep.mapping["[NAME]"] = names[0]
         parts: set[str] = set()
