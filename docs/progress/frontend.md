@@ -2,7 +2,7 @@
 
 <!--
 Living snapshot for context hand-off. ANY agent/model continuing this track reads this first.
-Overwrite sections to reflect the truth NOW; don't append history (history goes in docs/HANDOFF.md).
+Overwrite sections to reflect the truth NOW; don't append history (history and messages go in docs/handoff/frontend.md).
 Update after every meaningful step, not just at the end: usage limits cut sessions off without warning.
 Keep under ~150 lines. Commit it together with the code it describes.
 -->

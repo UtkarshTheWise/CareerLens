@@ -14,7 +14,7 @@ Copy-paste prompts for every task in `ROADMAP.md`. Task ids match.
           │ imports
  apps/web + apps/extension  ◄── Codex, worktree frontend/codex, talks to Prism mock :4010
           │
-          └── docs/HANDOFF.md (append-only): status, requests, Contract Change Requests
+          └── docs/handoff/<track>.md (append-only, one per track): requests, CCRs, what's usable
                                    │
                 Phase 3: Claude Code on branch `integration` merges both, points web at :8000,
                 runs drift check + builds + smoke tests, fixes mismatches.
@@ -24,7 +24,7 @@ Rules that make this work:
 1. **Shared instructions live in `AGENTS.md`.** Codex reads only AGENTS.md files; Claude Code reads `CLAUDE.md`, which imports AGENTS.md. Never put shared rules only in CLAUDE.md.
 2. **One task per session.** Start a fresh session (`/clear` in Claude Code, new `codex` session) for each task id. Paste the prompt. Context stays small; quality stays high.
 3. **Plan before edit** for anything bigger than a small fix (Claude Code: `Shift+Tab` into plan mode or `claude --permission-mode plan`; Codex: ask it to "propose a plan and wait").
-4. **Every task ends** with: checks run → progress file updated → HANDOFF entry (if the other track needs to know) → commit.
+4. **Every task ends** with: checks run → progress file updated → handoff entry in your track's log (if the other track needs to know) → commit → push.
 5. **Humans merge.** Merge `backend/claude` and `frontend/codex` into `main` at checkpoints; the other side rebases.
 6. **Progress files make agents swappable.** Each track keeps `docs/progress/<track>.md` current after every step (rules in `AGENTS.md`). If an agent hits its usage or context limit, any other model (Claude Code, Codex, Gemini CLI, Cursor…) picks up the same track with the **RESUME** prompt below. Claude Code is forced to do this by a Stop hook; Codex and other tools rely on the footer below.
 
@@ -42,6 +42,40 @@ cp apps/api/.env.example ../careerlens-api/apps/api/.env      # fill keys; never
 Terminals: (1) `claude` in `careerlens-api/`, (2) `codex` in `careerlens-web/`, (3) Prism mock from either, (4) dev servers. Phase 3 runs `claude` back in `careerlens/`.
 
 **Codex sandbox note:** Codex's default sandbox has network off, so it can't `pnpm install` or reach the mock. Either run installs and dev servers yourself in terminal 3/4 (simplest), or allow network for its workspace sandbox in `~/.codex/config.toml` (check the current Codex docs for the exact key).
+
+### Two-laptop setup (Codex on a teammate's machine)
+
+Each laptop has its **own clone** of the same GitHub repo. GitHub is the only link between them, so nothing moves by zip, pen drive or WhatsApp.
+
+**You** (Claude Code: Phase 0, backend, integration):
+
+```bash
+# add your teammate as a collaborator on the GitHub repo first
+git clone <repo> careerlens && cd careerlens            # run P0 here, then: git push origin main
+git worktree add ../careerlens-api -b backend/claude
+cp .claude/backend.settings.local.json ../careerlens-api/.claude/settings.local.json
+cp apps/api/.env.example ../careerlens-api/apps/api/.env  # fill keys locally; never share or commit
+cd ../careerlens-api && git push -u origin backend/claude
+```
+
+**Teammate** (Codex: frontend), after you've pushed P0:
+
+```bash
+git clone <repo> careerlens-web && cd careerlens-web
+git checkout -b frontend/codex && git push -u origin frontend/codex
+pnpm install                                                   # in a normal terminal, not inside Codex
+npx @stoplight/prism-cli mock contracts/openapi.yaml -p 4010 -d   # their own local mock; no API keys needed
+```
+
+Working rhythm:
+- Both push after every commit (AGENTS.md says so; the agents will too).
+- **See the other side's status remotely:** `git fetch && git show origin/frontend/codex:docs/progress/frontend.md` (or `backend`). The progress and handoff files are how you two stay in sync.
+- **Checkpoints (H6 / H12 / H14):** each opens a pull request into `main` on GitHub; you merge; both run `git pull --rebase origin main`, and the teammate runs `pnpm gen:client` if the contract changed.
+- **Contract change:** the requester writes the CCR in their handoff log and pushes; you approve, edit `contracts/openapi.yaml` on `main`, push; the other side pulls.
+- **Optional live test before Phase 3:** run the backend with `uv run fastapi dev app/main.py --host 0.0.0.0`; the teammate sets `NEXT_PUBLIC_API_URL=http://<your-LAN-IP>:8000` (their browser's origin is still `localhost:3000`, which CORS already allows). Venue Wi-Fi often blocks laptop-to-laptop traffic; if so, use the Render deployment instead.
+- **Phase 3 runs on your laptop:** `cd careerlens && git fetch && git checkout -b integration origin/main && git merge origin/backend/claude origin/frontend/codex`. The teammate keeps their laptop for demo checks and the extension test on real job pages.
+- **If Codex runs out on their laptop:** they run CHECKPOINT and push. Then either they continue there with another model plus RESUME, or you take the track: `git fetch && git worktree add ../careerlens-web frontend/codex`, copy `.claude/frontend.settings.local.json` into it as `.claude/settings.local.json`, paste RESUME. Agree who owns the branch from then on, so you never both push to it.
+- **Vercel:** if pushes from your teammate's account don't trigger deploys on the Hobby plan, deploy from the merges you push to `main`.
 
 ---
 
@@ -67,7 +101,7 @@ Phase 0. Read README.md, docs/SCORING.md, docs/PIPELINE.md, docs/DESIGN.md and c
 5. Verify `npx @stoplight/prism-cli mock contracts/openapi.yaml -d` starts and serves /v1/roles
    (send `Authorization: Bearer dev`; Prism enforces the security scheme).
 6. Record the freeze under *Decisions* in docs/progress/integration.md, fill the *Environment* sections of
-   docs/progress/backend.md and frontend.md with what you set up, append a HANDOFF entry and commit to
+   docs/progress/backend.md and frontend.md with what you set up, append an entry to docs/handoff/integration.md and commit to
    main as "chore(contract): freeze v0.2.0".
 ```
 
@@ -170,7 +204,7 @@ estimated_gain from scoring.simulate.
 Build the full AnalysisReport exactly as the contract. Failures in one project's judging must not
 fail the analysis (add a note instead).
 Test end-to-end offline with fixtures + recorded LLM responses. Then run one live analysis on the
-demo profile and paste the report summary into HANDOFF.
+demo profile and paste the report summary into docs/handoff/backend.md.
 ```
 
 ### B7 — Jobs, applications, cohorts, seed
@@ -218,7 +252,7 @@ Phase 1, task B9. Implement docs/QUIZ.md end to end.
    only; not_demonstrated downgrades only covered skills whose sole evidence is that project; not_taken
    changes nothing; practice never changes evidence; design effects are symmetric and never exceed
    moderate; understanding survives a re-analysis; verify feedback has no key fields before submit; answer keys absent from GET responses.
-Run check_contract.py, pytest, ruff. HANDOFF entry with one example generated quiz (questions only).
+Run check_contract.py, pytest, ruff. Handoff entry with one example generated quiz (questions only).
 ```
 
 ### B8 — Hardening and deploy
@@ -227,7 +261,7 @@ Run check_contract.py, pytest, ruff. HANDOFF entry with one example generated qu
 Make check_contract.py pass with no flags. Add request-size limit, timeouts on all external calls,
 structured logging, /health reporting active LLM provider. Write apps/api/README.md (run, test,
 seed, record fixtures). Add render.yaml for a free web service and .github/workflows/keepalive.yml
-(daily curl to /health and a trivial Supabase query). Do not deploy secrets. Final HANDOFF entry
+(daily curl to /health and a trivial Supabase query). Do not deploy secrets. Final handoff entry
 listing every endpoint's status (real / partial / stub).
 ```
 
@@ -352,7 +386,7 @@ Run Claude Code in the main checkout (`careerlens/`), which has no `.claude/sett
 ```
 Phase 3, task I1. You are now the integrator, not a feature builder. Fill in
 docs/progress/integration.md as you go. Read docs/progress/backend.md, docs/progress/frontend.md
-and docs/HANDOFF.md fully,
+and all of docs/handoff/*.md fully,
 then `git log main..backend/claude` and `git log main..frontend/codex` and their diffs (use a
 subagent to summarise each side). Produce: (a) open CCRs and requests from each side, (b) every
 place the frontend uses a field/endpoint the backend doesn't implement or implements differently,
@@ -396,7 +430,7 @@ report ONLY: correctness bugs, unmet requirements, security issues (keys, CORS, 
 LLM, secrets in git, quiz answer keys reachable before grading, focus data reaching cohort
 endpoints), and places that call students' work "slop/fake", imply a low quiz result means they
 didn't build the project, or claim AI-text detection.
-No style nits. Then fix what it finds and append a final HANDOFF entry.
+No style nits. Then fix what it finds and append a final entry to docs/handoff/integration.md.
 ```
 
 ---
@@ -430,7 +464,7 @@ CHECKPOINT. Stop feature work now.
 You are taking over the <backend | frontend | integration> track of CareerLens from another AI agent
 that stopped mid-task (usage or context limit). Don't start coding yet.
 1. Read, in order: AGENTS.md, <apps/api/AGENTS.md | apps/web/AGENTS.md + apps/extension/AGENTS.md>,
-   docs/progress/<track>.md (fully), the last 5 entries of docs/HANDOFF.md, and the PROMPTS.md
+   docs/progress/<track>.md (fully), the last 5 entries of docs/handoff/<track>.md and of the other tracks' logs, and the PROMPTS.md
    prompt for the current task id.
 2. Run `git status`, `git log --oneline -10` and the track's checks. If reality disagrees with the
    progress file, trust git and the checks, and correct the progress file first.
@@ -455,14 +489,14 @@ that stopped mid-task (usage or context limit). Don't start coding yet.
 **Contract drift found mid-build (either agent)**
 ```
 Stop. Do not change contracts/openapi.yaml or the other side's code. Write a Contract Change Request
-in docs/HANDOFF.md using the template, implement against the CURRENT contract with a TODO, and tell
+in your track's docs/handoff/<track>.md using the template in docs/HANDOFF.md, implement against the CURRENT contract with a TODO, and tell
 me the CCR number.
 ```
 
 **Agent touched files it doesn't own**
 ```
 Run `git diff --stat main...HEAD`. Revert every change outside your ownership listed in AGENTS.md.
-Move any needed change into a HANDOFF request instead.
+Move any needed change into a request in your docs/handoff/<track>.md instead.
 ```
 
 **LLM quota exhausted**

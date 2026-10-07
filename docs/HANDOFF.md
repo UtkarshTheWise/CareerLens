@@ -1,6 +1,16 @@
-# HANDOFF log (append only, newest at the bottom)
+# Handoff rules and templates
 
-Every agent appends an entry when it finishes a task. This file is for **messages between tracks** (requests, CCRs, what the other side can now use). The current state of each track lives in `docs/progress/<track>.md`. Humans approve Contract Change Requests by editing the `Status:` line only.
+Messages between tracks live in **one file per track**, so two branches (or two laptops) never edit the same file:
+
+| Track | Writes to (append only) | Reads |
+|---|---|---|
+| Backend | `docs/handoff/backend.md` | the other two |
+| Frontend | `docs/handoff/frontend.md` | the other two |
+| Integration / human | `docs/handoff/integration.md` | the other two |
+
+Pull `main` before reading the other tracks' logs; they only show what has been merged.
+
+Every agent appends an entry to **its own track's log** when it finishes a task. This file is for **messages between tracks** (requests, CCRs, what the other side can now use). The current state of each track lives in `docs/progress/<track>.md`. Humans approve Contract Change Requests by editing the `Status:` line only (on `main`, in the log where the CCR was written).
 
 ## Entry template
 
@@ -25,13 +35,3 @@ Impact: backend <…>; web <…>; extension <…>
 ```
 
 After APPROVED: the human (or Claude Code in phase 0/3) edits `contracts/openapi.yaml`, runs `pnpm gen:client`, commits `chore(contract): CCR-<n>` to `main`, and both agents rebase.
-
----
-
-## Log
-
-### [setup] human — Phase 0
-Contract v0.1.0 drafted. Awaiting freeze.
-
-### [setup] human — contract v0.2.0
-Added Project Understanding Check (docs/QUIZ.md): quiz endpoints and schemas, `understanding_gap` flag, `set_understanding` in simulate, cohort understanding stats. Removed interview-questions endpoint. Awaiting freeze.

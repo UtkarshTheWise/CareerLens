@@ -4,7 +4,7 @@ info:
   version: 0.2.0
   description: |
     Contract between apps/api (Claude Code) and apps/web + apps/extension (Codex).
-    SINGLE SOURCE OF TRUTH. Changes only via a Contract Change Request in docs/HANDOFF.md,
+    SINGLE SOURCE OF TRUTH. Changes only via a Contract Change Request (template in docs/HANDOFF.md),
     approved by a human, then regenerate packages/api-client.
     Auth: Bearer (Supabase JWT). With DEV_AUTH=1 the server accepts any request and uses the demo profile.
     Clients in development always send `Authorization: Bearer dev` (the Prism mock rejects requests without it).

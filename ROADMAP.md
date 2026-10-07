@@ -37,6 +37,7 @@ Owner: human + Claude Code (plan mode). Prompt: **P0**.
 - [ ] Claude Code reviews `contracts/openapi.yaml` against `docs/SCORING.md` + `docs/PIPELINE.md`, adds `examples` to key schemas so the Prism mock looks realistic, proposes changes.
 - [ ] Human approves → contract tagged `v0.2.0` on `main`. **Frozen.**
 - [ ] Claude Code creates root `package.json` + `pnpm-workspace.yaml` with `gen:client` script, generates `packages/api-client`, then hands root package files to Codex.
+- [ ] If Codex runs on a teammate's laptop: add them as a GitHub collaborator and follow "Two-laptop setup" in `PROMPTS.md`. They need no API keys (they build against their own local mock).
 - [ ] `docs/progress/*.md` committed on `main` (each worktree inherits its file).
 - [ ] Two worktrees: `backend/claude` (copy `.claude/backend.settings.local.json` → `.claude/settings.local.json` inside it) and `frontend/codex`.
 
@@ -46,7 +47,7 @@ Owner: human + Claude Code (plan mode). Prompt: **P0**.
 
 ## Phase 1 — Backend with Claude Code (H2 → H14)
 
-Branch `backend/claude`. Each task = one prompt in `PROMPTS.md`, one commit, one HANDOFF entry.
+Branch `backend/claude`. Each task = one prompt in `PROMPTS.md`, one commit, one handoff entry, pushed.
 
 | Id | Task | Est. | Done when |
 |---|---|---|---|
@@ -84,7 +85,7 @@ The F-task estimates add up to ~16 h for a 12 h window. Run two Codex sessions i
 | F7 | Tracker Kanban (drag between statuses → PATCH) | 1 h | Status persists via API |
 | F8 | Chrome extension: side panel, JSON-LD → adapters → text fallback, match rings, save to tracker, options page | 2.5 h | Loads unpacked; works on a Greenhouse page against mock |
 
-**Checkpoint H8:** F1–F3 done, screenshots in HANDOFF.
+**Checkpoint H8:** F1–F3 done, screenshots in `docs/handoff/frontend.md`.
 **Checkpoint H14:** all P0 screens + extension built against mock.
 
 ---
@@ -95,7 +96,7 @@ Branch `integration`, in the main checkout (which has no `settings.local.json`, 
 
 | Id | Task | Done when |
 |---|---|---|
-| I1 | Plan-mode review: read HANDOFF, both diffs, list mismatches and open CCRs; propose merge order | Human approves plan |
+| I1 | Plan-mode review: read all handoff logs, both diffs, list mismatches and open CCRs; propose merge order | Human approves plan |
 | I2 | Merge both branches; regenerate client; run contract drift check; point web to `:8000`; fix mismatches (prefer backend side) | `check_contract.py` green, `pnpm build` green |
 | I3 | End-to-end smoke: seed → onboarding → analysis → report → what-if → practice quiz → verify quiz (score changes) → roadmap → tracker → placement → extension on 3 real job pages; fix bugs | Smoke script + checklist pass |
 | I4 | Fresh-context review subagent: correctness, requirement gaps vs problem statement, security (keys, CORS, PII) | Findings fixed or logged |
@@ -124,6 +125,7 @@ Branch `integration`, in the main checkout (which has no `settings.local.json`, 
 | GitHub 60/hr unauthenticated limit on venue Wi-Fi | Server-side PAT (5,000/hr); cache 24 h |
 | Agents drift from contract | Frozen contract, generated client, `check_contract.py`, CCR process |
 | Agents edit each other's code | Deny rules in the backend worktree's `.claude/settings.local.json`; ownership in AGENTS.md; `git diff --stat` check before merge |
+| Two laptops drift apart | Push after every commit; per-track progress/handoff files (never edited by the other side); PR merges at H6/H12/H14; `git pull --rebase` after each |
 | Lockfile conflicts | Codex owns root lockfile; Claude only touches `apps/api/uv.lock` |
 | Render cold start / Supabase pause | Local demo as primary; keep-alive pings |
 | Job sites change DOM | JSON-LD first; LLM text fallback |

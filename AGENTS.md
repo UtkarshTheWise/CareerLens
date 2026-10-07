@@ -11,18 +11,18 @@ CareerLens: evidence-based employability analyser (resume + GitHub + portfolio �
 | `packages/api-client/` wrapper (`index.ts`, `package.json`) | written once by Claude Code in Phase 0, then Codex | — |
 | `apps/api/`, `data/` | Claude Code | read only |
 | `apps/web/`, `apps/extension/` | Codex | read only |
-| `docs/HANDOFF.md` | everyone | **append only** |
-| root `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml` | Codex | request changes in HANDOFF |
+| `docs/handoff/<track>.md` | that track | read; **append only** to your own |
+| root `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml` | Codex | request changes in your handoff log |
 | `apps/api/uv.lock` | Claude Code | — |
 
-If you need something outside your area, **do not edit it**. Append a request to `docs/HANDOFF.md` and continue with a stub or mock.
+If you need something outside your area, **do not edit it**. Append a request to your track's `docs/handoff/<track>.md` and continue with a stub or mock.
 
 ## The contract is the source of truth
 
 - All HTTP shapes come from `contracts/openapi.yaml`. Do not invent endpoints, fields or enum values.
 - Frontend uses only the generated client in `packages/api-client`. No hand-written duplicate types of API models.
 - Backend Pydantic models must serialise to exactly the contract's shapes. `apps/api/scripts/check_contract.py` must pass.
-- Need a change? Write a **Contract Change Request** in `docs/HANDOFF.md` (template there) and stop work on that piece until a human approves.
+- Need a change? Write a **Contract Change Request** in your track's handoff log (template in `docs/HANDOFF.md`) and stop work on that piece until a human approves.
 
 ## Product rules (apply to code, copy and prompts)
 
@@ -50,15 +50,17 @@ Any agent or model may be swapped in mid-task when another hits its usage or con
 5. **Commit it with the code it describes.** Unfinished work goes in a `wip(<area>): …` commit on your own branch so the next agent can see it.
 6. Write `Last updated` with your agent and model name (e.g. "Codex (gpt-…)", "Claude Code (Opus …)").
 7. Mark half-built code with `TODO(progress): <what's missing>` and list it under *Stubbed / fake*.
-8. Only edit your own track's file. Cross-track requests go in `docs/HANDOFF.md`.
+8. Only edit your own track's file. Cross-track requests go in your `docs/handoff/<track>.md`.
 
-`docs/progress/*.md` = current state of one track (overwritten). `docs/HANDOFF.md` = messages between tracks (append-only).
+`docs/progress/*.md` = current state of one track (overwritten). `docs/handoff/<track>.md` = messages from that track to the others (append-only). Neither is ever edited by another track, so branches on different machines merge cleanly.
 
 ## Workflow
 
 - Work on your own branch/worktree: `backend/claude` or `frontend/codex`. Small commits, conventional messages (`feat(api): …`, `fix(web): …`).
-- Before finishing any task: run the checks for your area (below) and append a short entry to `docs/HANDOFF.md` (what changed, what's stubbed, what you need).
-- Don't add dependencies without saying why in the HANDOFF entry.
+- Before finishing any task: run the checks for your area (below) and append a short entry to your `docs/handoff/<track>.md` (what changed, what's stubbed, what you need).
+- **Push after every commit** (`git push`), including `wip` commits. Tracks may run on different laptops; unpushed work is invisible and lost if a machine dies.
+- After any contract change lands on `main`: `git pull --rebase origin main` then `pnpm gen:client`.
+- Don't add dependencies without saying why in your handoff entry.
 - Never commit `.env*` files or keys. Never print secrets in logs.
 
 ## Commands
@@ -87,4 +89,4 @@ pnpm --filter extension build     # then chrome://extensions → Load unpacked �
 
 ## Done means
 
-Your area's checks pass, the app runs, nothing outside your area changed (`git diff --stat main...HEAD`), your progress file shows the task as `done` with its commit, and HANDOFF is updated.
+Your area's checks pass, the app runs, nothing outside your area changed (`git diff --stat main...HEAD`), your progress file shows the task as `done` with its commit, your handoff log is updated, and everything is pushed.

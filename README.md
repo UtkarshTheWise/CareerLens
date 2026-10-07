@@ -164,7 +164,7 @@ Details: `docs/PIPELINE.md` (stages + LLM prompt templates), `docs/SCORING.md` (
 careerlens/
 ├── AGENTS.md                 # shared rules — read by Codex AND Claude Code
 ├── CLAUDE.md                 # imports AGENTS.md + Claude-only rules
-├── README.md / ROADMAP.md / PROMPTS.md
+├── README.md / ROADMAP.md / PROMPTS.md / RUNBOOK.md   # RUNBOOK = who does what, in order
 ├── .claude/
 │   ├── settings.json         # shared allow-list, blocks reading .env, registers the progress Stop hook
 │   ├── hooks/require-progress.sh     # blocks ending a session with unrecorded changes
@@ -185,7 +185,8 @@ careerlens/
     ├── SCORING.md            # readiness formula
     ├── QUIZ.md               # Project Understanding Check (quiz) spec
     ├── DESIGN.md             # UI tokens & component rules (light + dark) from the reference shots
-    ├── HANDOFF.md            # append-only log between agents
+    ├── HANDOFF.md            # handoff rules + templates (entry, Contract Change Request)
+    ├── handoff/              # backend.md, frontend.md, integration.md — append-only log per track
     ├── progress/             # backend.md, frontend.md, integration.md — live state per track for model hand-off
     └── RESEARCH.md           # market, free-stack and agent-coordination research
 ```
