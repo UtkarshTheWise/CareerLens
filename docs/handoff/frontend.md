@@ -30,3 +30,9 @@ Coordination: F1 and its checkpoint are published; public fetch found main uncha
 ### [2026-10-07 18:48] codex — F2 final style verification
 Changed: shadcn Card base uses rounded-card/shadow-card so its default shadow-sm cannot override the locked design through custom-token class merging. Reduced-motion CSS stops infinite spinner loops after one brief iteration.
 Checks run: final production build passed. Browser computed-style assertions verify 20px radius, 24px padding, light 8px/24px shadow and dark 12px/32px shadow. Reduced-motion rings and CSS spinner behavior passed. Final accessibility and six-width checks passed in both themes; no app console/runtime errors.
+
+### [2026-10-07 18:54] codex — F2 published implementation and completion snapshot
+Works: public fetch verifies origin/frontend/codex matches implementation 82828dc9764a560a988a644b16d0aa3efae45808; user pushed from normal Windows PowerShell. All F2 checks passed. This completion snapshot records F2 done with its implementation SHA and exact F3 resume steps.
+Stubbed / mocked: unchanged from the F2 entry; preview-only synthetic/local state, no later screens started.
+Needs from other side: none. User requires a pause before F3. On resume, verify the latest completion docs HEAD is also published before starting new work.
+Checks run: corrected public-fetch launcher passed without the earlier Git crash; remote/local implementation SHAs match; working tree was clean before this documentation update.
