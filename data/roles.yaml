@@ -1,0 +1,15 @@
+# TODO(progress): placeholder with one role so GET /v1/roles works. B2 replaces this with the
+# 7 roles (8-14 skills each) plus per-role component weights, validated against skills.yaml.
+roles:
+  - id: sde-backend
+    name: Backend Developer
+    category: engineering
+    skills:
+      - { skill_id: python, skill_name: Python, importance: 3 }
+      - { skill_id: sql, skill_name: SQL, importance: 3 }
+      - { skill_id: fastapi, skill_name: FastAPI, importance: 2 }
+      - { skill_id: docker, skill_name: Docker, importance: 2 }
+      - { skill_id: ci-cd, skill_name: CI/CD, importance: 2 }
+      - { skill_id: redis, skill_name: Redis, importance: 2 }
+      - { skill_id: aws, skill_name: AWS, importance: 2 }
+      - { skill_id: kubernetes, skill_name: Kubernetes, importance: 1 }
