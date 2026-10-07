@@ -3,16 +3,16 @@
 ## Status
 - **Track:** frontend; owns apps/web, apps/extension and frontend workspace files.
 - **Branch / worktree:** frontend/codex; C:/Users/User/Desktop/CareerLens/careerlens-web
-- **Last updated:** 2026-10-07 22:07 Asia/Dubai by Codex (GPT-6).
-- **Current task:** F9 project quiz implemented and validated; publication pending. F4 implementation f129ef2 and completion checkpoint f029713 verified published.
-- **State:** F9 ready for normal-terminal commit/push; pause before F5.
+- **Last updated:** 2026-10-07 22:10 Asia/Dubai by Codex (GPT-6).
+- **Current task:** F9 project quiz done; implementation ff8072fe2137014737c81dbcecaf4754c418037b verified published. F4 implementation f129ef2 and completion checkpoint f029713 verified published.
+- **State:** F9 implementation published; final documentation checkpoint ready to publish. Pause before F5.
 - **Last green checks:** F9 lint, strict typecheck, production build; 20 native tests; 13 primary and five supplemental browser groups; actual static Prism createQuiz 201/getQuiz/answer/submit/result 200; light/dark seven views at 320/375/390/414/768/1440px; 14 zero-violation axe scans; keyboard, normal/reduced motion, no hydration/runtime errors and representative visual review.
 
 ## Resume here (exact next step)
 1. Work only in C:/Users/User/Desktop/CareerLens/careerlens-web on frontend/codex. Read this progress first, shared/web AGENTS, DESIGN, PROMPTS.md and latest frontend/backend handoffs.
-2. F9 source and checks are complete, but no F9 commit yet. HEAD and remote frontend/codex remain f0297132167da75764b5ca46411fe35375f584e0. Public main remains e762cb48916f07fd939e9ad0ddb0b0d815f3305f; contract v0.2.0. Never replay implementation blindly.
-3. User normal PowerShell must stage the F9 owned files, commit feat(web): implement project understanding quiz, and push --no-thin origin frontend/codex. Exact reviewed script is chat outputs/Publish-F9.ps1. Sandbox Git metadata deny ACLs and credential isolation still require normal terminal.
-4. After user confirms, verify local HEAD/status and public ls-remote using chat outputs/Invoke-CareerLensGit.ps1. Record the verified implementation SHA here and in own append-only handoff, commit/push completion docs, verify, then report/pause before F5.
+2. F9 implementation ff8072fe2137014737c81dbcecaf4754c418037b is verified published on origin/frontend/codex; worktree was clean before this documentation update. All recorded checks passed. Public main remains e762cb48916f07fd939e9ad0ddb0b0d815f3305f; contract v0.2.0.
+3. Publish only this final progress/handoff snapshot from normal PowerShell with docs-only commit and push --no-thin origin frontend/codex. Existing metadata ACLs/Windows credentials require user terminal. Verify local/remote SHA, then pause before F5; no new implementation checks needed for these docs.
+4. User asked to speed up without losing value: batch independent checks, choose checks by changed behavior/risk and avoid repeating green checks without new changes or failures. Preserve checkpoints and prompt boundaries.
 5. Only on user resume of F5: read its prompt, ROADMAP, DESIGN, relevant contract and installed Next docs; implement roadmap and score history. F9 quiz backend B9/Phase 3 integration remains separate.
 
 ## Task board
@@ -22,7 +22,7 @@
 | F2 | Component kit | done | 82828dc | d31554b checkpoint published |
 | F3 | Onboarding + polling | done | 231329d | Verified published |
 | F4 | Dashboard + report + simulator | done | f129ef2 | f029713 completion checkpoint published |
-| F9 | Quiz screens | validated; publication pending | | docs/plans/frontend-F9.md |
+| F9 | Quiz screens | done | ff8072f | docs/plans/frontend-F9.md |
 | F5 | Roadmap + history | todo | | Pause before starting |
 | F6 | Placement cell | todo | | |
 | F7 | Tracker | todo | | |
