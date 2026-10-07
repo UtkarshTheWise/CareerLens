@@ -25,9 +25,9 @@ resources:
   - { id: bash-linuxcommand, skill_id: bash, type: course, hours: 15, title: "The Linux Command Line (free book)", url: "https://linuxcommand.org/tlcl.php" }
 
   # ---------- backend ----------
-  - { id: nodejs-official-learn, skill_id: nodejs, type: documentation, hours: 8, title: "Introduction to Node.js", url: "https://nodejs.org/en/learn/getting-started/introduction-to-nodejs" }
+  - { id: nodejs-official-learn, skill_id: nodejs, type: documentation, hours: 8, title: "Introduction to Node.js", url: "https://nodejs.org/learn/getting-started/introduction-to-nodejs" }
   - { id: nodejs-roadmap, skill_id: nodejs, type: course, hours: 15, title: "Node.js Roadmap", url: "https://roadmap.sh/nodejs" }
-  - { id: express-getting-started, skill_id: express, type: documentation, hours: 3, title: "Express: Getting started", url: "https://expressjs.com/en/starter/installing.html" }
+  - { id: express-getting-started, skill_id: express, type: documentation, hours: 3, title: "Express: Getting started", url: "https://expressjs.com/en/starter/installing/" }
   - { id: express-mdn-tutorial, skill_id: express, type: project_idea, hours: 15, title: "MDN Express web framework tutorial (Local Library)", url: "https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/Express_Nodejs" }
   - { id: fastapi-tutorial, skill_id: fastapi, type: documentation, hours: 8, title: "FastAPI Tutorial - User Guide", url: "https://fastapi.tiangolo.com/tutorial/" }
   - { id: fastapi-deployment, skill_id: fastapi, type: documentation, hours: 3, title: "FastAPI Deployment", url: "https://fastapi.tiangolo.com/deployment/" }
@@ -64,7 +64,7 @@ resources:
   - { id: tailwind-docs, skill_id: tailwind, type: documentation, hours: 4, title: "Tailwind CSS documentation", url: "https://tailwindcss.com/docs" }
   - { id: tailwind-responsive, skill_id: tailwind, type: documentation, hours: 1, title: "Tailwind CSS: Responsive design", url: "https://tailwindcss.com/docs/responsive-design" }
   - { id: redux-essentials, skill_id: redux, type: course, hours: 8, title: "Redux Essentials tutorial", url: "https://redux.js.org/tutorials/essentials/part-1-overview-concepts" }
-  - { id: redux-toolkit-quickstart, skill_id: redux, type: documentation, hours: 2, title: "Redux Toolkit Quick Start", url: "https://redux-toolkit.js.org/tutorials/quick-start" }
+  - { id: redux-toolkit-quickstart, skill_id: redux, type: documentation, hours: 2, title: "Redux Toolkit Quick Start", url: "https://redux.js.org/tutorials/quick-start" }
   - { id: a11y-web-dev, skill_id: accessibility, type: course, hours: 8, title: "Learn Accessibility (web.dev)", url: "https://web.dev/learn/accessibility" }
   - { id: a11y-wai-intro, skill_id: accessibility, type: documentation, hours: 2, title: "W3C WAI: Introduction to Web Accessibility", url: "https://www.w3.org/WAI/fundamentals/accessibility-intro/" }
 
@@ -73,9 +73,9 @@ resources:
   - { id: pandas-10min, skill_id: pandas, type: documentation, hours: 1, title: "10 minutes to pandas", url: "https://pandas.pydata.org/docs/user_guide/10min.html" }
   - { id: numpy-beginners, skill_id: numpy, type: documentation, hours: 3, title: "NumPy: the absolute basics for beginners", url: "https://numpy.org/doc/stable/user/absolute_beginners.html" }
   - { id: numpy-quickstart, skill_id: numpy, type: documentation, hours: 2, title: "NumPy quickstart", url: "https://numpy.org/doc/stable/user/quickstart.html" }
-  - { id: excel-ms-training, skill_id: excel, type: video, hours: 6, title: "Excel video training (Microsoft Support)", url: "https://support.microsoft.com/en-us/office/excel-video-training-9bc05390-e94c-46af-a5b3-d7c22f6990bb" }
+  - { id: excel-ms-training, skill_id: excel, type: documentation, hours: 6, title: "Excel help and learning (Microsoft Support)", url: "https://support.microsoft.com/en-us/excel" }
   - { id: excel-easy, skill_id: excel, type: practice, hours: 10, title: "Excel Easy tutorials", url: "https://www.excel-easy.com/" }
-  - { id: tableau-training, skill_id: tableau, type: video, hours: 6, title: "Tableau free training videos", url: "https://www.tableau.com/learn/training" }
+  - { id: tableau-training, skill_id: tableau, type: video, hours: 1, title: "Tableau free training videos", url: "https://www.tableau.com/learn/training" }
   - { id: tableau-get-started, skill_id: tableau, type: project_idea, hours: 3, title: "Get Started with Tableau Desktop tutorial", url: "https://help.tableau.com/current/guides/get-started-tutorial/en-us/get-started-tutorial-home.htm" }
   - { id: powerbi-ms-learn, skill_id: power-bi, type: course, hours: 12, title: "Microsoft Learn: Power BI training", url: "https://learn.microsoft.com/en-us/training/powerplatform/power-bi" }
   - { id: powerbi-desktop-start, skill_id: power-bi, type: documentation, hours: 2, title: "Get started with Power BI Desktop", url: "https://learn.microsoft.com/en-us/power-bi/fundamentals/desktop-getting-started" }
@@ -90,12 +90,12 @@ resources:
   - { id: sklearn-getting-started, skill_id: scikit-learn, type: documentation, hours: 2, title: "scikit-learn: Getting Started", url: "https://scikit-learn.org/stable/getting_started.html" }
   - { id: ml-kaggle-intro, skill_id: scikit-learn, type: course, hours: 3, title: "Kaggle Learn: Intro to Machine Learning", url: "https://www.kaggle.com/learn/intro-to-machine-learning" }
   - { id: ml-google-crash-course, skill_id: scikit-learn, type: course, hours: 15, title: "Google Machine Learning Crash Course", url: "https://developers.google.com/machine-learning/crash-course" }
-  - { id: pytorch-basics, skill_id: pytorch, type: documentation, hours: 4, title: "PyTorch: Learn the Basics", url: "https://pytorch.org/tutorials/beginner/basics/intro.html" }
+  - { id: pytorch-basics, skill_id: pytorch, type: documentation, hours: 4, title: "PyTorch: Learn the Basics", url: "https://docs.pytorch.org/tutorials/beginner/basics/intro.html" }
   - { id: pytorch-fastai, skill_id: pytorch, type: course, hours: 40, title: "Practical Deep Learning for Coders (fast.ai)", url: "https://course.fast.ai/" }
   - { id: tensorflow-tutorials, skill_id: tensorflow, type: documentation, hours: 8, title: "TensorFlow tutorials", url: "https://www.tensorflow.org/tutorials" }
   - { id: keras-getting-started, skill_id: tensorflow, type: documentation, hours: 3, title: "Getting started with Keras", url: "https://keras.io/getting_started/" }
   - { id: nlp-huggingface-course, skill_id: nlp, type: course, hours: 30, title: "Hugging Face LLM / NLP course", url: "https://huggingface.co/learn/llm-course" }
-  - { id: nlp-spacy-course, skill_id: nlp, type: course, hours: 5, title: "Advanced NLP with spaCy", url: "https://course.spacy.io/" }
+  - { id: nlp-spacy-course, skill_id: nlp, type: course, hours: 5, title: "Advanced NLP with spaCy", url: "https://course.spacy.io/en/" }
   - { id: cv-kaggle, skill_id: computer-vision, type: course, hours: 4, title: "Kaggle Learn: Computer Vision", url: "https://www.kaggle.com/learn/computer-vision" }
   - { id: cv-opencv-python, skill_id: computer-vision, type: documentation, hours: 10, title: "OpenCV-Python Tutorials", url: "https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html" }
   - { id: llm-gemini-docs, skill_id: llm-apis, type: documentation, hours: 3, title: "Gemini API documentation", url: "https://ai.google.dev/gemini-api/docs" }
@@ -114,7 +114,7 @@ resources:
   - { id: devops-roadmap, skill_id: ci-cd, type: course, hours: 20, title: "DevOps Roadmap", url: "https://roadmap.sh/devops" }
   - { id: aws-getting-started, skill_id: aws, type: documentation, hours: 4, title: "Getting Started with AWS", url: "https://aws.amazon.com/getting-started/" }
   - { id: aws-roadmap, skill_id: aws, type: course, hours: 20, title: "AWS Roadmap", url: "https://roadmap.sh/aws" }
-  - { id: gcp-get-started, skill_id: gcp, type: documentation, hours: 3, title: "Get started with Google Cloud", url: "https://cloud.google.com/docs/get-started" }
+  - { id: gcp-get-started, skill_id: gcp, type: documentation, hours: 3, title: "Get started with Google Cloud", url: "https://docs.cloud.google.com/docs/get-started" }
   - { id: gcp-firebase-guides, skill_id: gcp, type: documentation, hours: 4, title: "Firebase guides", url: "https://firebase.google.com/docs/guides" }
   - { id: azure-ms-learn, skill_id: azure, type: course, hours: 10, title: "Microsoft Learn: Azure training", url: "https://learn.microsoft.com/en-us/training/azure/" }
   - { id: azure-fundamentals-path, skill_id: azure, type: course, hours: 4, title: "Azure Fundamentals: Describe cloud concepts", url: "https://learn.microsoft.com/en-us/training/paths/microsoft-azure-fundamentals-describe-cloud-concepts/" }
@@ -131,9 +131,9 @@ resources:
   - { id: figma-help-center, skill_id: figma, type: documentation, hours: 4, title: "Figma Learn (help center)", url: "https://help.figma.com/hc/en-us" }
   - { id: figma-resource-library, skill_id: figma, type: course, hours: 6, title: "Figma Resource Library", url: "https://www.figma.com/resource-library/" }
   - { id: wireframing-figma-guide, skill_id: wireframing, type: documentation, hours: 1, title: "What is wireframing? (Figma)", url: "https://www.figma.com/resource-library/what-is-wireframing/" }
-  - { id: wireframing-ixdf, skill_id: wireframing, type: documentation, hours: 2, title: "Wireframing (Interaction Design Foundation)", url: "https://www.interaction-design.org/literature/topics/wireframing" }
+  - { id: wireframing-ixdf, skill_id: wireframing, type: documentation, hours: 2, title: "Wireframing (Interaction Design Foundation)", url: "https://ixdf.org/literature/topics/wireframe" }
   - { id: prototyping-figma-guide, skill_id: prototyping, type: documentation, hours: 2, title: "Guide to prototyping in Figma", url: "https://help.figma.com/hc/en-us/articles/360040314193-Guide-to-prototyping-in-Figma" }
-  - { id: prototyping-ixdf, skill_id: prototyping, type: documentation, hours: 2, title: "Prototyping (Interaction Design Foundation)", url: "https://www.interaction-design.org/literature/topics/prototyping" }
+  - { id: prototyping-ixdf, skill_id: prototyping, type: documentation, hours: 2, title: "Prototyping (Interaction Design Foundation)", url: "https://ixdf.org/literature/topics/prototypes" }
   - { id: user-research-nng-methods, skill_id: user-research, type: documentation, hours: 1, title: "When to Use Which User-Experience Research Methods (NN/g)", url: "https://www.nngroup.com/articles/which-ux-research-methods/" }
   - { id: user-research-google-ux, skill_id: user-research, type: course, hours: 60, title: "Google UX Design Certificate (Coursera, audit for free)", url: "https://www.coursera.org/professional-certificates/google-ux-design" }
   - { id: usability-testing-101, skill_id: usability-testing, type: documentation, hours: 1, title: "Usability Testing 101 (NN/g)", url: "https://www.nngroup.com/articles/usability-testing-101/" }
@@ -142,7 +142,7 @@ resources:
   - { id: design-systems-storybook, skill_id: design-systems, type: course, hours: 6, title: "Storybook tutorials (incl. Design Systems for Developers)", url: "https://storybook.js.org/tutorials/" }
   - { id: visual-design-nng-principles, skill_id: visual-design, type: documentation, hours: 1, title: "5 Principles of Visual Design in UX (NN/g)", url: "https://www.nngroup.com/articles/principles-visual-design/" }
   - { id: visual-design-web-dev, skill_id: visual-design, type: course, hours: 6, title: "Learn Responsive Design (web.dev)", url: "https://web.dev/learn/design" }
-  - { id: interaction-design-ixdf, skill_id: interaction-design, type: documentation, hours: 2, title: "Interaction Design (Interaction Design Foundation)", url: "https://www.interaction-design.org/literature/topics/interaction-design" }
+  - { id: interaction-design-ixdf, skill_id: interaction-design, type: documentation, hours: 2, title: "Interaction Design (Interaction Design Foundation)", url: "https://ixdf.org/literature/topics/interaction-design" }
   - { id: interaction-design-laws-of-ux, skill_id: interaction-design, type: documentation, hours: 2, title: "Laws of UX", url: "https://lawsofux.com/" }
   - { id: ia-nng-vs-navigation, skill_id: information-architecture, type: documentation, hours: 1, title: "The Difference Between Information Architecture and Navigation (NN/g)", url: "https://www.nngroup.com/articles/ia-vs-navigation/" }
-  - { id: ia-ixdf, skill_id: information-architecture, type: documentation, hours: 2, title: "Information Architecture (Interaction Design Foundation)", url: "https://www.interaction-design.org/literature/topics/information-architecture" }
+  - { id: ia-ixdf, skill_id: information-architecture, type: documentation, hours: 2, title: "Information Architecture (Interaction Design Foundation)", url: "https://ixdf.org/literature/topics/information-architecture" }
