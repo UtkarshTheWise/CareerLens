@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "deny": [
+      "Edit(/apps/web/**)",
+      "Edit(/apps/extension/**)",
+      "Edit(/packages/api-client/**)"
+    ]
+  }
+}

@@ -1,0 +1,1143 @@
+openapi: 3.1.0
+info:
+  title: CareerLens API
+  version: 0.2.0
+  description: |
+    Contract between apps/api (Claude Code) and apps/web + apps/extension (Codex).
+    SINGLE SOURCE OF TRUTH. Changes only via a Contract Change Request in docs/HANDOFF.md,
+    approved by a human, then regenerate packages/api-client.
+    Auth: Bearer (Supabase JWT). With DEV_AUTH=1 the server accepts any request and uses the demo profile.
+    Clients in development always send `Authorization: Bearer dev` (the Prism mock rejects requests without it).
+servers:
+  - url: http://localhost:8000
+    description: local FastAPI
+  - url: http://localhost:4010
+    description: Prism mock
+security:
+  - bearerAuth: []
+
+tags:
+  - name: meta
+  - name: profiles
+  - name: analyses
+  - name: quizzes
+  - name: jobs
+  - name: applications
+  - name: cohorts
+
+paths:
+  /health:
+    get:
+      tags: [meta]
+      operationId: getHealth
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, version]
+                properties:
+                  status: { type: string, enum: [ok] }
+                  version: { type: string }
+                  llm_provider: { type: string, examples: [gemini] }
+
+  /v1/roles:
+    get:
+      tags: [meta]
+      operationId: listRoles
+      responses:
+        "200":
+          description: Role catalogue
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/Role" } }
+
+  /v1/me:
+    get:
+      tags: [profiles]
+      operationId: getMe
+      responses:
+        "200":
+          description: Current user's profile (demo profile when DEV_AUTH=1)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Profile" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /v1/profiles:
+    post:
+      tags: [profiles]
+      operationId: createProfile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ProfileCreate" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Profile" }
+        "422": { $ref: "#/components/responses/ValidationError" }
+
+  /v1/profiles/{profile_id}:
+    parameters: [{ $ref: "#/components/parameters/ProfileId" }]
+    get:
+      tags: [profiles]
+      operationId: getProfile
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Profile" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    patch:
+      tags: [profiles]
+      operationId: updateProfile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ProfileUpdate" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Profile" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    delete:
+      tags: [profiles]
+      operationId: deleteProfile
+      description: Deletes the profile and all its documents, analyses and applications ("delete my data").
+      responses:
+        "204": { description: Deleted }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /v1/profiles/{profile_id}/documents:
+    parameters: [{ $ref: "#/components/parameters/ProfileId" }]
+    post:
+      tags: [profiles]
+      operationId: uploadDocument
+      description: Upload a resume (PDF/DOCX) or LinkedIn profile PDF export. Max 5 MB.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [kind, file]
+              properties:
+                kind: { type: string, enum: [resume, linkedin] }
+                file: { type: string, format: binary }
+      responses:
+        "200":
+          description: Stored and text-extracted
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Profile" }
+        "413": { $ref: "#/components/responses/Error" }
+        "422": { $ref: "#/components/responses/ValidationError" }
+
+  /v1/profiles/{profile_id}/analyses:
+    parameters: [{ $ref: "#/components/parameters/ProfileId" }]
+    post:
+      tags: [analyses]
+      operationId: startAnalysis
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [role_id]
+              properties:
+                role_id: { type: string, examples: [sde-backend] }
+                force_refresh: { type: boolean, default: false, description: Bypass cache }
+      responses:
+        "202":
+          description: Accepted; poll GET /v1/analyses/{analysis_id}
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AnalysisStatus" }
+        "409":
+          description: Profile has no resume yet
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+    get:
+      tags: [analyses]
+      operationId: listAnalyses
+      description: History, newest first (for progress-over-time chart)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/AnalysisSummary" } }
+
+  /v1/analyses/{analysis_id}:
+    parameters: [{ $ref: "#/components/parameters/AnalysisId" }]
+    get:
+      tags: [analyses]
+      operationId: getAnalysis
+      responses:
+        "200":
+          description: Status, plus report when status=done
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Analysis" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /v1/analyses/{analysis_id}/simulate:
+    parameters: [{ $ref: "#/components/parameters/AnalysisId" }]
+    post:
+      tags: [analyses]
+      operationId: simulateAnalysis
+      description: What-if recomputation. Deterministic, no LLM or GitHub calls.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SimulationRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SimulationResult" }
+
+  /v1/analyses/{analysis_id}/quizzes:
+    parameters: [{ $ref: "#/components/parameters/AnalysisId" }]
+    post:
+      tags: [quizzes]
+      operationId: createQuiz
+      description: |
+        Generate a Project Understanding Check from the student's own repository (docs/QUIZ.md).
+        Answer keys are never returned here. Takes ~10-20 s (one LLM call).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/QuizCreate" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Quiz" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429":
+          description: Verify cooldown active (details.retry_at) or LLM quota exhausted
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+
+  /v1/quizzes/{quiz_id}:
+    parameters: [{ $ref: "#/components/parameters/QuizId" }]
+    get:
+      tags: [quizzes]
+      operationId: getQuiz
+      description: Resume a quiz. In verify mode returns only answered questions plus the current one, and records served_at for it.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Quiz" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /v1/quizzes/{quiz_id}/answers:
+    parameters: [{ $ref: "#/components/parameters/QuizId" }]
+    post:
+      tags: [quizzes]
+      operationId: answerQuizQuestion
+      description: Practice mode returns graded feedback immediately. Verify mode only records the answer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/QuizAnswer" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/QuizAnswerFeedback" }
+        "409":
+          description: Question already answered, out of order, or quiz already submitted
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+
+  /v1/quizzes/{quiz_id}/submit:
+    parameters: [{ $ref: "#/components/parameters/QuizId" }]
+    post:
+      tags: [quizzes]
+      operationId: submitQuiz
+      description: Grades remaining answers, sets the project's understanding (verify mode) and re-runs scoring.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/QuizResult" }
+        "409":
+          description: Already submitted
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+
+  /v1/profiles/{profile_id}/quizzes:
+    parameters: [{ $ref: "#/components/parameters/ProfileId" }]
+    get:
+      tags: [quizzes]
+      operationId: listQuizzes
+      responses:
+        "200":
+          description: Newest first
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/QuizSummary" } }
+
+  /v1/jobs/match:
+    post:
+      tags: [jobs]
+      operationId: matchJob
+      description: Used by the extension side panel. Returns keyword match AND evidence-backed match.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [profile_id, posting]
+              properties:
+                profile_id: { type: string, format: uuid }
+                posting: { $ref: "#/components/schemas/JobPosting" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/JobMatch" }
+        "409":
+          description: Profile has no completed analysis
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+
+  /v1/applications:
+    get:
+      tags: [applications]
+      operationId: listApplications
+      parameters:
+        - { name: profile_id, in: query, required: true, schema: { type: string, format: uuid } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/Application" } }
+    post:
+      tags: [applications]
+      operationId: createApplication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ApplicationCreate" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Application" }
+
+  /v1/applications/{application_id}:
+    parameters:
+      - { name: application_id, in: path, required: true, schema: { type: string, format: uuid } }
+    patch:
+      tags: [applications]
+      operationId: updateApplication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ApplicationUpdate" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Application" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    delete:
+      tags: [applications]
+      operationId: deleteApplication
+      responses:
+        "204": { description: Deleted }
+
+  /v1/applications/{application_id}/tailored-resume:
+    parameters:
+      - { name: application_id, in: path, required: true, schema: { type: string, format: uuid } }
+    post:
+      tags: [applications]
+      operationId: tailorResume
+      description: P2. Rewrites using verified facts only.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TailoredResume" }
+
+  /v1/cohorts:
+    get:
+      tags: [cohorts]
+      operationId: listCohorts
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/Cohort" } }
+
+  /v1/cohorts/{cohort_id}/insights:
+    parameters:
+      - { $ref: "#/components/parameters/CohortId" }
+      - { name: role_id, in: query, required: true, schema: { type: string } }
+    get:
+      tags: [cohorts]
+      operationId: getCohortInsights
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CohortInsights" }
+
+  /v1/cohorts/{cohort_id}/students:
+    parameters:
+      - { $ref: "#/components/parameters/CohortId" }
+      - { name: role_id, in: query, required: true, schema: { type: string } }
+      - { name: at_risk_only, in: query, schema: { type: boolean, default: false } }
+    get:
+      tags: [cohorts]
+      operationId: listCohortStudents
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/CohortStudent" } }
+
+  /v1/cohorts/{cohort_id}/export:
+    parameters:
+      - { $ref: "#/components/parameters/CohortId" }
+      - { name: role_id, in: query, required: true, schema: { type: string } }
+    get:
+      tags: [cohorts]
+      operationId: exportCohort
+      responses:
+        "200":
+          description: CSV file
+          content:
+            text/csv:
+              schema: { type: string }
+
+components:
+  securitySchemes:
+    bearerAuth: { type: http, scheme: bearer, bearerFormat: JWT }
+
+  parameters:
+    ProfileId: { name: profile_id, in: path, required: true, schema: { type: string, format: uuid } }
+    AnalysisId: { name: analysis_id, in: path, required: true, schema: { type: string, format: uuid } }
+    CohortId: { name: cohort_id, in: path, required: true, schema: { type: string, format: uuid } }
+    QuizId: { name: quiz_id, in: path, required: true, schema: { type: string, format: uuid } }
+
+  responses:
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    ValidationError:
+      description: Invalid input
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+
+  schemas:
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code: { type: string, examples: [not_found, rate_limited, no_resume] }
+        message: { type: string }
+        details: { type: [object, "null"] }
+
+    # ---------- catalogue ----------
+    Role:
+      type: object
+      required: [id, name, category, skills]
+      properties:
+        id: { type: string, examples: [sde-backend] }
+        name: { type: string, examples: [Backend Developer] }
+        category: { type: string, enum: [engineering, data, design, product] }
+        skills:
+          type: array
+          items:
+            type: object
+            required: [skill_id, skill_name, importance]
+            properties:
+              skill_id: { type: string }
+              skill_name: { type: string }
+              importance: { type: integer, minimum: 1, maximum: 3 }
+
+    Resource:
+      type: object
+      required: [id, title, url, type, skill_id]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        url: { type: string, format: uri }
+        type: { type: string, enum: [course, documentation, video, practice, project_idea] }
+        skill_id: { type: string }
+        hours: { type: [integer, "null"] }
+
+    # ---------- profiles ----------
+    ProfileCreate:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string }
+        email: { type: [string, "null"], format: email }
+        github_username: { type: [string, "null"] }
+        portfolio_urls: { type: array, items: { type: string, format: uri }, default: [] }
+        linkedin_text: { type: [string, "null"], description: Pasted LinkedIn profile text (alternative to PDF export) }
+        target_role_id: { type: [string, "null"] }
+        department: { type: [string, "null"] }
+        cohort_id: { type: [string, "null"], format: uuid }
+
+    ProfileUpdate:
+      type: object
+      properties:
+        name: { type: string }
+        github_username: { type: [string, "null"] }
+        portfolio_urls: { type: array, items: { type: string, format: uri } }
+        linkedin_text: { type: [string, "null"] }
+        target_role_id: { type: [string, "null"] }
+        department: { type: [string, "null"] }
+        cohort_id: { type: [string, "null"], format: uuid }
+
+    Profile:
+      allOf:
+        - $ref: "#/components/schemas/ProfileCreate"
+        - type: object
+          required: [id, has_resume, has_linkedin, created_at]
+          properties:
+            id: { type: string, format: uuid }
+            has_resume: { type: boolean }
+            has_linkedin: { type: boolean }
+            latest_analysis_id: { type: [string, "null"], format: uuid }
+            latest_score: { type: [number, "null"] }
+            created_at: { type: string, format: date-time }
+
+    # ---------- analyses ----------
+    AnalysisStage:
+      type: string
+      enum: [queued, ingesting, extracting, collecting, detecting, judging, scoring, planning, done, failed]
+
+    AnalysisStatus:
+      type: object
+      required: [id, profile_id, role_id, status, created_at]
+      properties:
+        id: { type: string, format: uuid }
+        profile_id: { type: string, format: uuid }
+        role_id: { type: string }
+        status: { $ref: "#/components/schemas/AnalysisStage" }
+        progress: { type: integer, minimum: 0, maximum: 100 }
+        error: { type: [string, "null"] }
+        created_at: { type: string, format: date-time }
+        finished_at: { type: [string, "null"], format: date-time }
+
+    AnalysisSummary:
+      type: object
+      required: [id, role_id, status, created_at]
+      properties:
+        id: { type: string, format: uuid }
+        role_id: { type: string }
+        status: { $ref: "#/components/schemas/AnalysisStage" }
+        score: { type: [number, "null"] }
+        coverage: { type: [number, "null"] }
+        created_at: { type: string, format: date-time }
+
+    Analysis:
+      allOf:
+        - $ref: "#/components/schemas/AnalysisStatus"
+        - type: object
+          properties:
+            report:
+              oneOf:
+                - $ref: "#/components/schemas/AnalysisReport"
+                - type: "null"
+
+    Band: { type: string, enum: [not_ready, developing, ready] }
+    Confidence: { type: string, enum: [low, medium, high] }
+    EvidenceLevel: { type: string, enum: [strong, moderate, weak, unverified, missing] }
+
+    AnalysisReport:
+      type: object
+      required: [score, coverage, claims, gaps, projects, role_fits, roadmap, evidence, notes]
+      properties:
+        score: { $ref: "#/components/schemas/ScoreBreakdown" }
+        coverage:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: "% of claimed skills with strong or moderate evidence"
+        claims: { type: array, items: { $ref: "#/components/schemas/SkillClaim" } }
+        gaps: { type: array, items: { $ref: "#/components/schemas/SkillGap" } }
+        projects: { type: array, items: { $ref: "#/components/schemas/ProjectAudit" } }
+        role_fits: { type: array, items: { $ref: "#/components/schemas/RoleFit" }, maxItems: 3 }
+        roadmap: { type: array, items: { $ref: "#/components/schemas/RoadmapMilestone" } }
+        consistency:
+          oneOf:
+            - $ref: "#/components/schemas/ConsistencySummary"
+            - type: "null"
+        evidence: { type: array, items: { $ref: "#/components/schemas/Evidence" } }
+        notes: { type: array, items: { type: string }, description: Data gaps, reweighting, caps applied }
+
+    ScoreBreakdown:
+      type: object
+      required: [total, band, confidence, components]
+      properties:
+        total: { type: number, minimum: 0, maximum: 100 }
+        band: { $ref: "#/components/schemas/Band" }
+        confidence: { $ref: "#/components/schemas/Confidence" }
+        capped: { type: boolean, default: false }
+        components:
+          type: array
+          items: { $ref: "#/components/schemas/ScoreComponent" }
+
+    ScoreComponent:
+      type: object
+      required: [key, label, weight, score, contribution, reasons]
+      properties:
+        key: { type: string, enum: [skill_evidence, project_quality, consistency, experience, resume_quality] }
+        label: { type: string }
+        weight: { type: number, description: Effective weight after reweighting }
+        score: { type: [number, "null"], description: 0-100, null when no data }
+        contribution: { type: number, description: weight × score }
+        reasons:
+          type: array
+          items:
+            type: object
+            required: [text, delta]
+            properties:
+              text: { type: string, examples: ["Docker verified in repo 'campus-api' (11 authored commits)"] }
+              delta: { type: number, description: Points gained (+) or withheld (-) inside this component }
+              evidence_ids: { type: array, items: { type: string } }
+
+    Evidence:
+      type: object
+      required: [id, kind, source, label]
+      properties:
+        id: { type: string }
+        kind: { type: string, enum: [repo, file, commit_range, portfolio_item, experience, resume_text, linkedin, certificate] }
+        source: { type: string, enum: [github, resume, linkedin, portfolio] }
+        label: { type: string }
+        url: { type: [string, "null"], format: uri }
+        details: { type: [object, "null"] }
+
+    SkillClaim:
+      type: object
+      required: [skill_id, skill_name, claimed, level, reason, evidence_ids]
+      properties:
+        skill_id: { type: string }
+        skill_name: { type: string }
+        claimed: { type: boolean }
+        level: { $ref: "#/components/schemas/EvidenceLevel" }
+        reason: { type: string }
+        evidence_ids: { type: array, items: { type: string } }
+
+    SkillGap:
+      type: object
+      required: [gap_id, skill_id, skill_name, importance, level, estimated_gain]
+      properties:
+        gap_id: { type: string }
+        skill_id: { type: string }
+        skill_name: { type: string }
+        importance: { type: integer, minimum: 1, maximum: 3 }
+        level: { $ref: "#/components/schemas/EvidenceLevel" }
+        estimated_gain: { type: number }
+
+    ProjectFlag:
+      type: object
+      required: [flag_id, code, severity, reason, fix, estimated_gain]
+      properties:
+        flag_id: { type: string }
+        code: { type: string, enum: [single_dump, unmodified_fork, default_readme, tutorial_pattern, thin_wrapper, claim_mismatch, vague_description, understanding_gap] }
+        severity: { type: string, enum: [low, medium, high] }
+        reason: { type: string }
+        fix: { type: string }
+        estimated_gain: { type: number }
+
+    ProjectAudit:
+      type: object
+      required: [project_id, title, kind, score, detected_skills, flags, self_reported]
+      properties:
+        project_id: { type: string }
+        title: { type: string }
+        kind: { type: string, enum: [code, design] }
+        repo_url: { type: [string, "null"], format: uri }
+        score: { type: number, minimum: 0, maximum: 100 }
+        subscores:
+          type: [object, "null"]
+          properties:
+            hygiene: { type: number }
+            engineering: { type: number }
+            authorship: { type: number }
+            depth: { type: number }
+        detected_skills: { type: array, items: { type: string } }
+        what_it_does: { type: [string, "null"] }
+        honest_rewrite: { type: [string, "null"] }
+        flags: { type: array, items: { $ref: "#/components/schemas/ProjectFlag" } }
+        self_reported: { type: boolean, description: true for link-based design evidence (capped at 80) }
+        understanding:
+          $ref: "#/components/schemas/Understanding"
+          description: From the latest verify quiz on this project (stored per project on the profile, carried across analyses)
+        latest_quiz_id: { type: [string, "null"], format: uuid }
+
+    RoleFit:
+      type: object
+      required: [role_id, role_name, score, reasons, top_missing]
+      properties:
+        role_id: { type: string }
+        role_name: { type: string }
+        score: { type: number }
+        reasons: { type: array, items: { type: string } }
+        top_missing: { type: array, items: { type: string } }
+
+    RoadmapMilestone:
+      type: object
+      required: [id, order, title, deliverable, addresses, resources, effort_hours, estimated_gain]
+      properties:
+        id: { type: string }
+        order: { type: integer }
+        title: { type: string }
+        deliverable: { type: string }
+        addresses: { type: array, items: { type: string }, description: gap_ids / flag_ids }
+        resources: { type: array, items: { $ref: "#/components/schemas/Resource" } }
+        effort_hours: { type: integer }
+        estimated_gain: { type: number }
+        done: { type: boolean, default: false }
+
+    ConsistencySummary:
+      type: object
+      required: [weeks, active_weeks, score]
+      properties:
+        weeks:
+          type: array
+          items:
+            type: object
+            required: [week_start, count]
+            properties:
+              week_start: { type: string, format: date }
+              count: { type: integer }
+        active_weeks: { type: integer }
+        cv: { type: [number, "null"] }
+        last_active_date: { type: [string, "null"], format: date }
+        score: { type: number }
+
+    SimulationRequest:
+      type: object
+      required: [changes]
+      properties:
+        changes:
+          type: array
+          items:
+            type: object
+            properties:
+              project_id: { type: [string, "null"] }
+              add_signals:
+                type: array
+                items: { type: string, enum: [tests, ci, demo_url, license, readme, more_commits, deploy_config] }
+              resolve_flags: { type: array, items: { type: string } }
+              set_understanding:
+                oneOf:
+                  - $ref: "#/components/schemas/Understanding"
+                  - type: "null"
+              set_skill_level:
+                type: [object, "null"]
+                properties:
+                  skill_id: { type: string }
+                  level: { $ref: "#/components/schemas/EvidenceLevel" }
+
+    SimulationResult:
+      type: object
+      required: [before, after, delta]
+      properties:
+        before: { $ref: "#/components/schemas/ScoreBreakdown" }
+        after: { $ref: "#/components/schemas/ScoreBreakdown" }
+        delta: { type: number }
+
+    # ---------- quizzes (docs/QUIZ.md) ----------
+    Understanding: { type: string, enum: [not_taken, demonstrated, partial, not_demonstrated] }
+    QuizMode: { type: string, enum: [practice, verify] }
+
+    SourceRef:
+      type: object
+      required: [path]
+      description: Code projects cite a file and lines. Design projects cite the portfolio page URL (path) and a section heading.
+      properties:
+        path: { type: string }
+        start_line: { type: [integer, "null"] }
+        end_line: { type: [integer, "null"] }
+        section: { type: [string, "null"] }
+        url: { type: [string, "null"], format: uri, description: GitHub blob URL with line anchor, or the page URL }
+
+    QuizCreate:
+      type: object
+      required: [project_id, mode]
+      properties:
+        project_id: { type: string }
+        mode: { $ref: "#/components/schemas/QuizMode" }
+        question_count: { type: integer, minimum: 3, maximum: 10, description: "Verify mode is fixed at 6; practice defaults to 8" }
+
+    QuizQuestion:
+      type: object
+      required: [id, order, type, category, prompt, skill_ids]
+      properties:
+        id: { type: string }
+        order: { type: integer }
+        type: { type: string, enum: [mcq, short_answer] }
+        category: { type: string, enum: [code_reading, architecture, design_decision, debugging, extension, claim_check, process, outcome, critique] }
+        prompt: { type: string }
+        code_snippet:
+          type: [object, "null"]
+          required: [path, start_line, end_line, code]
+          properties:
+            path: { type: string }
+            start_line: { type: integer }
+            end_line: { type: integer }
+            code: { type: string }
+            language: { type: [string, "null"] }
+        options:
+          type: array
+          description: MCQ only
+          items:
+            type: object
+            required: [id, text]
+            properties:
+              id: { type: string }
+              text: { type: string }
+        hint: { type: [string, "null"], description: Practice mode only }
+        time_limit_s: { type: [integer, "null"], description: Verify mode only }
+        served_at: { type: [string, "null"], format: date-time }
+        answered: { type: boolean, default: false }
+        skill_ids: { type: array, items: { type: string } }
+
+    Quiz:
+      type: object
+      required: [id, analysis_id, project_id, project_title, mode, status, questions, total_questions, created_at]
+      properties:
+        id: { type: string, format: uuid }
+        analysis_id: { type: string, format: uuid }
+        project_id: { type: string }
+        project_title: { type: string }
+        mode: { $ref: "#/components/schemas/QuizMode" }
+        status: { type: string, enum: [in_progress, submitted] }
+        total_questions: { type: integer }
+        questions: { type: array, items: { $ref: "#/components/schemas/QuizQuestion" } }
+        created_at: { type: string, format: date-time }
+
+    QuizAnswer:
+      type: object
+      required: [question_id, time_taken_ms]
+      properties:
+        question_id: { type: string }
+        choice_id: { type: [string, "null"], description: MCQ }
+        text: { type: [string, "null"], description: Short answer, max 2000 chars }
+        time_taken_ms: { type: integer }
+        focus_lost_count: { type: integer, default: 0 }
+
+    KeyPointResult:
+      type: object
+      required: [text, status]
+      properties:
+        text: { type: string }
+        status: { type: string, enum: [covered, partial, missing] }
+
+    QuizAnswerFeedback:
+      type: object
+      required: [question_id, recorded]
+      description: |
+        Verify mode before submit: only question_id, recorded and timed_out are set; every grading and
+        answer-key field is null or empty. Practice mode and QuizResult.per_question: all fields set.
+      properties:
+        question_id: { type: string }
+        recorded: { type: boolean }
+        timed_out: { type: boolean, default: false }
+        score: { type: [number, "null"], description: "0-1; null in verify mode until submitted" }
+        correct_choice_id: { type: [string, "null"] }
+        key_points: { type: array, items: { $ref: "#/components/schemas/KeyPointResult" } }
+        incorrect_statements: { type: array, items: { type: string } }
+        feedback: { type: [string, "null"] }
+        model_answer: { type: [string, "null"] }
+        source_ref:
+          oneOf:
+            - $ref: "#/components/schemas/SourceRef"
+            - type: "null"
+
+    QuizResult:
+      type: object
+      required: [quiz_id, mode, score, understanding, per_question, review_topics, strengths]
+      properties:
+        quiz_id: { type: string, format: uuid }
+        mode: { $ref: "#/components/schemas/QuizMode" }
+        score: { type: number, minimum: 0, maximum: 100 }
+        understanding:
+          description: Set in verify mode only; null for practice (practice never changes evidence)
+          oneOf:
+            - $ref: "#/components/schemas/Understanding"
+            - type: "null"
+        per_question: { type: array, items: { $ref: "#/components/schemas/QuizAnswerFeedback" } }
+        strengths: { type: array, items: { type: string } }
+        review_topics:
+          type: array
+          items:
+            type: object
+            required: [topic]
+            properties:
+              topic: { type: string }
+              source_ref:
+                oneOf:
+                  - $ref: "#/components/schemas/SourceRef"
+                  - type: "null"
+        focus_lost_total: { type: integer, description: Shown to the student only }
+        flag:
+          oneOf:
+            - $ref: "#/components/schemas/ProjectFlag"
+            - type: "null"
+        score_update:
+          oneOf:
+            - $ref: "#/components/schemas/SimulationResult"
+            - type: "null"
+        retake_available_at: { type: [string, "null"], format: date-time }
+
+    QuizSummary:
+      type: object
+      required: [id, project_id, project_title, mode, status, created_at]
+      properties:
+        id: { type: string, format: uuid }
+        project_id: { type: string }
+        project_title: { type: string }
+        mode: { $ref: "#/components/schemas/QuizMode" }
+        status: { type: string, enum: [in_progress, submitted] }
+        score: { type: [number, "null"] }
+        understanding:
+          oneOf:
+            - $ref: "#/components/schemas/Understanding"
+            - type: "null"
+        created_at: { type: string, format: date-time }
+
+    # ---------- jobs & applications ----------
+    JobPosting:
+      type: object
+      required: [title, description, source]
+      properties:
+        title: { type: string }
+        company: { type: [string, "null"] }
+        location: { type: [string, "null"] }
+        url: { type: [string, "null"], format: uri }
+        description: { type: string, description: Plain text, max 20k chars }
+        required_skills: { type: array, items: { type: string } }
+        nice_to_have: { type: array, items: { type: string } }
+        deadline: { type: [string, "null"], format: date }
+        source: { type: string, enum: [jsonld, dom, llm, manual] }
+
+    JobMatch:
+      type: object
+      required: [keyword_match, evidence_match, matched, missing, unverified, summary]
+      properties:
+        keyword_match: { type: number, minimum: 0, maximum: 100 }
+        evidence_match: { type: number, minimum: 0, maximum: 100 }
+        matched:
+          type: array
+          items:
+            type: object
+            required: [skill_id, skill_name, level]
+            properties:
+              skill_id: { type: string }
+              skill_name: { type: string }
+              level: { $ref: "#/components/schemas/EvidenceLevel" }
+        missing: { type: array, items: { type: string } }
+        unverified: { type: array, items: { type: string } }
+        summary: { type: string }
+        normalized_posting: { $ref: "#/components/schemas/JobPosting" }
+
+    ApplicationStatus: { type: string, enum: [saved, applied, interviewing, offer, rejected] }
+
+    ApplicationCreate:
+      type: object
+      required: [profile_id, company, title]
+      properties:
+        profile_id: { type: string, format: uuid }
+        company: { type: string }
+        title: { type: string }
+        url: { type: [string, "null"], format: uri }
+        status: { $ref: "#/components/schemas/ApplicationStatus" }
+        deadline: { type: [string, "null"], format: date }
+        keyword_match: { type: [number, "null"] }
+        evidence_match: { type: [number, "null"] }
+        description: { type: [string, "null"] }
+        notes: { type: [string, "null"] }
+
+    ApplicationUpdate:
+      type: object
+      properties:
+        status: { $ref: "#/components/schemas/ApplicationStatus" }
+        deadline: { type: [string, "null"], format: date }
+        notes: { type: [string, "null"] }
+        applied_at: { type: [string, "null"], format: date-time }
+
+    Application:
+      allOf:
+        - $ref: "#/components/schemas/ApplicationCreate"
+        - type: object
+          required: [id, status, created_at, updated_at]
+          properties:
+            id: { type: string, format: uuid }
+            applied_at: { type: [string, "null"], format: date-time }
+            created_at: { type: string, format: date-time }
+            updated_at: { type: string, format: date-time }
+
+    TailoredResume:
+      type: object
+      required: [bullets, numbers_without_evidence, skills_order]
+      properties:
+        bullets:
+          type: array
+          items:
+            type: object
+            required: [original, rewritten]
+            properties:
+              original: { type: string }
+              rewritten: { type: string }
+              evidence_ids: { type: array, items: { type: string } }
+        numbers_without_evidence: { type: array, items: { type: string } }
+        skills_order: { type: array, items: { type: string } }
+
+    # ---------- cohorts ----------
+    Cohort:
+      type: object
+      required: [id, name, student_count]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string, examples: ["B.Tech CSE 2027"] }
+        department: { type: [string, "null"] }
+        year: { type: [integer, "null"] }
+        student_count: { type: integer }
+
+    CohortInsights:
+      type: object
+      required: [cohort_id, role_id, student_count, analysed_count, median_score, bands, histogram, top_missing_skills, unverified_rate_by_skill, at_risk_count]
+      properties:
+        cohort_id: { type: string, format: uuid }
+        role_id: { type: string }
+        student_count: { type: integer }
+        analysed_count: { type: integer }
+        median_score: { type: [number, "null"] }
+        median_coverage: { type: [number, "null"] }
+        bands:
+          type: object
+          required: [not_ready, developing, ready]
+          properties:
+            not_ready: { type: integer }
+            developing: { type: integer }
+            ready: { type: integer }
+        histogram:
+          type: array
+          items:
+            type: object
+            required: [bucket, count]
+            properties:
+              bucket: { type: string, examples: ["50-59"] }
+              count: { type: integer }
+        top_missing_skills:
+          type: array
+          items:
+            type: object
+            required: [skill_id, skill_name, students]
+            properties:
+              skill_id: { type: string }
+              skill_name: { type: string }
+              students: { type: integer }
+        unverified_rate_by_skill:
+          type: array
+          items:
+            type: object
+            required: [skill_id, skill_name, claimed_by, unverified_rate]
+            properties:
+              skill_id: { type: string }
+              skill_name: { type: string }
+              claimed_by: { type: integer }
+              unverified_rate: { type: number, minimum: 0, maximum: 100 }
+        at_risk_count: { type: integer }
+        understanding:
+          type: object
+          required: [quizzed, demonstrated, partial, not_demonstrated]
+          description: Based on each student's top project, latest verify quiz
+          properties:
+            quizzed: { type: integer }
+            demonstrated: { type: integer }
+            partial: { type: integer }
+            not_demonstrated: { type: integer }
+            by_skill:
+              type: array
+              description: Share of students claiming the skill whose claim is built (strong/moderate) AND explained (demonstrated quiz on a project that backs that skill)
+              items:
+                type: object
+                required: [skill_id, skill_name, claimed_by, built_and_explained_rate]
+                properties:
+                  skill_id: { type: string }
+                  skill_name: { type: string }
+                  claimed_by: { type: integer }
+                  built_and_explained_rate: { type: number, minimum: 0, maximum: 100 }
+        by_department:
+          type: array
+          items:
+            type: object
+            required: [department, students, median_score]
+            properties:
+              department: { type: string }
+              students: { type: integer }
+              median_score: { type: [number, "null"] }
+
+    CohortStudent:
+      type: object
+      required: [profile_id, name, score, band, coverage, at_risk]
+      properties:
+        profile_id: { type: string, format: uuid }
+        name: { type: string }
+        department: { type: [string, "null"] }
+        score: { type: number }
+        band: { $ref: "#/components/schemas/Band" }
+        coverage: { type: number }
+        top_gap: { type: [string, "null"] }
+        at_risk: { type: boolean }
+        understanding:
+          $ref: "#/components/schemas/Understanding"
+          description: Latest verify result on the student's top project for this role

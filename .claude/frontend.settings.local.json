@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "deny": [
+      "Edit(/apps/api/**)",
+      "Edit(/data/**)",
+      "Edit(/contracts/**)"
+    ]
+  }
+}
