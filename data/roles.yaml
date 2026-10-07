@@ -1,15 +1,147 @@
-# TODO(progress): placeholder with one role so GET /v1/roles works. B2 replaces this with the
-# 7 roles (8-14 skills each) plus per-role component weights, validated against skills.yaml.
+# Role catalogue. Skill ids come from skills.yaml (the loader fills skill_name from there).
+# importance 1-3 feeds component A; weights feed the Job Readiness Score (docs/SCORING.md §2)
+# and must sum to 1. Tune here, not in code.
+defaults:
+  weights: &default_weights
+    skill_evidence: 0.40
+    project_quality: 0.25
+    consistency: 0.15
+    experience: 0.10
+    resume_quality: 0.10
+
 roles:
   - id: sde-backend
     name: Backend Developer
     category: engineering
+    weights: *default_weights
     skills:
-      - { skill_id: python, skill_name: Python, importance: 3 }
-      - { skill_id: sql, skill_name: SQL, importance: 3 }
-      - { skill_id: fastapi, skill_name: FastAPI, importance: 2 }
-      - { skill_id: docker, skill_name: Docker, importance: 2 }
-      - { skill_id: ci-cd, skill_name: CI/CD, importance: 2 }
-      - { skill_id: redis, skill_name: Redis, importance: 2 }
-      - { skill_id: aws, skill_name: AWS, importance: 2 }
-      - { skill_id: kubernetes, skill_name: Kubernetes, importance: 1 }
+      - { skill: python, importance: 3 }
+      - { skill: sql, importance: 3 }
+      - { skill: rest-api, importance: 3 }
+      - { skill: git, importance: 2 }
+      - { skill: fastapi, importance: 2 }
+      - { skill: docker, importance: 2 }
+      - { skill: pytest, importance: 2 }
+      - { skill: ci-cd, importance: 2 }
+      - { skill: redis, importance: 2 }
+      - { skill: system-design, importance: 2 }
+      - { skill: aws, importance: 2 }
+      - { skill: linux, importance: 1 }
+      - { skill: kubernetes, importance: 1 }
+
+  - id: sde-frontend
+    name: Frontend Developer
+    category: engineering
+    weights: *default_weights
+    skills:
+      - { skill: javascript, importance: 3 }
+      - { skill: html-css, importance: 3 }
+      - { skill: react, importance: 3 }
+      - { skill: typescript, importance: 2 }
+      - { skill: git, importance: 2 }
+      - { skill: nextjs, importance: 2 }
+      - { skill: tailwind, importance: 2 }
+      - { skill: rest-api, importance: 2 }
+      - { skill: jest, importance: 2 }
+      - { skill: redux, importance: 1 }
+      - { skill: accessibility, importance: 1 }
+      - { skill: ci-cd, importance: 1 }
+
+  - id: full-stack
+    name: Full-Stack Developer
+    category: engineering
+    weights: *default_weights
+    skills:
+      - { skill: javascript, importance: 3 }
+      - { skill: react, importance: 3 }
+      - { skill: nodejs, importance: 3 }
+      - { skill: sql, importance: 3 }
+      - { skill: rest-api, importance: 3 }
+      - { skill: html-css, importance: 2 }
+      - { skill: typescript, importance: 2 }
+      - { skill: git, importance: 2 }
+      - { skill: express, importance: 2 }
+      - { skill: docker, importance: 2 }
+      - { skill: mongodb, importance: 1 }
+      - { skill: nextjs, importance: 1 }
+      - { skill: jest, importance: 1 }
+      - { skill: ci-cd, importance: 1 }
+
+  - id: data-analyst
+    name: Data Analyst
+    category: data
+    weights: *default_weights
+    skills:
+      - { skill: sql, importance: 3 }
+      - { skill: excel, importance: 3 }
+      - { skill: python, importance: 3 }
+      - { skill: pandas, importance: 3 }
+      - { skill: data-visualization, importance: 3 }
+      - { skill: statistics, importance: 2 }
+      - { skill: power-bi, importance: 2 }
+      - { skill: tableau, importance: 2 }
+      - { skill: numpy, importance: 1 }
+      - { skill: jupyter, importance: 1 }
+      - { skill: git, importance: 1 }
+
+  - id: ml-engineer
+    name: Machine Learning Engineer
+    category: data
+    weights: *default_weights
+    skills:
+      - { skill: python, importance: 3 }
+      - { skill: scikit-learn, importance: 3 }
+      - { skill: pandas, importance: 3 }
+      - { skill: pytorch, importance: 3 }
+      - { skill: numpy, importance: 2 }
+      - { skill: statistics, importance: 2 }
+      - { skill: sql, importance: 2 }
+      - { skill: git, importance: 2 }
+      - { skill: docker, importance: 2 }
+      - { skill: nlp, importance: 1 }
+      - { skill: computer-vision, importance: 1 }
+      - { skill: llm-apis, importance: 1 }
+      - { skill: tensorflow, importance: 1 }
+      - { skill: fastapi, importance: 1 }
+
+  - id: devops-cloud
+    name: DevOps / Cloud Engineer
+    category: engineering
+    weights: *default_weights
+    skills:
+      - { skill: linux, importance: 3 }
+      - { skill: docker, importance: 3 }
+      - { skill: ci-cd, importance: 3 }
+      - { skill: aws, importance: 3 }
+      - { skill: kubernetes, importance: 3 }
+      - { skill: git, importance: 2 }
+      - { skill: bash, importance: 2 }
+      - { skill: terraform, importance: 2 }
+      - { skill: python, importance: 2 }
+      - { skill: monitoring, importance: 2 }
+      - { skill: nginx, importance: 1 }
+      - { skill: gcp, importance: 1 }
+      - { skill: azure, importance: 1 }
+
+  - id: ui-ux-designer
+    name: UI/UX Designer
+    category: design
+    # Designer column of SCORING §2: portfolio counts more, GitHub cadence less.
+    weights:
+      skill_evidence: 0.40
+      project_quality: 0.30
+      consistency: 0.05
+      experience: 0.15
+      resume_quality: 0.10
+    skills:
+      - { skill: figma, importance: 3 }
+      - { skill: user-research, importance: 3 }
+      - { skill: wireframing, importance: 3 }
+      - { skill: prototyping, importance: 3 }
+      - { skill: visual-design, importance: 3 }
+      - { skill: usability-testing, importance: 2 }
+      - { skill: interaction-design, importance: 2 }
+      - { skill: design-systems, importance: 2 }
+      - { skill: information-architecture, importance: 2 }
+      - { skill: accessibility, importance: 2 }
+      - { skill: html-css, importance: 1 }

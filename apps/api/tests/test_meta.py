@@ -14,10 +14,13 @@ def test_roles_come_from_the_catalogue(client):
     res = client.get("/v1/roles")
     assert res.status_code == 200
     roles = [Role.model_validate(r) for r in res.json()]
+    assert len(roles) == 7
     assert "sde-backend" in {r.id for r in roles}
     for role in roles:
         assert role.skills
-        assert all(1 <= s.importance <= 3 for s in role.skills)
+        assert all(s.skill_name and 1 <= s.importance <= 3 for s in role.skills)
+    # scoring weights are internal; the contract's Role has no such field
+    assert all(set(r) == {"id", "name", "category", "skills"} for r in res.json())
 
 
 def test_cors_allows_web_origin_and_extensions(client):

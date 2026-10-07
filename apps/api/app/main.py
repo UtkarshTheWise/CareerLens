@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.catalogue import validate_catalogue
 from app.config import API_VERSION, get_settings
 from app.db.base import create_all
 from app.errors import register_error_handlers
@@ -11,6 +12,7 @@ from app.routers import meta, profiles
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    validate_catalogue()  # refuse to start on broken data/*.yaml
     create_all()  # prototype: no migrations yet
     yield
 

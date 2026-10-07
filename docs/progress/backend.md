@@ -10,23 +10,25 @@ Keep under ~150 lines. Commit it together with the code it describes.
 ## Status
 - **Track:** backend · **Owns:** `apps/api/`, `data/`
 - **Branch / worktree:** `backend/claude` · `../careerlens-api`
-- **Last updated:** 2026-10-07 14:30 IST by Claude Code (Opus 5.5)
-- **Current task:** B1 done. Next: B2 (catalogues).
-- **State:** done   <!-- not started | in progress | blocked | done -->
-- **Last green checks:** 2026-10-07 14:25 IST, from `apps/api`: `uv run pytest -q` (16 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (3/29 routed, 0 mismatches)
+- **Last updated:** 2026-10-07 15:20 IST by Claude Code (Opus 5.5)
+- **Current task:** B2 (catalogues): built and tested, wrap-up left (stopped at a usage limit).
+- **State:** in progress   <!-- not started | in progress | blocked | done -->
+- **Last green checks:** 2026-10-07 14:25 IST, from `apps/api`: `uv run pytest -q` (45 passed, with B2) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (3/29 routed, 0 mismatches)
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
-1. Start B2: paste its prompt from PROMPTS.md. It replaces the placeholder `data/roles.yaml` and extends `apps/api/app/catalogue.py` (currently only `load_roles()` / `get_role()`).
-2. Keep these skill ids in `data/skills.yaml`, the contract examples use them: python, fastapi, sql, docker, pytest, react, kubernetes, aws, redis, ci-cd, javascript, system-design.
-3. After any route or schema change: `cd apps/api && uv run python scripts/check_contract.py --only-implemented`.
+1. `cd apps/api && uv run python scripts/check_resource_urls.py`. Last run: 127 ok, 2 blocked (w3.org WAI, tableau.com: bot-blocked, open in a browser), 1 failed. The failed one (`design-systems-storybook`) was repointed to `https://storybook.js.org/tutorials/` and NOT re-checked: confirm it answers, else replace it with another free design-systems resource.
+2. Optional tidy in `data/resources.yaml`: the script printed `moved` for ~15 URLs (redirects, all still working); update them to the final URLs it printed, e.g. `interaction-design.org/literature/topics/...` -> `ixdf.org/literature/topics/...`.
+3. Run `uv run pytest -q && uv run ruff check . && uv run python scripts/check_contract.py --only-implemented`, start the server and `curl /v1/roles` (expect 7 roles).
+4. Append the B2 entry to `docs/handoff/backend.md` (catalogue contents, URL check result, note that skills with `detectors: {}` are evidenced by experience/portfolio, not an error for B4/B5).
+5. Mark B2 `done` with its sha here, commit `feat(data): skill, role and resource catalogues with validated loaders`, push. Then B3.
 
 ## Task board
 <!-- status: todo | doing | done | blocked · commit = short sha of the commit that finished it -->
 | Id | Task | Status | Commit | Notes |
 |---|---|---|---|---|
 | B1 | Scaffold FastAPI, config, DB, errors, /health, /v1/roles, /v1/me, check_contract.py | done | 35c1be2 | all contract schemas already in `app/schemas/api.py` |
-| B2 | Catalogues: skills.yaml, roles.yaml, resources.yaml + loaders/tests | todo | | |
+| B2 | Catalogues: skills.yaml, roles.yaml, resources.yaml + loaders/tests | doing | wip commit | 63 skills, 7 roles, 130 resources, name lists, loaders + 29 tests done; wrap-up steps in Resume here |
 | B3 | Ingest, PII stripping, LLM gateway, resume extraction | todo | | |
 | B4 | GitHub collector, detectors, repo signals, rule flags | todo | | |
 | B5 | scoring.py + what-if + unit tests | todo | | |
@@ -36,10 +38,9 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | B8 | Hardening, contract check green, deploy, keep-alive | todo | | Supabase JWT verification lands here |
 
 ## In-progress detail
-- **Files touched, not finished:** none
+- **Files touched, not finished:** `data/resources.yaml` (one replaced URL unverified; redirected URLs not yet updated)
 - **What works right now:** `GET /health`, `GET /v1/roles`, `GET /v1/me` (demo profile, created on first call under `DEV_AUTH=1`); every error in the contract `Error` shape (404/405/422/500 + `ApiError`); CORS for `CORS_ORIGINS` and `chrome-extension://*`; tables created at startup.
 - **Stubbed / fake (search `TODO(progress)`):**
-  - `data/roles.yaml`: one placeholder role (`sde-backend`), no component weights → B2.
   - `app/deps.py:get_auth_subject`: with `DEV_AUTH=0` every request gets 401 (no Supabase JWT verification yet) → B8.
 - **Known failing tests / checks:** none. `check_contract.py` without `--only-implemented` exits 1 by design until all 29 operations are routed.
 
@@ -51,6 +52,9 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - `check_contract.py` also checks models that no route uses yet (it adds every model in `app/schemas/api.py` to the app spec), plus request bodies, operationIds and basic JSON types.
 - Routers pass `operation_id=` from the contract and `responses=ERROR_RESPONSES`; non-200 success codes must be set with `status_code=` or the check fails.
 - Validation errors return field locations and messages only, never the submitted values.
+- roles.yaml lists `{skill, importance}` only; the loader fills `skill_name` from skills.yaml. `RoleDef` (internal) adds `weights`; the API still returns the contract `Role`.
+- `read_catalogue()` reports every catalogue problem at once and runs in the app lifespan, so the server won't start on bad data.
+- `readme_templates.txt` uses `//` for comments because real markers start with `#`.
 - Per-project quiz understanding will live in `profiles.project_understanding` (JSON keyed by repo/portfolio URL).
 
 ## Gotchas learned (one line each, append)

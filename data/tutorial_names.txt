@@ -1,0 +1,53 @@
+# Project names that usually come from a tutorial. Used by the `tutorial_pattern` flag
+# (docs/SCORING.md §5), which also requires a low Depth sub-score, so a deep, original
+# project with one of these names is not flagged. One lowercase name per line; matched
+# against the repo name and description after replacing - and _ with spaces.
+todo
+todo list
+todo app
+to do list
+weather
+weather app
+calculator
+tic tac toe
+netflix clone
+amazon clone
+youtube clone
+spotify clone
+instagram clone
+twitter clone
+whatsapp clone
+airbnb clone
+uber clone
+chat app
+blog app
+notes app
+quiz app
+snake game
+flappy bird
+rock paper scissors
+hangman
+expense tracker
+budget tracker
+movie app
+recipe app
+portfolio website
+landing page
+url shortener
+library management system
+student management system
+hospital management system
+bank management system
+employee management system
+e commerce website
+food delivery app
+hello world
+titanic
+iris classification
+house price prediction
+mnist
+digit recognition
+spam classifier
+sentiment analysis
+movie recommendation system
+stock price prediction

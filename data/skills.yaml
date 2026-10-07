@@ -1,0 +1,495 @@
+# Skill catalogue. Format: docs/SCORING.md §4. Validated by apps/api/app/catalogue.py.
+#
+# aliases   matched case- and punctuation-insensitively ("React.js" == "reactjs"); the id and
+#           name are aliases automatically. An alias may belong to one skill only.
+# detectors npm | pip | maven | gradle (package names) · files (exact file names anywhere) ·
+#           paths (directory prefixes) · extensions · content {glob, regex} · imports {lang, modules}
+#           `detectors: {}` = no repository footprint; evidence comes from experience bullets,
+#           portfolio case studies and project descriptions (SCORING §1), not from a detector.
+skills:
+  # ---------- languages ----------
+  - id: python
+    name: Python
+    aliases: [python3, py]
+    category: language
+    detectors:
+      extensions: [.py]
+      files: [requirements.txt, pyproject.toml, setup.py, Pipfile]
+
+  - id: javascript
+    name: JavaScript
+    aliases: [js, es6, ecmascript, vanilla js]
+    category: language
+    detectors:
+      extensions: [.js, .mjs, .cjs, .jsx]
+
+  - id: typescript
+    name: TypeScript
+    aliases: [ts]
+    category: language
+    detectors:
+      npm: [typescript]
+      extensions: [.ts, .tsx]
+      files: [tsconfig.json]
+
+  - id: java
+    name: Java
+    aliases: [core java, java se, jdk]
+    category: language
+    detectors:
+      extensions: [.java]
+      files: [pom.xml, build.gradle, build.gradle.kts]
+
+  - id: cpp
+    name: C++
+    aliases: [c++, cplusplus, c/c++]
+    category: language
+    detectors:
+      extensions: [.cpp, .cc, .cxx, .hpp]
+      files: [CMakeLists.txt]
+
+  - id: go
+    name: Go
+    aliases: [golang]
+    category: language
+    detectors:
+      extensions: [.go]
+      files: [go.mod]
+
+  - id: sql
+    name: SQL
+    aliases: [mysql, postgresql, postgres, sqlite, rdbms, relational databases, pl/sql]
+    category: language
+    detectors:
+      extensions: [.sql]
+      pip: [sqlalchemy, psycopg, psycopg2, psycopg2-binary, pymysql, mysqlclient, sqlmodel, asyncpg]
+      npm: [pg, mysql2, prisma, "@prisma/client", drizzle-orm, sequelize, typeorm, knex]
+      maven: [mysql-connector-j, postgresql, spring-boot-starter-data-jpa]
+
+  - id: html-css
+    name: HTML & CSS
+    aliases: [html, css, html5, css3, html/css, sass, scss]
+    category: language
+    detectors:
+      extensions: [.html, .css, .scss, .sass]
+
+  - id: bash
+    name: Bash
+    aliases: [shell, shell scripting, bash scripting, sh]
+    category: language
+    detectors:
+      extensions: [.sh, .bash]
+
+  # ---------- backend ----------
+  - id: nodejs
+    name: Node.js
+    aliases: [node, node js]
+    category: backend
+    detectors:
+      npm: [express, fastify, koa, "@nestjs/core", hapi, nodemon]
+      files: [.nvmrc]
+
+  - id: express
+    name: Express
+    aliases: [expressjs, express.js]
+    category: backend
+    detectors:
+      npm: [express]
+
+  - id: fastapi
+    name: FastAPI
+    aliases: [fast api]
+    category: backend
+    detectors:
+      pip: [fastapi]
+      imports: { lang: python, modules: [fastapi] }
+
+  - id: django
+    name: Django
+    aliases: [django rest framework, drf]
+    category: backend
+    detectors:
+      pip: [django, djangorestframework]
+      files: [manage.py]
+
+  - id: flask
+    name: Flask
+    aliases: []
+    category: backend
+    detectors:
+      pip: [flask]
+      imports: { lang: python, modules: [flask] }
+
+  - id: spring-boot
+    name: Spring Boot
+    aliases: [spring, springboot, spring framework, spring mvc]
+    category: backend
+    detectors:
+      maven: [spring-boot-starter, spring-boot-starter-web, spring-boot-starter-parent]
+      gradle: [org.springframework.boot]
+
+  - id: rest-api
+    name: REST APIs
+    aliases: [rest, restful apis, restful api, rest api, api development, web apis]
+    category: backend
+    detectors:
+      pip: [fastapi, flask, djangorestframework]
+      npm: [express, fastify, koa, "@nestjs/core"]
+      maven: [spring-boot-starter-web]
+      files: [openapi.yaml, openapi.json, swagger.yaml, swagger.json]
+
+  - id: graphql
+    name: GraphQL
+    aliases: [gql, apollo]
+    category: backend
+    detectors:
+      npm: [graphql, "@apollo/server", "@apollo/client", apollo-server]
+      pip: [graphene, strawberry-graphql, ariadne]
+      extensions: [.graphql, .gql]
+
+  - id: mongodb
+    name: MongoDB
+    aliases: [mongo, mongoose, nosql]
+    category: backend
+    detectors:
+      npm: [mongodb, mongoose]
+      pip: [pymongo, motor, mongoengine]
+
+  - id: redis
+    name: Redis
+    aliases: [redis cache, caching]
+    category: backend
+    detectors:
+      pip: [redis, aioredis, celery]
+      npm: [redis, ioredis, bullmq]
+      content: { glob: "*compose*.y*ml", regex: "image:\\s*redis" }
+
+  - id: pytest
+    name: pytest
+    aliases: [unit testing in python, python testing]
+    category: backend
+    detectors:
+      pip: [pytest]
+      files: [pytest.ini, conftest.py]
+
+  - id: jest
+    name: Jest
+    aliases: [javascript testing, vitest, react testing library]
+    category: backend
+    detectors:
+      npm: [jest, vitest, "@testing-library/react"]
+      files: [jest.config.js, jest.config.ts, vitest.config.ts, vitest.config.js]
+
+  - id: system-design
+    name: System Design
+    aliases: [software architecture, scalable systems, distributed systems, hld, lld]
+    category: backend
+    detectors: {}
+
+  # ---------- frontend ----------
+  - id: react
+    name: React
+    aliases: [reactjs, react.js, react js]
+    category: frontend
+    detectors:
+      npm: [react]
+
+  - id: nextjs
+    name: Next.js
+    aliases: [next, next js]
+    category: frontend
+    detectors:
+      npm: [next]
+      files: [next.config.js, next.config.mjs, next.config.ts]
+
+  - id: vue
+    name: Vue
+    aliases: [vuejs, vue.js, vue js, nuxt]
+    category: frontend
+    detectors:
+      npm: [vue, nuxt]
+      extensions: [.vue]
+
+  - id: angular
+    name: Angular
+    aliases: [angularjs, angular js]
+    category: frontend
+    detectors:
+      npm: ["@angular/core"]
+      files: [angular.json]
+
+  - id: tailwind
+    name: Tailwind CSS
+    aliases: [tailwindcss]
+    category: frontend
+    detectors:
+      npm: [tailwindcss]
+      files: [tailwind.config.js, tailwind.config.ts]
+
+  - id: redux
+    name: Redux
+    aliases: [redux toolkit, rtk, state management, zustand]
+    category: frontend
+    detectors:
+      npm: [redux, "@reduxjs/toolkit", react-redux, zustand]
+
+  - id: accessibility
+    name: Web Accessibility
+    aliases: [a11y, wcag, aria, accessible design]
+    category: frontend
+    detectors:
+      npm: [eslint-plugin-jsx-a11y, "@axe-core/react", axe-core, pa11y]
+
+  # ---------- data ----------
+  - id: pandas
+    name: pandas
+    aliases: [data wrangling, data cleaning]
+    category: data
+    detectors:
+      pip: [pandas]
+      imports: { lang: python, modules: [pandas] }
+
+  - id: numpy
+    name: NumPy
+    aliases: []
+    category: data
+    detectors:
+      pip: [numpy]
+      imports: { lang: python, modules: [numpy] }
+
+  - id: excel
+    name: Excel
+    aliases: [ms excel, microsoft excel, spreadsheets, google sheets, advanced excel]
+    category: data
+    detectors: {}
+
+  - id: tableau
+    name: Tableau
+    aliases: [tableau desktop, tableau public]
+    category: data
+    detectors: {}
+
+  - id: power-bi
+    name: Power BI
+    aliases: [powerbi, microsoft power bi, dax]
+    category: data
+    detectors: {}
+
+  - id: data-visualization
+    name: Data Visualization
+    aliases: [matplotlib, seaborn, plotly, data viz, dashboards, charts]
+    category: data
+    detectors:
+      pip: [matplotlib, seaborn, plotly, altair, bokeh, streamlit, dash]
+      npm: [d3, recharts, chart.js, echarts]
+
+  - id: statistics
+    name: Statistics
+    aliases: [statistical analysis, hypothesis testing, probability, a/b testing]
+    category: data
+    detectors:
+      pip: [scipy, statsmodels]
+
+  - id: jupyter
+    name: Jupyter Notebooks
+    aliases: [jupyter, jupyter notebook, ipython, google colab, colab, notebooks]
+    category: data
+    detectors:
+      extensions: [.ipynb]
+
+  # ---------- machine learning ----------
+  - id: scikit-learn
+    name: scikit-learn
+    aliases: [sklearn, scikit learn, machine learning, ml, xgboost]
+    category: ml
+    detectors:
+      pip: [scikit-learn, xgboost, lightgbm, catboost]
+      imports: { lang: python, modules: [sklearn, xgboost] }
+
+  - id: pytorch
+    name: PyTorch
+    aliases: [torch]
+    category: ml
+    detectors:
+      pip: [torch, torchvision, pytorch-lightning, lightning]
+      imports: { lang: python, modules: [torch] }
+
+  - id: tensorflow
+    name: TensorFlow
+    aliases: [keras, tf, deep learning]
+    category: ml
+    detectors:
+      pip: [tensorflow, keras, tensorflow-cpu]
+      imports: { lang: python, modules: [tensorflow, keras] }
+
+  - id: nlp
+    name: Natural Language Processing
+    aliases: [natural language processing, transformers, hugging face, huggingface, spacy, nltk, text mining]
+    category: ml
+    detectors:
+      pip: [transformers, spacy, nltk, sentence-transformers, gensim, tokenizers]
+
+  - id: computer-vision
+    name: Computer Vision
+    aliases: [cv, opencv, image processing, yolo, object detection]
+    category: ml
+    detectors:
+      pip: [opencv-python, opencv-python-headless, ultralytics, mediapipe, torchvision, pillow]
+
+  - id: llm-apis
+    name: LLM APIs
+    aliases: [llm, llms, generative ai, genai, gen ai, langchain, openai api, gemini api, rag, prompt engineering]
+    category: ml
+    detectors:
+      pip: [openai, google-genai, google-generativeai, anthropic, groq, langchain, llama-index, litellm]
+      npm: [openai, "@google/genai", "@anthropic-ai/sdk", langchain, ai]
+
+  # ---------- devops & cloud ----------
+  - id: git
+    name: Git
+    aliases: [github, version control, gitlab, git/github]
+    category: devops
+    detectors:
+      files: [.gitignore, .gitattributes]
+
+  - id: docker
+    name: Docker
+    aliases: [containerization, containers, docker compose, docker-compose]
+    category: devops
+    detectors:
+      files: [Dockerfile, docker-compose.yml, docker-compose.yaml, compose.yaml, compose.yml, .dockerignore]
+
+  - id: kubernetes
+    name: Kubernetes
+    aliases: [k8s, helm, kubectl]
+    category: devops
+    detectors:
+      files: [Chart.yaml, kustomization.yaml]
+      paths: ["k8s/", "helm/", "manifests/"]
+      content: { glob: "*.y*ml", regex: "kind:\\s*(Deployment|Service|Ingress|StatefulSet)" }
+
+  - id: ci-cd
+    name: CI/CD
+    aliases: [ci cd, cicd, continuous integration, continuous delivery, github actions, jenkins, gitlab ci]
+    category: devops
+    detectors:
+      files: [.gitlab-ci.yml, Jenkinsfile, .travis.yml, azure-pipelines.yml, bitbucket-pipelines.yml]
+      paths: [".github/workflows/", ".circleci/"]
+
+  - id: aws
+    name: AWS
+    aliases: [amazon web services, ec2, s3, aws lambda, lambda]
+    category: devops
+    detectors:
+      pip: [boto3, aws-cdk-lib, awscli]
+      npm: [aws-sdk, aws-cdk-lib, "@aws-sdk/client-s3", serverless]
+      files: [serverless.yml, samconfig.toml, buildspec.yml]
+      content: { glob: "*.tf", regex: "provider\\s+\"aws\"" }
+
+  - id: gcp
+    name: Google Cloud
+    aliases: [google cloud platform, gcloud, firebase, cloud run, bigquery]
+    category: devops
+    detectors:
+      pip: [google-cloud-storage, google-cloud-bigquery, firebase-admin, google-cloud-firestore]
+      npm: [firebase, firebase-admin, "@google-cloud/storage"]
+      files: [app.yaml, cloudbuild.yaml, firebase.json]
+
+  - id: azure
+    name: Microsoft Azure
+    aliases: [ms azure, azure devops, azure functions]
+    category: devops
+    detectors:
+      pip: [azure-identity, azure-storage-blob, azure-functions]
+      npm: ["@azure/identity", "@azure/storage-blob"]
+      files: [azure-pipelines.yml, host.json]
+
+  - id: terraform
+    name: Terraform
+    aliases: [infrastructure as code, iac, opentofu]
+    category: devops
+    detectors:
+      extensions: [.tf]
+      files: [terraform.tfvars, .terraform.lock.hcl]
+
+  - id: linux
+    name: Linux
+    aliases: [unix, ubuntu, linux administration, command line, cli]
+    category: devops
+    detectors:
+      files: [Makefile]
+      extensions: [.service]
+
+  - id: nginx
+    name: Nginx
+    aliases: [reverse proxy, load balancing]
+    category: devops
+    detectors:
+      files: [nginx.conf, Caddyfile]
+      content: { glob: "*compose*.y*ml", regex: "image:\\s*nginx" }
+
+  - id: monitoring
+    name: Monitoring & Logging
+    aliases: [prometheus, grafana, observability, logging, elk, opentelemetry]
+    category: devops
+    detectors:
+      pip: [prometheus-client, opentelemetry-sdk, sentry-sdk, structlog]
+      npm: [prom-client, "@sentry/node", "@opentelemetry/api", winston, pino]
+      files: [prometheus.yml]
+
+  # ---------- design (portfolio evidence, no repository detectors) ----------
+  - id: figma
+    name: Figma
+    aliases: [figjam, adobe xd, sketch]
+    category: design
+    detectors: {}
+
+  - id: wireframing
+    name: Wireframing
+    aliases: [wireframes, low fidelity design, lo-fi wireframes, user flows]
+    category: design
+    detectors: {}
+
+  - id: prototyping
+    name: Prototyping
+    aliases: [prototypes, interactive prototypes, high fidelity prototypes, hi-fi prototypes]
+    category: design
+    detectors: {}
+
+  - id: user-research
+    name: User Research
+    aliases: [ux research, user interviews, personas, surveys, competitive analysis]
+    category: design
+    detectors: {}
+
+  - id: usability-testing
+    name: Usability Testing
+    aliases: [user testing, usability studies, heuristic evaluation]
+    category: design
+    detectors: {}
+
+  - id: design-systems
+    name: Design Systems
+    aliases: [component libraries, style guides, design tokens, ui kits]
+    category: design
+    detectors:
+      npm: [storybook, "@storybook/react"]
+      paths: [".storybook/"]
+
+  - id: visual-design
+    name: Visual Design
+    aliases: [ui design, typography, color theory, layout, graphic design]
+    category: design
+    detectors: {}
+
+  - id: interaction-design
+    name: Interaction Design
+    aliases: [ixd, microinteractions, motion design, ux design]
+    category: design
+    detectors: {}
+
+  - id: information-architecture
+    name: Information Architecture
+    aliases: [ia, sitemaps, card sorting, navigation design]
+    category: design
+    detectors: {}
