@@ -94,3 +94,16 @@ class RoadmapPlan(BaseModel):
     """Stage 7: the model only chooses ids and writes deliverables; Python attaches URLs and gains."""
 
     milestones: list[RoadmapMilestonePlan] = Field(default_factory=list)
+
+
+class JobPostingExtract(BaseModel):
+    """Job page fallback (docs/PIPELINE.md): only what is written on the page."""
+
+    title: str
+    company: str | None = None
+    location: str | None = None
+    employment_type: str | None = None
+    experience_years_min: int | None = Field(default=None, ge=0, le=50)
+    required_skills: list[str] = Field(default_factory=list)
+    nice_to_have: list[str] = Field(default_factory=list)
+    deadline: str | None = None  # ISO date (YYYY-MM-DD) if the page gives one

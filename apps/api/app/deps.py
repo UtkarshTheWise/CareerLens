@@ -63,14 +63,29 @@ def get_current_profile(
     return profile
 
 
-def get_profile_for(
-    profile_id: UUID, subject: str = Depends(get_auth_subject), db: Session = Depends(get_db)
-) -> models.Profile:
-    """The profile in the path, if the caller may see it. DEV_AUTH sees every profile."""
+def load_profile(db: Session, subject: str, profile_id: UUID | str) -> models.Profile:
+    """The profile with this id, if the caller may see it. DEV_AUTH sees every profile."""
     profile = db.get(models.Profile, str(profile_id))
     if profile is None or (subject != DEV_SUBJECT and profile.auth_subject != subject):
         raise not_found("Profile")
     return profile
+
+
+def get_profile_for(
+    profile_id: UUID, subject: str = Depends(get_auth_subject), db: Session = Depends(get_db)
+) -> models.Profile:
+    """The profile in the path, if the caller may see it."""
+    return load_profile(db, subject, profile_id)
+
+
+def get_application_for(
+    application_id: UUID, subject: str = Depends(get_auth_subject), db: Session = Depends(get_db)
+) -> models.Application:
+    """The application in the path, if the caller owns its profile."""
+    application = db.get(models.Application, str(application_id))
+    if application is None or (subject != DEV_SUBJECT and application.profile.auth_subject != subject):
+        raise not_found("Application")
+    return application
 
 
 def get_analysis_for(

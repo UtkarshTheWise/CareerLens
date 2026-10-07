@@ -221,6 +221,24 @@ def _with_text(projects, texts: dict[str, ProjectText]):
     return out
 
 
+def save_report(analysis: models.Analysis, inputs: ScoringInputs, report: AnalysisReport) -> None:
+    """Store a finished report with its scoring inputs and update the profile's latest score.
+
+    Does not set `status` or commit: the pipeline does that through `_set_stage`, the seed script directly.
+    """
+    analysis.report = report.model_dump(mode="json")
+    analysis.signals = inputs.model_dump(mode="json")
+    analysis.score = report.score.total
+    analysis.coverage = report.coverage
+    analysis.verified_skills = sum(
+        1 for c in report.claims if c.claimed and c.level.value in ("strong", "moderate")
+    )
+    analysis.finished_at = datetime.now(UTC)
+    profile = analysis.profile
+    profile.latest_analysis_id = analysis.id
+    profile.latest_score = report.score.total
+
+
 def _run(db: Session, analysis: models.Analysis, deps: PipelineDeps, refresh: bool) -> None:
     started = time.perf_counter()
     profile = analysis.profile
@@ -298,16 +316,7 @@ def _run(db: Session, analysis: models.Analysis, deps: PipelineDeps, refresh: bo
         evidence=result.evidence,
         notes=notes + result.notes + plan_notes,
     )
-    analysis.report = report.model_dump(mode="json")
-    analysis.signals = inputs.model_dump(mode="json")
-    analysis.score = report.score.total
-    analysis.coverage = report.coverage
-    analysis.verified_skills = sum(
-        1 for c in report.claims if c.claimed and c.level.value in ("strong", "moderate")
-    )
-    analysis.finished_at = datetime.now(UTC)
-    profile.latest_analysis_id = analysis.id
-    profile.latest_score = report.score.total
+    save_report(analysis, inputs, report)
     _set_stage(db, analysis, deps, "done", 100)
     logger.info(
         "analysis %s done score=%s ms=%d stages=%s",

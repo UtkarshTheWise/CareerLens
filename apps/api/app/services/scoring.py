@@ -992,6 +992,22 @@ def score(inputs: ScoringInputs, role_id: str | None = None) -> ScoreResult:
     )
 
 
+def skill_levels(inputs: ScoringInputs, skill_ids: list[str]) -> dict[str, tuple[EvidenceLevel, bool]]:
+    """Evidence level and claimed flag for any catalogue skills, e.g. those a job posting names.
+
+    Same evidence rules as `score` (quiz effects included), but not limited to the target role's skills.
+    A skill with no claim and no evidence is `missing`.
+    """
+    items, claimed = _collect(inputs, _Registry(), [])
+    _apply_quiz(items, inputs.projects)
+    levels = _resolve(items, claimed, _role(inputs.target_role_id), dict(inputs.skill_overrides))
+    return {
+        sid: (EvidenceLevel(levels[sid].level), levels[sid].claimed) if sid in levels
+        else (EvidenceLevel.missing, False)
+        for sid in skill_ids
+    }  # fmt: skip
+
+
 def role_fits(inputs: ScoringInputs) -> list[RoleFit]:
     """The student scored against every catalogue role (decision N5): top 3 by total."""
     fits = []
