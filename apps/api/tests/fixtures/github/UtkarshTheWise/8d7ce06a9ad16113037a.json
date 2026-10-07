@@ -1,0 +1,23 @@
+{
+ "method": "POST",
+ "url": "https://api.github.com/graphql",
+ "request": {
+  "query": "query($owner: String!, $name: String!, $e0: String!) {",
+  "variables": {
+   "owner": "UtkarshTheWise",
+   "name": "patm",
+   "e0": "HEAD:render.yaml"
+  }
+ },
+ "status": 200,
+ "body": {
+  "data": {
+   "repository": {
+    "f0": {
+     "text": "# Render Blueprint — https://render.com/docs/blueprint-spec\n# New → Blueprint → pick this repo. Render prompts for every `sync: false` value.\nservices:\n  - type: web\n    name: patm\n    runtime: node\n    plan: free\n    buildCommand: npm ci\n    startCommand: npm start\n    healthCheckPath: /healthz\n    envVars:\n      - key: SUPABASE_URL\n        sync: false\n      - key: SUPABASE_PUBLISHABLE_KEY\n        sync: false\n      - key: SUPABASE_SECRET_KEY\n        sync: false\n      # Generate once with `npx web-push generate-vapid-keys` and never rotate:\n      # Render's disk is wiped on every deploy, so the data/vapid.json fallback\n      # would mint new keys each time and kill every saved push subscription.\n      - key: VAPID_PUBLIC_KEY\n        sync: false\n      - key: VAPID_PRIVATE_KEY\n        sync: false\n      - key: VAPID_SUBJECT\n        sync: false\n",
+     "isBinary": false
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,576 @@
+{
+ "method": "GET",
+ "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/trees/HEAD?recursive=1",
+ "request": null,
+ "status": 200,
+ "body": {
+  "sha": "d1d0eac005bd6f3f6fd6567f3acea4f54ff747a3",
+  "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/trees/d1d0eac005bd6f3f6fd6567f3acea4f54ff747a3",
+  "tree": [
+   {
+    "path": ".claude",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "3bbadf2a8ef5f51ed953de624896073e32b6221f",
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/trees/3bbadf2a8ef5f51ed953de624896073e32b6221f"
+   },
+   {
+    "path": ".claude/backend.settings.local.json",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "384d9a5c82d4a056dcb43b558f365f4fb8681688",
+    "size": 147,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/384d9a5c82d4a056dcb43b558f365f4fb8681688"
+   },
+   {
+    "path": ".claude/frontend.settings.local.json",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4458126751189b22623d9d5725ec642c69ea2bcc",
+    "size": 127,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/4458126751189b22623d9d5725ec642c69ea2bcc"
+   },
+   {
+    "path": ".claude/hooks",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "188774dd5d65bcc7d3e16547eed76bcd3e95fae5",
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/trees/188774dd5d65bcc7d3e16547eed76bcd3e95fae5"
+   },
+   {
+    "path": ".claude/hooks/require-progress.sh",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0ac2f297fd1868888ece2954e1b31a4bbd115871",
+    "size": 1148,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/0ac2f297fd1868888ece2954e1b31a4bbd115871"
+   },
+   {
+    "path": ".claude/settings.json",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "67056daa4dc01c102108338b6957b17297a5ddee",
+    "size": 593,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/67056daa4dc01c102108338b6957b17297a5ddee"
+   },
+   {
+    "path": ".gitattributes",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dfe0770424b2a19faf507a501ebfc23be8f54e7b",
+    "size": 66,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/dfe0770424b2a19faf507a501ebfc23be8f54e7b"
+   },
+   {
+    "path": ".gitignore",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0c5dd26cdb576d3cca1bd579b0d4b832748892e0",
+    "size": 135,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/0c5dd26cdb576d3cca1bd579b0d4b832748892e0"
+   },
+   {
+    "path": "AGENTS.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "993952f784da3e1695e545b54f9b062fdd9a7d96",
+    "size": 6032,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/993952f784da3e1695e545b54f9b062fdd9a7d96"
+   },
+   {
+    "path": "CLAUDE.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7b5dc04e4e626caaf6bae678b8e47916a9898b59",
+    "size": 1389,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/7b5dc04e4e626caaf6bae678b8e47916a9898b59"
+   },
+   {
+    "path": "PROMPTS.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ed33e274f66018db09c0194cca9c58d655ee137b",
+    "size": 31805,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/ed33e274f66018db09c0194cca9c58d655ee137b"
+   },
+   {
+    "path": "README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c4dc75eaa34b8d7c72b43cbb30324cb4a26c66ed",
+    "size": 22641,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/c4dc75eaa34b8d7c72b43cbb30324cb4a26c66ed"
+   },
+   {
+    "path": "ROADMAP.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b49296c575d1a1f389b076ff97b19c052a8e864b",
+    "size": 11874,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/b49296c575d1a1f389b076ff97b19c052a8e864b"
+   },
+   {
+    "path": "RUNBOOK.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b0f838bf32397c492b049d6657ccfa025c184e6b",
+    "size": 9718,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/b0f838bf32397c492b049d6657ccfa025c184e6b"
+   },
+   {
+    "path": "apps",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "9fa54e2b5bba524cd4a3843a72c59d1e8fb2489c",
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/trees/9fa54e2b5bba524cd4a3843a72c59d1e8fb2489c"
+   },
+   {
+    "path": "apps/api",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "43d514cf69c2e1a9803c184c041d8cef5d85b0a8",
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/trees/43d514cf69c2e1a9803c184c041d8cef5d85b0a8"
+   },
+   {
+    "path": "apps/api/.env.example",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "993b882b3a82619d21ef172fd8cf05053a8949c6",
+    "size": 577,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/993b882b3a82619d21ef172fd8cf05053a8949c6"
+   },
+   {
+    "path": "apps/api/AGENTS.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "848f2e98cf8dee404a90ad1940f00d2daf652d4c",
+    "size": 3460,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/848f2e98cf8dee404a90ad1940f00d2daf652d4c"
+   },
+   {
+    "path": "apps/extension",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "4848bb0ad32532f51a4532bcac46eb54e250393e",
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/trees/4848bb0ad32532f51a4532bcac46eb54e250393e"
+   },
+   {
+    "path": "apps/extension/AGENTS.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c48fa0279c0d2faef27c68a1d88f534da6d4902b",
+    "size": 1647,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/c48fa0279c0d2faef27c68a1d88f534da6d4902b"
+   },
+   {
+    "path": "apps/web",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "969efa5efbc86f76c46f8866ee17e3432ed3f3d5",
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/trees/969efa5efbc86f76c46f8866ee17e3432ed3f3d5"
+   },
+   {
+    "path": "apps/web/AGENTS.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f852b4ef67b476d7903f7b408db07071c11abba8",
+    "size": 1781,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/f852b4ef67b476d7903f7b408db07071c11abba8"
+   },
+   {
+    "path": "contracts",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "dc35d99259b48369e4ad5afc882ca7b90358cb0b",
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/trees/dc35d99259b48369e4ad5afc882ca7b90358cb0b"
+   },
+   {
+    "path": "contracts/openapi.yaml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5825f7cfc07ab93f259d8642f14455e5f5b8d5ca",
+    "size": 69405,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/5825f7cfc07ab93f259d8642f14455e5f5b8d5ca"
+   },
+   {
+    "path": "design-refs",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "99fbe07e394e40b4aa32a4ab4be9ba073c742782",
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/trees/99fbe07e394e40b4aa32a4ab4be9ba073c742782"
+   },
+   {
+    "path": "design-refs/189ba4208923943.66f6873fde756.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "484516234b425ff4e9f9a9682abfc04e05306e60",
+    "size": 6629507,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/484516234b425ff4e9f9a9682abfc04e05306e60"
+   },
+   {
+    "path": "design-refs/19cd89208923943.66f6873fdd921.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0f11f82d9e2c40c13b84ae812cb7913f91f1e8c9",
+    "size": 865082,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/0f11f82d9e2c40c13b84ae812cb7913f91f1e8c9"
+   },
+   {
+    "path": "design-refs/1f641a229017577.685d1c6740c5d.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0c68d980bef058f72f093c77a3f6135387510edf",
+    "size": 3012002,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/0c68d980bef058f72f093c77a3f6135387510edf"
+   },
+   {
+    "path": "design-refs/1f641a229017577_685d1c6740c5d.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0c68d980bef058f72f093c77a3f6135387510edf",
+    "size": 3012002,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/0c68d980bef058f72f093c77a3f6135387510edf"
+   },
+   {
+    "path": "design-refs/2593ee208923943.66f6873fe009f.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "52a05ac73badfb2bee5a27b528bcf1aee80a425a",
+    "size": 5389230,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/52a05ac73badfb2bee5a27b528bcf1aee80a425a"
+   },
+   {
+    "path": "design-refs/2593ee208923943_66f6873fe009f.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "52a05ac73badfb2bee5a27b528bcf1aee80a425a",
+    "size": 5389230,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/52a05ac73badfb2bee5a27b528bcf1aee80a425a"
+   },
+   {
+    "path": "design-refs/43049f229017577.685d1c673fb0d.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dd1f88a17309b22ccfaae80f7d3fe150eac8a188",
+    "size": 5119079,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/dd1f88a17309b22ccfaae80f7d3fe150eac8a188"
+   },
+   {
+    "path": "design-refs/4dcc4d208923943.66ffe2faf4162.jpg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9e80aaf5bd4420ddeaf35929f9ea44a739268520",
+    "size": 1254835,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/9e80aaf5bd4420ddeaf35929f9ea44a739268520"
+   },
+   {
+    "path": "design-refs/5ed89d229017577.685d1c673f370.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "24e7139b3d376b869d9b7afe595801ef746a6fb0",
+    "size": 4900882,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/24e7139b3d376b869d9b7afe595801ef746a6fb0"
+   },
+   {
+    "path": "design-refs/5ed89d229017577_685d1c673f370.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "24e7139b3d376b869d9b7afe595801ef746a6fb0",
+    "size": 4900882,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/24e7139b3d376b869d9b7afe595801ef746a6fb0"
+   },
+   {
+    "path": "design-refs/7b712a208923943.66f6879e484a8.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "598d2fd3308a7a3fffbe1b0e50b70232b8acbe05",
+    "size": 998398,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/598d2fd3308a7a3fffbe1b0e50b70232b8acbe05"
+   },
+   {
+    "path": "design-refs/7bf836208923943.66f6873fde03e.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2388b76307e494bc946ce7b030414f1e9ac71fb8",
+    "size": 757296,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/2388b76307e494bc946ce7b030414f1e9ac71fb8"
+   },
+   {
+    "path": "design-refs/83e55e208923943.66f687777fa18.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "28d87f586dfebce9df5587e041035d7b32c10ae3",
+    "size": 184249,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/28d87f586dfebce9df5587e041035d7b32c10ae3"
+   },
+   {
+    "path": "design-refs/8b1185229017577.685d1c673dd97.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "da366483d95db2062384f0973a27f26e7ba6ee2b",
+    "size": 1345250,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/da366483d95db2062384f0973a27f26e7ba6ee2b"
+   },
+   {
+    "path": "design-refs/90ad36208923943.66f6873fdeceb.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d8893925ee3238fef101951f9ac610d8cc1dd4c5",
+    "size": 2430517,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/d8893925ee3238fef101951f9ac610d8cc1dd4c5"
+   },
+   {
+    "path": "design-refs/90ad36208923943_66f6873fdeceb.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d8893925ee3238fef101951f9ac610d8cc1dd4c5",
+    "size": 2430517,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/d8893925ee3238fef101951f9ac610d8cc1dd4c5"
+   },
+   {
+    "path": "design-refs/936ac6208923943.66ffe46cb0ee2.jpg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c7052f279b9f1c37cada83c8f62f34cbea64a1a2",
+    "size": 1699960,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/c7052f279b9f1c37cada83c8f62f34cbea64a1a2"
+   },
+   {
+    "path": "design-refs/d66fb1208923943.66f6873fdfb24.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b36234fd515463856e1a89aa125e1c5768924a79",
+    "size": 360348,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/b36234fd515463856e1a89aa125e1c5768924a79"
+   },
+   {
+    "path": "design-refs/dccdcc208923943.66f6873fdcbe6.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "962312613cdeef7251e2cd5f48ef83f13b6aeaa6",
+    "size": 2765264,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/962312613cdeef7251e2cd5f48ef83f13b6aeaa6"
+   },
+   {
+    "path": "design-refs/e22ac7208923943.66ffe46cb142b.jpg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cd7dff8fe36642768bd505d1dd7edfe2b5012aa8",
+    "size": 2336152,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/cd7dff8fe36642768bd505d1dd7edfe2b5012aa8"
+   },
+   {
+    "path": "design-refs/e24946208923943.66ffe3c6273d3.jpg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5d64c2f52de7d2001274be3148be3705d660e341",
+    "size": 3336453,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/5d64c2f52de7d2001274be3148be3705d660e341"
+   },
+   {
+    "path": "design-refs/f98380229017577.685d1c673eba9.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1b6be1910d891705ac0d9adfd1dfd0a51541134f",
+    "size": 220685,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/1b6be1910d891705ac0d9adfd1dfd0a51541134f"
+   },
+   {
+    "path": "docs",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "0edbaf3d7cdef7915bcf5c728f4b339ad612a2e3",
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/trees/0edbaf3d7cdef7915bcf5c728f4b339ad612a2e3"
+   },
+   {
+    "path": "docs/DESIGN.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9436cf5b6de31281ae352bc59d7d15a2cce94de9",
+    "size": 7003,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/9436cf5b6de31281ae352bc59d7d15a2cce94de9"
+   },
+   {
+    "path": "docs/HANDOFF.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8f7f1f5a4b8f8965eabdffe908b20e1c9dc2a717",
+    "size": 1647,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/8f7f1f5a4b8f8965eabdffe908b20e1c9dc2a717"
+   },
+   {
+    "path": "docs/PIPELINE.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "355f222fd2acb21a516185261af35c274c41f45d",
+    "size": 13640,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/355f222fd2acb21a516185261af35c274c41f45d"
+   },
+   {
+    "path": "docs/QUIZ.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b3ac5a2f66ec561b5438e571ac56dd5456ab62fb",
+    "size": 10734,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/b3ac5a2f66ec561b5438e571ac56dd5456ab62fb"
+   },
+   {
+    "path": "docs/RESEARCH.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9073ab787f89a8935fe74e064c77d9ef768ba435",
+    "size": 29481,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/9073ab787f89a8935fe74e064c77d9ef768ba435"
+   },
+   {
+    "path": "docs/SCORING.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fb21ac1923a441ea6d7a44f97f45749c1acf7b95",
+    "size": 10688,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/fb21ac1923a441ea6d7a44f97f45749c1acf7b95"
+   },
+   {
+    "path": "docs/handoff",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "6efdfeb9c010da2f954e781c7a032b75816efb99",
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/trees/6efdfeb9c010da2f954e781c7a032b75816efb99"
+   },
+   {
+    "path": "docs/handoff/backend.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d99182de6fb8389c59264ce72a897f2511c2665f",
+    "size": 146,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/d99182de6fb8389c59264ce72a897f2511c2665f"
+   },
+   {
+    "path": "docs/handoff/frontend.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "33a8cd6110e788e46c4ecf64046dc1dad7be8b3d",
+    "size": 148,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/33a8cd6110e788e46c4ecf64046dc1dad7be8b3d"
+   },
+   {
+    "path": "docs/handoff/integration.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "42804e0a8d84d5db7ffdb3cddda3af736b640777",
+    "size": 2948,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/42804e0a8d84d5db7ffdb3cddda3af736b640777"
+   },
+   {
+    "path": "docs/progress",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "61d10ed592c775c94fcb428fdfc42ed85ad634e3",
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/trees/61d10ed592c775c94fcb428fdfc42ed85ad634e3"
+   },
+   {
+    "path": "docs/progress/backend.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a5b0376443a23cf60f260111bdcfb33b7af0c675",
+    "size": 2753,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/a5b0376443a23cf60f260111bdcfb33b7af0c675"
+   },
+   {
+    "path": "docs/progress/frontend.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fe2e62a100de28f300f56dd69a379574d57a7a99",
+    "size": 2585,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/fe2e62a100de28f300f56dd69a379574d57a7a99"
+   },
+   {
+    "path": "docs/progress/integration.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "acee4bcd021d5561ff473782671c9184a674fd49",
+    "size": 4271,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/acee4bcd021d5561ff473782671c9184a674fd49"
+   },
+   {
+    "path": "package.json",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e30befc014c30b2862ae604eac55ccaf2f90c100",
+    "size": 290,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/e30befc014c30b2862ae604eac55ccaf2f90c100"
+   },
+   {
+    "path": "packages",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "56324a44ba71228d70b4790923aa361525025660",
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/trees/56324a44ba71228d70b4790923aa361525025660"
+   },
+   {
+    "path": "packages/api-client",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "814f1c48c33b27654bb1f0dca81284a4b22c7294",
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/trees/814f1c48c33b27654bb1f0dca81284a4b22c7294"
+   },
+   {
+    "path": "packages/api-client/index.ts",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ceadd14a53119bdb29ddb70539b62df47eaea230",
+    "size": 457,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/ceadd14a53119bdb29ddb70539b62df47eaea230"
+   },
+   {
+    "path": "packages/api-client/package.json",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9b81f44cf102c1b1f666d17266f9e997699344f8",
+    "size": 299,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/9b81f44cf102c1b1f666d17266f9e997699344f8"
+   },
+   {
+    "path": "packages/api-client/schema.d.ts",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fe63126ddac119723e7185ad73be16ac3ef55d2e",
+    "size": 105317,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/fe63126ddac119723e7185ad73be16ac3ef55d2e"
+   },
+   {
+    "path": "packages/api-client/tsconfig.json",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7180f6f7b589bad2b2e48e855d6b7176574042db",
+    "size": 251,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/7180f6f7b589bad2b2e48e855d6b7176574042db"
+   },
+   {
+    "path": "pnpm-lock.yaml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7a307b0209521335ee191eff243d51c090390c55",
+    "size": 8807,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/7a307b0209521335ee191eff243d51c090390c55"
+   },
+   {
+    "path": "pnpm-workspace.yaml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9b13df25ce78317526df6c07496fffe1464a15b7",
+    "size": 57,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/9b13df25ce78317526df6c07496fffe1464a15b7"
+   },
+   {
+    "path": "redocly.yaml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "567b54f4588b4e6c7c76c444095e3e83a80f2e51",
+    "size": 296,
+    "url": "https://api.github.com/repos/UtkarshTheWise/CareerLens/git/blobs/567b54f4588b4e6c7c76c444095e3e83a80f2e51"
+   }
+  ],
+  "truncated": false
+ }
+}

@@ -1,0 +1,670 @@
+{
+ "method": "POST",
+ "url": "https://api.github.com/graphql",
+ "request": {
+  "query": "query($owner: String!, $uid: ID!, $n0: String!, $s0: GitTimestamp!, $n1: String!",
+  "variables": {
+   "owner": "UtkarshTheWise",
+   "uid": "MDQ6VXNlcjc5Mzc1MTEx",
+   "n0": "neohomes",
+   "s0": "2022-11-18T19:22:59Z",
+   "n1": "amity",
+   "s1": "2022-10-29T14:43:43Z",
+   "n2": "ordin20",
+   "s2": "2022-04-14T04:33:47Z"
+  }
+ },
+ "status": 200,
+ "body": {
+  "data": {
+   "r0": {
+    "defaultBranchRef": {
+     "target": {
+      "total": {
+       "totalCount": 13
+      },
+      "authored": {
+       "totalCount": 6,
+       "nodes": [
+        {
+         "committedDate": "2025-03-05T14:38:36Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2025-03-05T13:19:08Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2025-03-05T13:17:25Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2025-03-05T13:15:24Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2025-03-05T13:15:01Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2025-03-05T13:12:01Z",
+         "additions": 1
+        }
+       ]
+      },
+      "since_created": {
+       "totalCount": 6
+      },
+      "all": {
+       "totalCount": 13,
+       "nodes": [
+        {
+         "committedDate": "2025-03-05T14:38:36Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2025-03-05T13:19:08Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2025-03-05T13:17:25Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2025-03-05T13:15:24Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2025-03-05T13:15:01Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2025-03-05T13:12:01Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2022-11-18T18:59:55Z",
+         "additions": 41
+        },
+        {
+         "committedDate": "2022-11-18T18:25:38Z",
+         "additions": 98
+        },
+        {
+         "committedDate": "2022-11-18T14:09:05Z",
+         "additions": 2
+        },
+        {
+         "committedDate": "2022-11-18T10:49:27Z",
+         "additions": 4
+        },
+        {
+         "committedDate": "2022-11-18T10:48:42Z",
+         "additions": 11
+        },
+        {
+         "committedDate": "2022-11-18T10:33:40Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2022-11-18T08:22:27Z",
+         "additions": 507
+        }
+       ]
+      }
+     }
+    }
+   },
+   "r1": {
+    "defaultBranchRef": {
+     "target": {
+      "total": {
+       "totalCount": 27
+      },
+      "authored": {
+       "totalCount": 0,
+       "nodes": []
+      },
+      "since_created": {
+       "totalCount": 0
+      },
+      "all": {
+       "totalCount": 27,
+       "nodes": [
+        {
+         "committedDate": "2022-10-29T14:16:23Z",
+         "additions": 2
+        },
+        {
+         "committedDate": "2022-10-29T14:12:14Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2022-10-29T13:57:10Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2022-10-29T13:49:33Z",
+         "additions": 12
+        },
+        {
+         "committedDate": "2022-10-29T13:40:23Z",
+         "additions": 213
+        },
+        {
+         "committedDate": "2022-10-29T13:27:32Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2022-10-29T13:26:28Z",
+         "additions": 422
+        },
+        {
+         "committedDate": "2022-10-29T13:17:32Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2022-10-29T13:10:34Z",
+         "additions": 2
+        },
+        {
+         "committedDate": "2022-10-29T13:04:02Z",
+         "additions": 6
+        },
+        {
+         "committedDate": "2022-10-29T12:59:54Z",
+         "additions": 157
+        },
+        {
+         "committedDate": "2022-10-29T12:56:02Z",
+         "additions": 5
+        },
+        {
+         "committedDate": "2022-10-29T12:49:33Z",
+         "additions": 634
+        },
+        {
+         "committedDate": "2022-10-29T10:40:00Z",
+         "additions": 8
+        },
+        {
+         "committedDate": "2022-10-29T10:23:09Z",
+         "additions": 5
+        },
+        {
+         "committedDate": "2022-10-29T10:21:56Z",
+         "additions": 37
+        },
+        {
+         "committedDate": "2022-10-29T09:34:30Z",
+         "additions": 2
+        },
+        {
+         "committedDate": "2022-10-29T09:25:33Z",
+         "additions": 2
+        },
+        {
+         "committedDate": "2022-10-29T08:34:15Z",
+         "additions": 2
+        },
+        {
+         "committedDate": "2022-10-29T08:32:21Z",
+         "additions": 5
+        },
+        {
+         "committedDate": "2022-10-29T08:28:40Z",
+         "additions": 106
+        },
+        {
+         "committedDate": "2022-10-29T08:06:26Z",
+         "additions": 33
+        },
+        {
+         "committedDate": "2022-10-29T07:33:32Z",
+         "additions": 4
+        },
+        {
+         "committedDate": "2022-10-29T07:06:25Z",
+         "additions": 29
+        },
+        {
+         "committedDate": "2022-10-29T06:57:16Z",
+         "additions": 29
+        },
+        {
+         "committedDate": "2022-10-29T06:35:15Z",
+         "additions": 52
+        },
+        {
+         "committedDate": "2022-10-29T06:08:43Z",
+         "additions": 431
+        }
+       ]
+      }
+     }
+    }
+   },
+   "r2": {
+    "defaultBranchRef": {
+     "target": {
+      "total": {
+       "totalCount": 109
+      },
+      "authored": {
+       "totalCount": 0,
+       "nodes": []
+      },
+      "since_created": {
+       "totalCount": 0
+      },
+      "all": {
+       "totalCount": 109,
+       "nodes": [
+        {
+         "committedDate": "2020-08-13T18:05:55Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-08-13T18:04:46Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-08-01T16:03:20Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-08-01T16:03:07Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-08-01T16:02:54Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-08-01T16:02:37Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-08-01T16:02:19Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-07-16T17:48:51Z",
+         "additions": 14
+        },
+        {
+         "committedDate": "2020-07-14T18:26:02Z",
+         "additions": 12
+        },
+        {
+         "committedDate": "2020-07-14T18:25:27Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2020-07-14T15:35:47Z",
+         "additions": 12
+        },
+        {
+         "committedDate": "2020-07-08T14:58:09Z",
+         "additions": 64
+        },
+        {
+         "committedDate": "2020-07-08T06:58:45Z",
+         "additions": 2
+        },
+        {
+         "committedDate": "2020-07-08T06:55:10Z",
+         "additions": 137
+        },
+        {
+         "committedDate": "2020-07-08T06:35:31Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2020-07-08T06:34:51Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2020-07-08T06:33:49Z",
+         "additions": 32
+        },
+        {
+         "committedDate": "2020-07-08T05:54:24Z",
+         "additions": 34
+        },
+        {
+         "committedDate": "2020-07-08T05:44:32Z",
+         "additions": 63
+        },
+        {
+         "committedDate": "2020-07-08T05:40:55Z",
+         "additions": 106
+        },
+        {
+         "committedDate": "2020-07-05T13:49:45Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2020-07-02T11:51:48Z",
+         "additions": 4
+        },
+        {
+         "committedDate": "2020-07-02T11:03:58Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-07-01T12:26:37Z",
+         "additions": 2
+        },
+        {
+         "committedDate": "2020-07-01T10:29:44Z",
+         "additions": 49
+        },
+        {
+         "committedDate": "2020-06-30T19:51:49Z",
+         "additions": 5
+        },
+        {
+         "committedDate": "2020-06-30T19:51:42Z",
+         "additions": 9
+        },
+        {
+         "committedDate": "2020-06-30T19:38:33Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2020-06-30T19:38:09Z",
+         "additions": 9
+        },
+        {
+         "committedDate": "2020-06-30T19:31:58Z",
+         "additions": 7
+        },
+        {
+         "committedDate": "2020-06-30T19:31:13Z",
+         "additions": 8
+        },
+        {
+         "committedDate": "2020-06-30T19:18:13Z",
+         "additions": 7
+        },
+        {
+         "committedDate": "2020-06-30T16:28:19Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-06-30T16:27:35Z",
+         "additions": 6
+        },
+        {
+         "committedDate": "2020-06-30T16:19:52Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-06-30T08:37:07Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-06-30T07:56:50Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-06-29T09:32:29Z",
+         "additions": 34
+        },
+        {
+         "committedDate": "2020-06-27T23:28:00Z",
+         "additions": 12
+        },
+        {
+         "committedDate": "2020-06-27T22:52:21Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2020-06-27T22:50:56Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-06-27T22:49:58Z",
+         "additions": 13
+        },
+        {
+         "committedDate": "2020-06-27T22:42:46Z",
+         "additions": 167
+        },
+        {
+         "committedDate": "2020-06-27T22:36:06Z",
+         "additions": 191
+        },
+        {
+         "committedDate": "2020-06-27T22:23:53Z",
+         "additions": 133
+        },
+        {
+         "committedDate": "2020-06-27T21:55:47Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2020-06-27T21:50:45Z",
+         "additions": 34
+        },
+        {
+         "committedDate": "2020-06-27T21:47:29Z",
+         "additions": 169
+        },
+        {
+         "committedDate": "2020-06-27T21:46:40Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2020-06-27T21:40:21Z",
+         "additions": 8
+        },
+        {
+         "committedDate": "2020-06-27T21:31:33Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2020-06-27T21:23:21Z",
+         "additions": 2
+        },
+        {
+         "committedDate": "2020-06-27T21:22:45Z",
+         "additions": 32
+        },
+        {
+         "committedDate": "2020-06-27T21:01:39Z",
+         "additions": 2
+        },
+        {
+         "committedDate": "2020-06-27T20:44:07Z",
+         "additions": 247
+        },
+        {
+         "committedDate": "2020-06-27T15:50:30Z",
+         "additions": 19
+        },
+        {
+         "committedDate": "2020-06-27T15:49:13Z",
+         "additions": 72
+        },
+        {
+         "committedDate": "2020-06-27T15:45:08Z",
+         "additions": 15
+        },
+        {
+         "committedDate": "2020-06-27T12:35:42Z",
+         "additions": 3
+        },
+        {
+         "committedDate": "2020-06-27T12:35:34Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2020-06-27T12:22:32Z",
+         "additions": 68
+        },
+        {
+         "committedDate": "2020-06-27T12:19:23Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-06-27T12:17:14Z",
+         "additions": 123
+        },
+        {
+         "committedDate": "2020-06-27T11:34:19Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-06-27T08:59:48Z",
+         "additions": 2
+        },
+        {
+         "committedDate": "2020-06-26T18:16:04Z",
+         "additions": 3
+        },
+        {
+         "committedDate": "2020-06-25T20:19:16Z",
+         "additions": 6
+        },
+        {
+         "committedDate": "2020-06-25T20:13:55Z",
+         "additions": 5
+        },
+        {
+         "committedDate": "2020-06-25T18:20:18Z",
+         "additions": 89
+        },
+        {
+         "committedDate": "2020-06-24T22:48:38Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-06-24T22:45:42Z",
+         "additions": 68
+        },
+        {
+         "committedDate": "2020-06-24T09:39:02Z",
+         "additions": 14
+        },
+        {
+         "committedDate": "2020-06-24T09:28:41Z",
+         "additions": 4
+        },
+        {
+         "committedDate": "2020-06-24T09:18:58Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2020-06-23T10:00:21Z",
+         "additions": 4
+        },
+        {
+         "committedDate": "2020-06-22T16:01:33Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2020-06-22T16:00:42Z",
+         "additions": 25
+        },
+        {
+         "committedDate": "2020-06-21T20:03:58Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-06-21T12:23:35Z",
+         "additions": 68
+        },
+        {
+         "committedDate": "2020-06-21T12:00:25Z",
+         "additions": 29
+        },
+        {
+         "committedDate": "2020-06-21T12:00:00Z",
+         "additions": 1
+        },
+        {
+         "committedDate": "2020-06-21T11:58:38Z",
+         "additions": 115
+        },
+        {
+         "committedDate": "2020-06-20T21:23:44Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-06-20T19:09:27Z",
+         "additions": 18
+        },
+        {
+         "committedDate": "2020-06-20T18:22:50Z",
+         "additions": 6
+        },
+        {
+         "committedDate": "2020-06-20T10:39:16Z",
+         "additions": 2
+        },
+        {
+         "committedDate": "2020-06-20T10:16:42Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-06-20T10:14:36Z",
+         "additions": 5
+        },
+        {
+         "committedDate": "2020-06-20T10:08:22Z",
+         "additions": 885
+        },
+        {
+         "committedDate": "2020-06-19T19:07:29Z",
+         "additions": 24
+        },
+        {
+         "committedDate": "2020-06-19T14:37:43Z",
+         "additions": 786
+        },
+        {
+         "committedDate": "2020-06-19T09:24:08Z",
+         "additions": 18
+        },
+        {
+         "committedDate": "2020-06-19T09:07:09Z",
+         "additions": 3
+        },
+        {
+         "committedDate": "2020-06-19T09:01:03Z",
+         "additions": 0
+        },
+        {
+         "committedDate": "2020-06-19T08:50:53Z",
+         "additions": 4
+        },
+        {
+         "committedDate": "2020-06-19T08:47:18Z",
+         "additions": 6
+        },
+        {
+         "committedDate": "2020-06-17T12:13:24Z",
+         "additions": 3
+        },
+        {
+         "committedDate": "2020-06-17T07:57:57Z",
+         "additions": 2
+        },
+        {
+         "committedDate": "2020-06-17T07:43:53Z",
+         "additions": 2
+        },
+        {
+         "committedDate": "2020-06-17T06:58:41Z",
+         "additions": 214
+        }
+       ]
+      }
+     }
+    }
+   }
+  }
+ }
+}

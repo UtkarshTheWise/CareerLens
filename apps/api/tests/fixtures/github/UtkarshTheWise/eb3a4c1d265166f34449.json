@@ -1,0 +1,53 @@
+{
+ "method": "GET",
+ "url": "https://api.github.com/repos/UtkarshTheWise/timetableanalyzer/git/trees/HEAD?recursive=1",
+ "request": null,
+ "status": 200,
+ "body": {
+  "sha": "c616f36ee7701fd39c3f522e28a99ef3aa334ec6",
+  "url": "https://api.github.com/repos/UtkarshTheWise/timetableanalyzer/git/trees/c616f36ee7701fd39c3f522e28a99ef3aa334ec6",
+  "tree": [
+   {
+    "path": "README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9548896dc68f0dfb863b3b8db5dac20053b9e3cf",
+    "size": 56,
+    "url": "https://api.github.com/repos/UtkarshTheWise/timetableanalyzer/git/blobs/9548896dc68f0dfb863b3b8db5dac20053b9e3cf"
+   },
+   {
+    "path": "calendar.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0e7ba4a94601caa007cb4806d5a39e70f21202c1",
+    "size": 3210,
+    "url": "https://api.github.com/repos/UtkarshTheWise/timetableanalyzer/git/blobs/0e7ba4a94601caa007cb4806d5a39e70f21202c1"
+   },
+   {
+    "path": "command.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6de1fa4b42b0d3489d83ebac504ca48cbc8b6a81",
+    "size": 4830,
+    "url": "https://api.github.com/repos/UtkarshTheWise/timetableanalyzer/git/blobs/6de1fa4b42b0d3489d83ebac504ca48cbc8b6a81"
+   },
+   {
+    "path": "freetime.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a74fb0c3d83d1995f51171abe592bbec795d88b3",
+    "size": 6572,
+    "url": "https://api.github.com/repos/UtkarshTheWise/timetableanalyzer/git/blobs/a74fb0c3d83d1995f51171abe592bbec795d88b3"
+   },
+   {
+    "path": "index.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "75231303f485b33550e57fa539685b3c9d767f2d",
+    "size": 5025,
+    "url": "https://api.github.com/repos/UtkarshTheWise/timetableanalyzer/git/blobs/75231303f485b33550e57fa539685b3c9d767f2d"
+   }
+  ],
+  "truncated": false
+ }
+}

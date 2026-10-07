@@ -1,0 +1,99 @@
+{
+ "method": "GET",
+ "url": "https://api.github.com/repos/UtkarshTheWise/SABTA/git/trees/HEAD?recursive=1",
+ "request": null,
+ "status": 200,
+ "body": {
+  "sha": "b1c576065fe2b255e5e02b0afd266ea6c7c2e0a9",
+  "url": "https://api.github.com/repos/UtkarshTheWise/SABTA/git/trees/b1c576065fe2b255e5e02b0afd266ea6c7c2e0a9",
+  "tree": [
+   {
+    "path": "2025-07-29 16-40-39.mp4",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5e0a88a6a41b45efb2f5fd6dd3efacc01c0c170c",
+    "size": 3720437,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SABTA/git/blobs/5e0a88a6a41b45efb2f5fd6dd3efacc01c0c170c"
+   },
+   {
+    "path": "README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "582575fbca86a600eed5473098b09d4498fe73fb",
+    "size": 745,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SABTA/git/blobs/582575fbca86a600eed5473098b09d4498fe73fb"
+   },
+   {
+    "path": "Sabta.pptx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3091723a0ef16fab04272019613a2f51285279b9",
+    "size": 3180150,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SABTA/git/blobs/3091723a0ef16fab04272019613a2f51285279b9"
+   },
+   {
+    "path": "Segment-Clothing",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "a0af7c171f4f795f5f58bf53a0b2933e9dbf4518",
+    "url": "https://api.github.com/repos/UtkarshTheWise/SABTA/git/trees/a0af7c171f4f795f5f58bf53a0b2933e9dbf4518"
+   },
+   {
+    "path": "Segment-Clothing/README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "87f630499e4e8ea95799fe80edb4cb7b25f7dbb1",
+    "size": 2235,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SABTA/git/blobs/87f630499e4e8ea95799fe80edb4cb7b25f7dbb1"
+   },
+   {
+    "path": "Segment-Clothing/SegCloth.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b9314e923e54a210eebdadb0341ba09f7c90a8fb",
+    "size": 2168,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SABTA/git/blobs/b9314e923e54a210eebdadb0341ba09f7c90a8fb"
+   },
+   {
+    "path": "Segment-Clothing/__pycache__",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "8c088d7e8c0a6956573ac9fe1676738dab62a7aa",
+    "url": "https://api.github.com/repos/UtkarshTheWise/SABTA/git/trees/8c088d7e8c0a6956573ac9fe1676738dab62a7aa"
+   },
+   {
+    "path": "Segment-Clothing/__pycache__/SegCloth.cpython-39.pyc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2b3c1ab1dad5a396fd0cf005fd36337d3c353794",
+    "size": 1526,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SABTA/git/blobs/2b3c1ab1dad5a396fd0cf005fd36337d3c353794"
+   },
+   {
+    "path": "Segment-Clothing/image.jpg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "eec206d85de8a541e19353ae4641794169449da7",
+    "size": 2909206,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SABTA/git/blobs/eec206d85de8a541e19353ae4641794169449da7"
+   },
+   {
+    "path": "Segment-Clothing/requirements.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bfeedf5b1ec9fd488eaba3782b75528fe277eed3",
+    "size": 34,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SABTA/git/blobs/bfeedf5b1ec9fd488eaba3782b75528fe277eed3"
+   },
+   {
+    "path": "Segment-Clothing/test.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e10838f002ddbc0a64c928ab766635df33deb912",
+    "size": 1721,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SABTA/git/blobs/e10838f002ddbc0a64c928ab766635df33deb912"
+   }
+  ],
+  "truncated": false
+ }
+}

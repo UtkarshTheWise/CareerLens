@@ -1,0 +1,1351 @@
+{
+ "method": "GET",
+ "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/HEAD?recursive=1",
+ "request": null,
+ "status": 200,
+ "body": {
+  "sha": "0cf8f00e74f0ea8cad9628a8db736955750d4bbf",
+  "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/0cf8f00e74f0ea8cad9628a8db736955750d4bbf",
+  "tree": [
+   {
+    "path": ".env.example",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c01e40eda6f5bb9c8fe94d8dd98b7243d7d095fc",
+    "size": 1929,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/c01e40eda6f5bb9c8fe94d8dd98b7243d7d095fc"
+   },
+   {
+    "path": ".firebaserc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0b64264c64e21ed67b181aae60c809d03a46f227",
+    "size": 64,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/0b64264c64e21ed67b181aae60c809d03a46f227"
+   },
+   {
+    "path": ".gitignore",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8293dc6fbd9ebdc71313efde2cdaad2fa912d7e8",
+    "size": 386,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/8293dc6fbd9ebdc71313efde2cdaad2fa912d7e8"
+   },
+   {
+    "path": "WORK.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d15e3e33320c2a01072f64ab76d3431b5211a2d1",
+    "size": 16895,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/d15e3e33320c2a01072f64ab76d3431b5211a2d1"
+   },
+   {
+    "path": "app",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "589678bfb32cbd49b3ff2c07a75341aaeea8e64c",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/589678bfb32cbd49b3ff2c07a75341aaeea8e64c"
+   },
+   {
+    "path": "app/(pages)",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "9e099ae2cb9207000caea36122e215b03e225dd0",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/9e099ae2cb9207000caea36122e215b03e225dd0"
+   },
+   {
+    "path": "app/(pages)/admin",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "dd12f283439ee8d49f6aeb966f03e15b6fdc2886",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/dd12f283439ee8d49f6aeb966f03e15b6fdc2886"
+   },
+   {
+    "path": "app/(pages)/admin/page.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "803f2c7781c9a6bd874c1e2f25acea534b4d83a4",
+    "size": 998,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/803f2c7781c9a6bd874c1e2f25acea534b4d83a4"
+   },
+   {
+    "path": "app/(pages)/departments",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "3187b797840c1c08da05b7fc92503f9154fcbc94",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/3187b797840c1c08da05b7fc92503f9154fcbc94"
+   },
+   {
+    "path": "app/(pages)/departments/page.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "346f055ff4d30f813b621e74f0278e28f7c91674",
+    "size": 5447,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/346f055ff4d30f813b621e74f0278e28f7c91674"
+   },
+   {
+    "path": "app/(pages)/development",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "93db4adb6c9c19bed25ec33d27a605c0d9d9e60f",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/93db4adb6c9c19bed25ec33d27a605c0d9d9e60f"
+   },
+   {
+    "path": "app/(pages)/development/page.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6caf699e0c6f2ac1ab3bdcb265274e010cf9cfc8",
+    "size": 1215,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/6caf699e0c6f2ac1ab3bdcb265274e010cf9cfc8"
+   },
+   {
+    "path": "app/(pages)/join",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "d866f38fc649e53cfbc91558436cfafc0c9db092",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/d866f38fc649e53cfbc91558436cfafc0c9db092"
+   },
+   {
+    "path": "app/(pages)/join/[...joinIds]",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "cc5e12b8c34351563076d6227a069922995b532a",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/cc5e12b8c34351563076d6227a069922995b532a"
+   },
+   {
+    "path": "app/(pages)/join/[...joinIds]/not-found.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e19c52450b4de9c167802b66494e7f512ffa6b66",
+    "size": 374,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/e19c52450b4de9c167802b66494e7f512ffa6b66"
+   },
+   {
+    "path": "app/(pages)/join/[...joinIds]/page.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bb871e228e745f26f080ad443a0ce5ab1f00ee26",
+    "size": 3206,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/bb871e228e745f26f080ad443a0ce5ab1f00ee26"
+   },
+   {
+    "path": "app/_error.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1dba4e4ddf62f191ee0d95b5c5dc1f79631c6366",
+    "size": 746,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/1dba4e4ddf62f191ee0d95b5c5dc1f79631c6366"
+   },
+   {
+    "path": "app/api",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "a903d4f93330f13078f53870066264a973d93983",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/a903d4f93330f13078f53870066264a973d93983"
+   },
+   {
+    "path": "app/api/admin",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "e886bb5f11b2dc571ec72eb9dfc878c5037df6a6",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/e886bb5f11b2dc571ec72eb9dfc878c5037df6a6"
+   },
+   {
+    "path": "app/api/admin/applicants",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "5b50290c8cbf7fa46d58e9b427abf84f1dd708c9",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/5b50290c8cbf7fa46d58e9b427abf84f1dd708c9"
+   },
+   {
+    "path": "app/api/admin/applicants/route.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bc0d532388ae018137abbcda00e150949407741b",
+    "size": 848,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/bc0d532388ae018137abbcda00e150949407741b"
+   },
+   {
+    "path": "app/api/auth",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "da98bfda30a872931cddd1f5d2c16d3d23328b33",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/da98bfda30a872931cddd1f5d2c16d3d23328b33"
+   },
+   {
+    "path": "app/api/auth/[...all]",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "449e4fd05ee62aaa11bea6f9ffa0e7f19617c46b",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/449e4fd05ee62aaa11bea6f9ffa0e7f19617c46b"
+   },
+   {
+    "path": "app/api/auth/[...all]/route.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7270fa760438c9b13b2301ad21ff414d03e4c15f",
+    "size": 150,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/7270fa760438c9b13b2301ad21ff414d03e4c15f"
+   },
+   {
+    "path": "app/api/check-applications",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "5609cf88c4ee276ee105ca7029d3b88a3afd7886",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/5609cf88c4ee276ee105ca7029d3b88a3afd7886"
+   },
+   {
+    "path": "app/api/check-applications/route.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "58d1fa3656f95a023bed6aff526dbdd4b0ce114a",
+    "size": 1528,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/58d1fa3656f95a023bed6aff526dbdd4b0ce114a"
+   },
+   {
+    "path": "app/api/check-department-submission",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "80fda7feacb938756361b6b6e9d6faf2745500cb",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/80fda7feacb938756361b6b6e9d6faf2745500cb"
+   },
+   {
+    "path": "app/api/check-department-submission/route.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7bd1033f46bdb8bdeacb86f3dd7ecd0aed0f1e5a",
+    "size": 1489,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/7bd1033f46bdb8bdeacb86f3dd7ecd0aed0f1e5a"
+   },
+   {
+    "path": "app/api/get-submissions",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "d7e31057915a629dd7d1df727860e2fb0d691b3f",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/d7e31057915a629dd7d1df727860e2fb0d691b3f"
+   },
+   {
+    "path": "app/api/get-submissions/route.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e07247061857c5f66548a6a2439d4b2399fadfa0",
+    "size": 1513,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/e07247061857c5f66548a6a2439d4b2399fadfa0"
+   },
+   {
+    "path": "app/api/send-email",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "a341767aa435ea836445e425f6b7e822cdafd35f",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/a341767aa435ea836445e425f6b7e822cdafd35f"
+   },
+   {
+    "path": "app/api/send-email/route.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2033a7ddff72a7563ae53a05969f57f55af8de0a",
+    "size": 2518,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/2033a7ddff72a7563ae53a05969f57f55af8de0a"
+   },
+   {
+    "path": "app/api/shortlist",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "2b89dd5a3a09a367ff9cdff383b4cff711e21bbd",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/2b89dd5a3a09a367ff9cdff383b4cff711e21bbd"
+   },
+   {
+    "path": "app/api/shortlist/[id]",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "fd0f3b5af4db4be4bc9c3162338f3abbd9091ec8",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/fd0f3b5af4db4be4bc9c3162338f3abbd9091ec8"
+   },
+   {
+    "path": "app/api/shortlist/[id]/route.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "698db8dfe05f8be04bbd5dfd674b086be30b4c53",
+    "size": 1678,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/698db8dfe05f8be04bbd5dfd674b086be30b4c53"
+   },
+   {
+    "path": "app/api/submit-form",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "3153e1e016c55822adc24a3c15ef448f76292861",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/3153e1e016c55822adc24a3c15ef448f76292861"
+   },
+   {
+    "path": "app/api/submit-form/route.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "06faad3ff404c0d823fc3b8e9e146d34fd4df43e",
+    "size": 4305,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/06faad3ff404c0d823fc3b8e9e146d34fd4df43e"
+   },
+   {
+    "path": "app/auth",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "fb3d677c9fac3f145099d078b9ebd806f08ccba8",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/fb3d677c9fac3f145099d078b9ebd806f08ccba8"
+   },
+   {
+    "path": "app/auth/signin",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "4d71108fe4dff41951605f97f88d6b34283e8f08",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/4d71108fe4dff41951605f97f88d6b34283e8f08"
+   },
+   {
+    "path": "app/auth/signin/page.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7eb4d4a7664f3dec3ab0760671e29f4d8bb644cd",
+    "size": 4939,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/7eb4d4a7664f3dec3ab0760671e29f4d8bb644cd"
+   },
+   {
+    "path": "app/auth/signout",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "aa31f6867caacc1c290d03b32503043868c52f27",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/aa31f6867caacc1c290d03b32503043868c52f27"
+   },
+   {
+    "path": "app/auth/signout/page.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6958e7ad880b05d78594d291af8e796acf66635a",
+    "size": 703,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/6958e7ad880b05d78594d291af8e796acf66635a"
+   },
+   {
+    "path": "app/favicon.ico",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "463cb8052c2f4f649d7e4d8e3cb5580eb3bb9734",
+    "size": 269,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/463cb8052c2f4f649d7e4d8e3cb5580eb3bb9734"
+   },
+   {
+    "path": "app/globals.css",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "209d066f1ec1fb867a7f8b30006fef14888aba15",
+    "size": 97,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/209d066f1ec1fb867a7f8b30006fef14888aba15"
+   },
+   {
+    "path": "app/icon.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "935c850bc9639db517a41f12e2fde0bbce499462",
+    "size": 262,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/935c850bc9639db517a41f12e2fde0bbce499462"
+   },
+   {
+    "path": "app/layout.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d02e8c03ea486f53b6d73b8ca561877b73fa4256",
+    "size": 655,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/d02e8c03ea486f53b6d73b8ca561877b73fa4256"
+   },
+   {
+    "path": "app/loading.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0f5760d5e94057923fd053cd42772f0522cedf32",
+    "size": 242,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/0f5760d5e94057923fd053cd42772f0522cedf32"
+   },
+   {
+    "path": "app/page.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cfcc39668b3bd00dca5c3ea784b3a6b66a2ad8f0",
+    "size": 4001,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/cfcc39668b3bd00dca5c3ea784b3a6b66a2ad8f0"
+   },
+   {
+    "path": "bun.lock",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ab0aa88c88a75e2b2e3412b4058439a28e51a0f0",
+    "size": 393039,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/ab0aa88c88a75e2b2e3412b4058439a28e51a0f0"
+   },
+   {
+    "path": "components.json",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "733348f36c07dd55330d916810749eab2cc1dd68",
+    "size": 342,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/733348f36c07dd55330d916810749eab2cc1dd68"
+   },
+   {
+    "path": "components",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "0f7489bdcf4f092e41eaaeff531d2b12979774e0",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/0f7489bdcf4f092e41eaaeff531d2b12979774e0"
+   },
+   {
+    "path": "components/AdminContent.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c5d306e743e6659b6bc725ab44905bc2f70ff9f8",
+    "size": 2400,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/c5d306e743e6659b6bc725ab44905bc2f70ff9f8"
+   },
+   {
+    "path": "components/AllDepartments.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "540516640c6412ab5e2e9a958d8bf03485c5199d",
+    "size": 1321,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/540516640c6412ab5e2e9a958d8bf03485c5199d"
+   },
+   {
+    "path": "components/AnimatedButton.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "377637138be5cf7b6ce95529d630639c14211688",
+    "size": 924,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/377637138be5cf7b6ce95529d630639c14211688"
+   },
+   {
+    "path": "components/BentoGridComp.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2e9d970b66623b897a4483b2e53552ddc23c108a",
+    "size": 23324,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/2e9d970b66623b897a4483b2e53552ddc23c108a"
+   },
+   {
+    "path": "components/BlurFadeGrid.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d597aebc51f9664cdc64b6218c7690010334461c",
+    "size": 643,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/d597aebc51f9664cdc64b6218c7690010334461c"
+   },
+   {
+    "path": "components/Card.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fc5074f27878ace19cf00ab3af4e388c66bb614e",
+    "size": 2526,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/fc5074f27878ace19cf00ab3af4e388c66bb614e"
+   },
+   {
+    "path": "components/CarouselComp.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bdd699232f237baaf37a81d4fc16af6229c5599f",
+    "size": 5049,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/bdd699232f237baaf37a81d4fc16af6229c5599f"
+   },
+   {
+    "path": "components/CheckBoxComp.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "47ebce04ce8813b68ebe2b35f0751dd3cf17b8df",
+    "size": 480,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/47ebce04ce8813b68ebe2b35f0751dd3cf17b8df"
+   },
+   {
+    "path": "components/DataTable.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e978b84ccace356bbeb028f87e6d436fe05cf992",
+    "size": 11447,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/e978b84ccace356bbeb028f87e6d436fe05cf992"
+   },
+   {
+    "path": "components/Departments.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d0d3ba2845b05218bcebb7f7c7271ac048e3a60a",
+    "size": 5465,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/d0d3ba2845b05218bcebb7f7c7271ac048e3a60a"
+   },
+   {
+    "path": "components/DeptHero.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9c436efabe5aca5fbbd14b13aa4c65b3f22ff174",
+    "size": 741,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/9c436efabe5aca5fbbd14b13aa4c65b3f22ff174"
+   },
+   {
+    "path": "components/DialogComp.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e27f66938a59c067e6362d7938fab110728b5bf9",
+    "size": 3111,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/e27f66938a59c067e6362d7938fab110728b5bf9"
+   },
+   {
+    "path": "components/FilterDepartment.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9b4938d413f2c35d8a24f7274322a8d0442823a3",
+    "size": 3566,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/9b4938d413f2c35d8a24f7274322a8d0442823a3"
+   },
+   {
+    "path": "components/FilterShortlisted.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a388576ff6318eb43cf52bfffaaa1e4bb479265c",
+    "size": 3427,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/a388576ff6318eb43cf52bfffaaa1e4bb479265c"
+   },
+   {
+    "path": "components/Footer.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2e793e9aaf8b9da57503822a60b7b1eb5389c8d4",
+    "size": 1833,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/2e793e9aaf8b9da57503822a60b7b1eb5389c8d4"
+   },
+   {
+    "path": "components/FormComp.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4aa4dcd7a55efdb49bb2faa653f129ba2234e490",
+    "size": 17500,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/4aa4dcd7a55efdb49bb2faa653f129ba2234e490"
+   },
+   {
+    "path": "components/GDGLoader.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3374c42de88c3e92eebbd0b28dfc406e8591dc50",
+    "size": 188,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/3374c42de88c3e92eebbd0b28dfc406e8591dc50"
+   },
+   {
+    "path": "components/Hero.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a2b159639564199133288a7cce10d13d1eaa0ced",
+    "size": 2590,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/a2b159639564199133288a7cce10d13d1eaa0ced"
+   },
+   {
+    "path": "components/MagicCardComp.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e159860bb3ed7d2837c5e23cf5130eb1b61b2b06",
+    "size": 623,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/e159860bb3ed7d2837c5e23cf5130eb1b61b2b06"
+   },
+   {
+    "path": "components/MailComposer.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2a03a564549f5dd97c93cc5b8958b6f33d375220",
+    "size": 22134,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/2a03a564549f5dd97c93cc5b8958b6f33d375220"
+   },
+   {
+    "path": "components/NavBar.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1cbfd5b9eae336a1804e959d5edd95d42e8fdf9a",
+    "size": 3700,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/1cbfd5b9eae336a1804e959d5edd95d42e8fdf9a"
+   },
+   {
+    "path": "components/PaginationComp.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "847d80769e7e132bb63662e212ae0ea4c3d090e2",
+    "size": 2508,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/847d80769e7e132bb63662e212ae0ea4c3d090e2"
+   },
+   {
+    "path": "components/ParticlesComp.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8b76178d7c38b2881771429cc8c02f4998d0bf2c",
+    "size": 1350,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/8b76178d7c38b2881771429cc8c02f4998d0bf2c"
+   },
+   {
+    "path": "components/PopupComp.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "63003b6a469112a7b939baa7ef4d3ea7f6d81902",
+    "size": 769,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/63003b6a469112a7b939baa7ef4d3ea7f6d81902"
+   },
+   {
+    "path": "components/SignInButton.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2aa40b63de8de8f727c86993663867453f4c3805",
+    "size": 658,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/2aa40b63de8de8f727c86993663867453f4c3805"
+   },
+   {
+    "path": "components/SubmissionsProvider.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6abb37864a4366f30a9c99370ecdb709b022164d",
+    "size": 2717,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/6abb37864a4366f30a9c99370ecdb709b022164d"
+   },
+   {
+    "path": "components/ThemeToggle.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0437f28ac878befd716e8127df702cff22072e6c",
+    "size": 1359,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/0437f28ac878befd716e8127df702cff22072e6c"
+   },
+   {
+    "path": "components/UserButton.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3409d02b908f576d95b2e11d440878b0168a7916",
+    "size": 1219,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/3409d02b908f576d95b2e11d440878b0168a7916"
+   },
+   {
+    "path": "components/common",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "41f687f789e507a24fa6432cf5de44006dc56473",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/41f687f789e507a24fa6432cf5de44006dc56473"
+   },
+   {
+    "path": "components/common/CountdownTimer.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5fc120521aec2837b211f06aa21a609150b3f748",
+    "size": 2308,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/5fc120521aec2837b211f06aa21a609150b3f748"
+   },
+   {
+    "path": "components/magicui",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "2b10bfc958c78f369e9be24a315b96942caf2c2f",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/2b10bfc958c78f369e9be24a315b96942caf2c2f"
+   },
+   {
+    "path": "components/magicui/animated-gradient-text.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2be575301404747c3492c68a33a06fda5e07b589",
+    "size": 850,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/2be575301404747c3492c68a33a06fda5e07b589"
+   },
+   {
+    "path": "components/magicui/bento-grid.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "33af2aa67500d62b91a67c284ab119c2660b60e6",
+    "size": 2266,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/33af2aa67500d62b91a67c284ab119c2660b60e6"
+   },
+   {
+    "path": "components/magicui/blur-fade.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d90d9b32e46d98c9e765d6983276b457870c7a66",
+    "size": 1077,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/d90d9b32e46d98c9e765d6983276b457870c7a66"
+   },
+   {
+    "path": "components/magicui/dot-pattern.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "46b28ff92985bd5a1bd8b3a51e98dc36c9e664ff",
+    "size": 860,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/46b28ff92985bd5a1bd8b3a51e98dc36c9e664ff"
+   },
+   {
+    "path": "components/magicui/magic-card.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8acbbac953b4b57c5e7c001dc35b8c59a5c3a2b5",
+    "size": 1632,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/8acbbac953b4b57c5e7c001dc35b8c59a5c3a2b5"
+   },
+   {
+    "path": "components/magicui/marquee.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9633ac4f2a529b7c13758f9f7750364a96414f9a",
+    "size": 947,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/9633ac4f2a529b7c13758f9f7750364a96414f9a"
+   },
+   {
+    "path": "components/magicui/particles.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1c840a9a00b4193fed81b4d9859e3af4c42c5b62",
+    "size": 6683,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/1c840a9a00b4193fed81b4d9859e3af4c42c5b62"
+   },
+   {
+    "path": "components/magicui/ripple.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9a243236a3cab5d777e48bdbabda0facec3e744a",
+    "size": 1333,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/9a243236a3cab5d777e48bdbabda0facec3e744a"
+   },
+   {
+    "path": "components/magicui/shine-border.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c916872bc07c50007bb2dd5e38d64dcbdb8c0c87",
+    "size": 2082,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/c916872bc07c50007bb2dd5e38d64dcbdb8c0c87"
+   },
+   {
+    "path": "components/theme-provider.tsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "030456eb8418ceb7a14b5d73b90103f2abe450c8",
+    "size": 403,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/030456eb8418ceb7a14b5d73b90103f2abe450c8"
+   },
+   {
+    "path": "components/ui",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "810adfbd0bec0cc92082c05f6356702444b22c2f",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/810adfbd0bec0cc92082c05f6356702444b22c2f"
+   },
+   {
+    "path": "components/ui/DotGrid",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "271c311ed08dcf4cc16aac5de95b0709be612ed3",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/271c311ed08dcf4cc16aac5de95b0709be612ed3"
+   },
+   {
+    "path": "components/ui/DotGrid/DotGrid.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "34b1871a44b7d3c59ea70e68346003bbdb3e2345",
+    "size": 7863,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/34b1871a44b7d3c59ea70e68346003bbdb3e2345"
+   },
+   {
+    "path": "components/ui/Iridescence",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "bb305b86fbdb14f20267f5540a3af1d05bbb8631",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/bb305b86fbdb14f20267f5540a3af1d05bbb8631"
+   },
+   {
+    "path": "components/ui/Iridescence/Iridescence.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "72761879718033d14f3e3cff7f55c3f4076f3627",
+    "size": 3620,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/72761879718033d14f3e3cff7f55c3f4076f3627"
+   },
+   {
+    "path": "components/ui/avatar.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4920324321522fb9ac382a6898083bbd641f154b",
+    "size": 1043,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/4920324321522fb9ac382a6898083bbd641f154b"
+   },
+   {
+    "path": "components/ui/badge.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "deae51c4a2f714ccbc27a14d6c8b2f510f59bb15",
+    "size": 978,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/deae51c4a2f714ccbc27a14d6c8b2f510f59bb15"
+   },
+   {
+    "path": "components/ui/button.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9bdf65b897a888b9b64e829020ea0b3391694eb4",
+    "size": 1611,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/9bdf65b897a888b9b64e829020ea0b3391694eb4"
+   },
+   {
+    "path": "components/ui/card.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dd79b5133b615528d34502b928e7541a971f534a",
+    "size": 1449,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/dd79b5133b615528d34502b928e7541a971f534a"
+   },
+   {
+    "path": "components/ui/carousel.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a6bfc715b598b7cdb79e526b56ed5904ef2abd11",
+    "size": 4835,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/a6bfc715b598b7cdb79e526b56ed5904ef2abd11"
+   },
+   {
+    "path": "components/ui/checkbox.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dc639bcd97d8491be62ac2efbffc00159f2dbeb6",
+    "size": 938,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/dc639bcd97d8491be62ac2efbffc00159f2dbeb6"
+   },
+   {
+    "path": "components/ui/command.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "05da1cc08379ee8e4db68c328cda3a58ac5586d9",
+    "size": 3857,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/05da1cc08379ee8e4db68c328cda3a58ac5586d9"
+   },
+   {
+    "path": "components/ui/dialog.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2d291585448ae00d83ce5cd33251b63d2965bb97",
+    "size": 3497,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/2d291585448ae00d83ce5cd33251b63d2965bb97"
+   },
+   {
+    "path": "components/ui/dropdown-menu.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "918363f74b7923f971de2627b9dc5439f7f64acf",
+    "size": 6064,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/918363f74b7923f971de2627b9dc5439f7f64acf"
+   },
+   {
+    "path": "components/ui/form.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1512b4a31092d28e5196751b33258bd70f32f0eb",
+    "size": 3606,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/1512b4a31092d28e5196751b33258bd70f32f0eb"
+   },
+   {
+    "path": "components/ui/input.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c2db37de5332147520fd82116d1c23b18fe66c51",
+    "size": 680,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/c2db37de5332147520fd82116d1c23b18fe66c51"
+   },
+   {
+    "path": "components/ui/label.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d3cfbaf836e86b45ad4e701fbd9ace1a4a32d4b5",
+    "size": 539,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/d3cfbaf836e86b45ad4e701fbd9ace1a4a32d4b5"
+   },
+   {
+    "path": "components/ui/pagination.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5353d2fcba581b8e2a90ce46f3320d09f894b8f8",
+    "size": 2321,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/5353d2fcba581b8e2a90ce46f3320d09f894b8f8"
+   },
+   {
+    "path": "components/ui/popover.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7978ef483a1e9c2a913330d43b58224a5216af1b",
+    "size": 1118,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/7978ef483a1e9c2a913330d43b58224a5216af1b"
+   },
+   {
+    "path": "components/ui/radio-group.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cdf859498c8849a5010f573dc38b7f5574ce0e49",
+    "size": 1204,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/cdf859498c8849a5010f573dc38b7f5574ce0e49"
+   },
+   {
+    "path": "components/ui/scroll-area.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9563747bfb2fb991f336ca6546798cad5681edc2",
+    "size": 1376,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/9563747bfb2fb991f336ca6546798cad5681edc2"
+   },
+   {
+    "path": "components/ui/select.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "40b28e23d41b33af41ddaa30ae29684b3fd38b0e",
+    "size": 4667,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/40b28e23d41b33af41ddaa30ae29684b3fd38b0e"
+   },
+   {
+    "path": "components/ui/separator.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9c314807d9c506b5f34cfa9c54a03de785f63b86",
+    "size": 614,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/9c314807d9c506b5f34cfa9c54a03de785f63b86"
+   },
+   {
+    "path": "components/ui/sonner.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bd51a926e1a133c35aa2000f6795d292989cd014",
+    "size": 799,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/bd51a926e1a133c35aa2000f6795d292989cd014"
+   },
+   {
+    "path": "components/ui/switch.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e0b4e8e65d55179868f9e0265590b27dc680ba79",
+    "size": 1030,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/e0b4e8e65d55179868f9e0265590b27dc680ba79"
+   },
+   {
+    "path": "components/ui/table.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "31b58edcad1e1684e5feff2089c5ff3ffc6f2f6b",
+    "size": 2137,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/31b58edcad1e1684e5feff2089c5ff3ffc6f2f6b"
+   },
+   {
+    "path": "components/ui/textarea.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7369cf57dd249ba488f729722af02fffd8bfc652",
+    "size": 614,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/7369cf57dd249ba488f729722af02fffd8bfc652"
+   },
+   {
+    "path": "components/ui/toast.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7c644017740c744759dbd4dbcd20f5617a3385ea",
+    "size": 3860,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/7c644017740c744759dbd4dbcd20f5617a3385ea"
+   },
+   {
+    "path": "components/ui/toaster.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0514f650cb89fd813f25c55c7ab2432b07fc36ff",
+    "size": 800,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/0514f650cb89fd813f25c55c7ab2432b07fc36ff"
+   },
+   {
+    "path": "components/ui/use-toast.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "03accc0a354f14ce303aef1143ebb68284586145",
+    "size": 3085,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/03accc0a354f14ce303aef1143ebb68284586145"
+   },
+   {
+    "path": "constants",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "47d85e9bd0930e0ca99f45ed46625d0871d2be22",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/47d85e9bd0930e0ca99f45ed46625d0871d2be22"
+   },
+   {
+    "path": "constants/index.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5a00a27f1739f4dd6d3f58e39b9a9ce2aa32a63b",
+    "size": 25330,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/5a00a27f1739f4dd6d3f58e39b9a9ce2aa32a63b"
+   },
+   {
+    "path": "firebase.json",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4576ff9fdbe5bfaca2b150e4781d88f1c78e5288",
+    "size": 237,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/4576ff9fdbe5bfaca2b150e4781d88f1c78e5288"
+   },
+   {
+    "path": "firestore.rules",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f6c2230616bd72e090eb392c491fbf54272f1b98",
+    "size": 390,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/f6c2230616bd72e090eb392c491fbf54272f1b98"
+   },
+   {
+    "path": "functions",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "1021b1ba592b556b0e1197c6343371658b177151",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/1021b1ba592b556b0e1197c6343371658b177151"
+   },
+   {
+    "path": "functions/MailTemplate.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e89a55c7f164eeecbb1d8eb7f3a833baeb39a33d",
+    "size": 39,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/e89a55c7f164eeecbb1d8eb7f3a833baeb39a33d"
+   },
+   {
+    "path": "jsconfig.json",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d3586b5a46924b468b451dd031468706d3bf3ac0",
+    "size": 161,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/d3586b5a46924b468b451dd031468706d3bf3ac0"
+   },
+   {
+    "path": "lib",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "6df8e533bbf9cbfcd1fde068f1fe53afe524e112",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/6df8e533bbf9cbfcd1fde068f1fe53afe524e112"
+   },
+   {
+    "path": "lib/actions",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "c543d82f02c9d7f9b48e79b8ffb41190cb16f7ec",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/c543d82f02c9d7f9b48e79b8ffb41190cb16f7ec"
+   },
+   {
+    "path": "lib/actions/data.action.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f930c26b4a7dfa6865bba505658a45fd0e09871d",
+    "size": 501,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/f930c26b4a7dfa6865bba505658a45fd0e09871d"
+   },
+   {
+    "path": "lib/actions/form.action.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b59c7d70562290801c239b3ce906f1de7e4905f3",
+    "size": 566,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/b59c7d70562290801c239b3ce906f1de7e4905f3"
+   },
+   {
+    "path": "lib/actions/user.action.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5fe27d519b832f2a6e58aac2c93849efddff5388",
+    "size": 490,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/5fe27d519b832f2a6e58aac2c93849efddff5388"
+   },
+   {
+    "path": "lib/admin-guard.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fc07a7c799305ae1790e4c17d39d884e4aa80d61",
+    "size": 646,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/fc07a7c799305ae1790e4c17d39d884e4aa80d61"
+   },
+   {
+    "path": "lib/auth-client.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "eb776f108676635d1015119b5bf2c1075a20baa5",
+    "size": 197,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/eb776f108676635d1015119b5bf2c1075a20baa5"
+   },
+   {
+    "path": "lib/auth.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e2d05bf7b86c9ceaa9c9e9de53af9940abf87ed0",
+    "size": 1686,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/e2d05bf7b86c9ceaa9c9e9de53af9940abf87ed0"
+   },
+   {
+    "path": "lib/db.ts",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "df5ef766acfa4985f6fa39a600bebbdf88be8b36",
+    "size": 2214,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/df5ef766acfa4985f6fa39a600bebbdf88be8b36"
+   },
+   {
+    "path": "lib/modals",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "922a0a00efe023455323d007425182a326ebc167",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/922a0a00efe023455323d007425182a326ebc167"
+   },
+   {
+    "path": "lib/modals/form.modal.ts",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "58d73709984b30097828a55b8029c3770a7048eb",
+    "size": 2336,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/58d73709984b30097828a55b8029c3770a7048eb"
+   },
+   {
+    "path": "lib/modals/user.modal.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b808e160d0a0509285997c08692232457c40d2cb",
+    "size": 902,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/b808e160d0a0509285997c08692232457c40d2cb"
+   },
+   {
+    "path": "lib/utils.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a2b7170804fae33251a557e84ceee3db11e4a598",
+    "size": 134,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/a2b7170804fae33251a557e84ceee3db11e4a598"
+   },
+   {
+    "path": "next.config.mjs",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8d0898282857cf4870541243199a55de4ae2cb25",
+    "size": 153,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/8d0898282857cf4870541243199a55de4ae2cb25"
+   },
+   {
+    "path": "package.json",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d97414d108419da5e9b9b4ce5cff22766b03aae4",
+    "size": 2163,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/d97414d108419da5e9b9b4ce5cff22766b03aae4"
+   },
+   {
+    "path": "postcss.config.mjs",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1a69fd2a450afc3bf47e08b22c149190df0ffdb4",
+    "size": 135,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/1a69fd2a450afc3bf47e08b22c149190df0ffdb4"
+   },
+   {
+    "path": "public",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "a6ef24164932cffcdb5e577ce22907d6856412b4",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/a6ef24164932cffcdb5e577ce22907d6856412b4"
+   },
+   {
+    "path": "public/assets",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "15b513babf2b7e58ed565bd55e0cb29e6a18bed9",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/15b513babf2b7e58ed565bd55e0cb29e6a18bed9"
+   },
+   {
+    "path": "public/assets/dept-container.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0cee9758dcd02745573cc928d1f5746e938fbc47",
+    "size": 1129,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/0cee9758dcd02745573cc928d1f5746e938fbc47"
+   },
+   {
+    "path": "public/assets/fonts",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "7d05d6148457b88658508c38aac12e9517d8d490",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/7d05d6148457b88658508c38aac12e9517d8d490"
+   },
+   {
+    "path": "public/assets/fonts/Product Sans Bold Italic.ttf",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "129d12df72a13d79395507fd7317c360cf12c3a1",
+    "size": 56488,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/129d12df72a13d79395507fd7317c360cf12c3a1"
+   },
+   {
+    "path": "public/assets/fonts/Product Sans Bold.ttf",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d847195c7600a96700df62b68a5009be200f234d",
+    "size": 55548,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/d847195c7600a96700df62b68a5009be200f234d"
+   },
+   {
+    "path": "public/assets/fonts/Product Sans Italic.ttf",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5fc56d4c521abc2951750886fc3e575d9d71b005",
+    "size": 56508,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/5fc56d4c521abc2951750886fc3e575d9d71b005"
+   },
+   {
+    "path": "public/assets/fonts/ProductSansRegular.ttf",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c0442ee29ddd0630e42ef043746032cb6cdf74cf",
+    "size": 41116,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/c0442ee29ddd0630e42ef043746032cb6cdf74cf"
+   },
+   {
+    "path": "public/assets/gdg-logo-loader.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0e689223d0904b0f7d7452c082c754e0d82432e6",
+    "size": 296,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/0e689223d0904b0f7d7452c082c754e0d82432e6"
+   },
+   {
+    "path": "public/assets/gdg.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0e689223d0904b0f7d7452c082c754e0d82432e6",
+    "size": 296,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/0e689223d0904b0f7d7452c082c754e0d82432e6"
+   },
+   {
+    "path": "public/assets/images",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "9344458cad83011609ab11f1443efe0a2f27715a",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/9344458cad83011609ab11f1443efe0a2f27715a"
+   },
+   {
+    "path": "public/assets/images/bg_grids.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bf490d834ebc1e00ed89f4d51078c598f23daea9",
+    "size": 5312,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/bf490d834ebc1e00ed89f4d51078c598f23daea9"
+   },
+   {
+    "path": "public/assets/images/icons",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "5e91bed27a957e6bf5d6417aa587c752eaf27725",
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/trees/5e91bed27a957e6bf5d6417aa587c752eaf27725"
+   },
+   {
+    "path": "public/assets/images/icons/app-dev.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d294cdbe18077f4d7264bb565616c702c91f55df",
+    "size": 2397,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/d294cdbe18077f4d7264bb565616c702c91f55df"
+   },
+   {
+    "path": "public/assets/images/icons/blockchain.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "51a60124431e2df22791b6cc55272cbb6c451d61",
+    "size": 1605,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/51a60124431e2df22791b6cc55272cbb6c451d61"
+   },
+   {
+    "path": "public/assets/images/icons/cp.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b3b3b131e2b30bf96babd0da31cfca278ceff88e",
+    "size": 361,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/b3b3b131e2b30bf96babd0da31cfca278ceff88e"
+   },
+   {
+    "path": "public/assets/images/icons/data-science.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "994c44bc4a0ff38ed4bb74ca7c2aa141b0b3f00f",
+    "size": 415,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/994c44bc4a0ff38ed4bb74ca7c2aa141b0b3f00f"
+   },
+   {
+    "path": "public/assets/images/icons/design.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "780e36bcdea8d4137bdc2fa4c2566c1787b89857",
+    "size": 937,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/780e36bcdea8d4137bdc2fa4c2566c1787b89857"
+   },
+   {
+    "path": "public/assets/images/icons/game-dev.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "846586b872256d0be87f4407c92721020cdf18ce",
+    "size": 835,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/846586b872256d0be87f4407c92721020cdf18ce"
+   },
+   {
+    "path": "public/assets/images/icons/management.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d6e6d352016955f21062b71e94ed9e1e4e7fc638",
+    "size": 451,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/d6e6d352016955f21062b71e94ed9e1e4e7fc638"
+   },
+   {
+    "path": "public/assets/images/icons/marketing.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a362c270e141572431609ac3d5f2d61c1da3eb7c",
+    "size": 343,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/a362c270e141572431609ac3d5f2d61c1da3eb7c"
+   },
+   {
+    "path": "public/assets/images/icons/open-source.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "560819ef2c463ec161a5ca397a4da6c07f941361",
+    "size": 30710,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/560819ef2c463ec161a5ca397a4da6c07f941361"
+   },
+   {
+    "path": "public/assets/images/icons/outreach.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "88243065b39fc586e56fa7f264e134f51a0a0dca",
+    "size": 1236,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/88243065b39fc586e56fa7f264e134f51a0a0dca"
+   },
+   {
+    "path": "public/assets/images/icons/social-media.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f7a067a6fcf2c1d1e422c0454381329e9a3621d1",
+    "size": 3806,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/f7a067a6fcf2c1d1e422c0454381329e9a3621d1"
+   },
+   {
+    "path": "public/assets/images/icons/ui-ux.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "71b6cfcb38b34ae537f760ed42b80b4991b0ff6f",
+    "size": 1056,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/71b6cfcb38b34ae537f760ed42b80b4991b0ff6f"
+   },
+   {
+    "path": "public/assets/images/icons/web-dev.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "079bd04f9481a714ebcc36be06fa55ddc83b6fc1",
+    "size": 472,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/079bd04f9481a714ebcc36be06fa55ddc83b6fc1"
+   },
+   {
+    "path": "tailwind.config.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b429d7b867fbfad39ba8d0c074a1a795c7642d9f",
+    "size": 3464,
+    "url": "https://api.github.com/repos/UtkarshTheWise/GDG_Round2/git/blobs/b429d7b867fbfad39ba8d0c074a1a795c7642d9f"
+   }
+  ],
+  "truncated": false
+ }
+}

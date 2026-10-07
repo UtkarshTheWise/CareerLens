@@ -1,0 +1,3095 @@
+{
+ "method": "POST",
+ "url": "https://api.github.com/graphql",
+ "request": {
+  "query": "query($login: String!) {",
+  "variables": {
+   "login": "UtkarshTheWise"
+  }
+ },
+ "status": 200,
+ "body": {
+  "data": {
+   "user": {
+    "id": "MDQ6VXNlcjc5Mzc1MTEx",
+    "login": "UtkarshTheWise",
+    "name": "Utkarsh Mishra",
+    "bio": "Sigma Chan Fr",
+    "websiteUrl": null,
+    "createdAt": "2021-02-20T17:44:11Z",
+    "contributionsCollection": {
+     "contributionCalendar": {
+      "totalContributions": 23,
+      "weeks": [
+       {
+        "firstDay": "2025-10-05",
+        "contributionDays": [
+         {
+          "date": "2025-10-05",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-06",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-07",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-08",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-09",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-10",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-11",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2025-10-12",
+        "contributionDays": [
+         {
+          "date": "2025-10-12",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-13",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-14",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-15",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-16",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-17",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-18",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2025-10-19",
+        "contributionDays": [
+         {
+          "date": "2025-10-19",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-20",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-21",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-22",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-23",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-24",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-25",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2025-10-26",
+        "contributionDays": [
+         {
+          "date": "2025-10-26",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-27",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-28",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-29",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-30",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-10-31",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-01",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2025-11-02",
+        "contributionDays": [
+         {
+          "date": "2025-11-02",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-03",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-04",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-05",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-06",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-07",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-08",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2025-11-09",
+        "contributionDays": [
+         {
+          "date": "2025-11-09",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-10",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-11",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-12",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-13",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-14",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-15",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2025-11-16",
+        "contributionDays": [
+         {
+          "date": "2025-11-16",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-17",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-18",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-19",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-20",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-21",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-22",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2025-11-23",
+        "contributionDays": [
+         {
+          "date": "2025-11-23",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-24",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-25",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-26",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-27",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-28",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-11-29",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2025-11-30",
+        "contributionDays": [
+         {
+          "date": "2025-11-30",
+          "contributionCount": 2
+         },
+         {
+          "date": "2025-12-01",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-02",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-03",
+          "contributionCount": 1
+         },
+         {
+          "date": "2025-12-04",
+          "contributionCount": 1
+         },
+         {
+          "date": "2025-12-05",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-06",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2025-12-07",
+        "contributionDays": [
+         {
+          "date": "2025-12-07",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-08",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-09",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-10",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-11",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-12",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-13",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2025-12-14",
+        "contributionDays": [
+         {
+          "date": "2025-12-14",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-15",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-16",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-17",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-18",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-19",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-20",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2025-12-21",
+        "contributionDays": [
+         {
+          "date": "2025-12-21",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-22",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-23",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-24",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-25",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-26",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-27",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2025-12-28",
+        "contributionDays": [
+         {
+          "date": "2025-12-28",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-29",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-30",
+          "contributionCount": 0
+         },
+         {
+          "date": "2025-12-31",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-01",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-02",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-03",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-01-04",
+        "contributionDays": [
+         {
+          "date": "2026-01-04",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-05",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-06",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-07",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-08",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-09",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-10",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-01-11",
+        "contributionDays": [
+         {
+          "date": "2026-01-11",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-12",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-13",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-14",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-15",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-16",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-17",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-01-18",
+        "contributionDays": [
+         {
+          "date": "2026-01-18",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-19",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-20",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-21",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-22",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-23",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-24",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-01-25",
+        "contributionDays": [
+         {
+          "date": "2026-01-25",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-26",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-27",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-28",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-29",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-30",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-01-31",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-02-01",
+        "contributionDays": [
+         {
+          "date": "2026-02-01",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-02",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-03",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-04",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-05",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-06",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-07",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-02-08",
+        "contributionDays": [
+         {
+          "date": "2026-02-08",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-09",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-10",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-11",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-12",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-13",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-14",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-02-15",
+        "contributionDays": [
+         {
+          "date": "2026-02-15",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-16",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-17",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-18",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-19",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-20",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-21",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-02-22",
+        "contributionDays": [
+         {
+          "date": "2026-02-22",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-23",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-24",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-25",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-26",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-27",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-02-28",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-03-01",
+        "contributionDays": [
+         {
+          "date": "2026-03-01",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-02",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-03",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-04",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-05",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-06",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-07",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-03-08",
+        "contributionDays": [
+         {
+          "date": "2026-03-08",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-09",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-10",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-11",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-12",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-13",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-14",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-03-15",
+        "contributionDays": [
+         {
+          "date": "2026-03-15",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-16",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-17",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-18",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-19",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-20",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-21",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-03-22",
+        "contributionDays": [
+         {
+          "date": "2026-03-22",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-23",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-24",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-25",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-26",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-27",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-28",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-03-29",
+        "contributionDays": [
+         {
+          "date": "2026-03-29",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-30",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-03-31",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-01",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-02",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-03",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-04",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-04-05",
+        "contributionDays": [
+         {
+          "date": "2026-04-05",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-06",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-07",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-08",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-09",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-10",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-11",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-04-12",
+        "contributionDays": [
+         {
+          "date": "2026-04-12",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-13",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-14",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-15",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-16",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-17",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-18",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-04-19",
+        "contributionDays": [
+         {
+          "date": "2026-04-19",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-20",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-21",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-22",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-23",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-24",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-25",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-04-26",
+        "contributionDays": [
+         {
+          "date": "2026-04-26",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-27",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-28",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-29",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-04-30",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-01",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-02",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-05-03",
+        "contributionDays": [
+         {
+          "date": "2026-05-03",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-04",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-05",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-06",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-07",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-08",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-09",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-05-10",
+        "contributionDays": [
+         {
+          "date": "2026-05-10",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-11",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-12",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-13",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-14",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-15",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-16",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-05-17",
+        "contributionDays": [
+         {
+          "date": "2026-05-17",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-18",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-19",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-20",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-21",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-22",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-23",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-05-24",
+        "contributionDays": [
+         {
+          "date": "2026-05-24",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-25",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-26",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-27",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-28",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-29",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-05-30",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-05-31",
+        "contributionDays": [
+         {
+          "date": "2026-05-31",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-01",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-02",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-03",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-04",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-05",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-06",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-06-07",
+        "contributionDays": [
+         {
+          "date": "2026-06-07",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-08",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-09",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-10",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-11",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-12",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-13",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-06-14",
+        "contributionDays": [
+         {
+          "date": "2026-06-14",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-15",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-16",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-17",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-18",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-19",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-20",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-06-21",
+        "contributionDays": [
+         {
+          "date": "2026-06-21",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-22",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-23",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-24",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-25",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-26",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-27",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-06-28",
+        "contributionDays": [
+         {
+          "date": "2026-06-28",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-29",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-06-30",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-01",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-02",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-03",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-04",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-07-05",
+        "contributionDays": [
+         {
+          "date": "2026-07-05",
+          "contributionCount": 3
+         },
+         {
+          "date": "2026-07-06",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-07",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-08",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-09",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-10",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-11",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-07-12",
+        "contributionDays": [
+         {
+          "date": "2026-07-12",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-13",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-14",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-15",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-16",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-17",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-18",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-07-19",
+        "contributionDays": [
+         {
+          "date": "2026-07-19",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-20",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-21",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-22",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-23",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-24",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-25",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-07-26",
+        "contributionDays": [
+         {
+          "date": "2026-07-26",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-27",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-28",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-29",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-30",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-07-31",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-01",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-08-02",
+        "contributionDays": [
+         {
+          "date": "2026-08-02",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-03",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-04",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-05",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-06",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-07",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-08",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-08-09",
+        "contributionDays": [
+         {
+          "date": "2026-08-09",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-10",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-11",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-12",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-13",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-14",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-15",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-08-16",
+        "contributionDays": [
+         {
+          "date": "2026-08-16",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-17",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-18",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-19",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-20",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-21",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-22",
+          "contributionCount": 3
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-08-23",
+        "contributionDays": [
+         {
+          "date": "2026-08-23",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-24",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-25",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-26",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-27",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-28",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-29",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-08-30",
+        "contributionDays": [
+         {
+          "date": "2026-08-30",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-08-31",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-01",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-02",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-03",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-04",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-05",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-09-06",
+        "contributionDays": [
+         {
+          "date": "2026-09-06",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-07",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-08",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-09",
+          "contributionCount": 2
+         },
+         {
+          "date": "2026-09-10",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-11",
+          "contributionCount": 2
+         },
+         {
+          "date": "2026-09-12",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-09-13",
+        "contributionDays": [
+         {
+          "date": "2026-09-13",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-14",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-15",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-16",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-17",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-18",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-19",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-09-20",
+        "contributionDays": [
+         {
+          "date": "2026-09-20",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-21",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-22",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-23",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-24",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-25",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-26",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-09-27",
+        "contributionDays": [
+         {
+          "date": "2026-09-27",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-28",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-29",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-09-30",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-10-01",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-10-02",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-10-03",
+          "contributionCount": 0
+         }
+        ]
+       },
+       {
+        "firstDay": "2026-10-04",
+        "contributionDays": [
+         {
+          "date": "2026-10-04",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-10-05",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-10-06",
+          "contributionCount": 0
+         },
+         {
+          "date": "2026-10-07",
+          "contributionCount": 9
+         }
+        ]
+       }
+      ]
+     }
+    },
+    "repositories": {
+     "nodes": [
+      {
+       "name": "CareerLens",
+       "description": "Dataquest 3.0",
+       "url": "https://github.com/UtkarshTheWise/CareerLens",
+       "homepageUrl": null,
+       "isFork": false,
+       "pushedAt": "2026-10-07T11:29:31Z",
+       "createdAt": "2026-10-07T07:10:56Z",
+       "stargazerCount": 0,
+       "licenseInfo": null,
+       "primaryLanguage": {
+        "name": "Shell"
+       },
+       "languages": {
+        "edges": [
+         {
+          "size": 1148,
+          "node": {
+           "name": "Shell"
+          }
+         },
+         {
+          "size": 457,
+          "node": {
+           "name": "TypeScript"
+          }
+         }
+        ]
+       },
+       "repositoryTopics": {
+        "nodes": []
+       },
+       "defaultBranchRef": {
+        "target": {
+         "history": {
+          "totalCount": 3
+         }
+        }
+       },
+       "readme": {
+        "text": "# CareerLens\n\n**Evidence-based employability analysis for students and placement cells.**\nBuilt for DataQuest 3.0 (VIT Chennai), problem statement DQWL.\n\nCareerLens reads a student's resume, GitHub, portfolio links and LinkedIn export, checks every claimed skill against real proof of work, and returns an explainable **Job Readiness Score**, a skill-gap report, role-fit suggestions and a step-by-step roadmap. Placement cells get a batch view of the same data. A Chrome extension carries the verified profile onto job pages.\n\n> Positioning line for judges: *Existing tools tell a placement officer how students score on tests. CareerLens tells them whether what students claim is backed by work they actually built.*\n\n---\n\n## 1. Critical analysis of the original idea\n\n### Verdict\n\nThe core idea (verify claims against evidence) is right and maps exactly onto the problem statement. The draft prompt, though, spends most of its scope on the part of the idea that is already a commodity, and it under-delivers on three things the problem statement explicitly asks for.\n\n### What's strong\n\n- **Claim-vs-evidence verification** is the real gap in the market. None of the mainstream job-seeker tools (Jobscan, Teal, Simplify, Huntr, Rezi, Careerflow, Jobright, Enhancv, Kickresume) checks a claimed skill against code or commits. They all match keywords.\n- **Remediation plans per flag** (not just a score) match the PS requirement for \"actionable, explainable guidance\".\n- **Structured JSON output** from the LLM is the right instinct.\n\n### What needs fixing\n\n| # | Issue in the draft | Why it matters | Fix |\n|---|---|---|---|\n| 1 | No **placement-cell / batch dashboard** | The PS says \"placement teams gain batch-level insights\". Missing it costs marks directly. | Add a Cohort Insights view (section 3). |\n| 2 | No **design portfolio** evidence (Behance, Figma) | Explicitly in the PS. Also the one area no competitor covers. | Link-based design evidence, weighted lower and labelled. |\n| 3 | No **consistency-over-time** signal | PS: \"how consistently they learn, build, and stay active\". | Commit cadence from GitHub's contribution calendar. |\n| 4 | One mega-prompt produces score + audit + resume + links in one JSON | Large nested schemas get rejected by Gemini's structured output, outputs are not reproducible, and the score can't be explained. | Split into small pipeline stages. **Compute the score deterministically** from signals; the LLM only extracts and judges. See `docs/PIPELINE.md`. |\n| 5 | \"AI-Slop\" detector / `isAiSlop` / \"Larping\" / \"Integrity (honesty) score\" | AI-text detectors scored 25–56% on a 2026 resume dataset and misclassify non-native English writing. Accusing Indian students of \"slop\" on that basis is unfair and indefensible in front of faculty judges. | Rename to **Evidence Coverage**, **Unverified claim**, **Low-evidence project**. Flag *what is missing*, never *who wrote it*. |\n| 6 | LLM generates upskilling URLs | LLMs invent URLs. | Curated `resources.yaml` catalogue; the LLM only picks from it. |\n| 7 | \"Tailor & Apply\" resume rewriting | Competitors' AI tailoring invents metrics (\"reduced latency by 67%\"). That's the exact problem CareerLens claims to solve. | Tailoring may only reorder, rephrase and emphasise **verified** claims, and must flag any number without evidence. |\n| 8 | The Chrome extension is \"the core edge\" | Simplify, Teal, Huntr, Careerflow and Jobright already ship free JD-scraping extensions with match scores. | Make the extension the *delivery surface* for the verified score (\"72% keyword match, 40% evidence-backed\"). Build it last. |\n| 9 | `gemini-1.5-pro` / `gemini-2.5-flash` | 1.5 is retired, and 2.5 is closed to new projects since 18 Sep 2026. | Gemini 3.5 Flash-Lite / 3.8 Flash with a Groq fallback. Confirm model IDs in AI Studio. |\n| 10 | `customApiKey` stored on the user profile | Plain-text key in a shared DB. | Keep BYO keys in the extension's local storage or env only. Never persist. |\n| 11 | LinkedIn DOM scraping | LinkedIn's API exposes only name/headline/photo/email, and hiQ v. LinkedIn ended in an injunction against scraping. | Use the user's own LinkedIn **profile PDF export** or pasted text. |\n| 12 | Data model has scores but no **evidence objects** or history | \"Explainable\" means every score component points to a source. Without history you can't show improvement. | `Evidence` records with URLs, `ScoreBreakdown` components, analysis history. See `contracts/openapi.yaml`. |\n| 13 | Eight major features in 24 hours | Scope will collapse into eight half-features. | P0/P1/P2 cut list in `ROADMAP.md`. |\n\n### Be honest with judges about prior art\n\n\"Resume + GitHub score\" is not new on its own. HackerRank open-sourced **hiring-agent** (MIT, ~7k stars) that parses resumes, enriches with GitHub, checks authorship and originality and outputs explainable scores. GradPipe (2025 startup) does a 0–100 resume+GitHub score. Hackathon projects (RashDev at FOSS Hack 2026, Devpost \"Verify\") do similar things. Say this up front, borrow hiring-agent's authorship-threshold idea openly, and show what none of them do (next section).\n\n---\n\n## 2. What makes CareerLens different\n\n| | Keyword ATS tools (Jobscan, Teal, Simplify…) | GitHub scorers (hiring-agent, GradPipe, GitRoll) | Indian placement platforms (Superset, PlacementPreparation.io, Mettl, Unstop) | **CareerLens** |\n|---|---|---|---|---|\n| Checks claims against work | No | Partly (category level) | No (tests only) | **Per claim, with links** |\n| Checks the student can explain their own code | No | No | Generic aptitude/coding tests | **Quiz generated from their repo** |\n| Explainable score breakdown | No (opaque %) | Partly | Partly | **Every point traced to a signal** |\n| Design portfolios | No | No | No | **Yes (link-based)** |\n| Learning consistency over time | No | Partly | No | **Yes** |\n| Student-facing roadmap | Generic | Limited | Test prep | **Tied to each gap** |\n| Batch view for placement cell | No | No | Yes (test-based) | **Yes (evidence-based)** |\n| Refuses to invent claims when tailoring | No | n/a | n/a | **Yes** |\n\nThe five differentiators to put on a slide:\n\n1. **Per-claim proof links.** \"Docker → `repo/infra/Dockerfile`, 11 authored commits\" or \"Unverified\".\n2. **Multi-modal evidence**, including design work, so designers and PMs aren't scored as failing developers.\n3. **Explainable, deterministic score** built from published signals (repo hygiene, CI/tests, commit consistency, authorship share, originality).\n4. **Project Understanding Check.** A quiz generated from the student's *own* files (\"what happens in `update_stock()` when two requests arrive together?\") that doubles as interview prep and raises or lowers the evidence behind each claim. Claimed → built → explained.\n5. **Cohort view** for the placement officer: which claimed skills in a batch are actually backed by work, and explained by the student.\n\n---\n\n## 3. Feature set\n\n### P0: must ship (covers every PS requirement)\n\n1. **Ingestion**: resume PDF/DOCX, GitHub username (OAuth optional), LinkedIn PDF export or pasted text, portfolio/design URLs, target role.\n2. **Evidence engine**: deterministic detectors scan GitHub repos for skill evidence (dependency manifests, file types, configs), authorship share, forks, templates, tests, CI, README quality, commit cadence.\n3. **Claim verification**: each resume skill gets `strong / moderate / weak / unverified` with evidence links and a one-line reason.\n4. **Job Readiness Score** (0–100) per target role with a component breakdown and \"why\" text (spec in `docs/SCORING.md`).\n5. **Skill gap report**: required-for-role vs verified vs claimed-only vs missing.\n6. **Roadmap**: ordered milestones, each tied to a gap, with curated resources and an estimated score gain.\n7. **Role-fit**: top 3 roles from a curated role catalogue, with reasons.\n8. **Cohort Insights** (placement cell): readiness distribution, top missing skills, unverified-claim rate per skill, at-risk list, CSV export. Seeded with synthetic students for the demo.\n9. **Project Understanding Check: verify mode** (`docs/QUIZ.md`): 6 timed questions generated from the student's own repo (code-reading MCQs on their snippets, plus architecture / design-decision / debugging / extension short answers). Graded against a hidden answer key. `demonstrated` upgrades evidence; `not_demonstrated` raises an `understanding_gap` flag with a review list and retake. Never labelled as \"didn't build it\"; skipping is never penalised.\n\n### P1: added features that strengthen the pitch\n\n10. **Project Understanding Check: practice mode** (interview prep): untimed, hints, instant feedback with model answers linked to the exact lines in their repo.\n11. **Low-evidence project flags** (replaces \"AI-slop\"): single-commit dumps, unmodified forks, default framework READMEs, tutorial-name matches, thin API wrappers, descriptions with no metrics or architecture. Each flag comes with a fix.\n12. **What-if simulator**: \"Add tests + CI to repo X → +6 points\" (recompute the deterministic score with a hypothetical signal).\n13. **Re-scan and progress history**: score over time, proving the roadmap works.\n14. **Chrome extension side panel**: reads JobPosting JSON-LD (DOM fallback), shows keyword match *and* evidence-backed match, saves to tracker.\n15. **Application tracker** (Kanban) fed by the extension.\n\n### P2: only if time remains\n\n16. Truthful tailored resume (reorder and rephrase verified claims, never add) rendered with `@react-pdf/renderer`.\n17. Quick practice quiz from the extension: 3 questions on the project most relevant to the job on screen.\n18. Codeforces public API stats as an extra evidence source.\n19. Shareable public \"proof card\" for a student.\n\n### Deliberately cut\n\n- Auto-apply / autofill (crowded, and ATSs deprioritise bulk applications).\n- AI-written-text detection (unreliable and biased).\n- Scraping LinkedIn pages.\n\n---\n\n## 4. Architecture\n\n```\n            ┌──────────────────────────── apps/web (Next.js, Codex) ───────────────────────────┐\n            │ Dashboard · Report · Project quiz · Roadmap · Tracker · Cohort Insights          │\n            └───────────────┬──────────────────────────────────────────────▲───────────────────┘\n                            │ typed client generated from contracts/openapi.yaml\n apps/extension (MV3, Codex)│                                              │\n side panel ── JobPosting ──┤                                              │\n                            ▼                                              │\n            ┌──────────────────────────── apps/api (FastAPI, Claude Code) ─┴───────────────────┐\n            │ 1 Ingest   resume → text (pdfplumber/python-docx), LinkedIn PDF, URLs            │\n            │ 2 Extract  LLM → ResumeProfile JSON (small schema)                               │\n            │ 3 Collect  GitHub GraphQL → repos, languages, calendar, manifests, file tree     │\n            │ 4 Detect   deterministic skill detectors + repo-quality signals (no LLM)         │\n            │ 5 Judge    LLM → per-project judgement on descriptions vs evidence (small schema)│\n            │ 6 Score    deterministic Job Readiness Score + breakdown (no LLM)                │\n            │ 7 Plan     LLM picks roadmap items/resources from curated catalogues             │\n            │ 8 Persist  Supabase Postgres (+ cache of every LLM/GitHub call)                  │\n            │ Quiz       on demand: repo files → LLM questions + hidden key → LLM grades →     │\n            │            Python scores → understanding → re-run step 6                         │\n            └──────────────────────────────────────────────────────────────────────────────────┘\n               LLM gateway: Gemini → (429) Groq → (offline) Ollama      PII stripped before LLM\n```\n\nLong analyses run as a background job: `POST /v1/profiles/{id}/analyses` returns `202` with an id, and the UI polls `GET /v1/analyses/{id}`.\n\nDetails: `docs/PIPELINE.md` (stages + LLM prompt templates), `docs/SCORING.md` (formula) and `docs/QUIZ.md` (Project Understanding Check).\n\n---\n\n## 5. Zero-cost stack (checked October 2026)\n\n| Layer | Choice | Free limit / gotcha |\n|---|---|---|\n| Backend | **FastAPI** (Python 3.12, uv) | Run locally for dev and demo; deploy to **Render free** (sleeps after 15 min idle, ~1 min cold start, so hit `/health` before judging). |\n| Frontend | **Next.js** (App Router, TS, Tailwind, shadcn/ui, Recharts, Framer Motion) on **Vercel Hobby** | 4.5 MB request body (upload resumes straight to the API or Supabase Storage); **Hobby can't deploy repos owned by a GitHub org** — use a personal repo. |\n| Extension | Chrome **MV3** + Vite + React, `sidePanel` API | Load unpacked for the demo; `sidePanel.open()` needs a user gesture. |\n| DB / Auth / Storage | **Supabase Free** | 500 MB DB, 1 GB storage, 50K MAU. **Pauses after ~7 days idle**: add a daily GitHub Actions ping. |\n| Primary LLM | **Gemini** 3.5 Flash-Lite (bulk) / 3.8 Flash (judgement) via `google-genai` | Free quotas are no longer published (estimates: ~500/day Flash-Lite, ~20/day Flash). Check AI Studio. **Free-tier data may be used for training, users must be 18+**: strip PII, use synthetic resumes for the demo. `temperature` is deprecated on the newest models. |\n| Fallback LLM | **Groq** `openai/gpt-oss-120b` (strict `json_schema`) | 30 RPM, 1,000 req/day, 8K tokens/min. No streaming with structured output. Llama 3.x is gone from free. |\n| Offline LLM | **Ollama** (e.g. a small Qwen/Llama) | Supports JSON-schema output locally; demo-day insurance. |\n| GitHub data | **GraphQL v4** with a token | Unauthenticated REST is 60 req/hr **per IP** (a hackathon Wi-Fi burns it in minutes). Use a PAT on the server (5,000/hr) or the user's OAuth token. Stats endpoints return 202 while computing: retry. |\n| Resume parsing | **pdfplumber** (MIT), python-docx | Avoid PyMuPDF (AGPL) unless you accept the licence. |\n| Code similarity (optional) | Simple fingerprinting / Dolos ideas | No off-the-shelf tutorial-clone detector exists; we use heuristics. |\n| PDF output (P2) | `@react-pdf/renderer` in the web app | Avoid Puppeteer on Vercel (bundle limit). |\n| Coding agents | Claude Code (backend), Codex (frontend) | **Codex CLI/IDE needs ChatGPT Plus or an API key**; the free plan only has limited desktop-app access. Confirm the model with `/model`. |\n\n**Not free anymore (don't plan around them):** Cerebras free tier (ended 16 Jul 2026), Koyeb free (ended Feb 2026), Fly.io (trial only), Hugging Face Docker Spaces (paid), Render free Postgres (expires in 30 days). Behance API is unavailable; Figma's free-seat REST quota is 20 calls/month; Dribbble only returns your own shots.\n\n---\n\n## 6. Repository layout and ownership\n\n```\ncareerlens/\n├── AGENTS.md                 # shared rules — read by Codex AND Claude Code\n├── CLAUDE.md                 # imports AGENTS.md + Claude-only rules\n├── README.md / ROADMAP.md / PROMPTS.md / RUNBOOK.md   # RUNBOOK = who does what, in order\n├── .claude/\n│   ├── settings.json         # shared allow-list, blocks reading .env, registers the progress Stop hook\n│   ├── hooks/require-progress.sh     # blocks ending a session with unrecorded changes\n│   ├── backend.settings.local.json   # copy into the backend worktree as settings.local.json\n│   └── frontend.settings.local.json  # only if Claude Code ever builds frontend\n├── contracts/\n│   └── openapi.yaml          # SINGLE SOURCE OF TRUTH — frozen after Phase 0\n├── packages/\n│   └── api-client/           # generated from the contract; never hand-edited\n├── apps/\n│   ├── api/                  # FastAPI          — owner: Claude Code\n│   ├── web/                  # Next.js          — owner: Codex\n│   └── extension/            # Chrome MV3       — owner: Codex\n├── design-refs/              # UI reference shots (add the rest of your folder here)\n├── data/                     # skills.yaml, roles.yaml, resources.yaml, seed cohort — owner: Claude Code\n└── docs/\n    ├── PIPELINE.md           # analysis stages + LLM prompt templates\n    ├── SCORING.md            # readiness formula\n    ├── QUIZ.md               # Project Understanding Check (quiz) spec\n    ├── DESIGN.md             # UI tokens & component rules (light + dark) from the reference shots\n    ├── HANDOFF.md            # handoff rules + templates (entry, Contract Change Request)\n    ├── handoff/              # backend.md, frontend.md, integration.md — append-only log per track\n    ├── progress/             # backend.md, frontend.md, integration.md — live state per track for model hand-off\n    └── RESEARCH.md           # market, free-stack and agent-coordination research\n```\n\nThe coordination flow (contract → backend ∥ frontend → integration) and copy-paste prompts for each step are in **`PROMPTS.md`**. The schedule is in **`ROADMAP.md`**.\n\n---\n\n## 7. Getting started\n\n### Accounts (all free)\n\n1. **Google AI Studio** API key (owned by a teammate aged 18+).\n2. **Groq** console API key.\n3. **Supabase** project (enable the GitHub auth provider later if you want OAuth).\n4. **GitHub** fine-grained personal access token, public-repo read only.\n5. **Vercel** and **Render** connected to a *personal* GitHub repo.\n\n### Environment (`apps/api/.env`, never committed)\n\n```bash\nGEMINI_API_KEY=\nGEMINI_MODEL_FAST=gemini-3.5-flash-lite   # confirm exact IDs in AI Studio\nGEMINI_MODEL_SMART=gemini-3.8-flash\nGROQ_API_KEY=\nGROQ_MODEL=openai/gpt-oss-120b\nOLLAMA_URL=http://localhost:11434          # optional\nGITHUB_TOKEN=\nDATABASE_URL=postgresql+psycopg://...      # Supabase connection string (or sqlite:///./dev.db locally)\nSUPABASE_JWT_SECRET=                       # optional; DEV_AUTH=1 skips auth locally\nDEV_AUTH=1\nCORS_ORIGINS=http://localhost:3000        # extension origins are allowed by regex in code\n```\n\n### Run (once the agents have built it)\n\n```bash\n# backend\ncd apps/api && uv sync && uv run fastapi dev app/main.py        # http://localhost:8000/docs\n\n# mock API for frontend work before the backend exists\nnpx @stoplight/prism-cli mock contracts/openapi.yaml -p 4010\n\n# typed client\nnpx openapi-typescript contracts/openapi.yaml -o packages/api-client/schema.d.ts\n\n# frontend\ncd apps/web && pnpm i && pnpm dev                                # http://localhost:3000\n# NEXT_PUBLIC_API_URL=http://localhost:4010 (mock) or :8000 (real)\n\n# extension\ncd apps/extension && pnpm i && pnpm build   # chrome://extensions → Load unpacked → dist/\n```\n\n---\n\n## 8. Privacy and fairness\n\n- Strip names, emails, phone numbers and addresses from text before any LLM call (free Gemini tier may use inputs for training).\n- Use synthetic or consenting resumes in the demo.\n- Never label a student's writing as AI-generated. Flags describe missing evidence and how to add it.\n- A weak quiz result means \"understanding not demonstrated yet\", never \"you didn't build this\". Quiz answers are graded on concepts, not English fluency, and the placement cell sees only the status, not the answers.\n- Design and non-code roles are scored on the evidence sources that make sense for that role (see `docs/SCORING.md`); missing GitHub is not a penalty for a UI/UX target.\n- The score is **diagnostic, not predictive**: no published study yet shows proof-of-work scores predict placement outcomes. A pilot against VIT placement data would be the natural next step.\n\n---\n\n## 9. Key sources\n\n- Competitors: [Simplify Copilot](https://simplify.jobs/copilot), [Teal pricing](https://www.tealhq.com/pricing), [Huntr pricing](https://huntr.co/pricing), [Careerflow FAQ](https://www.careerflow.ai/faq), [Rezi pricing](https://www.rezi.ai/pricing)\n- Prior art: [HackerRank hiring-agent](https://github.com/interviewstreet/hiring-agent), [GradPipe](https://www.everydev.ai/tools/gradpipe), [Devpost Verify](https://devpost.com/software/verify-27gui6), [RashDev](https://fossunited.org/hack/fosshack26/p/fckh0ajbou), [LinkedIn verified skills](https://techcrunch.com/2026/01/28/linkedin-will-let-you-show-off-your-vibe-coding-chops-with-a-certificate/)\n- India: [Superset for universities](https://joinsuperset.com/university.html), [PlacementPreparation.io for colleges](https://www.placementpreparation.io/for-colleges/), [India Skills Report 2026](https://news.careers360.com/india-skills-report-2026-employability-56-35-pc-ai-tools-digital-gig-economy-workforce-global-talent-hub)\n- Signals: [OpenSSF Scorecard](https://github.com/ossf/scorecard), [UW–Madison repo quality](https://ospo.wisc.edu/blog/2024/repo-quality-metrics), [commit consistency (arXiv 2508.02487)](https://arxiv.org/html/2508.02487v2), [Dolos](https://arxiv.org/html/2402.10853v2), [AI-resume detection (LREC 2026)](https://preview.aclanthology.org/ingest-lrec/2026.lrec-main.581/)\n- Stack: [Gemini changelog](https://ai.google.dev/gemini-api/docs/changelog), [Gemini terms](https://ai.google.dev/gemini-api/terms), [Groq limits](https://console.groq.com/docs/rate-limits), [Vercel limits](https://vercel.com/docs/limits), [Supabase pricing](https://supabase.com/pricing), [Render free](https://render.com/docs/free), [GitHub GraphQL limits](https://docs.github.com/en/graphql/overview/rate-limits-and-query-limits-for-the-graphql-api), [LinkedIn API access](https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access)\n- Agents: [Claude Code memory](https://code.claude.com/docs/en/memory), [permissions](https://code.claude.com/docs/en/permissions), [worktrees](https://code.claude.com/docs/en/worktrees), [Codex AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md), [Codex pricing](https://learn.chatgpt.com/docs/pricing), [Prism](https://github.com/stoplightio/prism), [openapi-typescript](https://openapi-ts.dev/introduction)\n\nFull research report with all sources: `docs/RESEARCH.md`.\n"
+       },
+       "readme_lower": null,
+       "pkg": {
+        "text": "{\n  \"name\": \"careerlens\",\n  \"private\": true,\n  \"packageManager\": \"pnpm@10.12.3\",\n  \"scripts\": {\n    \"gen:client\": \"openapi-typescript contracts/openapi.yaml -o packages/api-client/schema.d.ts\"\n  },\n  \"devDependencies\": {\n    \"openapi-typescript\": \"^7.4.0\",\n    \"typescript\": \"^5.6.0\"\n  }\n}\n"
+       },
+       "req": null,
+       "pyproject": null,
+       "workflows": null,
+       "root": {
+        "entries": [
+         {
+          "name": ".claude",
+          "type": "tree"
+         },
+         {
+          "name": ".gitattributes",
+          "type": "blob"
+         },
+         {
+          "name": ".gitignore",
+          "type": "blob"
+         },
+         {
+          "name": "AGENTS.md",
+          "type": "blob"
+         },
+         {
+          "name": "CLAUDE.md",
+          "type": "blob"
+         },
+         {
+          "name": "PROMPTS.md",
+          "type": "blob"
+         },
+         {
+          "name": "README.md",
+          "type": "blob"
+         },
+         {
+          "name": "ROADMAP.md",
+          "type": "blob"
+         },
+         {
+          "name": "RUNBOOK.md",
+          "type": "blob"
+         },
+         {
+          "name": "apps",
+          "type": "tree"
+         },
+         {
+          "name": "contracts",
+          "type": "tree"
+         },
+         {
+          "name": "design-refs",
+          "type": "tree"
+         },
+         {
+          "name": "docs",
+          "type": "tree"
+         },
+         {
+          "name": "package.json",
+          "type": "blob"
+         },
+         {
+          "name": "packages",
+          "type": "tree"
+         },
+         {
+          "name": "pnpm-lock.yaml",
+          "type": "blob"
+         },
+         {
+          "name": "pnpm-workspace.yaml",
+          "type": "blob"
+         },
+         {
+          "name": "redocly.yaml",
+          "type": "blob"
+         }
+        ]
+       }
+      },
+      {
+       "name": "patm",
+       "description": "pay attention to me <3",
+       "url": "https://github.com/UtkarshTheWise/patm",
+       "homepageUrl": null,
+       "isFork": false,
+       "pushedAt": "2026-10-06T19:56:35Z",
+       "createdAt": "2026-10-06T19:21:15Z",
+       "stargazerCount": 0,
+       "licenseInfo": null,
+       "primaryLanguage": {
+        "name": "JavaScript"
+       },
+       "languages": {
+        "edges": [
+         {
+          "size": 50264,
+          "node": {
+           "name": "JavaScript"
+          }
+         },
+         {
+          "size": 9911,
+          "node": {
+           "name": "HTML"
+          }
+         },
+         {
+          "size": 15437,
+          "node": {
+           "name": "CSS"
+          }
+         },
+         {
+          "size": 4761,
+          "node": {
+           "name": "PLpgSQL"
+          }
+         }
+        ]
+       },
+       "repositoryTopics": {
+        "nodes": []
+       },
+       "defaultBranchRef": {
+        "target": {
+         "history": {
+          "totalCount": 4
+         }
+        }
+       },
+       "readme": {
+        "text": "# Pay Attention To Me\n\nA 2D battle scene where the move you pick pings your person's phone.\n\n- Sign in with Google (Supabase Auth)\n- Pair with a 6-character code\n- Three attack options: **Need Attention**, **Thinking of You**, **Missing You**\n- An octopus mood toy you flip between happy / angry / sad — your partner sees it\n- Real Web Push (works on iPhone once added to Home Screen, iOS 16.4+)\n- All data in Supabase Postgres: profiles, pairs, push subscriptions, poke history\n- 10-second cooldown, rename, leave pair, delete account\n\n## The look\n\nA Pokemon-style battle screen in valentine shades — white, red, pink and light blue.\nBoth of you are an octopus mood toy on a platform, each with a status box showing\nyour name, your current mood and an \"attention\" bar that fills when the other\nperson sends something and fades over a few hours. Underneath is a message box and\na 2x2 move grid with a `▶` cursor, exactly like picking an attack.\n\nTapping a move selects it; tapping the selected move sends it. That second tap is\ndeliberate — a poke wakes someone's phone, so it shouldn't happen by brushing the\nscreen. The message box says which move is armed.\n\nTap your own octopus to flip its mood. The flip is saved after a short pause, and\nyour partner only gets a notification if the mood actually ended up different —\nso cycling through all three faces stays silent.\n\n- **Art**: every sprite is inline SVG in `public/sprites.js`. No image assets to\n  load, nothing to re-export when a colour changes.\n- **Motion**: [GSAP](https://gsap.com) drives the attack timeline, mood flip,\n  screen transitions, idle bobbing and the heart particles. It is served from\n  `node_modules` at `/vendor/gsap.js` so the app still animates offline.\n- **Fallbacks**: if GSAP fails to load, or the device asks for reduced motion,\n  every animation helper lands on the same end state instantly. The app is fully\n  usable with no animation at all.\n- **Palette**: fixed. The game keeps its valentine colours in dark mode, the same\n  way a game looks the same whatever the phone is set to.\n\n## How it fits together\n\n```\nBrowser ──Google sign-in──▶ Supabase Auth ──▶ session (access token) in browser\nBrowser ──API call + Bearer token──▶ Node server ──verifies token──▶ Supabase Auth\n                                     Node server ──secret key──▶ Supabase Postgres\n                                     Node server ──web-push──▶ partner's phone\n```\n\nThe browser never reads tables directly. RLS is on with no policies, so the\npublishable key can't touch any data; only the server (secret key) can.\n\n## Setup (about 15 minutes)\n\n### 1. Supabase project\n1. Create a free project at [supabase.com](https://supabase.com).\n2. **SQL Editor** → paste all of `supabase/schema.sql` → **Run**.\n   (Already running an older copy? Re-run the same file — it is safe to re-run and\n   adds the `mood` column the octopus toy needs. Until you do, flipping the mood\n   returns an error and everything else keeps working.)\n3. **Project Settings → API Keys**: copy the Project URL, the **publishable** key and the **secret** key.\n\n### 2. Google OAuth client\n1. [Google Cloud Console](https://console.cloud.google.com) → create a project.\n2. **APIs & Services → OAuth consent screen**: External, add app name + your email.\n   Scopes: just the defaults (`email`, `profile`, `openid`).\n3. **Credentials → Create credentials → OAuth client ID → Web application**.\n4. **Authorized redirect URIs**: add\n   `https://YOUR-PROJECT-REF.supabase.co/auth/v1/callback`\n   (Supabase shows this exact URL on the Google provider page.)\n5. Copy the **Client ID** and **Client secret**.\n\n### 3. Connect them\n1. Supabase → **Authentication → Sign In / Providers → Google** → enable, paste Client ID + secret, save.\n2. Supabase → **Authentication → URL Configuration**:\n   - **Site URL**: your production URL (e.g. `https://patm.onrender.com`)\n   - **Redirect URLs**: add `http://localhost:3000/**` and your production URL with `/**`\n\n### 4. Run it\n```bash\ncp .env.example .env      # fill in the Supabase values\nnpm install\nnpm start                 # http://localhost:3000\n```\n\nFor production, also set VAPID keys (`npx web-push generate-vapid-keys`).\nIf they change, every saved push subscription stops working.\n\n### Testing on your phone\nPush and Google sign-in both need HTTPS. Use a tunnel and add its URL to\nSupabase's Redirect URLs:\n```bash\nnpx localtunnel --port 3000     # or: cloudflared tunnel --url http://localhost:3000\n```\n\n## Deploy (free)\nRender, Railway or Fly.io. No disk needed anymore since everything lives in Supabase.\nSet the same env vars as `.env`. Add the deployed URL to Supabase's Site URL / Redirect URLs.\n\n## Google consent screen: testing vs published\nWhile the consent screen is in **Testing**, only Google accounts you add as test users can sign in.\nClick **Publish app** to let anyone in. With only `email`/`profile` scopes, Google doesn't require a review.\n\n## iPhone setup (for users)\n1. Open the site in Safari → sign in with Google\n2. Share → **Add to Home Screen**\n3. Open it from the Home Screen icon, sign in again if asked, tap **Enable** for notifications\n\nThe Home Screen app has its own storage on iOS, so signing in once in Safari\ndoesn't carry over. Test the sign-in redirect inside the Home Screen app on a\nreal iPhone before launch.\n\n## Data model\n| Table | What |\n| --- | --- |\n| `profiles` | one per Google user: name, avatar, `pair_id`, `last_poke_at`, `mood` |\n| `pairs` | share code; deleted automatically when the last member leaves |\n| `push_subscriptions` | one per device; dead ones are pruned when a push returns 404/410 |\n| `pokes` | history: who, level, when |\n\nDeleting a user in Supabase Auth cascades to their profile and subscriptions.\n`join_pair` / `leave_pair` are SQL functions so two people can't grab the same slot at once.\n\n## Files\n```\nserver.js              Express API, auth middleware, web-push\ndb.js                  every Supabase query\nsupabase/schema.sql    tables, RLS, join/leave functions\npublic/index.html      screens: title, pair up, waiting, battle, menu\npublic/style.css       the 2D game look (boxes, palette, scene layout)\npublic/sprites.js      all the art, as inline SVG\npublic/ui.js           every animation (GSAP, with a no-motion fallback)\npublic/app.js          client: Supabase Auth, API calls, push subscribe\npublic/sw.js           service worker: notifications + offline shell\n```\n\nThe app icon is `public/icons/icon.svg`. The PNG icons in that folder are from the\nearlier design — regenerate them from the SVG if you want the manifest icons to\nmatch (the SVG is listed first, so browsers that support it already use it).\n\n## Going to TestFlight later\n1. Wrap with Capacitor: `npm i @capacitor/core @capacitor/cli @capacitor/ios && npx cap init && npx cap add ios`\n2. Swap Web Push for native push (`@capacitor/push-notifications` + an APNs key)\n3. Google sign-in inside a native app needs a deep-link redirect (e.g. `patm://auth`) added to Supabase's Redirect URLs\n4. Archive in Xcode → App Store Connect → TestFlight → enable a public link\n\nNeeds a Mac with Xcode and the $99/yr Apple Developer Program. Builds expire after 90 days.\n"
+       },
+       "readme_lower": null,
+       "pkg": {
+        "text": "{\n  \"name\": \"pay-attention-to-me\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"description\": \"Tap an attack, your partner gets a push notification. 2D battle-scene PWA.\",\n  \"main\": \"server.js\",\n  \"scripts\": {\n    \"start\": \"node server.js\",\n    \"dev\": \"node --watch server.js\"\n  },\n  \"engines\": {\n    \"node\": \">=18\"\n  },\n  \"dependencies\": {\n    \"@supabase/supabase-js\": \"^2.117.2\",\n    \"dotenv\": \"^18.0.5\",\n    \"express\": \"^4.21.0\",\n    \"gsap\": \"^3.13.0\",\n    \"web-push\": \"^3.6.7\"\n  }\n}\n"
+       },
+       "req": null,
+       "pyproject": null,
+       "workflows": null,
+       "root": {
+        "entries": [
+         {
+          "name": ".env.example",
+          "type": "blob"
+         },
+         {
+          "name": ".gitattributes",
+          "type": "blob"
+         },
+         {
+          "name": ".gitignore",
+          "type": "blob"
+         },
+         {
+          "name": "README.md",
+          "type": "blob"
+         },
+         {
+          "name": "db.js",
+          "type": "blob"
+         },
+         {
+          "name": "package-lock.json",
+          "type": "blob"
+         },
+         {
+          "name": "package.json",
+          "type": "blob"
+         },
+         {
+          "name": "public",
+          "type": "tree"
+         },
+         {
+          "name": "render.yaml",
+          "type": "blob"
+         },
+         {
+          "name": "server.js",
+          "type": "blob"
+         },
+         {
+          "name": "supabase",
+          "type": "tree"
+         }
+        ]
+       }
+      },
+      {
+       "name": "SimpleHabitTracker",
+       "description": "A simple and personalized Habit Tracker for ME, and who ever else would like to use it.",
+       "url": "https://github.com/UtkarshTheWise/SimpleHabitTracker",
+       "homepageUrl": "https://utaxhabittracker.vercel.app",
+       "isFork": false,
+       "pushedAt": "2026-09-11T05:50:15Z",
+       "createdAt": "2026-08-22T17:32:16Z",
+       "stargazerCount": 0,
+       "licenseInfo": null,
+       "primaryLanguage": {
+        "name": "JavaScript"
+       },
+       "languages": {
+        "edges": [
+         {
+          "size": 300,
+          "node": {
+           "name": "HTML"
+          }
+         },
+         {
+          "size": 43246,
+          "node": {
+           "name": "JavaScript"
+          }
+         },
+         {
+          "size": 267,
+          "node": {
+           "name": "CSS"
+          }
+         }
+        ]
+       },
+       "repositoryTopics": {
+        "nodes": []
+       },
+       "defaultBranchRef": {
+        "target": {
+         "history": {
+          "totalCount": 4
+         }
+        }
+       },
+       "readme": {
+        "text": "# Daily Tracker\n\nA minimalist daily goal & habit tracker. React + Tailwind + Supabase (Google OAuth), with a localStorage fallback so it also runs fully offline with zero setup.\n\n## Features\n\n- Google sign-in via Supabase Auth (falls back to a local-only mode if Supabase isn't configured)\n- Custom trackers: Streak Counter, Duration, Boolean Checkbox, Numeric Goal\n- Optional daily target and deadline per tracker\n- Pick a custom color per tracker (used across its badge, progress bar, and history)\n- One-tap logging, streak badges, progress bars, 7-day history strip\n- Longest-streak counter and a tiny GitHub/LeetCode-style contribution map for Streak Counter trackers\n- A queue-style to-do bar for quick, ad-hoc tasks\n- A one-line fun fact / dad joke at the bottom of the page (click to reshuffle)\n- Dark mode\n- Local browser notification reminder at a chosen time (see [Notifications](#notifications))\n\n## 1. Run it locally (no setup required)\n\n```bash\nnpm install\nnpm run dev\n```\n\nOpen the printed localhost URL. Without Supabase env vars set, the app runs in **local mode**: it auto-signs you in and stores everything in your browser's localStorage. Good for trying it out or fully offline use — data stays on that device/browser only.\n\n## 2. Connect Supabase (real accounts + Google sign-in + synced data)\n\n### a. Create a project\n\n1. Go to https://supabase.com → **New project**.\n2. Once it's ready, open **Project Settings → API** and copy the **Project URL** and **anon public key**.\n\n### b. Create the database tables\n\n1. Open the **SQL Editor** in your Supabase project.\n2. Paste the contents of `supabase/schema.sql` and run it. This creates `trackers`, `tracker_logs`, `user_settings`, and `todos`, and locks them down with Row Level Security so each user can only see their own data. (If you already have an older copy of these tables, re-running `schema.sql` is safe — it adds the new `color` column and `todos` table without touching existing data.)\n\n### c. Enable Google sign-in\n\n1. In Supabase: **Authentication → Providers → Google** → toggle it on.\n2. In the [Google Cloud Console](https://console.cloud.google.com/apis/credentials), create an **OAuth Client ID** (type: Web application).\n   - Authorized redirect URI: use the callback URL Supabase shows on the Google provider settings page (looks like `https://<your-project-ref>.supabase.co/auth/v1/callback`).\n3. Copy the Google **Client ID** and **Client Secret** into the Supabase Google provider settings and save.\n4. In **Authentication → URL Configuration**, set your **Site URL** (e.g. `http://localhost:5173` for local dev — you'll add your deployed URL later) and add it to **Redirect URLs**.\n\n### d. Set environment variables\n\nCopy `.env.example` to `.env` and fill in the values from step (a):\n\n```\nVITE_SUPABASE_URL=https://your-project-ref.supabase.co\nVITE_SUPABASE_ANON_KEY=your-anon-key\n```\n\nRestart `npm run dev`. The app now shows the Google sign-in screen and reads/writes from Supabase instead of localStorage.\n\n## 3. Deploy — GitHub + Vercel (free)\n\n### a. Push to GitHub\n\n```bash\ngit init\ngit add .\ngit commit -m \"Initial commit\"\ngit branch -M main\ngit remote add origin https://github.com/<your-username>/<your-repo>.git\ngit push -u origin main\n```\n\n### b. Deploy on Vercel\n\n1. Go to https://vercel.com → **Add New → Project** → import your GitHub repo.\n2. Framework preset: **Vite** (build command `npm run build`, output directory `dist` — Vercel usually detects these automatically).\n3. Under **Environment Variables**, add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.\n4. Deploy.\n5. Back in Supabase **Authentication → URL Configuration**, add your new `https://your-app.vercel.app` URL to **Site URL** and **Redirect URLs** — otherwise Google login will redirect but Supabase will reject it.\n\nNetlify works the same way: build command `npm run build`, publish directory `dist`, same two env vars.\n\n## Notifications\n\nThe reminder feature uses the browser's local `Notification` API — it checks the current time every 30 seconds while the app tab is open and fires a notification once per day at your chosen time. It does **not** fire when the tab/browser is fully closed, because that requires a service worker + push server (VAPID keys, backend push infrastructure), which is out of scope for this minimal, backend-less build. If you need true background push later, that's the piece to add.\n\n## Project structure\n\n```\nsrc/\n  App.jsx\n  main.jsx\n  index.css\n  components/   Login, Header, Dashboard, TrackerCard, TrackerModal, SettingsModal, ProgressBar,\n                StreakBadge, StreakHeatmap, TodoQueue, FunFact\n  hooks/        useAuth, useTrackers, useTodos, useNotifications\n  lib/          supabaseClient.js, data.js (Supabase/localStorage data layer)\n  utils/        dateUtils.js, trackerTypes.js\nsupabase/\n  schema.sql    Tables + Row Level Security policies\n```\n\n## Notes / assumptions\n\n- Data model: one log row per tracker per day (`value` — 0/1 for boolean & streak types, a number for duration/numeric types).\n- Streak counts consecutive days with a logged value; today doesn't zero out an existing streak until the day ends without a log.\n- Longest streak and the contribution map are computed from the full log history (local and Supabase modes both load all logs; see `fetchLogs` in `lib/data.js`).\n- The to-do bar is a lightweight, ad-hoc FIFO queue (oldest task highlighted as \"up next\"); it's separate from the trackers and isn't logged/streaked.\n- No custom backend server — Supabase is used directly from the client, with Row Level Security enforcing per-user data isolation.\n- Stack: Vite + React (JavaScript, not TypeScript) + Tailwind CSS + lucide-react, chosen for minimal build config.\n"
+       },
+       "readme_lower": null,
+       "pkg": {
+        "text": "{\n  \"name\": \"daily-tracker\",\n  \"private\": true,\n  \"version\": \"0.1.0\",\n  \"type\": \"module\",\n  \"scripts\": {\n    \"dev\": \"vite\",\n    \"build\": \"vite build\",\n    \"preview\": \"vite preview\"\n  },\n  \"dependencies\": {\n    \"@supabase/supabase-js\": \"^2.45.4\",\n    \"lucide-react\": \"^0.446.0\",\n    \"react\": \"^18.3.1\",\n    \"react-dom\": \"^18.3.1\"\n  },\n  \"devDependencies\": {\n    \"@vitejs/plugin-react\": \"^4.3.1\",\n    \"autoprefixer\": \"^10.4.20\",\n    \"postcss\": \"^8.4.47\",\n    \"tailwindcss\": \"^3.4.13\",\n    \"vite\": \"^5.4.8\"\n  }\n}\n"
+       },
+       "req": null,
+       "pyproject": null,
+       "workflows": null,
+       "root": {
+        "entries": [
+         {
+          "name": ".gitignore",
+          "type": "blob"
+         },
+         {
+          "name": "README.md",
+          "type": "blob"
+         },
+         {
+          "name": "index.html",
+          "type": "blob"
+         },
+         {
+          "name": "package-lock.json",
+          "type": "blob"
+         },
+         {
+          "name": "package.json",
+          "type": "blob"
+         },
+         {
+          "name": "postcss.config.js",
+          "type": "blob"
+         },
+         {
+          "name": "src",
+          "type": "tree"
+         },
+         {
+          "name": "supabase",
+          "type": "tree"
+         },
+         {
+          "name": "tailwind.config.js",
+          "type": "blob"
+         },
+         {
+          "name": "vite.config.js",
+          "type": "blob"
+         }
+        ]
+       }
+      },
+      {
+       "name": "GDG_Round2",
+       "description": "PLEASE ACCEPT IT I GENUINELY SLEPT OFF AFTER COLLEGE",
+       "url": "https://github.com/UtkarshTheWise/GDG_Round2",
+       "homepageUrl": null,
+       "isFork": false,
+       "pushedAt": "2026-09-09T01:54:27Z",
+       "createdAt": "2026-09-09T01:49:53Z",
+       "stargazerCount": 0,
+       "licenseInfo": null,
+       "primaryLanguage": {
+        "name": "JavaScript"
+       },
+       "languages": {
+        "edges": [
+         {
+          "size": 278613,
+          "node": {
+           "name": "JavaScript"
+          }
+         },
+         {
+          "size": 97,
+          "node": {
+           "name": "CSS"
+          }
+         },
+         {
+          "size": 4953,
+          "node": {
+           "name": "TypeScript"
+          }
+         }
+        ]
+       },
+       "repositoryTopics": {
+        "nodes": []
+       },
+       "defaultBranchRef": {
+        "target": {
+         "history": {
+          "totalCount": 1
+         }
+        }
+       },
+       "readme": null,
+       "readme_lower": null,
+       "pkg": {
+        "text": "{\n  \"name\": \"recruitment-portal\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"clean\": \"rm -rf .next\",\n    \"dev\": \"next dev\",\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"lint\": \"next lint\"\n  },\n  \"dependencies\": {\n    \"@hookform/resolvers\": \"^3.9.0\",\n    \"@material-symbols-svg/react\": \"^0.13.0\",\n    \"@radix-ui/react-avatar\": \"^1.1.0\",\n    \"@radix-ui/react-checkbox\": \"^1.1.1\",\n    \"@radix-ui/react-dialog\": \"^1.1.1\",\n    \"@radix-ui/react-dropdown-menu\": \"^2.1.1\",\n    \"@radix-ui/react-icons\": \"^1.3.0\",\n    \"@radix-ui/react-label\": \"^2.1.0\",\n    \"@radix-ui/react-popover\": \"^1.1.1\",\n    \"@radix-ui/react-radio-group\": \"^1.3.7\",\n    \"@radix-ui/react-scroll-area\": \"^1.1.0\",\n    \"@radix-ui/react-select\": \"^2.1.1\",\n    \"@radix-ui/react-separator\": \"^1.1.0\",\n    \"@radix-ui/react-slot\": \"^1.1.0\",\n    \"@radix-ui/react-switch\": \"^1.1.0\",\n    \"@radix-ui/react-toast\": \"^1.2.1\",\n    \"@tiptap/extension-blockquote\": \"^2.7.4\",\n    \"@tiptap/extension-bullet-list\": \"^2.7.4\",\n    \"@tiptap/extension-heading\": \"^2.7.4\",\n    \"@tiptap/extension-ordered-list\": \"^2.7.4\",\n    \"@tiptap/pm\": \"^2.7.4\",\n    \"@tiptap/react\": \"^2.7.4\",\n    \"@tiptap/starter-kit\": \"^2.7.4\",\n    \"better-auth\": \"1.6.25\",\n    \"better-auth-firestore\": \"1.2.8\",\n    \"class-variance-authority\": \"^0.7.0\",\n    \"clsx\": \"^2.1.1\",\n    \"cmdk\": \"^1.0.0\",\n    \"dotenv\": \"^16.4.5\",\n    \"embla-carousel-react\": \"^8.1.8\",\n    \"firebase-admin\": \"14.2.0\",\n    \"framer-motion\": \"^11.3.19\",\n    \"gsap\": \"^3.13.0\",\n    \"lucide-react\": \"^0.412.0\",\n    \"next\": \"14.2.5\",\n    \"next-themes\": \"^0.3.0\",\n    \"nodemailer\": \"^6.9.14\",\n    \"ogl\": \"^1.0.11\",\n    \"react\": \"^18\",\n    \"react-csv\": \"^2.2.2\",\n    \"react-dom\": \"^18\",\n    \"react-hook-form\": \"^7.52.2\",\n    \"react-icons\": \"^5.2.1\",\n    \"react-table\": \"^7.8.0\",\n    \"sonner\": \"^1.5.0\",\n    \"tailwind-merge\": \"^2.4.0\",\n    \"tailwindcss-animate\": \"^1.0.7\",\n    \"zod\": \"^3.23.8\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"20.14.12\",\n    \"@types/react\": \"18.3.3\",\n    \"eslint\": \"^8\",\n    \"eslint-config-next\": \"14.2.5\",\n    \"firebase-tools\": \"^15.25.1\",\n    \"postcss\": \"^8\",\n    \"tailwindcss\": \"^3.4.7\",\n    \"typescript\": \"^7.0.2\"\n  }\n}\n"
+       },
+       "req": null,
+       "pyproject": null,
+       "workflows": null,
+       "root": {
+        "entries": [
+         {
+          "name": ".env.example",
+          "type": "blob"
+         },
+         {
+          "name": ".firebaserc",
+          "type": "blob"
+         },
+         {
+          "name": ".gitignore",
+          "type": "blob"
+         },
+         {
+          "name": "WORK.md",
+          "type": "blob"
+         },
+         {
+          "name": "app",
+          "type": "tree"
+         },
+         {
+          "name": "bun.lock",
+          "type": "blob"
+         },
+         {
+          "name": "components.json",
+          "type": "blob"
+         },
+         {
+          "name": "components",
+          "type": "tree"
+         },
+         {
+          "name": "constants",
+          "type": "tree"
+         },
+         {
+          "name": "firebase.json",
+          "type": "blob"
+         },
+         {
+          "name": "firestore.rules",
+          "type": "blob"
+         },
+         {
+          "name": "functions",
+          "type": "tree"
+         },
+         {
+          "name": "jsconfig.json",
+          "type": "blob"
+         },
+         {
+          "name": "lib",
+          "type": "tree"
+         },
+         {
+          "name": "next.config.mjs",
+          "type": "blob"
+         },
+         {
+          "name": "package.json",
+          "type": "blob"
+         },
+         {
+          "name": "postcss.config.mjs",
+          "type": "blob"
+         },
+         {
+          "name": "public",
+          "type": "tree"
+         },
+         {
+          "name": "tailwind.config.js",
+          "type": "blob"
+         }
+        ]
+       }
+      },
+      {
+       "name": "timetableanalyzer",
+       "description": "TimeTable Analyzer for Vit Students",
+       "url": "https://github.com/UtkarshTheWise/timetableanalyzer",
+       "homepageUrl": null,
+       "isFork": false,
+       "pushedAt": "2026-07-05T11:51:51Z",
+       "createdAt": "2025-07-19T20:28:35Z",
+       "stargazerCount": 0,
+       "licenseInfo": null,
+       "primaryLanguage": {
+        "name": "HTML"
+       },
+       "languages": {
+        "edges": [
+         {
+          "size": 8040,
+          "node": {
+           "name": "JavaScript"
+          }
+         },
+         {
+          "size": 11597,
+          "node": {
+           "name": "HTML"
+          }
+         }
+        ]
+       },
+       "repositoryTopics": {
+        "nodes": []
+       },
+       "defaultBranchRef": {
+        "target": {
+         "history": {
+          "totalCount": 30
+         }
+        }
+       },
+       "readme": {
+        "text": "# timetableanalyzer\nTimeTable Analyzer for Vit Students\n"
+       },
+       "readme_lower": null,
+       "pkg": null,
+       "req": null,
+       "pyproject": null,
+       "workflows": null,
+       "root": {
+        "entries": [
+         {
+          "name": "README.md",
+          "type": "blob"
+         },
+         {
+          "name": "calendar.js",
+          "type": "blob"
+         },
+         {
+          "name": "command.js",
+          "type": "blob"
+         },
+         {
+          "name": "freetime.html",
+          "type": "blob"
+         },
+         {
+          "name": "index.html",
+          "type": "blob"
+         }
+        ]
+       }
+      },
+      {
+       "name": "Swolo",
+       "description": "Make music with Swolo!",
+       "url": "https://github.com/UtkarshTheWise/Swolo",
+       "homepageUrl": "",
+       "isFork": false,
+       "pushedAt": "2025-08-08T05:00:35Z",
+       "createdAt": "2025-08-07T09:01:55Z",
+       "stargazerCount": 0,
+       "licenseInfo": null,
+       "primaryLanguage": {
+        "name": "JavaScript"
+       },
+       "languages": {
+        "edges": [
+         {
+          "size": 13483,
+          "node": {
+           "name": "HTML"
+          }
+         },
+         {
+          "size": 37527,
+          "node": {
+           "name": "JavaScript"
+          }
+         },
+         {
+          "size": 25101,
+          "node": {
+           "name": "CSS"
+          }
+         },
+         {
+          "size": 37,
+          "node": {
+           "name": "PHP"
+          }
+         }
+        ]
+       },
+       "repositoryTopics": {
+        "nodes": []
+       },
+       "defaultBranchRef": {
+        "target": {
+         "history": {
+          "totalCount": 25
+         }
+        }
+       },
+       "readme": {
+        "text": "# Swolo: The AI-Powered Music Generation and Audio Harmonization Tool 🎶\n\n> **Swolo** is an innovative project that blends the power of generative AI with creative audio production tools. Inspired by Saraswati and Apollo, the goddesses of music from Hindu and Greek mythology, Swolo provides users with an intuitive platform to generate unique music and then creatively harmonize it with their own vocals. This project was made by team How2Possible consisting of Utkarsh Mishra, Arihant Singh, Shreyash Saxena and Unnati Tiwari.\n\n***\n\n## ✨ Features\n\n- **AI Music Generation**: Utilizing a pre-trained generative AI model via Loudly's API, users can create custom music tracks by simply providing a text prompt (e.g., \"Chill Lofi with Flute\") and a desired duration.\n- **User Dashboard**: A personal dashboard, powered by **Firebase** for authentication and database management, allows users to log in securely with their Google account. They can easily track, download, and delete their previously generated music files.\n- **Dynamic Audio Visualization**: The platform leverages the **WebAudio API** and **Tone.js** to display real-time spectrograms and waveforms of the generated audio, offering a visually engaging experience.\n- **Integrated Audio Mixer**: A powerful, in-browser audio mixer allows users to upload their own vocals and mix them with the AI-generated base track. Features include pitch, reverb, and delay controls, enabling sophisticated harmonization.\n- **Stunning Synthesizer-Inspired UI**: The frontend, built with **HTML**, **CSS**, and **JavaScript**, boasts a retro synthesizer aesthetic. It features a **Three.js**-powered 3D gramophone model and a synthwave grid, complemented by smooth CSS breathing animations and scroll effects for a visually captivating and user-friendly experience.\n\n***\n\n## 💻 Tech Stack\n\n-   **Frontend**:\n    -   HTML5, CSS3, JavaScript\n    -   **Three.js**: For 3D graphics and models\n    -   **WebAudio API**: For audio processing and visualization\n    -   **Tone.js**: For advanced audio synthesis and effects\n-   **Backend/API**:\n    -   **Loudly's API**: For AI music generation\n-   **Authentication & Database**:\n    -   **Firebase**: For Google login, authentication, and database services\n\n***\n\n## 🚀 How to Run Locally\n\nTo get Swolo up and running on your local machine, follow these steps:\n\n1.  **Clone the repository**:\n    ```bash\n    git clone [https://github.com/UtkarshTheWise/Swolo/](https://github.com/UtkarshTheWise/Swolo/)\n    cd Swolo\n    ```\n2.  **Start the server**:\n    Open the `index.html` file in your browser to launch the application.\n\n    OR\n\n    Directly use from [https://utkarshthewise.github.io/Swolo/](https://utkarshthewise.github.io/Swolo/)\n\n***\n\n## 🗺️ Project Structure\n\nThe project is organized into logical directories:\n\n-   `assets/`: Contains images, 3D models, and other media.\n-   `backend/`: Contains all the files for backend processing of music generation, login and dashboard.\n-   `models/`: Stores models for the Three.js scene.\n-   `node_modules/`: Contains installed npm packages.\n-   `index.html`: The main entry point of the website.\n-   `package.json`: Lists project dependencies and scripts.\n-   `package-lock.json`: Records the exact versions of dependencies.\n-   `README.md`: This file.\n-   `script.js`: Handles all core JavaScript logic, API calls, and UI interactions.\n-   `style.css`: Manages all styling and layout, including the retro synthwave aesthetic.\n\n***\n\n## 🌟 Future Scope\n\nSwolo is just the beginning. The potential for expansion is vast:\n\n-   **Custom Generative AI Model**: Developing our own in-house AI/ML model for music generation, offering a fully custom solution.\n-   **Public-Facing API**: Creating our own API that others can call to generate music, fostering a developer community.\n-   **Advanced Vocal Refinement**: Enhancing the vocal harmonization features to include vocal tuning, style emulation (e.g., changing a voice to sound like a famous singer), and AI-generated covers.\n-   **Scientific and Analytical Applications**: Expanding into fields like audio forensics to help decode and clarify hard-to-understand audio recordings.\n\n***\n\n## 🙏 Acknowledgements\n\nWe'd like to extend our gratitude to the creators of **Loudly** for their accessible and powerful API, the developers of **Firebase** for their robust authentication and database services, and the creators of **Three.js**, **WebAudio API**, and **Tone.js** for providing the foundational tools that made our creative vision a reality. Thank you to the event organizers of **CodeZilla** for giving us this deeply influential learning experience and the opportunity to present our skills.\n"
+       },
+       "readme_lower": null,
+       "pkg": {
+        "text": "{\n  \"dependencies\": {\n    \"three\": \"^0.179.1\"\n  }\n}\n"
+       },
+       "req": null,
+       "pyproject": null,
+       "workflows": null,
+       "root": {
+        "entries": [
+         {
+          "name": "Assets",
+          "type": "tree"
+         },
+         {
+          "name": "README.md",
+          "type": "blob"
+         },
+         {
+          "name": "backend",
+          "type": "tree"
+         },
+         {
+          "name": "index.html",
+          "type": "blob"
+         },
+         {
+          "name": "index.php",
+          "type": "blob"
+         },
+         {
+          "name": "models",
+          "type": "tree"
+         },
+         {
+          "name": "node_modules",
+          "type": "tree"
+         },
+         {
+          "name": "package-lock.json",
+          "type": "blob"
+         },
+         {
+          "name": "package.json",
+          "type": "blob"
+         },
+         {
+          "name": "script.js",
+          "type": "blob"
+         },
+         {
+          "name": "style.css",
+          "type": "blob"
+         }
+        ]
+       }
+      },
+      {
+       "name": "SABTA",
+       "description": null,
+       "url": "https://github.com/UtkarshTheWise/SABTA",
+       "homepageUrl": null,
+       "isFork": false,
+       "pushedAt": "2025-07-29T11:16:11Z",
+       "createdAt": "2025-07-29T10:51:13Z",
+       "stargazerCount": 0,
+       "licenseInfo": null,
+       "primaryLanguage": {
+        "name": "Python"
+       },
+       "languages": {
+        "edges": [
+         {
+          "size": 3889,
+          "node": {
+           "name": "Python"
+          }
+         }
+        ]
+       },
+       "repositoryTopics": {
+        "nodes": []
+       },
+       "defaultBranchRef": {
+        "target": {
+         "history": {
+          "totalCount": 6
+         }
+        }
+       },
+       "readme": {
+        "text": "# SABTA\n\nSabta stands for Smart Ai Based Try-on Assistant\n\nThe way it works is by taking input of 2 images, image of the user and image of the cloth they are wanting to try on!\n\nThen it processes the image of the cloth by going through a Cloth Segmentation process which uses Happyface Transformers (Pre-learnt Datasets) to segment the clothes from the given image into clear masks.\n\nThese masks are then copied into the dataset used by VITON-HD which is pre-made AI ML library that uses diffusion to virtually try on the clothes.\n\nFinally, the result is generated and the user can see how the cloth looks on them!\n\n\nPRE-REQUISITES:\n\nSince VITON-HD uses a 4 GB dataset for processing, kindly clone it from https://github.com/shadow2496/VITON-HD\n"
+       },
+       "readme_lower": null,
+       "pkg": null,
+       "req": null,
+       "pyproject": null,
+       "workflows": null,
+       "root": {
+        "entries": [
+         {
+          "name": "2025-07-29 16-40-39.mp4",
+          "type": "blob"
+         },
+         {
+          "name": "README.md",
+          "type": "blob"
+         },
+         {
+          "name": "Sabta.pptx",
+          "type": "blob"
+         },
+         {
+          "name": "Segment-Clothing",
+          "type": "tree"
+         }
+        ]
+       }
+      },
+      {
+       "name": "neohomes",
+       "description": null,
+       "url": "https://github.com/UtkarshTheWise/neohomes",
+       "homepageUrl": null,
+       "isFork": true,
+       "pushedAt": "2025-03-05T14:38:36Z",
+       "createdAt": "2022-11-18T19:22:59Z",
+       "stargazerCount": 0,
+       "licenseInfo": null,
+       "primaryLanguage": {
+        "name": "HTML"
+       },
+       "languages": {
+        "edges": [
+         {
+          "size": 11083,
+          "node": {
+           "name": "JavaScript"
+          }
+         },
+         {
+          "size": 1612,
+          "node": {
+           "name": "CSS"
+          }
+         },
+         {
+          "size": 15244,
+          "node": {
+           "name": "HTML"
+          }
+         }
+        ]
+       },
+       "repositoryTopics": {
+        "nodes": []
+       },
+       "defaultBranchRef": {
+        "target": {
+         "history": {
+          "totalCount": 13
+         }
+        }
+       },
+       "readme": null,
+       "readme_lower": null,
+       "pkg": null,
+       "req": null,
+       "pyproject": null,
+       "workflows": null,
+       "root": {
+        "entries": [
+         {
+          "name": "beige.html",
+          "type": "blob"
+         },
+         {
+          "name": "fontawesome.js",
+          "type": "blob"
+         },
+         {
+          "name": "images",
+          "type": "tree"
+         },
+         {
+          "name": "index.html",
+          "type": "blob"
+         },
+         {
+          "name": "index.js",
+          "type": "blob"
+         },
+         {
+          "name": "main.css",
+          "type": "blob"
+         },
+         {
+          "name": "naman.txt",
+          "type": "blob"
+         }
+        ]
+       }
+      },
+      {
+       "name": "ordin23",
+       "description": "ye ye",
+       "url": "https://github.com/UtkarshTheWise/ordin23",
+       "homepageUrl": null,
+       "isFork": false,
+       "pushedAt": "2025-03-05T13:10:20Z",
+       "createdAt": "2023-03-26T22:13:31Z",
+       "stargazerCount": 0,
+       "licenseInfo": null,
+       "primaryLanguage": {
+        "name": "HTML"
+       },
+       "languages": {
+        "edges": [
+         {
+          "size": 70402,
+          "node": {
+           "name": "HTML"
+          }
+         },
+         {
+          "size": 21708,
+          "node": {
+           "name": "CSS"
+          }
+         },
+         {
+          "size": 3307,
+          "node": {
+           "name": "JavaScript"
+          }
+         }
+        ]
+       },
+       "repositoryTopics": {
+        "nodes": []
+       },
+       "defaultBranchRef": {
+        "target": {
+         "history": {
+          "totalCount": 34
+         }
+        }
+       },
+       "readme": null,
+       "readme_lower": null,
+       "pkg": null,
+       "req": null,
+       "pyproject": null,
+       "workflows": null,
+       "root": {
+        "entries": [
+         {
+          "name": "e.html",
+          "type": "blob"
+         },
+         {
+          "name": "events",
+          "type": "tree"
+         },
+         {
+          "name": "images",
+          "type": "tree"
+         },
+         {
+          "name": "index copy.html",
+          "type": "blob"
+         },
+         {
+          "name": "index.html",
+          "type": "blob"
+         },
+         {
+          "name": "index.js",
+          "type": "blob"
+         },
+         {
+          "name": "main.css",
+          "type": "blob"
+         },
+         {
+          "name": "slider.css",
+          "type": "blob"
+         },
+         {
+          "name": "slider.js",
+          "type": "blob"
+         }
+        ]
+       }
+      },
+      {
+       "name": "aeon23-main",
+       "description": "Make your Day Easy, with Daisy!",
+       "url": "https://github.com/UtkarshTheWise/aeon23-main",
+       "homepageUrl": "https://aeon23-main.vercel.app",
+       "isFork": false,
+       "pushedAt": "2024-07-10T08:04:52Z",
+       "createdAt": "2023-10-15T07:47:11Z",
+       "stargazerCount": 0,
+       "licenseInfo": null,
+       "primaryLanguage": {
+        "name": "JavaScript"
+       },
+       "languages": {
+        "edges": [
+         {
+          "size": 26885,
+          "node": {
+           "name": "JavaScript"
+          }
+         },
+         {
+          "size": 95,
+          "node": {
+           "name": "CSS"
+          }
+         }
+        ]
+       },
+       "repositoryTopics": {
+        "nodes": []
+       },
+       "defaultBranchRef": {
+        "target": {
+         "history": {
+          "totalCount": 1
+         }
+        }
+       },
+       "readme": {
+        "text": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).\n\n## Getting Started\n\nFirst, run the development server:\n\n```bash\nnpm run dev\n# or\nyarn dev\n# or\npnpm dev\n# or\nbun dev\n```\n\nOpen [http://localhost:3000](http://localhost:3000) with your browser to see the result.\n\nYou can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.\n\nThis project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.\n\n## Learn More\n\nTo learn more about Next.js, take a look at the following resources:\n\n- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.\n- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.\n\nYou can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!\n\n## Deploy on Vercel\n\nThe easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.\n\nCheck out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.\n"
+       },
+       "readme_lower": null,
+       "pkg": {
+        "text": "{\n  \"name\": \"aeon23\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"dev\": \"next dev\",\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"lint\": \"next lint\",\n    \"node\": \"node server.js\"\n  },\n  \"dependencies\": {\n    \"@fortawesome/fontawesome-svg-core\": \"^6.4.2\",\n    \"@fortawesome/free-brands-svg-icons\": \"^6.4.2\",\n    \"@fortawesome/free-regular-svg-icons\": \"^6.4.2\",\n    \"@fortawesome/free-solid-svg-icons\": \"^6.4.2\",\n    \"@fortawesome/react-fontawesome\": \"^0.2.0\",\n    \"classnames\": \"^2.3.2\",\n    \"next\": \"13.5.4\",\n    \"react\": \"^18\",\n    \"react-dom\": \"^18\",\n    \"socket.io\": \"^4.7.2\",\n    \"socket.io-client\": \"^4.7.2\"\n  },\n  \"devDependencies\": {\n    \"autoprefixer\": \"^10\",\n    \"postcss\": \"^8\",\n    \"tailwindcss\": \"^3\"\n  },\n  \"optionalDependencies\": {\n    \"bufferutil\": \"^4.0.7\",\n    \"utf-8-validate\": \"^5.0.10\"\n  }\n}\n"
+       },
+       "req": null,
+       "pyproject": null,
+       "workflows": null,
+       "root": {
+        "entries": [
+         {
+          "name": ".gitattributes",
+          "type": "blob"
+         },
+         {
+          "name": ".gitignore",
+          "type": "blob"
+         },
+         {
+          "name": "README.md",
+          "type": "blob"
+         },
+         {
+          "name": "app",
+          "type": "tree"
+         },
+         {
+          "name": "components",
+          "type": "tree"
+         },
+         {
+          "name": "jsconfig.json",
+          "type": "blob"
+         },
+         {
+          "name": "next.config.js",
+          "type": "blob"
+         },
+         {
+          "name": "package-lock.json",
+          "type": "blob"
+         },
+         {
+          "name": "package.json",
+          "type": "blob"
+         },
+         {
+          "name": "postcss.config.js",
+          "type": "blob"
+         },
+         {
+          "name": "public",
+          "type": "tree"
+         },
+         {
+          "name": "server.js",
+          "type": "blob"
+         },
+         {
+          "name": "tailwind.config.js",
+          "type": "blob"
+         }
+        ]
+       }
+      },
+      {
+       "name": "AdvancedCertificateGenerator",
+       "description": "This is my first solo Python Project YIPEEEEEEEEEEEEEEEEE! Open sourced :) Please feel free to make improvements.",
+       "url": "https://github.com/UtkarshTheWise/AdvancedCertificateGenerator",
+       "homepageUrl": null,
+       "isFork": false,
+       "pushedAt": "2024-01-03T09:08:47Z",
+       "createdAt": "2024-01-02T19:32:50Z",
+       "stargazerCount": 0,
+       "licenseInfo": {
+        "spdxId": "MIT"
+       },
+       "primaryLanguage": {
+        "name": "Python"
+       },
+       "languages": {
+        "edges": [
+         {
+          "size": 9200,
+          "node": {
+           "name": "Python"
+          }
+         }
+        ]
+       },
+       "repositoryTopics": {
+        "nodes": []
+       },
+       "defaultBranchRef": {
+        "target": {
+         "history": {
+          "totalCount": 8
+         }
+        }
+       },
+       "readme": {
+        "text": "# AdvancedCertificateGenerator\nThis is my first solo Python Project YIPEEEEEEEEEEEEEEEEE! Open sourced :) Please feel free to make improvements.\n\nYou can either run main.py after installing the dependencies or straight away use the executable. \n\n\n# Pre-Requisites ( For those using python script only )\nhttps://github.com/TomSchimansky/CustomTkinter\nPlease install the following prerequisites : Customtkinter and PIL (Pillow)\n```pip3 install Pillow```\n```pip3 install customtkinter,```\n\n\n# Size\nChange Canvas Size according to your size of certificate, currently it is fixed at A4 Size at 96 DPI. (Good Enough for prints) \n\n# Certificate Name\nThe Name of the certificate is taken from the last textbox / file added. \n\n# Font\nSome basic fonts are included in Fonts folder, you can add your own using the add custom font button or by adding them into the fonts folder and adding it in the Known_fonts list at the start. Ensure fonts are only true type (tff)\n\n\n![image](https://github.com/UtkarshTheWise/AdvancedCertificateGenerator/assets/79375111/1c14661f-45df-490a-b4c9-52d4ac0a4cd1)\n"
+       },
+       "readme_lower": null,
+       "pkg": null,
+       "req": null,
+       "pyproject": null,
+       "workflows": null,
+       "root": {
+        "entries": [
+         {
+          "name": "CertificateGeneratorAdvanced.exe",
+          "type": "blob"
+         },
+         {
+          "name": "LICENSE",
+          "type": "blob"
+         },
+         {
+          "name": "Main.py",
+          "type": "blob"
+         },
+         {
+          "name": "README.md",
+          "type": "blob"
+         },
+         {
+          "name": "events.txt",
+          "type": "blob"
+         },
+         {
+          "name": "fonts",
+          "type": "tree"
+         },
+         {
+          "name": "names.txt",
+          "type": "blob"
+         },
+         {
+          "name": "output",
+          "type": "tree"
+         },
+         {
+          "name": "schools.txt",
+          "type": "blob"
+         }
+        ]
+       }
+      },
+      {
+       "name": "amity",
+       "description": null,
+       "url": "https://github.com/UtkarshTheWise/amity",
+       "homepageUrl": null,
+       "isFork": true,
+       "pushedAt": "2022-10-29T14:44:00Z",
+       "createdAt": "2022-10-29T14:43:43Z",
+       "stargazerCount": 0,
+       "licenseInfo": null,
+       "primaryLanguage": {
+        "name": "HTML"
+       },
+       "languages": {
+        "edges": [
+         {
+          "size": 2739,
+          "node": {
+           "name": "JavaScript"
+          }
+         },
+         {
+          "size": 19941,
+          "node": {
+           "name": "CSS"
+          }
+         },
+         {
+          "size": 27470,
+          "node": {
+           "name": "HTML"
+          }
+         }
+        ]
+       },
+       "repositoryTopics": {
+        "nodes": []
+       },
+       "defaultBranchRef": {
+        "target": {
+         "history": {
+          "totalCount": 27
+         }
+        }
+       },
+       "readme": null,
+       "readme_lower": null,
+       "pkg": null,
+       "req": null,
+       "pyproject": null,
+       "workflows": null,
+       "root": {
+        "entries": [
+         {
+          "name": ".DS_Store",
+          "type": "blob"
+         },
+         {
+          "name": "images",
+          "type": "tree"
+         },
+         {
+          "name": "index.html",
+          "type": "blob"
+         },
+         {
+          "name": "login",
+          "type": "tree"
+         },
+         {
+          "name": "main.css",
+          "type": "blob"
+         },
+         {
+          "name": "slider.css",
+          "type": "blob"
+         },
+         {
+          "name": "slider.js",
+          "type": "blob"
+         }
+        ]
+       }
+      },
+      {
+       "name": "Magic-Trainer",
+       "description": "Magic Training GUI",
+       "url": "https://github.com/UtkarshTheWise/Magic-Trainer",
+       "homepageUrl": null,
+       "isFork": false,
+       "pushedAt": "2021-02-20T17:45:54Z",
+       "createdAt": "2021-02-20T17:45:32Z",
+       "stargazerCount": 0,
+       "licenseInfo": null,
+       "primaryLanguage": {
+        "name": "Lua"
+       },
+       "languages": {
+        "edges": [
+         {
+          "size": 49927,
+          "node": {
+           "name": "Lua"
+          }
+         }
+        ]
+       },
+       "repositoryTopics": {
+        "nodes": []
+       },
+       "defaultBranchRef": {
+        "target": {
+         "history": {
+          "totalCount": 2
+         }
+        }
+       },
+       "readme": {
+        "text": "# Magic-Trainer\nMagic Training GUI\n"
+       },
+       "readme_lower": null,
+       "pkg": null,
+       "req": null,
+       "pyproject": null,
+       "workflows": null,
+       "root": {
+        "entries": [
+         {
+          "name": "README.md",
+          "type": "blob"
+         },
+         {
+          "name": "WeezardHack_v2.lua",
+          "type": "blob"
+         }
+        ]
+       }
+      },
+      {
+       "name": "ordin20",
+       "description": null,
+       "url": "https://github.com/UtkarshTheWise/ordin20",
+       "homepageUrl": null,
+       "isFork": true,
+       "pushedAt": "2020-08-14T12:38:44Z",
+       "createdAt": "2022-04-14T04:33:47Z",
+       "stargazerCount": 0,
+       "licenseInfo": null,
+       "primaryLanguage": {
+        "name": "HTML"
+       },
+       "languages": {
+        "edges": [
+         {
+          "size": 86080,
+          "node": {
+           "name": "HTML"
+          }
+         },
+         {
+          "size": 13620,
+          "node": {
+           "name": "JavaScript"
+          }
+         },
+         {
+          "size": 16969,
+          "node": {
+           "name": "CSS"
+          }
+         }
+        ]
+       },
+       "repositoryTopics": {
+        "nodes": []
+       },
+       "defaultBranchRef": {
+        "target": {
+         "history": {
+          "totalCount": 109
+         }
+        }
+       },
+       "readme": {
+        "text": "# ordin-20\r\n \r\nwebsite for ordinatrix 2020\r\n"
+       },
+       "readme_lower": null,
+       "pkg": null,
+       "req": null,
+       "pyproject": null,
+       "workflows": null,
+       "root": {
+        "entries": [
+         {
+          "name": "README.md",
+          "type": "blob"
+         },
+         {
+          "name": "fontawesome.js",
+          "type": "blob"
+         },
+         {
+          "name": "index.html",
+          "type": "blob"
+         },
+         {
+          "name": "index.js",
+          "type": "blob"
+         },
+         {
+          "name": "invite.pdf",
+          "type": "blob"
+         },
+         {
+          "name": "jquery.js",
+          "type": "blob"
+         },
+         {
+          "name": "lib",
+          "type": "tree"
+         },
+         {
+          "name": "main.css",
+          "type": "blob"
+         },
+         {
+          "name": "nav.js",
+          "type": "blob"
+         },
+         {
+          "name": "poster-1.psd",
+          "type": "blob"
+         },
+         {
+          "name": "poster-2.psd",
+          "type": "blob"
+         },
+         {
+          "name": "stuff left to do.txt",
+          "type": "blob"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,303 @@
+{
+ "method": "GET",
+ "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/trees/HEAD?recursive=1",
+ "request": null,
+ "status": 200,
+ "body": {
+  "sha": "c48d19ef3399e792a25b82c21d2217d5e61b69ee",
+  "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/trees/c48d19ef3399e792a25b82c21d2217d5e61b69ee",
+  "tree": [
+   {
+    "path": ".gitignore",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b1640b509ce261ff5dbf040efd0673e68b453d64",
+    "size": 34,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/b1640b509ce261ff5dbf040efd0673e68b453d64"
+   },
+   {
+    "path": "README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b004b85516820df9fccf6e03960aeff694762e99",
+    "size": 5758,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/b004b85516820df9fccf6e03960aeff694762e99"
+   },
+   {
+    "path": "index.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7803778211b4db72b5463b01a782e88770435bf6",
+    "size": 300,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/7803778211b4db72b5463b01a782e88770435bf6"
+   },
+   {
+    "path": "package-lock.json",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "87fef91992bfe7f391b61a9d41db74b715098e83",
+    "size": 92449,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/87fef91992bfe7f391b61a9d41db74b715098e83"
+   },
+   {
+    "path": "package.json",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9911ef678e7e7c26440d16120a551ae03202deed",
+    "size": 510,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/9911ef678e7e7c26440d16120a551ae03202deed"
+   },
+   {
+    "path": "postcss.config.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2aa7205d4b402a1bdfbe07110c61df920b370066",
+    "size": 81,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/2aa7205d4b402a1bdfbe07110c61df920b370066"
+   },
+   {
+    "path": "src",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "9d58c73772ca8e15758851022e54475e155bd9dc",
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/trees/9d58c73772ca8e15758851022e54475e155bd9dc"
+   },
+   {
+    "path": "src/App.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "838a157dc72801d34a06a6880d72e4e3a6fe6f29",
+    "size": 1997,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/838a157dc72801d34a06a6880d72e4e3a6fe6f29"
+   },
+   {
+    "path": "src/components",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "ad5a6205c7367a9ca2df84b23c386e053c124366",
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/trees/ad5a6205c7367a9ca2df84b23c386e053c124366"
+   },
+   {
+    "path": "src/components/Dashboard.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d0a8b2c509026c87541a8674aee3ed5eb2790798",
+    "size": 2206,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/d0a8b2c509026c87541a8674aee3ed5eb2790798"
+   },
+   {
+    "path": "src/components/FunFact.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "400db3349111599596e59aa2dce01d37a4900829",
+    "size": 2600,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/400db3349111599596e59aa2dce01d37a4900829"
+   },
+   {
+    "path": "src/components/Header.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1a78fc4823dc1f200e6d270f8f4887fb58b54fb3",
+    "size": 1278,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/1a78fc4823dc1f200e6d270f8f4887fb58b54fb3"
+   },
+   {
+    "path": "src/components/Login.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d32cde2df75457720ca8341a204730ef7ff25c37",
+    "size": 1688,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/d32cde2df75457720ca8341a204730ef7ff25c37"
+   },
+   {
+    "path": "src/components/ProgressBar.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bcf2a7f7102ac468b04b248dd1886c43af7d182e",
+    "size": 500,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/bcf2a7f7102ac468b04b248dd1886c43af7d182e"
+   },
+   {
+    "path": "src/components/SettingsModal.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5ebbf4aa95708ce9201797bffa982e56c6b31487",
+    "size": 2693,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/5ebbf4aa95708ce9201797bffa982e56c6b31487"
+   },
+   {
+    "path": "src/components/StreakBadge.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7bfe637bc7dbf7c06277c1f3cfc9e89ade984ea9",
+    "size": 591,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/7bfe637bc7dbf7c06277c1f3cfc9e89ade984ea9"
+   },
+   {
+    "path": "src/components/StreakHeatmap.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9692e5c641bf3e5efcefc70b6b1727c348244f7e",
+    "size": 907,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/9692e5c641bf3e5efcefc70b6b1727c348244f7e"
+   },
+   {
+    "path": "src/components/TodoQueue.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8fbd50041433cc07afc6faaa2a0e3ffe9b0f05fe",
+    "size": 2064,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/8fbd50041433cc07afc6faaa2a0e3ffe9b0f05fe"
+   },
+   {
+    "path": "src/components/TrackerCard.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "90e4f64c6562d0fc38169e770e3d5b18e5495371",
+    "size": 5557,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/90e4f64c6562d0fc38169e770e3d5b18e5495371"
+   },
+   {
+    "path": "src/components/TrackerModal.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d543d86f8657b545cbf0d029e626ee1c490db45d",
+    "size": 6994,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/d543d86f8657b545cbf0d029e626ee1c490db45d"
+   },
+   {
+    "path": "src/hooks",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "2ddb7bc828e34db7a63451b0ad6e62400594277b",
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/trees/2ddb7bc828e34db7a63451b0ad6e62400594277b"
+   },
+   {
+    "path": "src/hooks/useAuth.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "de4d4bec580dfb062adfad8a8a49ee16d5deaed0",
+    "size": 1084,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/de4d4bec580dfb062adfad8a8a49ee16d5deaed0"
+   },
+   {
+    "path": "src/hooks/useNotifications.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bba10a2c70da0a5a4f8f28bce107eda76e2131c4",
+    "size": 1343,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/bba10a2c70da0a5a4f8f28bce107eda76e2131c4"
+   },
+   {
+    "path": "src/hooks/useTodos.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a4ebc7430896ea086d0958f62e46c30c9c522d0f",
+    "size": 797,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/a4ebc7430896ea086d0958f62e46c30c9c522d0f"
+   },
+   {
+    "path": "src/hooks/useTrackers.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "aa377c98fc0d62f5ba02bc8665587539471fb474",
+    "size": 1404,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/aa377c98fc0d62f5ba02bc8665587539471fb474"
+   },
+   {
+    "path": "src/index.css",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3f82aeaecb132037b0618cdcba804324e7a148bb",
+    "size": 267,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/3f82aeaecb132037b0618cdcba804324e7a148bb"
+   },
+   {
+    "path": "src/lib",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "cb07867ccbe576a39d088d51cc6bb9b7dd807600",
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/trees/cb07867ccbe576a39d088d51cc6bb9b7dd807600"
+   },
+   {
+    "path": "src/lib/data.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d24269b6c2df71db5a11c5e5f681e2eff36e1cf2",
+    "size": 5163,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/d24269b6c2df71db5a11c5e5f681e2eff36e1cf2"
+   },
+   {
+    "path": "src/lib/supabaseClient.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "145204b75294c3c3cc82fca2761d9f4bee0eb301",
+    "size": 303,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/145204b75294c3c3cc82fca2761d9f4bee0eb301"
+   },
+   {
+    "path": "src/main.jsx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5bc59e86252f25062423e8d2acc01b26267ee904",
+    "size": 229,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/5bc59e86252f25062423e8d2acc01b26267ee904"
+   },
+   {
+    "path": "src/utils",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "a348815687858dbdc46b6175e81c8d0927cd2866",
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/trees/a348815687858dbdc46b6175e81c8d0927cd2866"
+   },
+   {
+    "path": "src/utils/dateUtils.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "06e18653bb70ae0fadfb22ed8b32c19619a4d7b2",
+    "size": 2575,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/06e18653bb70ae0fadfb22ed8b32c19619a4d7b2"
+   },
+   {
+    "path": "src/utils/trackerTypes.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8b2ec390242074c214d68281775df83543cbf9c8",
+    "size": 916,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/8b2ec390242074c214d68281775df83543cbf9c8"
+   },
+   {
+    "path": "supabase",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "c4aa6a3bec62ae8b5194f05fb294fabdb2beb34a",
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/trees/c4aa6a3bec62ae8b5194f05fb294fabdb2beb34a"
+   },
+   {
+    "path": "supabase/schema.sql",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9b811db82d01a9635e2f8ca6070aff38f82e9a56",
+    "size": 2936,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/9b811db82d01a9635e2f8ca6070aff38f82e9a56"
+   },
+   {
+    "path": "tailwind.config.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7fc83275f87c897e48f49eca4f02c9c17d773c43",
+    "size": 140,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/7fc83275f87c897e48f49eca4f02c9c17d773c43"
+   },
+   {
+    "path": "vite.config.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0466183af6ac8a9f74ced8fe1d8bcbf6c85dce5e",
+    "size": 136,
+    "url": "https://api.github.com/repos/UtkarshTheWise/SimpleHabitTracker/git/blobs/0466183af6ac8a9f74ced8fe1d8bcbf6c85dce5e"
+   }
+  ],
+  "truncated": false
+ }
+}

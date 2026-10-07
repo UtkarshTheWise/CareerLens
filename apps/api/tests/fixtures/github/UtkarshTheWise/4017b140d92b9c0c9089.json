@@ -1,0 +1,33 @@
+{
+ "method": "POST",
+ "url": "https://api.github.com/graphql",
+ "request": {
+  "query": "query($owner: String!, $name: String!, $e0: String!, $e1: String!, $e2: String!)",
+  "variables": {
+   "owner": "UtkarshTheWise",
+   "name": "SABTA",
+   "e0": "HEAD:Segment-Clothing/requirements.txt",
+   "e1": "HEAD:Segment-Clothing/SegCloth.py",
+   "e2": "HEAD:Segment-Clothing/test.py"
+  }
+ },
+ "status": 200,
+ "body": {
+  "data": {
+   "repository": {
+    "f0": {
+     "text": "transformers\r\ntorch\r\npillow\r\nnumpy",
+     "isBinary": false
+    },
+    "f1": {
+     "text": "from transformers import pipeline\r\nfrom PIL import Image\r\nimport numpy as np\r\nimport os\r\n\r\n\r\n# Initialize segmentation pipeline\r\nsegmenter = pipeline(model=\"mattmdjaga/segformer_b2_clothes\")\r\n\r\n\r\ndef segment_clothing(img, clothes= [\"Hat\", \"Upper-clothes\", \"Skirt\", \"Pants\", \"Dress\", \"Belt\", \"Left-shoe\", \"Right-shoe\", \"Scarf\"]):\r\n    # Segment image\r\n    segments = segmenter(img)\r\n\r\n    # Create list of masks\r\n    mask_list = []\r\n    for s in segments:\r\n        if(s['label'] in clothes):\r\n            mask_list.append(s['mask'])\r\n\r\n\r\n    # Paste all masks on top of eachother \r\n    final_mask = np.array(mask_list[0])\r\n    for mask in mask_list:\r\n        current_mask = np.array(mask)\r\n        final_mask = final_mask + current_mask\r\n            \r\n    # Convert final mask from np array to PIL image\r\n    final_mask = Image.fromarray(final_mask)\r\n\r\n    # Apply mask to original image\r\n    img.putalpha(final_mask)\r\n\r\n    return img\r\n\r\n\r\ndef batch_segment_clothing(img_dir, out_dir, clothes= [\"Hat\", \"Upper-clothes\", \"Skirt\", \"Pants\", \"Dress\", \"Belt\", \"Left-shoe\", \"Right-shoe\", \"Scarf\"]):\r\n    # Create output directory if it doesn't exist\r\n    if not os.path.exists(out_dir):\r\n        os.makedirs(out_dir)\r\n\r\n    # Iterate through each file in the input directory\r\n    for filename in os.listdir(img_dir):\r\n        if filename.endswith(\".jpg\") or filename.endswith(\".JPG\") or filename.endswith(\".png\") or filename.endswith(\".PNG\"):\r\n            try:\r\n                # Load image\r\n                img_path = os.path.join(img_dir, filename)\r\n                img = Image.open(img_path).convert(\"RGBA\")\r\n\r\n                # Segment clothing\r\n                segmented_img = segment_clothing(img, clothes)\r\n\r\n                # Save segmented image to output directory as PNG\r\n                out_path = os.path.join(out_dir, filename.split('.')[0] + \".png\")\r\n                segmented_img.save(out_path)\r\n\r\n                print(f\"Segmented {filename} successfully.\")\r\n\r\n            except Exception as e:\r\n                print(f\"Error processing {filename}: {e}\")\r\n\r\n        else:\r\n            print(f\"Skipping {filename} as it is not a supported image file.\")\r\n\r\n\r\n",
+     "isBinary": false
+    },
+    "f2": {
+     "text": "import argparse\r\nfrom SegCloth import segment_clothing\r\nfrom PIL import Image\r\n\r\ndef resize_and_fill(image, target_size=(768, 1024), bg_color=(255, 255, 255), is_mask=False):\r\n    target_w, target_h = target_size\r\n    original_w, original_h = image.size\r\n\r\n    scale = max(target_w / original_w, target_h / original_h)\r\n    new_size = (int(original_w * scale), int(original_h * scale))\r\n    resized = image.resize(new_size, resample=Image.Resampling.LANCZOS)\r\n\r\n    left = (resized.width - target_w) // 2\r\n    top = (resized.height - target_h) // 2\r\n    right = left + target_w\r\n    bottom = top + target_h\r\n    cropped = resized.crop((left, top, right, bottom))\r\n\r\n    return cropped.convert(\"L\" if is_mask else \"RGB\")\r\n\r\ndef main(input_path):\r\n    image = Image.open(input_path).convert(\"RGBA\")\r\n\r\n    # Segment clothing\r\n    result = segment_clothing(img=image, clothes=[\"Upper-clothes\"])\r\n    result.save(\"segmented.png\")\r\n\r\n    # Apply white background\r\n    white_bg = Image.new(\"RGB\", result.size, (255, 255, 255))\r\n    white_bg.paste(result, mask=result.getchannel(\"A\"))\r\n\r\n    # Create B&W mask from alpha\r\n    alpha = result.getchannel(\"A\")\r\n    mask = alpha.point(lambda p: 255 if p > 20 else 0).convert(\"L\")\r\n\r\n    # Resize & center\r\n    resized_rgb = resize_and_fill(white_bg)\r\n    resized_rgb.save(\"segmented_resized.png\")\r\n\r\n    resized_mask = resize_and_fill(mask, is_mask=True)\r\n    resized_mask.save(\"segmented_mask.png\")\r\n\r\n    print(\"✅ Saved: segmented_resized.png and segmented_mask.png\")\r\n\r\nif __name__ == \"__main__\":\r\n    parser = argparse.ArgumentParser()\r\n    parser.add_argument(\"--input\", required=True, help=\"Path to input cloth image\")\r\n    args = parser.parse_args()\r\n    main(args.input)\r\n",
+     "isBinary": false
+    }
+   }
+  }
+ }
+}

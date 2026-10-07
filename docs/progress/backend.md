@@ -10,17 +10,18 @@ Keep under ~150 lines. Commit it together with the code it describes.
 ## Status
 - **Track:** backend · **Owns:** `apps/api/`, `data/`
 - **Branch / worktree:** `backend/claude` · `../careerlens-api`
-- **Last updated:** 2026-10-07 17:20 IST by Claude Code (Sonnet 5.5)
-- **Current task:** B3 done and verified live (Gemini fast + Groq). Next: B4 (GitHub collector, detectors).
+- **Last updated:** 2026-10-07 19:10 IST by Claude Code (Sonnet 5.5)
+- **Current task:** B4 done (collector, detectors, signals, flags, recorded fixture). Next: B5 (scoring engine).
 - **State:** done   <!-- not started | in progress | blocked | done -->
-- **Last green checks:** 2026-10-07 15:58 IST, from `apps/api`: `uv run pytest -q` (116 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (8/29 routed, 0 mismatches)
+- **Last green checks:** 2026-10-07 19:05 IST, from `apps/api`: `uv run pytest -q` (217 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (8/29 routed, 0 mismatches)
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
-1. Env is ready: Supabase session pooler works (needs the mobile hotspot; the college Wi-Fi blocks DB ports; on that Wi-Fi use `DATABASE_URL=sqlite:///./dev.db`), `GEMINI_MODEL_SMART=gemini-3.5-flash`. Tables exist in Supabase with RLS on.
-2. Start B4: paste its prompt from PROMPTS.md. New files: `app/services/github.py`, `app/services/detectors.py`, `scripts/record_github.py`, `tests/fixtures/github/`. B4 needs `GITHUB_TOKEN` in `.env` to record fixtures. Cache GitHub responses in the `cache` table (`CacheEntry`, kind `github`, 24 h via `expires_at`).
-3. Detectors read `catalogue.load_skills()` (`SkillDef.detectors`); `load_tutorial_names()` and `load_readme_templates()` feed the rule flags.
+1. Start B5: paste its prompt from PROMPTS.md (plan with Opus, build with Sonnet: `/model opusplan`). New file `app/services/scoring.py` (pure functions, no I/O, no LLM) + `tests/test_scoring.py`.
+2. B5 consumes these B4 shapes (all in `app/services/detectors.py`): `RepoSignals` (per repo: readme/license/demo/tests/ci/lockfile/manifest/module_count/deploy flags, authored/total commits, authored_share, active_span_weeks, code_kb, is_fork, fork_authored_commits), `RepoAnalysis.skills` (`skill_id -> [DetectorHit(kind, detail)]`), `RepoAnalysis.language_skills`, `RuleFlag(code, severity, reason, fix)` (no estimated_gain yet: B5/B6 add it via simulate), and `depth_points(signals)` (SCORING §2B Depth, reuse it, don't re-derive). Consistency inputs: `GithubSnapshot.weeks` (26 `WeekCount`) and `last_active_date`.
+3. B5 also needs `catalogue.get_role(id).weights` (`RoleWeights`), `catalogue.load_skills()` / `normalize_skill()`, and the quiz-effects table in SCORING §6.
 4. After any route or schema change: `cd apps/api && uv run python scripts/check_contract.py --only-implemented`.
+5. Human: the GitHub token expires 2026-10-14; renew it in `careerlens-api/apps/api/.env` before B6's live run.
 
 ## Task board
 <!-- status: todo | doing | done | blocked · commit = short sha of the commit that finished it -->
@@ -29,7 +30,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | B1 | Scaffold FastAPI, config, DB, errors, /health, /v1/roles, /v1/me, check_contract.py | done | 35c1be2 | all contract schemas already in `app/schemas/api.py` |
 | B2 | Catalogues: skills.yaml, roles.yaml, resources.yaml + loaders/tests | done | e67462c | 63 skills, 7 roles, 130 resources; all links checked live |
 | B3 | Ingest, PII stripping, LLM gateway, resume extraction | done | 1ced9ff | verified live 2026-10-07: Gemini fast and Groq both extract the fixture resume |
-| B4 | GitHub collector, detectors, repo signals, rule flags | todo | | |
+| B4 | GitHub collector, detectors, repo signals, rule flags | done | SHA_B4 | fixture: UtkarshTheWise (14 repos, 768 KB); `claim_mismatch` and `vague_description` flags are B6 |
 | B5 | scoring.py + what-if + unit tests | todo | | |
 | B6 | Pipeline, analyses endpoints, judging, roadmap planner, role-fit | todo | | also `PATCH /v1/analyses/{id}/roadmap/{milestone_id}` (added at freeze) |
 | B7 | Jobs match, applications, cohorts, seed_demo.py | todo | | |
@@ -38,7 +39,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 
 ## In-progress detail
 - **Files touched, not finished:** none
-- **What works right now:** `GET /health`, `GET /v1/roles` (7 real roles), `GET /v1/me`, profile create/get/patch/delete, document upload (PDF/DOCX -> text) (demo profile, created on first call under `DEV_AUTH=1`); every error in the contract `Error` shape (404/405/422/500 + `ApiError`); CORS for `CORS_ORIGINS` and `chrome-extension://*`; tables created at startup.
+- **What works right now:** `GET /health`, `GET /v1/roles` (7 real roles), `GET /v1/me` (demo profile, created on first call under `DEV_AUTH=1`), profile create/get/patch/delete, document upload (PDF/DOCX -> text); every error in the contract `Error` shape (404/405/422/500 + `ApiError`); CORS for `CORS_ORIGINS` and `chrome-extension://*`; tables created at startup. Services with no route yet: `github.collect()`, `detectors.analyse()`, `resume.extract_resume()`, `llm.generate_structured()`.
 - **Stubbed / fake (search `TODO(progress)`):**
   - `app/deps.py:get_auth_subject`: with `DEV_AUTH=0` every request gets 401 (no Supabase JWT verification yet) → B8.
 - **Known failing tests / checks:** none. `pytest -m live` passes (1 real call). Real server verified against Supabase on 2026-10-07 (create/upload/delete profile). `check_contract.py` without `--only-implemented` exits 1 by design until all 29 operations are routed.
@@ -61,6 +62,13 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - LLM schemas (`app/schemas/llm.py`) must stay free of free-form dicts: Groq strict mode needs closed objects.
 - Datetime columns use `UtcDateTime` (SQLite returns naive values otherwise, and the API would drop the `Z`).
 - Per-project quiz understanding will live in `profiles.project_understanding` (JSON keyed by repo/portfolio URL).
+- GitHub: public repos only (`privacy: PUBLIC`), top 8 non-forks by `pushedAt` get a file tree; **forks (up to 8) get commit facts but no tree**, so `unmodified_fork` is computable. Authored commits are matched by the GitHub account id, so commits made under an email not linked to the account don't count.
+- Commit facts come from `history(first: 100)`: active span is measured on the newest 100 authored commits; `first_commit_share` is only computed for repos with <= 100 commits (else None, and the single_dump share rule can't fire).
+- One GitHub fetch per repo serves manifests, content-regex files and import files; detector limits are constants at the top of `detectors.py` (>= 2 files per extension, 5 content files, 10 import files x 200 lines, 4 nested manifests).
+- `default_readme` is a heuristic (starter marker in the first 500 chars, <= 4000 chars, none of the sections a student writes) because `readme_templates.txt` holds markers, not full starter text.
+- An untouched fork gets `unmodified_fork` only, not also `single_dump` (one fact, one penalty). `.d.ts` files count as generated, not code.
+- Flag severities are one fixed map (`FLAG_SEVERITY` in `detectors.py`); `RuleFlag` carries no id or estimated_gain, B6 adds `flag_id` and gain.
+- Recorded fixtures: `tests/fixtures/github/<login>/<fingerprint>.json` (status + body, never headers), replayed by `scripts/github_fixtures.py:ReplayTransport`; re-record with `uv run python scripts/record_github.py <login>` (needs token + a network that reaches api.github.com). Changing a GraphQL query changes its fingerprint, so re-record after editing `OVERVIEW_QUERY`, `commit_facts_query` or `files_query`.
 
 ## Gotchas learned (one line each, append)
 - The backend reads `careerlens-api/apps/api/.env`. The main checkout `careerlens/apps/api/.env` is a different file; keys edited there do nothing until copied over (done once on 2026-10-07, old file kept as `.env.bak`).
@@ -75,6 +83,8 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - New fixtures: `uv run python tests/fixtures/make_fixtures.py`.
 - `scripts/check_resource_urls.py` is live and manual; w3.org and tableau.com answer 403 to scripts (reported as `blocked`, not a failure).
 - Skills with `detectors: {}` are intentional (no repo footprint); evidence for them comes from experience and portfolio items.
+- When writing Python through the Bash tool, a double backslash (`\\b`) reaches Python as a single backslash, so `"\\b"` silently became a backspace character in a regex once. Use the Write/Edit tools for regex code, or build the characters with `chr(92)`.
+- The GitHub token is a fine-grained PAT that expires 2026-10-14. Fixture tests never need it.
 - `uv` lives in `~/.local/bin`; in Git Bash run `export PATH="$HOME/.local/bin:$PATH"` first if `uv` isn't found.
 - Tests set `DATABASE_URL=sqlite:///:memory:` and `DEV_AUTH=1` in `tests/conftest.py` before importing the app, so they never read the real `.env` database.
 - `Settings.cors_origins` is a comma-separated string (a `list[str]` field would make pydantic-settings expect JSON in `.env`); use `settings.cors_origin_list`.
