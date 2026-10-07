@@ -4,14 +4,14 @@
 - **Track:** frontend; owns apps/web/apps/extension and frontend workspace files.
 - **Branch / worktree:** frontend/codex; C:/Users/User/Desktop/CareerLens/careerlens-web
 - **Last updated:** 2026-10-07 22:45 Asia/Dubai by Codex (GPT-6).
-- **Current task:** F7 publication snapshot; later local work is validated but not yet published.
+- **Current task:** F5, F6 and F7 complete; implementation commits published. This final SHA checkpoint is being published. Pause before F8.
 - **Baseline:** F9 implementation ff8072fe2137014737c81dbcecaf4754c418037b and completion 5cfc2e2c39a0aa2174b1c39fbf4ff7e8fb1b5ab5 verified published. Main e762cb48916f07fd939e9ad0ddb0b0d815f3305f unchanged; contract v0.2.0.
 - **Green checks:** final lint, strict typecheck, production build; 22 native tests; eight production browser groups; both themes, roadmap/placement/tracker/dialog at 320/375/390/414/768/1440px; eight zero-violation axe scans; representative visual review; actual static Prism queries, milestone/application PATCH 200, CSV export 200 and application create 201. Mini-ring/full-ring and overlay final visual smoke passed in normal/reduced motion; two additional dialog scans passed.
 
 ## Resume here (exact next step)
 1. User explicitly authorized continuous F5–F7, pausing only for Git input. Implementation is complete; do not repeat green checks absent source changes/failures. No F8.
-2. Run chat outputs/Publish-F567.ps1 in regular Windows PowerShell. It verifies baseline/files, publishes F5, F6 and F7 as separate commits with checkpoint snapshots, pushes each, then publishes the SHA completion snapshot. Metadata deny ACLs and Windows credentials require user terminal.
-3. If interrupted publication: inspect git status/log and the reported push failure; do not replay script blindly. Local commits remain intact. Finish pending pushes/checkpoints, verify public origin/frontend/codex equals local HEAD via outputs/Invoke-CareerLensGit.ps1, then pause before F8.
+2. F5/F6/F7 implementation commits are published and recorded below. Verify this completion HEAD matches public origin/frontend/codex and the tree is clean, then report/pause before F8.
+3. No implementation tests need repeating for this docs-only checkpoint. Scratch output reports can record its final SHA without another repository commit.
 4. On user F8 authorization: read apps/extension/AGENTS, PROMPTS F8, DESIGN, PIPELINE and generated job/app schemas; implement extension only. Backend B7/B9 and real integration remain separate tracks.
 
 ## Task board
@@ -24,7 +24,7 @@
 | F9 | Project quiz | done | ff8072f; checkpoint 5cfc2e2 |
 | F5 | Roadmap/history | done | 7b5123f24d8ca2ee835946300b275b1ede51bf5d |
 | F6 | Placement cell | done | 71d29d12363cd49645ceffcb809d0a411fb4a056 |
-| F7 | Tracker | validated; publication pending | pending publication |
+| F7 | Tracker | done | c1cb8d5245ded875e6517c21b87be265cea3cf5a |
 | F8 | Extension | todo | |
 
 ## Implementation / next files
