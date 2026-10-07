@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { operations, type OperationInputs } from "./operations";
 import { analysisPollInterval } from "./transport";
 import { queryKeys } from "./query-keys";
+import { markQuizCreated, markQuizReceived } from "../quiz";
 type QueryControl = { enabled?: boolean };
 
 export function useGetHealth(control: QueryControl = {}) { return useQuery({ queryKey: queryKeys.getHealth(), queryFn: ({ signal }) => operations.getHealth(signal), enabled: (control.enabled ?? true) }); }
@@ -49,26 +50,95 @@ export function useUpdateMilestone() {
   });
 }
 export function useCreateQuiz() {
-  const cache = useQueryClient(); return useMutation({
-    mutationFn: (input: OperationInputs["createQuiz"]) => operations.createQuiz(input),
-    onSuccess: async () => { await Promise.all(["quiz", "quizzes", "quizResult"].map(key => cache.invalidateQueries({ queryKey: [key] }))); },
+  const cache = useQueryClient();
+  return useMutation({
+    mutationFn: (input: OperationInputs["createQuiz"]) =>
+      operations.createQuiz(input),
+    onSuccess: async (quiz) => {
+      await Promise.all(
+        ["quizzes", "quizResult"].map((key) =>
+          cache.invalidateQueries({ queryKey: [key] }),
+        ),
+      );
+      cache.setQueryData(
+        queryKeys.getQuiz({ quiz_id: quiz.id }),
+        markQuizCreated(quiz),
+      );
+    },
   });
 }
-export function useGetQuiz(input: OperationInputs["getQuiz"] | undefined, control: QueryControl = {}) { return useQuery({ queryKey: queryKeys.getQuiz(input), queryFn: ({ signal }) => operations.getQuiz(input!, signal), enabled: Boolean(input?.quiz_id) && (control.enabled ?? true) }); }
+export function useGetQuiz(
+  input: OperationInputs["getQuiz"] | undefined,
+  control: QueryControl = {},
+) {
+  return useQuery({
+    queryKey: queryKeys.getQuiz(input),
+    queryFn: async ({ signal }) =>
+      markQuizReceived(await operations.getQuiz(input!, signal)),
+    enabled: Boolean(input?.quiz_id) && (control.enabled ?? true),
+    staleTime: 0,
+    refetchOnWindowFocus: false,
+    structuralSharing: false,
+  });
+}
 export function useAnswerQuizQuestion() {
-  const cache = useQueryClient(); return useMutation({
-    mutationFn: (input: OperationInputs["answerQuizQuestion"]) => operations.answerQuizQuestion(input),
-    onSuccess: async () => { await Promise.all(["quiz", "quizzes", "quizResult"].map(key => cache.invalidateQueries({ queryKey: [key] }))); },
+  const cache = useQueryClient();
+  return useMutation({
+    mutationFn: (input: OperationInputs["answerQuizQuestion"]) =>
+      operations.answerQuizQuestion(input),
+    onSuccess: async () => {
+      await Promise.all(
+        ["quiz", "quizzes", "quizResult"].map((key) =>
+          cache.invalidateQueries({ queryKey: [key] }),
+        ),
+      );
+    },
   });
 }
 export function useSubmitQuiz() {
-  const cache = useQueryClient(); return useMutation({
-    mutationFn: (input: OperationInputs["submitQuiz"]) => operations.submitQuiz(input),
-    onSuccess: async () => { await Promise.all(["quiz", "quizzes", "quizResult", "analysis", "analyses", "profiles", "cohortInsights", "cohortStudents"].map(key => cache.invalidateQueries({ queryKey: [key] }))); },
+  const cache = useQueryClient();
+  return useMutation({
+    mutationFn: (input: OperationInputs["submitQuiz"]) =>
+      operations.submitQuiz(input),
+    onSuccess: async () => {
+      await Promise.all(
+        [
+          "quiz",
+          "quizzes",
+          "quizResult",
+          "analysis",
+          "analyses",
+          "profiles",
+          "me",
+          "cohortInsights",
+          "cohortStudents",
+        ].map((key) => cache.invalidateQueries({ queryKey: [key] })),
+      );
+    },
   });
 }
-export function useGetQuizResult(input: OperationInputs["getQuizResult"] | undefined, control: QueryControl = {}) { return useQuery({ queryKey: queryKeys.getQuizResult(input), queryFn: ({ signal }) => operations.getQuizResult(input!, signal), enabled: Boolean(input?.quiz_id) && (control.enabled ?? true) }); }
-export function useListQuizzes(input: OperationInputs["listQuizzes"] | undefined, control: QueryControl = {}) { return useQuery({ queryKey: queryKeys.listQuizzes(input), queryFn: ({ signal }) => operations.listQuizzes(input!, signal), enabled: Boolean(input?.profile_id) && (control.enabled ?? true) }); }
+export function useGetQuizResult(
+  input: OperationInputs["getQuizResult"] | undefined,
+  control: QueryControl = {},
+) {
+  return useQuery({
+    queryKey: queryKeys.getQuizResult(input),
+    queryFn: ({ signal }) => operations.getQuizResult(input!, signal),
+    enabled: Boolean(input?.quiz_id) && (control.enabled ?? true),
+    staleTime: 0,
+  });
+}
+export function useListQuizzes(
+  input: OperationInputs["listQuizzes"] | undefined,
+  control: QueryControl = {},
+) {
+  return useQuery({
+    queryKey: queryKeys.listQuizzes(input),
+    queryFn: ({ signal }) => operations.listQuizzes(input!, signal),
+    enabled: Boolean(input?.profile_id) && (control.enabled ?? true),
+    staleTime: 0,
+  });
+}
 export function useMatchJob() { return useMutation({ mutationFn: (input: OperationInputs["matchJob"]) => operations.matchJob(input) }); }
 export function useListApplications(input: OperationInputs["listApplications"] | undefined, control: QueryControl = {}) { return useQuery({ queryKey: queryKeys.listApplications(input), queryFn: ({ signal }) => operations.listApplications(input!, signal), enabled: Boolean(input?.query.profile_id) && (control.enabled ?? true) }); }
 export function useCreateApplication() {

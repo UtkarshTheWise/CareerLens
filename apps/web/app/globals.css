@@ -79,11 +79,15 @@
   ::selection { background: var(--primary-soft); color: var(--text); }
 }
 @layer components {
+  .break-anywhere { overflow-wrap: anywhere; min-width: 0; }
   .icon-chip { display: flex; height: 40px; width: 40px; align-items: center; justify-content: center; border-radius: var(--radius-control); background: var(--surface-2); }
   .nav-link { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 12px 16px; border-radius: var(--radius-control); font-size: 14px; font-weight: 500; white-space: nowrap; }
   .nav-link[aria-current="page"] { background: var(--primary); color: var(--on-primary); }
   .nav-link:not([aria-current="page"]):hover { background: var(--surface-2); color: var(--text); }
 }
+
+:root { --code-warm: #92400E; }
+:root[data-theme="dark"] { --code-warm: #FCD34D; }
 :focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
 

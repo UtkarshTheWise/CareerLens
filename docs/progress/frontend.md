@@ -3,60 +3,63 @@
 ## Status
 - **Track:** frontend; owns apps/web, apps/extension and frontend workspace files.
 - **Branch / worktree:** frontend/codex; C:/Users/User/Desktop/CareerLens/careerlens-web
-- **Last updated:** 2026-10-07 21:02 Asia/Dubai by Codex (GPT-6).
-- **Current task:** F4 implementation published and verified at f129ef244a355b4dd9004177b3803d7000a11f21; final documentation checkpoint push pending.
-- **State:** F4 implementation done; completion checkpoint publication pending; paused before F9.
-- **Last green checks:** final lint, strict typecheck and production build; 16 transport/onboarding/presentation tests; 13 production browser groups; actual Prism dashboard/report/createQuiz 201/simulate 200; normal/reduced motion and hydration; six zero-violation axe scans; both themes at 320/375/390/414/768/1440px; representative screenshots visually reviewed.
+- **Last updated:** 2026-10-07 22:07 Asia/Dubai by Codex (GPT-6).
+- **Current task:** F9 project quiz implemented and validated; publication pending. F4 implementation f129ef2 and completion checkpoint f029713 verified published.
+- **State:** F9 ready for normal-terminal commit/push; pause before F5.
+- **Last green checks:** F9 lint, strict typecheck, production build; 20 native tests; 13 primary and five supplemental browser groups; actual static Prism createQuiz 201/getQuiz/answer/submit/result 200; light/dark seven views at 320/375/390/414/768/1440px; 14 zero-violation axe scans; keyboard, normal/reduced motion, no hydration/runtime errors and representative visual review.
 
 ## Resume here (exact next step)
-1. Work only in C:/Users/User/Desktop/CareerLens/careerlens-web on frontend/codex. Read shared/nested AGENTS, docs/DESIGN.md, root PROMPTS.md, this file and last five frontend/backend handoff entries.
-2. F4 implementation f129ef244a355b4dd9004177b3803d7000a11f21 is verified on GitHub, matching local HEAD; tree was clean before this documentation checkpoint. F3 is 231329df7a3eed594af33919af2b07eb827a00dc. Main was e762cb48916f07fd939e9ad0ddb0b0d815f3305f; frozen OpenAPI v0.2.0, backend B1–B6.
-3. Publish only this final checkpoint from regular Windows PowerShell: git -C "C:\Users\User\Desktop\CareerLens\careerlens-web" add -- docs/progress/frontend.md docs/handoff/frontend.md; git -C "C:\Users\User\Desktop\CareerLens\careerlens-web" commit -m "docs(frontend): record F4 completion checkpoint"; git -C "C:\Users\User\Desktop\CareerLens\careerlens-web" push --no-thin origin frontend/codex. Run commands separately; stop on failure.
-4. After user confirms, verify local HEAD/status and public ls-remote origin refs/heads/frontend/codex with chat outputs/Invoke-CareerLensGit.ps1. Update only chat output report with the matching docs SHA; no additional self-referencing repo checkpoint commit is needed. Report and pause before F9.
-5. Only after user authorizes F9: recheck remote main for backend updates and read PROMPTS.md F9, docs/QUIZ.md §7, DESIGN, all relevant Markdown and latest handoffs. Replace apps/web/app/quiz/[quizId]/page.tsx TODO(progress) with intro/questions/results and report quiz history using generated hooks. Save an F9 plan/checkpoint; do not begin F5 until F9 report/pause.
+1. Work only in C:/Users/User/Desktop/CareerLens/careerlens-web on frontend/codex. Read this progress first, shared/web AGENTS, DESIGN, PROMPTS.md and latest frontend/backend handoffs.
+2. F9 source and checks are complete, but no F9 commit yet. HEAD and remote frontend/codex remain f0297132167da75764b5ca46411fe35375f584e0. Public main remains e762cb48916f07fd939e9ad0ddb0b0d815f3305f; contract v0.2.0. Never replay implementation blindly.
+3. User normal PowerShell must stage the F9 owned files, commit feat(web): implement project understanding quiz, and push --no-thin origin frontend/codex. Exact reviewed script is chat outputs/Publish-F9.ps1. Sandbox Git metadata deny ACLs and credential isolation still require normal terminal.
+4. After user confirms, verify local HEAD/status and public ls-remote using chat outputs/Invoke-CareerLensGit.ps1. Record the verified implementation SHA here and in own append-only handoff, commit/push completion docs, verify, then report/pause before F5.
+5. Only on user resume of F5: read its prompt, ROADMAP, DESIGN, relevant contract and installed Next docs; implement roadmap and score history. F9 quiz backend B9/Phase 3 integration remains separate.
+
 ## Task board
 | Id | Task | Status | Commit | Notes |
 |---|---|---|---|---|
 | F1 | Scaffold, tokens, shell, client/hooks | done | 99a083e | beacd4a checkpoint published |
-| F2 | Component kit | done | 82828dc | d31554b completion checkpoint published |
-| F3 | Onboarding + polling UI | done | 231329d | Verified published; SHA recorded in this F4 continuation checkpoint |
-| F4 | Dashboard + report + simulator | done | f129ef2 | Implementation verified published; final docs checkpoint pending |
-| F9 | Quiz screens | todo | | Next prompt; user pause required |
-| F5 | Roadmap + history | todo | | |
+| F2 | Component kit | done | 82828dc | d31554b checkpoint published |
+| F3 | Onboarding + polling | done | 231329d | Verified published |
+| F4 | Dashboard + report + simulator | done | f129ef2 | f029713 completion checkpoint published |
+| F9 | Quiz screens | validated; publication pending | | docs/plans/frontend-F9.md |
+| F5 | Roadmap + history | todo | | Pause before starting |
 | F6 | Placement cell | todo | | |
 | F7 | Tracker | todo | | |
 | F8 | Extension | todo | | |
 
 ## In-progress detail
-- **F4 source:** app/dashboard/page.tsx; components/dashboard/student-dashboard.tsx; report/{report-overview,evidence-report,project-card,what-if-panel}.tsx; lib/report-presentation.ts and tests; career understanding badge, optional second TrendCard series and hydration-safe ScoreRing; completed AnalysisProgress branch; listAnalyses stale-time control; quiz navigation destination. Existing onboarding Card padding corrected without changing flow.
-- **Dashboard:** latest profile/analysis, readiness/coverage/verified count/top role KPIs, all five score reasons/evidence and effective weights, actual commit-count consistency chart, top three server gaps and next unfinished milestone. One polling observer; summaries requested fresh only after done. Months/years sum commit counts by week start, not inferred score history.
-- **Report:** all-level claim filter/reasons/evidence links; code/design projects, appropriate returned subscores, flags/issues, descriptions, understanding labels; role fits/reasons; cap/confidence/data-gap notes. Loading/error/empty/missing-report and F3 terminal/restart behavior preserved. Summary errors have retry.
-- **Simulator:** five requested missing code-project signals, typed simulateAnalysis, 350ms debounce, superseded-response protection, error/retry/reset, returned before/after/delta/bands and all component explanations. No client scoring, band thresholds or saved-score mutation.
-- **Quiz handoff:** Practice/Verify call createQuiz, show contract errors/retake detail and route to /quiz/[quizId]?analysis=.... Both code/design checks supported. Minimal destination with return link is tracked TODO(progress) for F9; no questions, timers, quiz results or history are implemented in F4.
-- **Stubbed / fake:** default backend remains stateless Prism; synthetic stage/design/error/race fixtures exist only in chat work. F2 /dev/components preview remains illustrative. Quiz destination is the F9 placeholder; roadmap milestone completion remains F5. Backend integration remains Phase 3. No synthetic dashboard/report product data.
-- **Known failing checks:** none. F4 implementation is verified published; only final docs checkpoint publication remains. Existing sandbox metadata ACLs/credential isolation still require normal terminal.
+- **F9 source:** app/quiz/[quizId]/page.tsx; components/quiz/{quiz-screen,quiz-card,code-snippet,quiz-feedback,quiz-result,quiz-history}.tsx; lib/quiz.ts; tests/quiz.test.ts; quiz hooks, report history, syntax tokens and highlighter dependency.
+- **Intro/resume:** create response seeds intro without first GET serving a question. Only unserved creations skip fetch; cached resumes fetch a fresh server timer before activating. GET receipt metadata uses monotonic time and structuralSharing false; focus refetch disabled.
+- **Quiz:** one current server-unanswered question; line-numbered syntax snippet, native MCQ radios, 2000-char textarea, practice hints/feedback only. Verify subtracts elapsed monotonic time from time_remaining_s, auto-records at zero, blocks paste/back UI and deduplicates blur/visibility count. No grading inference.
+- **Recovery:** synchronous answer/submit locks; pending answer keeps the card mounted. Exact retry snapshot reconciles prior accepted answers before re-POST. Final acknowledgment submits; error/result retry and empty/no-timing states remain explicit.
+- **Result/history:** returned grade/key points/model answer/source links; understanding status; before/after/delta/reasons; strengths/review topics; server cooldown and 429 recovery, fresh retake. History follows project review and links to resume/results. Submit refreshes report/profile/me/cohort caches. Missing verify status is never labelled practice.
+- **Dependencies:** prism-react-renderer 2.4.1 for required syntax highlighting; lock diff adds only highlighter and its @types/prismjs dependency. No unrelated upgrades.
+- **Stubbed / fake:** none in F9 product code. Static Prism is stateless and lacks authored quiz examples; stateful flows use synthetic contract fixtures outside repo. Backend B9 must supply real generation, grading, timer/retake enforcement and score update. Other routes remain their future prompts.
+- **Known limits:** anonymous mock/dev auth only; browser controls supplement server authority. Backend/data/contract/generated client/extension and unrelated root packages unchanged by F9.
 
 ## Decisions
-- Strict order is F1 → F2 → F3 → F4 → F9 → F5 → F6 → F7 → F8; report and pause after every prompt.
-- DESIGN and design-refs lock Plus Jakarta Sans, light/dark tokens and F2 components. Hallmark interaction/state quality applies; taste marketing layouts exclude dashboards/multi-step UI. No new dependencies.
-- All scores/levels/gains/counts/flags/quiz states come from generated API models. Presentation sorting/count rollups never recompute scores or infer bands.
-- F3 acknowledged profile/file retry state remains mounted-session only; saved LinkedIn PDF source stays locked because no contract document-delete operation exists.
-- HTTP query failures pause interval polling until explicit retry. Terminal done/failed stop polling. Dashboard passes its query to AnalysisProgress to avoid duplicate polling observers.
-- Weekly consistency is the sole actual chart series; preserve F2 two-series caller compatibility. Next milestone is read-only until F5.
+- Strict order: F1 → F2 → F3 → F4 → F9 → F5 → F6 → F7 → F8; report and pause after each prompt.
+- DESIGN/design-refs lock Plus Jakarta Sans, themes, tokens and F2 components. Hallmark informs interaction/state quality; taste excludes dashboard/multistep product layouts.
+- Generated APIs supply scores/levels/flags/quiz states. No frontend scoring, band inference or invented resources/URLs.
+- F9 requires prism-react-renderer for real syntax highlighting; code palettes use existing readable semantic tokens plus named code-warm token.
+- Quiz answers/focus stay in student views only; no placement leakage. Low results use understanding not demonstrated yet; skip never lowers score.
+- F3 acknowledged file/profile retry state is mounted-session only. LinkedIn saved PDF locks because contract has no document-delete endpoint. F4 simulator calls API; milestone persistence awaits F5.
 
 ## Gotchas
-- Sandbox PATH/Path duplicates previously crashed git-remote-https. Chat outputs/Invoke-CareerLensGit.ps1 normalizes child PATH and pins installed Git/helpers/OpenSSL; public ls-remote works. Authenticated pushes require normal Windows Credential Manager context.
-- Existing Windows deny ACLs block index.lock and FETCH_HEAD writes despite specific grants. No ACL/global Git changes or bypass metadata. User normal Windows terminal must commit/push the final F4 checkpoint.
-- Next dev re-adds its installed-docs guidance to web AGENTS.md; keep the committed block. Read node_modules/next/dist/docs guides for relevant APIs. Final build restores next-env.d.ts unchanged.
-- Dev Strict Mode can abort/repeat the first request. Production checks confirm one 2000ms polling observer and terminal stop.
-- Framer Motion reduced-motion preference differs during SSR. ScoreRing always starts identical SVG markup and settles with duration 0 when reduced; production hydration checks pass.
-- Static Prism supplies generic simulation examples, not real deterministic gains. Its smoke validates actual HTTP contract wiring only.
-- Two F4 pushes returned GitHub Internal Server Error after upload/delta resolution. Full local integrity checks passed. A later push --no-thin succeeded; remote f129ef2 verified. Timing/recovery versus transfer option as the cause is unproven. Verified offline backup is chat outputs/F4-local-backup.bundle.
+- Sandbox PATH/Path duplicates previously crashed git-remote-https. Chat launcher normalizes PATH and pins installed Git/helpers/OpenSSL; public ls-remote works. Never expose credentials.
+- Existing Git metadata deny ACLs block index.lock/FETCH_HEAD despite grants; do not repeat ACL changes or use alternate metadata. User terminal commits/pushes.
+- Two F4 pushes returned GitHub Internal Server Error after object upload; full local fsck passed. Later push --no-thin succeeded, cause unproven. Backup: chat outputs/F4-local-backup.bundle.
+- Next re-adds installed-docs guidance in web AGENTS. Keep committed block. next-env.d.ts unchanged after production build.
+- F9 cached create and resumed quiz must differ: WeakSet creation tag/WeakMap monotonic receipt exist only in memory, no answer persistence. structuralSharing false preserves receipt identity.
+- Keep QuizCard mounted during pending answer/invalidation so retry latch and exact payload survive; do not replace it with a loading-only parent.
+- Prism HTTP proves contract wiring, not real backend quiz logic. Axe does not replace a full manual accessibility audit.
 
 ## Environment and validation
-- Static Prism :4010; production web :3000/dashboard. Protected backend/data/contract/generated client/extension/root packages/lock have zero F4 changes.
-- Commands: pnpm --filter web lint; pnpm --filter web typecheck; pnpm --filter web build; pnpm --filter web exec node --experimental-transform-types --import ./tests/register.mjs --test tests/api.test.ts tests/onboarding.test.ts tests/report-presentation.test.ts.
-- Chat work/browser_f4.cjs: 13 production groups including claims, scores/reasons, quiz modes/errors, simulation race/retry, no-profile/empty/error/running/failed, one-observer polling, six-width themes, six axe scans and F2 chart compatibility; no app console/runtime errors.
-- Chat work/prism_f4.cjs: actual HTTP dashboard/report/createQuiz 201/simulate 200. work/motion_f4.cjs: normal/reduced ring geometry and clean hydration. Node native tests pass 16/16.
-- Evidence: chat outputs/F4-browser-checks.json, F4-prism-check.json, F4-motion-checks.json, six F4-*-accessibility.json files, viewport/section screenshots, F4-plan.md and F4-progress-report.md. Axe does not replace a full manual accessibility audit.
-- Runtime Node 24.19.0: C:/Users/User/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe. pnpm 10.12.3: chat work/tools/node_modules/pnpm/bin/pnpm.cjs. Scratch tools stay outside the repository.
+- Static Prism :4010; production web :3000, built against mock. Scratch tools/scripts stay in chat work/ and evidence in outputs/.
+- Commands: pnpm --filter web lint; pnpm --filter web typecheck; pnpm --filter web build; from apps/web: node --experimental-transform-types --import ./tests/register.mjs --test tests/api.test.ts tests/onboarding.test.ts tests/report-presentation.test.ts tests/quiz.test.ts.
+- work/browser_f9.cjs: 13 groups covering creation, practice/verify, confidentiality, timer/timeout, paste/focus, cached resume, retry/lost acknowledgment, duplicates, final submission, history and empty/errors; ten axe scans and six widths per theme.
+- work/supplemental_f9.cjs: verify question/results six widths and four axe scans; keyboard heading/radio behavior and textarea boundary; normal/reduced motion/hydration; result retry/missing understanding/429 cooldown.
+- work/prism_f9.cjs: browser create intro/getQuiz plus actual direct answer/submit/result requests, all expected HTTP statuses.
+- Outputs: F9-browser-checks.json, F9-supplemental-checks.json, F9-prism-check.json, F9-*-accessibility.json, light/dark viewport/section/motion screenshots, F9-plan.md and F9-progress-report.md.
+- Node 24.19.0: C:/Users/User/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe. pnpm 10.12.3: chat work/tools/node_modules/pnpm/bin/pnpm.cjs. Existing dependency store: C:/Users/User/Desktop/CareerLens/.pnpm-store.

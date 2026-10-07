@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { ReportOverview, RoleReasons } from "./report-overview";
 import { ProjectCard } from "./project-card";
 import { WhatIfPanel } from "./what-if-panel";
+import { QuizHistory } from "@/components/quiz/quiz-history";
 const levels = ["strong", "moderate", "weak", "unverified", "missing"] as const;
 export function EvidenceReport({
   analysis,
@@ -170,6 +171,7 @@ export function EvidenceReport({
           </p>
         )}
       </section>
+      <QuizHistory profileId={analysis.profile_id} />
       <section className="space-y-4">
         <h2 className="text-lg font-semibold">Role fit</h2>
         <div className="grid items-start gap-4 md:grid-cols-2 xl:grid-cols-3">
