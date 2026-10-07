@@ -9,7 +9,17 @@ class Base(DeclarativeBase):
     pass
 
 
+def normalize_database_url(database_url: str) -> str:
+    """Supabase and Render hand out `postgresql://` (or `postgres://`) URLs, which SQLAlchemy maps
+    to psycopg2. We ship psycopg 3, so point those at it."""
+    for prefix in ("postgresql://", "postgres://"):
+        if database_url.startswith(prefix):
+            return "postgresql+psycopg://" + database_url[len(prefix) :]
+    return database_url
+
+
 def make_engine(database_url: str) -> Engine:
+    database_url = normalize_database_url(database_url)
     if database_url.startswith("sqlite"):
         kwargs: dict = {"connect_args": {"check_same_thread": False}}
         if ":memory:" in database_url:

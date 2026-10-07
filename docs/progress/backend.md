@@ -10,14 +10,14 @@ Keep under ~150 lines. Commit it together with the code it describes.
 ## Status
 - **Track:** backend · **Owns:** `apps/api/`, `data/`
 - **Branch / worktree:** `backend/claude` · `../careerlens-api`
-- **Last updated:** 2026-10-07 16:25 IST by Claude Code (Opus 5.5)
+- **Last updated:** 2026-10-07 16:40 IST by Claude Code (Opus 5.5)
 - **Current task:** B3 done and verified live (Gemini fast + Groq). Next: B4 (GitHub collector, detectors).
 - **State:** done   <!-- not started | in progress | blocked | done -->
-- **Last green checks:** 2026-10-07 15:58 IST, from `apps/api`: `uv run pytest -q` (110 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (8/29 routed, 0 mismatches)
+- **Last green checks:** 2026-10-07 15:58 IST, from `apps/api`: `uv run pytest -q` (115 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (8/29 routed, 0 mismatches)
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
-1. Human, in `apps/api/.env` of THIS worktree (`careerlens-api`, not `careerlens`): set `GEMINI_MODEL_SMART=gemini-3.7-flash` (3.8-flash times out, see Gotchas) and replace `DATABASE_URL` with the Supabase *Session pooler* string, or `sqlite:///./dev.db` for local work. Until then the server cannot start (startup creates tables).
+1. Human, in `apps/api/.env` of THIS worktree (`careerlens-api`, not `careerlens`): (a) set `GEMINI_MODEL_SMART=gemini-3.7-flash`; (b) `DATABASE_URL` now points at the Supabase session pooler but the password is still wrapped in `[` `]` from the dashboard template: remove the brackets; (c) this network blocks ports 5432 and 6543, so for local work here use `DATABASE_URL=sqlite:///./dev.db` and keep the Supabase string for Render or another network. Until (b)/(c) the server cannot start (startup creates tables).
 2. Start B4: paste its prompt from PROMPTS.md. New files: `app/services/github.py`, `app/services/detectors.py`, `scripts/record_github.py`, `tests/fixtures/github/`. B4 needs `GITHUB_TOKEN` in `.env` to record fixtures. Cache GitHub responses in the `cache` table (`CacheEntry`, kind `github`, 24 h via `expires_at`).
 3. Detectors read `catalogue.load_skills()` (`SkillDef.detectors`); `load_tutorial_names()` and `load_readme_templates()` feed the rule flags.
 4. After any route or schema change: `cd apps/api && uv run python scripts/check_contract.py --only-implemented`.
@@ -65,7 +65,8 @@ Keep under ~150 lines. Commit it together with the code it describes.
 ## Gotchas learned (one line each, append)
 - The backend reads `careerlens-api/apps/api/.env`. The main checkout `careerlens/apps/api/.env` is a different file; keys edited there do nothing until copied over (done once on 2026-10-07, old file kept as `.env.bak`).
 - Live check 2026-10-07: `gemini-3.5-flash-lite` ok (~2 s), Groq `openai/gpt-oss-120b` ok (<1 s, strict schema works for ResumeProfile), `gemini-3.8-flash` returns 504 after the full timeout on a one-word prompt (3 tries); `gemini-3.7-flash` and `gemini-3.6-flash` answer in 3-4 s.
-- `DATABASE_URL` host `db.<ref>.supabase.co` does not resolve on this network (Supabase direct connections are IPv6-only); use the Session pooler connection string from the Supabase dashboard.
+- Supabase from this laptop/network (checked 2026-10-07): the direct host `db.<ref>.supabase.co` does not resolve (IPv6-only); the session pooler host resolves but TCP 5432 and 6543 time out while 443 works, i.e. the network blocks database ports. Use SQLite locally.
+- `make_engine` rewrites `postgresql://` / `postgres://` to `postgresql+psycopg://` (dashboard URLs would otherwise ask for psycopg2, which is not installed).
 - `/health` reports the first configured provider, not a reachable one. Health should probe in B8.
 - uvicorn does not show the app's INFO logs (no logging config yet): stage timings are invisible until B8 adds structured logging.
 - PDF fixtures are hand-built ASCII; `tests/fixtures/.gitattributes` marks them binary so git doesn't rewrite line endings and break them.
