@@ -10,14 +10,14 @@ Keep under ~150 lines. Commit it together with the code it describes.
 ## Status
 - **Track:** backend · **Owns:** `apps/api/`, `data/`
 - **Branch / worktree:** `backend/claude` · `../careerlens-api`
-- **Last updated:** 2026-10-07 17:05 IST by Claude Code (Sonnet 5.5)
+- **Last updated:** 2026-10-07 17:20 IST by Claude Code (Sonnet 5.5)
 - **Current task:** B3 done and verified live (Gemini fast + Groq). Next: B4 (GitHub collector, detectors).
 - **State:** done   <!-- not started | in progress | blocked | done -->
 - **Last green checks:** 2026-10-07 15:58 IST, from `apps/api`: `uv run pytest -q` (116 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (8/29 routed, 0 mismatches)
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
-1. Env is ready: Supabase session pooler works (needs the mobile hotspot; the college Wi-Fi blocks DB ports; on that Wi-Fi use `DATABASE_URL=sqlite:///./dev.db`), `GEMINI_MODEL_SMART=gemini-3.7-flash`. Tables exist in Supabase with RLS on.
+1. Env is ready: Supabase session pooler works (needs the mobile hotspot; the college Wi-Fi blocks DB ports; on that Wi-Fi use `DATABASE_URL=sqlite:///./dev.db`), `GEMINI_MODEL_SMART=gemini-3.5-flash`. Tables exist in Supabase with RLS on.
 2. Start B4: paste its prompt from PROMPTS.md. New files: `app/services/github.py`, `app/services/detectors.py`, `scripts/record_github.py`, `tests/fixtures/github/`. B4 needs `GITHUB_TOKEN` in `.env` to record fixtures. Cache GitHub responses in the `cache` table (`CacheEntry`, kind `github`, 24 h via `expires_at`).
 3. Detectors read `catalogue.load_skills()` (`SkillDef.detectors`); `load_tutorial_names()` and `load_readme_templates()` feed the rule flags.
 4. After any route or schema change: `cd apps/api && uv run python scripts/check_contract.py --only-implemented`.
@@ -68,7 +68,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - Supabase from this laptop/network (checked 2026-10-07): the direct host `db.<ref>.supabase.co` does not resolve (IPv6-only); the session pooler host resolves but TCP 5432 and 6543 time out while 443 works, i.e. the network blocks database ports. Use SQLite locally.
 - `make_engine` rewrites `postgresql://` / `postgres://` to `postgresql+psycopg://` (dashboard URLs would otherwise ask for psycopg2, which is not installed).
 - Supabase tables are created by `create_all()` at startup and get `ENABLE ROW LEVEL SECURITY` (no policies) so the public anon key can't read them via PostgREST; the backend's `postgres` role bypasses RLS. New tables are covered automatically.
-- Gemini benchmark 2026-10-07: during a demand spike both 3.7-flash and 3.6-flash returned 503 on most structured calls (3.7: 1 of 4 succeeded per round, 3.6: 0); chose 3.7. The gateway falls back to Groq on 503.
+- Gemini benchmark 2026-10-07: during a demand spike both 3.7-flash and 3.6-flash returned 503 on most structured calls (3.7: 1 of 4 succeeded per round, 3.6: 0); 3.7 looked better then. Later `gemini-3.5-flash` succeeded 2 of 2 structured calls (~8 s each), so `.env` uses it for the smart tier. The gateway falls back to Groq on 503.
 - `/health` reports the first configured provider, not a reachable one. Health should probe in B8.
 - uvicorn does not show the app's INFO logs (no logging config yet): stage timings are invisible until B8 adds structured logging.
 - PDF fixtures are hand-built ASCII; `tests/fixtures/.gitattributes` marks them binary so git doesn't rewrite line endings and break them.
