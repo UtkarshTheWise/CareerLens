@@ -10,14 +10,14 @@ Keep under ~150 lines. Commit it together with the code it describes.
 ## Status
 - **Track:** backend · **Owns:** `apps/api/`, `data/`
 - **Branch / worktree:** `backend/claude` · `../careerlens-api`
-- **Last updated:** 2026-10-07 16:00 IST by Claude Code (Opus 5.5)
-- **Current task:** B3 done (live LLM call not verified: no API keys in `.env`). Next: B4 (GitHub collector, detectors).
+- **Last updated:** 2026-10-07 16:25 IST by Claude Code (Opus 5.5)
+- **Current task:** B3 done and verified live (Gemini fast + Groq). Next: B4 (GitHub collector, detectors).
 - **State:** done   <!-- not started | in progress | blocked | done -->
 - **Last green checks:** 2026-10-07 15:58 IST, from `apps/api`: `uv run pytest -q` (110 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (8/29 routed, 0 mismatches)
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
-1. FIRST, once a key exists: put `GEMINI_API_KEY` and/or `GROQ_API_KEY` in `apps/api/.env`, then `cd apps/api && uv run pytest -m live -q`. It makes one real `extract_resume` call on the synthetic fixture resume. If Gemini rejects the request (HTTP 400), look at `GeminiProvider.complete` in `app/services/llm.py` (the `response_json_schema` config) and the model ids in `.env`.
+1. Human, in `apps/api/.env` of THIS worktree (`careerlens-api`, not `careerlens`): set `GEMINI_MODEL_SMART=gemini-3.7-flash` (3.8-flash times out, see Gotchas) and replace `DATABASE_URL` with the Supabase *Session pooler* string, or `sqlite:///./dev.db` for local work. Until then the server cannot start (startup creates tables).
 2. Start B4: paste its prompt from PROMPTS.md. New files: `app/services/github.py`, `app/services/detectors.py`, `scripts/record_github.py`, `tests/fixtures/github/`. B4 needs `GITHUB_TOKEN` in `.env` to record fixtures. Cache GitHub responses in the `cache` table (`CacheEntry`, kind `github`, 24 h via `expires_at`).
 3. Detectors read `catalogue.load_skills()` (`SkillDef.detectors`); `load_tutorial_names()` and `load_readme_templates()` feed the rule flags.
 4. After any route or schema change: `cd apps/api && uv run python scripts/check_contract.py --only-implemented`.
@@ -28,7 +28,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 |---|---|---|---|---|
 | B1 | Scaffold FastAPI, config, DB, errors, /health, /v1/roles, /v1/me, check_contract.py | done | 35c1be2 | all contract schemas already in `app/schemas/api.py` |
 | B2 | Catalogues: skills.yaml, roles.yaml, resources.yaml + loaders/tests | done | e67462c | 63 skills, 7 roles, 130 resources; all links checked live |
-| B3 | Ingest, PII stripping, LLM gateway, resume extraction | done | 1ced9ff | live LLM call unverified (no keys); profile CRUD + upload real |
+| B3 | Ingest, PII stripping, LLM gateway, resume extraction | done | 1ced9ff | verified live 2026-10-07: Gemini fast and Groq both extract the fixture resume |
 | B4 | GitHub collector, detectors, repo signals, rule flags | todo | | |
 | B5 | scoring.py + what-if + unit tests | todo | | |
 | B6 | Pipeline, analyses endpoints, judging, roadmap planner, role-fit | todo | | also `PATCH /v1/analyses/{id}/roadmap/{milestone_id}` (added at freeze) |
@@ -41,7 +41,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - **What works right now:** `GET /health`, `GET /v1/roles` (7 real roles), `GET /v1/me`, profile create/get/patch/delete, document upload (PDF/DOCX -> text) (demo profile, created on first call under `DEV_AUTH=1`); every error in the contract `Error` shape (404/405/422/500 + `ApiError`); CORS for `CORS_ORIGINS` and `chrome-extension://*`; tables created at startup.
 - **Stubbed / fake (search `TODO(progress)`):**
   - `app/deps.py:get_auth_subject`: with `DEV_AUTH=0` every request gets 401 (no Supabase JWT verification yet) → B8.
-- **Known failing tests / checks:** none offline. `pytest -m live` fails with `llm_unavailable` until an LLM key is in `.env` (or Ollama is running). `check_contract.py` without `--only-implemented` exits 1 by design until all 29 operations are routed.
+- **Known failing tests / checks:** none. `pytest -m live` passes (1 real call). Real server start currently fails on `DATABASE_URL` (see Resume here 1). `check_contract.py` without `--only-implemented` exits 1 by design until all 29 operations are routed.
 
 ## Decisions made (one line each, append)
 - Tables are created with `Base.metadata.create_all` at startup; no Alembic for the prototype.
@@ -63,7 +63,10 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - Per-project quiz understanding will live in `profiles.project_understanding` (JSON keyed by repo/portfolio URL).
 
 ## Gotchas learned (one line each, append)
-- `.env` currently configures only Ollama (`OLLAMA_URL` came from `.env.example`); `/health` reports `llm_provider: ollama` even if Ollama isn't running. Health should probe it in B8.
+- The backend reads `careerlens-api/apps/api/.env`. The main checkout `careerlens/apps/api/.env` is a different file; keys edited there do nothing until copied over (done once on 2026-10-07, old file kept as `.env.bak`).
+- Live check 2026-10-07: `gemini-3.5-flash-lite` ok (~2 s), Groq `openai/gpt-oss-120b` ok (<1 s, strict schema works for ResumeProfile), `gemini-3.8-flash` returns 504 after the full timeout on a one-word prompt (3 tries); `gemini-3.7-flash` and `gemini-3.6-flash` answer in 3-4 s.
+- `DATABASE_URL` host `db.<ref>.supabase.co` does not resolve on this network (Supabase direct connections are IPv6-only); use the Session pooler connection string from the Supabase dashboard.
+- `/health` reports the first configured provider, not a reachable one. Health should probe in B8.
 - uvicorn does not show the app's INFO logs (no logging config yet): stage timings are invisible until B8 adds structured logging.
 - PDF fixtures are hand-built ASCII; `tests/fixtures/.gitattributes` marks them binary so git doesn't rewrite line endings and break them.
 - New fixtures: `uv run python tests/fixtures/make_fixtures.py`.
