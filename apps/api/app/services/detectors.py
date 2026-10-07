@@ -487,15 +487,17 @@ def to_project_signals(signals: RepoSignals) -> ProjectSignals:
     )
 
 
-def depth_points(signals: RepoSignals) -> float:
-    """SCORING §2B Depth (0-20): authored commits 0->30 (8), active span 0->4 weeks (6), code 0->20 KB (6).
-
-    Lives here because the `tutorial_pattern` flag needs it; B5's scoring reuses it.
-    """
+def depth_parts(signals: RepoSignals) -> tuple[float, float, float]:
+    """SCORING §2B Depth items: authored commits 0->30 (8), active span 0->4 weeks (6), code 0->20 KB (6)."""
     commits = min(signals.authored_commits, 30) / 30 * 8
     span = min(signals.active_span_weeks, 4) / 4 * 6
     code = min(signals.code_kb, 20) / 20 * 6
-    return round(commits + span + code, 2)
+    return commits, span, code
+
+
+def depth_points(signals: RepoSignals) -> float:
+    """SCORING §2B Depth (0-20). Here because the `tutorial_pattern` flag needs it; scoring reuses it."""
+    return round(sum(depth_parts(signals)), 2)
 
 
 # ---------------------------------------------------------------- flags

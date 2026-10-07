@@ -255,3 +255,37 @@ def normalize_skill(text: str) -> str | None:
 
 def resources_for(skill_id: str) -> list[Resource]:
     return [r for r in load_resources() if r.skill_id == skill_id]
+
+
+# Aliases that are ordinary English words (or too short) and would match everywhere in free text:
+# "Next steps", "node of a graph", "in the spring", "express interest", "caching headers" ...
+# They still work for exact lookups through normalize_skill(); only text scanning skips them.
+_TEXT_STOPLIST = {
+    "go", "next", "node", "spring", "express", "caching", "layout", "charts", "dashboards", "surveys",
+    "personas", "notebooks", "logging", "shell", "state management", "command line", "containers", "ia",
+    "cv", "ml", "py", "ts", "js", "r", "c", "sh", "ide",
+}  # fmt: skip
+
+
+@lru_cache
+def _text_patterns() -> tuple[tuple[str, re.Pattern[str]], ...]:
+    patterns = []
+    for skill in load_skills():
+        words = {w.lower() for w in skill.all_aliases}
+        words = {w for w in words if w not in _TEXT_STOPLIST and (len(w) >= 3 or not w.isalnum())}
+        if not words:
+            continue
+        alts = "|".join(re.escape(w).replace(r"\ ", r"\s+") for w in sorted(words, key=len, reverse=True))
+        patterns.append((skill.id, re.compile(rf"(?<![a-z0-9+#])(?:{alts})(?![a-z0-9+#])")))
+    return tuple(patterns)
+
+
+def find_skills_in_text(text: str) -> set[str]:
+    """Catalogue skills named in free text (an experience bullet, a project description, a certificate).
+
+    Whole-word, case-insensitive, over skill ids, names and aliases minus an explicit stoplist of
+    ambiguous words. A heuristic for *weak/moderate* evidence only; exact resume skill lists go
+    through normalize_skill().
+    """
+    lowered = text.lower()
+    return {skill_id for skill_id, pattern in _text_patterns() if pattern.search(lowered)}
