@@ -3,20 +3,20 @@
 ## Status
 - **Track:** frontend; owns apps/web, apps/extension and frontend workspace files.
 - **Branch / worktree:** frontend/codex; C:/Users/User/Desktop/CareerLens/careerlens-web
-- **Last updated:** 2026-10-07 17:29 Asia/Dubai by Codex (GPT 6.1 Sol, user-selected).
-- **Current task:** F1 implemented and validated; preparing implementation commit and publish checkpoint.
-- **State:** in progress
-- **Last green checks:** Latest main e762cb4 and initial frontend branch published; client regeneration without schema drift, client typecheck, web typecheck, production build and eight API transport tests passed. Final web lint/typecheck/build passed. Browser checks and visual review passed in both themes at 320/375/390/414/768/1440px.
+- **Last updated:** 2026-10-07 17:34 Asia/Dubai by Codex (GPT 6.1 Sol, user-selected).
+- **Current task:** F1 implementation complete and published at 99a083e; final completion snapshot publication pending.
+- **State:** F1 validated and published; pause before F2 after completion snapshot push
+- **Last green checks:** Remote implementation SHA matches local 99a083e. Latest main e762cb4 and initial frontend branch published; client regeneration without schema drift, client typecheck, web typecheck, production build and eight API transport tests passed. Final web lint/typecheck/build passed. Browser checks and visual review passed in both themes at 320/375/390/414/768/1440px.
 
 ## Resume here (exact next step)
 1. Work only in C:/Users/User/Desktop/CareerLens/careerlens-web. Read AGENTS.md, apps/web/AGENTS.md, docs/DESIGN.md, docs/plans/frontend-F1.md, F1 in PROMPTS.md and the last five handoffs.
-2. All F1 checks passed. Review git status and diff against origin/main, then make the F1 implementation commit with this snapshot and frontend handoff.
-3. Publishing requires regular Windows PowerShell: git -C "C:\Users\User\Desktop\CareerLens\careerlens-web" push origin frontend/codex. Verify the public remote using the corrected launcher; do not retry Windows credentials from the sandbox.
-4. After implementation push, record its SHA and mark F1 done in this file, commit that completion snapshot and publish it. Report F1 and pause before F2; resume only when the user asks.
+2. F1 implementation commit 99a083ef5ee1a0d612d6f0198f80531633f26cec is verified on origin/frontend/codex. All F1 checks passed. Publish the final docs completion commit from regular Windows PowerShell: git -C "C:\Users\User\Desktop\CareerLens\careerlens-web" push origin frontend/codex.
+3. Verify the public remote using the corrected launcher in the chat outputs directory; do not retry Windows credentials from the sandbox. Report F1 and pause. F2 is not authorized until the user asks to continue.
+4. On the user's continuation, fetch main via the launcher, review shared/nested rules, DESIGN, F2 in PROMPTS.md and the last five handoffs, then plan F2. Prompt order remains F2 F3 F4 F9 F5 F6 F7 F8 with a report and pause after each.
 ## Task board
 | Id | Task | Status | Commit | Notes |
 |---|---|---|---|---|
-| F1 | Scaffold, tokens, shell, client/hooks | doing | | All checks passed; publishing checkpoint remains |
+| F1 | Scaffold, tokens, shell, client/hooks | done | 99a083e | Implementation published; completion docs push pending |
 | F2 | Component kit | todo | | Await F1 completion and user continuation |
 | F3 | Onboarding + polling UI | todo | | |
 | F4 | Dashboard + report + simulator | todo | | |
@@ -30,7 +30,7 @@
 - **Files touched:** apps/web configuration, global tokens/providers, sidebar/topbar/theme/profile, route shells, /dev/roles, lib/api operations/query keys/hooks/upload/transport, focused API tests; workspace dependency lock/config; F1 plan.
 - **What works:** 29 operations and hooks use frozen generated paths. Eight native Node HTTP transport/poll/retry tests pass. Static Prism and production web run; browser acceptance and visual review passed.
 - **Stubbed / fake:** TODO(progress) in components/layout/section-shell.tsx: dashboard/report/roadmap/tracker/placement/settings feature bodies are later prompts. Temporary roles page is a real API proof. No fabricated metrics or analyses.
-- **Known failing checks:** None. Publishing is the remaining completion step.
+- **Known failing checks:** None. Implementation publication verified; final docs snapshot publication is the remaining coordination step.
 
 ## Decisions
 - Prompt order F1 F2 F3 F4 F9 F5 F6 F7 F8; pause after every prompt. User later authorized F1 execution without another plan approval pause.
@@ -50,7 +50,7 @@
 - tsx/os.userInfo and esbuild CLI hit Windows sandbox permissions; tests now use Node native TypeScript transform plus a local module-resolution hook. All eight pass.
 
 ## Blocked on
-- No implementation blocker. Publishing later commits requires the user's Windows credential context if sandbox authentication remains unavailable.
+- No implementation blocker. Publishing the completion snapshot requires the user's Windows credential context if sandbox authentication remains unavailable.
 
 ## Environment
 - API default NEXT_PUBLIC_API_URL=http://localhost:4010; development bearer dev from @careerlens/api-client.
