@@ -21,7 +21,9 @@ def posting(required=(), nice=(), source="manual", description="Backend intern r
 
 
 def test_resolve_skills_uses_aliases_phrases_and_reports_unknown():
-    ids, unknown = matching.resolve_skills(["ReactJS", "Docker and Kubernetes", "Python", "Python", "Synergy"])
+    ids, unknown = matching.resolve_skills(
+        ["ReactJS", "Docker and Kubernetes", "Python", "Python", "Synergy"]
+    )
     assert ids == ["react", "docker", "kubernetes", "python"]
     assert unknown == ["Synergy"]
 
@@ -101,7 +103,9 @@ def test_skill_found_in_repos_but_not_on_resume_is_mentioned():
 def test_normalize_keeps_postings_that_already_list_skills(client):
     provider = SchemaProvider({})
     with SessionLocal() as db:
-        out, notes = matching.normalize_posting(posting(["Python"], source="jsonld"), db, providers=[provider])
+        out, notes = matching.normalize_posting(
+            posting(["Python"], source="jsonld"), db, providers=[provider]
+        )
     assert out.required_skills == ["Python"] and notes == [] and provider.calls == []
 
 
@@ -123,7 +127,9 @@ def test_normalize_extracts_when_the_page_listed_nothing(client):
 
 
 def test_normalize_keeps_what_the_page_gave_over_the_extractor(client):
-    provider = SchemaProvider({"JobPostingExtract": {"title": "x", "company": "Other", "required_skills": ["SQL"]}})
+    provider = SchemaProvider(
+        {"JobPostingExtract": {"title": "x", "company": "Other", "required_skills": ["SQL"]}}
+    )
     with SessionLocal() as db:
         out, _ = matching.normalize_posting(posting(source="llm", company="Mine"), db, providers=[provider])
     assert out.company == "Mine"
@@ -175,7 +181,9 @@ def test_match_route_returns_the_contract_shape(client):
 
 
 def test_match_route_uses_the_llm_for_llm_sourced_postings(client):
-    provider = SchemaProvider({"JobPostingExtract": {"title": "x", "required_skills": ["Python", "Terraform"]}})
+    provider = SchemaProvider(
+        {"JobPostingExtract": {"title": "x", "required_skills": ["Python", "Terraform"]}}
+    )
     app.dependency_overrides[get_llm_providers] = lambda: [provider]
     body = {"profile_id": _profile(), "posting": posting(source="llm").model_dump(mode="json")}
     res = client.post("/v1/jobs/match", json=body)
