@@ -4,7 +4,7 @@
 - **Track:** frontend; owns apps/web/apps/extension and frontend workspace files.
 - **Branch / worktree:** frontend/codex; C:/Users/User/Desktop/CareerLens/careerlens-web
 - **Last updated:** 2026-10-07 22:45 Asia/Dubai by Codex (GPT-6).
-- **Current task:** F5 publication snapshot; later local work is validated but not yet published.
+- **Current task:** F6 publication snapshot; later local work is validated but not yet published.
 - **Baseline:** F9 implementation ff8072fe2137014737c81dbcecaf4754c418037b and completion 5cfc2e2c39a0aa2174b1c39fbf4ff7e8fb1b5ab5 verified published. Main e762cb48916f07fd939e9ad0ddb0b0d815f3305f unchanged; contract v0.2.0.
 - **Green checks:** final lint, strict typecheck, production build; 22 native tests; eight production browser groups; both themes, roadmap/placement/tracker/dialog at 320/375/390/414/768/1440px; eight zero-violation axe scans; representative visual review; actual static Prism queries, milestone/application PATCH 200, CSV export 200 and application create 201. Mini-ring/full-ring and overlay final visual smoke passed in normal/reduced motion; two additional dialog scans passed.
 
@@ -22,7 +22,7 @@
 | F3 | Onboarding/progress | done | 231329d |
 | F4 | Dashboard/report/simulator | done | f129ef2 |
 | F9 | Project quiz | done | ff8072f; checkpoint 5cfc2e2 |
-| F5 | Roadmap/history | validated; publication pending | pending publication |
+| F5 | Roadmap/history | done | 7b5123f24d8ca2ee835946300b275b1ede51bf5d |
 | F6 | Placement cell | validated; publication pending | pending publication |
 | F7 | Tracker | validated; publication pending | pending publication |
 | F8 | Extension | todo | |

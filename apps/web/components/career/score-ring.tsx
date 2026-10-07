@@ -16,6 +16,7 @@ export function ScoreRing({
   size?: number;
 }) {
   const reduced = useReducedMotion();
+  const compact = size < 120;
   const valid =
     value !== null && Number.isFinite(value) && value >= 0 && value <= 100;
   const circumference = 2 * Math.PI * 58;
@@ -69,16 +70,28 @@ export function ScoreRing({
         </svg>
         <div
           aria-hidden="true"
-          className="absolute inset-0 flex flex-col items-center justify-center gap-1 px-7 text-center"
+          className={`absolute inset-0 flex flex-col items-center justify-center gap-1 text-center ${compact ? "px-3" : "px-7"}`}
         >
-          <span className="text-4xl font-bold tracking-tight tabular-nums">
+          <span
+            className={`${compact ? "text-xl" : "text-4xl"} font-bold tracking-tight tabular-nums`}
+          >
             {valid ? number(value!) : "—"}
           </span>
-          <span className="text-xs font-medium text-muted-readable">
-            {label}
-          </span>
+          {!compact && (
+            <span className="text-xs font-medium text-muted-readable">
+              {label}
+            </span>
+          )}
         </div>
       </div>
+      {compact && (
+        <span
+          aria-hidden="true"
+          className="max-w-full break-anywhere text-center text-xs font-medium text-muted-readable"
+        >
+          {label}
+        </span>
+      )}
       {explanation}
     </div>
   );
