@@ -1,0 +1,89 @@
+import re
+from uuid import UUID
+
+from fastapi import APIRouter, Depends, Response
+from sqlalchemy import func, select
+from sqlalchemy.orm import Session
+
+from app import catalogue
+from app.db import models
+from app.deps import get_auth_subject, get_db
+from app.errors import ApiError, not_found
+from app.routers import ERROR_RESPONSES
+from app.schemas.api import Cohort, CohortInsights, CohortStudent
+from app.services import cohorts
+
+# TODO(progress): cohort data is for placement staff. DEV_AUTH callers see everything; B8 restricts these
+# routes to staff once the auth provider says who they are (the contract has no staff role yet).
+router = APIRouter(tags=["cohorts"], responses=ERROR_RESPONSES, dependencies=[Depends(get_auth_subject)])
+
+
+def _cohort(db: Session, cohort_id: UUID) -> models.Cohort:
+    cohort = db.get(models.Cohort, str(cohort_id))
+    if cohort is None:
+        raise not_found("Cohort")
+    return cohort
+
+
+def _role(role_id: str) -> str:
+    if catalogue.get_role(role_id) is None:
+        raise ApiError(422, "validation_error", f"Unknown role '{role_id}'", {"field": "role_id"})
+    return role_id
+
+
+@router.get("/v1/cohorts", operation_id="listCohorts", response_model=list[Cohort])
+def list_cohorts(db: Session = Depends(get_db)) -> list[dict]:
+    counts = dict(
+        db.execute(
+            select(models.Profile.cohort_id, func.count(models.Profile.id))
+            .where(models.Profile.cohort_id.is_not(None))
+            .group_by(models.Profile.cohort_id)
+        ).all()
+    )
+    rows = db.scalars(select(models.Cohort).order_by(models.Cohort.name, models.Cohort.id))
+    return [
+        {
+            "id": c.id,
+            "name": c.name,
+            "department": c.department,
+            "year": c.year,
+            "student_count": counts.get(c.id, 0),
+        }
+        for c in rows
+    ]
+
+
+@router.get(
+    "/v1/cohorts/{cohort_id}/insights", operation_id="getCohortInsights", response_model=CohortInsights
+)
+def get_cohort_insights(cohort_id: UUID, role_id: str, db: Session = Depends(get_db)) -> CohortInsights:
+    cohort = _cohort(db, cohort_id)
+    rows, profiles = cohorts.load_rows(db, cohort.id, _role(role_id))
+    return cohorts.aggregate(rows, profiles, cohort.id, role_id)
+
+
+@router.get(
+    "/v1/cohorts/{cohort_id}/students", operation_id="listCohortStudents", response_model=list[CohortStudent]
+)
+def list_cohort_students(
+    cohort_id: UUID, role_id: str, at_risk_only: bool = False, db: Session = Depends(get_db)
+) -> list[CohortStudent]:
+    cohort = _cohort(db, cohort_id)
+    rows, _ = cohorts.load_rows(db, cohort.id, _role(role_id))
+    return cohorts.students(rows, at_risk_only=at_risk_only)
+
+
+@router.get(
+    "/v1/cohorts/{cohort_id}/export",
+    operation_id="exportCohort",
+    response_class=Response,
+    responses={200: {"description": "CSV file", "content": {"text/csv": {"schema": {"type": "string"}}}}},
+)
+def export_cohort(cohort_id: UUID, role_id: str, db: Session = Depends(get_db)) -> Response:
+    cohort = _cohort(db, cohort_id)
+    rows, _ = cohorts.load_rows(db, cohort.id, _role(role_id))
+    body = cohorts.to_csv(cohorts.students(rows))
+    stem = re.sub(r"[^A-Za-z0-9]+", "-", f"{cohort.name}-{role_id}").strip("-").lower()
+    return Response(
+        body, media_type="text/csv", headers={"Content-Disposition": f'attachment; filename="{stem}.csv"'}
+    )
