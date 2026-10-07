@@ -3,25 +3,24 @@
 ## Status
 - **Track:** frontend; owns apps/web, apps/extension and frontend workspace files.
 - **Branch / worktree:** frontend/codex; C:/Users/User/Desktop/CareerLens/careerlens-web
-- **Last updated:** 2026-10-07 20:45 Asia/Dubai by Codex (GPT-6).
-- **Current task:** F4 dashboard/report/simulator implemented and validated; normal-terminal commit/push pending.
-- **State:** F4 validated, publication pending; pause before F9.
+- **Last updated:** 2026-10-07 21:02 Asia/Dubai by Codex (GPT-6).
+- **Current task:** F4 implementation published and verified at f129ef244a355b4dd9004177b3803d7000a11f21; final documentation checkpoint push pending.
+- **State:** F4 implementation done; completion checkpoint publication pending; paused before F9.
 - **Last green checks:** final lint, strict typecheck and production build; 16 transport/onboarding/presentation tests; 13 production browser groups; actual Prism dashboard/report/createQuiz 201/simulate 200; normal/reduced motion and hydration; six zero-violation axe scans; both themes at 320/375/390/414/768/1440px; representative screenshots visually reviewed.
 
 ## Resume here (exact next step)
 1. Work only in C:/Users/User/Desktop/CareerLens/careerlens-web on frontend/codex. Read shared/nested AGENTS, docs/DESIGN.md, root PROMPTS.md, this file and last five frontend/backend handoff entries.
-2. F3 implementation 231329df7a3eed594af33919af2b07eb827a00dc is verified on GitHub. Public main remains e762cb48916f07fd939e9ad0ddb0b0d815f3305f; frozen OpenAPI v0.2.0, backend B1–B6. F4 source is finished; do not implement F9 yet.
-3. User's regular Windows PowerShell must run: git -C "C:\Users\User\Desktop\CareerLens\careerlens-web" add -- apps/web docs/plans/frontend-F4.md docs/progress/frontend.md docs/handoff/frontend.md; git -C "C:\Users\User\Desktop\CareerLens\careerlens-web" commit -m "feat(web): add dashboard evidence report and simulator"; git -C "C:\Users\User\Desktop\CareerLens\careerlens-web" push origin frontend/codex. Run each command separately and stop on failure. Only frontend-owned paths are changed; no .env files are staged.
-4. After the user confirms publication, verify local HEAD/status and public ls-remote origin refs/heads/frontend/codex with the chat outputs/Invoke-CareerLensGit.ps1 launcher. Record the matching implementation SHA here, mark F4 done and append a publication handoff. Publish that documentation checkpoint from normal PowerShell, verify it and pause before F9.
-5. Only after user authorizes F9: read PROMPTS.md F9, docs/QUIZ.md §7, DESIGN and docs/plans/frontend-F4.md. Replace apps/web/app/quiz/[quizId]/page.tsx placeholder with intro/questions/results and report quiz history. Preserve contract, use generated hooks, and do not begin F5 until F9 report/pause.
-
+2. F4 implementation f129ef244a355b4dd9004177b3803d7000a11f21 is verified on GitHub, matching local HEAD; tree was clean before this documentation checkpoint. F3 is 231329df7a3eed594af33919af2b07eb827a00dc. Main was e762cb48916f07fd939e9ad0ddb0b0d815f3305f; frozen OpenAPI v0.2.0, backend B1–B6.
+3. Publish only this final checkpoint from regular Windows PowerShell: git -C "C:\Users\User\Desktop\CareerLens\careerlens-web" add -- docs/progress/frontend.md docs/handoff/frontend.md; git -C "C:\Users\User\Desktop\CareerLens\careerlens-web" commit -m "docs(frontend): record F4 completion checkpoint"; git -C "C:\Users\User\Desktop\CareerLens\careerlens-web" push --no-thin origin frontend/codex. Run commands separately; stop on failure.
+4. After user confirms, verify local HEAD/status and public ls-remote origin refs/heads/frontend/codex with chat outputs/Invoke-CareerLensGit.ps1. Update only chat output report with the matching docs SHA; no additional self-referencing repo checkpoint commit is needed. Report and pause before F9.
+5. Only after user authorizes F9: recheck remote main for backend updates and read PROMPTS.md F9, docs/QUIZ.md §7, DESIGN, all relevant Markdown and latest handoffs. Replace apps/web/app/quiz/[quizId]/page.tsx TODO(progress) with intro/questions/results and report quiz history using generated hooks. Save an F9 plan/checkpoint; do not begin F5 until F9 report/pause.
 ## Task board
 | Id | Task | Status | Commit | Notes |
 |---|---|---|---|---|
 | F1 | Scaffold, tokens, shell, client/hooks | done | 99a083e | beacd4a checkpoint published |
 | F2 | Component kit | done | 82828dc | d31554b completion checkpoint published |
 | F3 | Onboarding + polling UI | done | 231329d | Verified published; SHA recorded in this F4 continuation checkpoint |
-| F4 | Dashboard + report + simulator | validated, publication pending | | All checks green; normal-terminal commit/push required |
+| F4 | Dashboard + report + simulator | done | f129ef2 | Implementation verified published; final docs checkpoint pending |
 | F9 | Quiz screens | todo | | Next prompt; user pause required |
 | F5 | Roadmap + history | todo | | |
 | F6 | Placement cell | todo | | |
@@ -35,7 +34,7 @@
 - **Simulator:** five requested missing code-project signals, typed simulateAnalysis, 350ms debounce, superseded-response protection, error/retry/reset, returned before/after/delta/bands and all component explanations. No client scoring, band thresholds or saved-score mutation.
 - **Quiz handoff:** Practice/Verify call createQuiz, show contract errors/retake detail and route to /quiz/[quizId]?analysis=.... Both code/design checks supported. Minimal destination with return link is tracked TODO(progress) for F9; no questions, timers, quiz results or history are implemented in F4.
 - **Stubbed / fake:** default backend remains stateless Prism; synthetic stage/design/error/race fixtures exist only in chat work. F2 /dev/components preview remains illustrative. Quiz destination is the F9 placeholder; roadmap milestone completion remains F5. Backend integration remains Phase 3. No synthetic dashboard/report product data.
-- **Known failing checks:** none. Publication remains blocked in sandbox by existing Git metadata deny ACLs and credential isolation; user normal terminal works. F4 is not marked done until publication/SHA verification.
+- **Known failing checks:** none. F4 implementation is verified published; only final docs checkpoint publication remains. Existing sandbox metadata ACLs/credential isolation still require normal terminal.
 
 ## Decisions
 - Strict order is F1 → F2 → F3 → F4 → F9 → F5 → F6 → F7 → F8; report and pause after every prompt.
@@ -47,11 +46,12 @@
 
 ## Gotchas
 - Sandbox PATH/Path duplicates previously crashed git-remote-https. Chat outputs/Invoke-CareerLensGit.ps1 normalizes child PATH and pins installed Git/helpers/OpenSSL; public ls-remote works. Authenticated pushes require normal Windows Credential Manager context.
-- Existing Windows deny ACLs block index.lock and FETCH_HEAD writes despite specific grants. No ACL/global Git changes or bypass metadata. User normal Windows terminal must commit/push F4.
+- Existing Windows deny ACLs block index.lock and FETCH_HEAD writes despite specific grants. No ACL/global Git changes or bypass metadata. User normal Windows terminal must commit/push the final F4 checkpoint.
 - Next dev re-adds its installed-docs guidance to web AGENTS.md; keep the committed block. Read node_modules/next/dist/docs guides for relevant APIs. Final build restores next-env.d.ts unchanged.
 - Dev Strict Mode can abort/repeat the first request. Production checks confirm one 2000ms polling observer and terminal stop.
 - Framer Motion reduced-motion preference differs during SSR. ScoreRing always starts identical SVG markup and settles with duration 0 when reduced; production hydration checks pass.
 - Static Prism supplies generic simulation examples, not real deterministic gains. Its smoke validates actual HTTP contract wiring only.
+- Two F4 pushes returned GitHub Internal Server Error after upload/delta resolution. Full local integrity checks passed. A later push --no-thin succeeded; remote f129ef2 verified. Timing/recovery versus transfer option as the cause is unproven. Verified offline backup is chat outputs/F4-local-backup.bundle.
 
 ## Environment and validation
 - Static Prism :4010; production web :3000/dashboard. Protected backend/data/contract/generated client/extension/root packages/lock have zero F4 changes.
