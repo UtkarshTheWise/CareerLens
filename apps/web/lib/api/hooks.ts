@@ -39,7 +39,7 @@ export function useStartAnalysis() {
     onSuccess: async () => { await Promise.all(["analyses"].map(key => cache.invalidateQueries({ queryKey: [key] }))); },
   });
 }
-export function useListAnalyses(input: OperationInputs["listAnalyses"] | undefined, control: QueryControl = {}) { return useQuery({ queryKey: queryKeys.listAnalyses(input), queryFn: ({ signal }) => operations.listAnalyses(input!, signal), enabled: Boolean(input?.profile_id) && (control.enabled ?? true) }); }
+export function useListAnalyses(input: OperationInputs["listAnalyses"] | undefined, control: QueryControl & { staleTime?: number } = {}) { return useQuery({ queryKey: queryKeys.listAnalyses(input), queryFn: ({ signal }) => operations.listAnalyses(input!, signal), enabled: Boolean(input?.profile_id) && (control.enabled ?? true), ...(control.staleTime === undefined ? {} : { staleTime: control.staleTime }) }); }
 export function useGetAnalysis(input: OperationInputs["getAnalysis"] | undefined, control: QueryControl = {}) { return useQuery({ queryKey: queryKeys.getAnalysis(input), queryFn: ({ signal }) => operations.getAnalysis(input!, signal), enabled: Boolean(input?.analysis_id) && (control.enabled ?? true), refetchInterval: (query) => query.state.status === "error" ? false : analysisPollInterval(query.state.data) }); }
 export function useSimulateAnalysis() { return useMutation({ mutationFn: (input: OperationInputs["simulateAnalysis"]) => operations.simulateAnalysis(input) }); }
 export function useUpdateMilestone() {

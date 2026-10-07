@@ -9,8 +9,18 @@ import { StageProgress } from "@/components/career";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-export function AnalysisProgress({ analysisId }: { analysisId: string }) {
-  const analysis = useGetAnalysis({ analysis_id: analysisId });
+import { EvidenceReport } from "@/components/report/evidence-report";
+export function AnalysisProgress({
+  analysisId,
+  query,
+}: {
+  analysisId: string;
+  query?: ReturnType<typeof useGetAnalysis>;
+}) {
+  const ownQuery = useGetAnalysis(
+    query ? undefined : { analysis_id: analysisId },
+  );
+  const analysis = query ?? ownQuery;
   const restart = useStartAnalysis();
   const router = useRouter();
   const retryLocked = useRef(false);
@@ -27,6 +37,17 @@ export function AnalysisProgress({ analysisId }: { analysisId: string }) {
       retryLocked.current = false;
       /* The mutation error is rendered below. */
     }
+  }
+  if (analysis.data?.status === "done" && analysis.data.report) {
+    return (
+      <EvidenceReport
+        analysis={analysis.data}
+        report={analysis.data.report}
+        onRefresh={() => analysis.refetch()}
+        refreshing={analysis.isFetching}
+        error={analysis.isError ? errorMessage(analysis.error) : undefined}
+      />
+    );
   }
   return (
     <section className="mx-auto max-w-4xl space-y-6">
@@ -50,7 +71,7 @@ export function AnalysisProgress({ analysisId }: { analysisId: string }) {
         </p>
       </div>
       {analysis.isPending && (
-        <Card>
+        <Card className="py-0">
           <CardContent
             className="space-y-4 p-6"
             role="status"
@@ -91,7 +112,7 @@ export function AnalysisProgress({ analysisId }: { analysisId: string }) {
       )}
       {analysis.data && (
         <div className="grid items-start gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-          <Card>
+          <Card className="py-0">
             <CardContent className="p-6">
               <StageProgress
                 status={analysis.data.status}
@@ -102,20 +123,28 @@ export function AnalysisProgress({ analysisId }: { analysisId: string }) {
           </Card>
           <div className="space-y-4">
             {analysis.data.status === "done" ? (
-              <Card>
+              <Card className="py-0">
                 <CardContent className="space-y-3 p-6">
-                  <h2 className="font-semibold">Results saved</h2>
+                  <h2 className="font-semibold">Report unavailable</h2>
                   <p className="text-sm leading-relaxed text-muted-readable">
-                    This analysis has finished. Keep this URL to return to it.
+                    This analysis finished, but no report was returned. Retry to
+                    check for its results.
                   </p>
-                  {/* TODO(progress): F4 renders the completed evidence report and its explanations here. */}
+                  <Button
+                    variant="outline"
+                    className="min-h-11"
+                    onClick={() => analysis.refetch()}
+                    disabled={analysis.isFetching}
+                  >
+                    Retry report
+                  </Button>
                   <Button asChild variant="outline" className="min-h-11">
                     <Link href="/onboarding">New analysis</Link>
                   </Button>
                 </CardContent>
               </Card>
             ) : analysis.data.status === "failed" ? (
-              <Card>
+              <Card className="py-0">
                 <CardContent className="space-y-4 p-6">
                   <h2 className="font-semibold">Try again when you’re ready</h2>
                   {!analysis.data.error && (

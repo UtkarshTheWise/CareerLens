@@ -13,7 +13,7 @@ import {
 } from "recharts";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { CardFrame, CardState, number, type ViewState } from "./shared";
-export type TrendPoint = { label: string; primary: number; secondary: number };
+export type TrendPoint = { label: string; primary: number; secondary?: number };
 export type TrendPeriod = "weekly" | "monthly" | "yearly";
 const periods = ["weekly", "monthly", "yearly"] as const;
 export function TrendCard({
@@ -26,7 +26,7 @@ export function TrendCard({
 }: {
   title: string;
   description?: string;
-  series: [string, string];
+  series: [string, string?];
   datasets: Record<TrendPeriod, TrendPoint[]>;
   state?: ViewState;
   message?: string;
@@ -96,7 +96,7 @@ export function TrendCard({
                 <div
                   className="h-64 min-w-0"
                   role="group"
-                  aria-label={`${title}, ${value}: ${data.map((p) => `${p.label}, ${series[0]} ${number(p.primary)}, ${series[1]} ${number(p.secondary)}`).join("; ")}`}
+                  aria-label={`${title}, ${value}: ${data.map((p) => `${p.label}, ${series[0]} ${number(p.primary)}${series[1] && p.secondary !== undefined ? `, ${series[1]} ${number(p.secondary)}` : ""}`).join("; ")}`}
                 >
                   <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                     <LineChart
@@ -140,15 +140,17 @@ export function TrendCard({
                           ) : null
                         }
                       />
-                      <Line
-                        name={series[1]}
-                        type="monotone"
-                        dataKey="secondary"
-                        stroke="var(--primary-soft)"
-                        strokeWidth={2.5}
-                        dot={false}
-                        isAnimationActive={!reduced}
-                      />
+                      {series[1] && (
+                        <Line
+                          name={series[1]}
+                          type="monotone"
+                          dataKey="secondary"
+                          stroke="var(--primary-soft)"
+                          strokeWidth={2.5}
+                          dot={false}
+                          isAnimationActive={!reduced}
+                        />
+                      )}
                       <Line
                         name={series[0]}
                         type="monotone"
@@ -206,9 +208,13 @@ export function TrendCard({
                             <td className="text-right tabular-nums">
                               {number(p.primary)}
                             </td>
-                            <td className="text-right tabular-nums">
-                              {number(p.secondary)}
-                            </td>
+                            {series[1] && (
+                              <td className="text-right tabular-nums">
+                                {p.secondary === undefined
+                                  ? "—"
+                                  : number(p.secondary)}
+                              </td>
+                            )}
                           </tr>
                         ))}
                       </tbody>

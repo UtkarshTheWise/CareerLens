@@ -268,7 +268,7 @@ export function OnboardingWizard() {
         ))}
       </ol>
       <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_260px]">
-        <Card>
+        <Card className="py-0">
           <CardContent className="p-5 sm:p-6">
             <form ref={form} onSubmit={submit} noValidate aria-busy={busy}>
               <div className="mb-6">

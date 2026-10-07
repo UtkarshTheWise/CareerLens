@@ -9,3 +9,4 @@ export { FlagCard } from "./flag-card";
 export { MilestoneCard } from "./milestone-card";
 export { StageProgress } from "./stage-progress";
 export { WhyPopover } from "./why-popover";
+export { UnderstandingBadge } from "./understanding-badge";

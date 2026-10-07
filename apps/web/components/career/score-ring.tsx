@@ -59,9 +59,8 @@ export function ScoreRing({
             stroke={color}
             strokeWidth="14"
             strokeLinecap="round"
-            initial={
-              reduced ? false : { strokeDasharray: `0 ${circumference}` }
-            }
+            // Match server/client markup; reduced motion settles instantly after hydration.
+            initial={{ strokeDasharray: `0 ${circumference}` }}
             animate={{
               strokeDasharray: `${circumference * (valid ? value! / 100 : 0)} ${circumference}`,
             }}
