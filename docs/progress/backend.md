@@ -10,18 +10,18 @@ Keep under ~150 lines. Commit it together with the code it describes.
 ## Status
 - **Track:** backend · **Owns:** `apps/api/`, `data/`
 - **Branch / worktree:** `backend/claude` · `../careerlens-api`
-- **Last updated:** 2026-10-07 21:00 IST by Claude Code (Sonnet 5.5)
-- **Current task:** B5 done (scoring engine + what-if). Next: B6 (pipeline and analysis endpoints).
+- **Last updated:** 2026-10-07 23:00 IST by Claude Code (Sonnet 5.5)
+- **Current task:** B6 done and verified live. Next: B7 (jobs, applications, cohorts, seed).
 - **State:** done   <!-- not started | in progress | blocked | done -->
-- **Last green checks:** 2026-10-07 20:55 IST, from `apps/api`: `uv run pytest -q` (323 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (8/29 routed, 0 mismatches)
+- **Last green checks:** 2026-10-07 22:50 IST, from `apps/api`: `uv run pytest -q` (425 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (13/29 routed, 0 mismatches) · live analysis on real GitHub + Gemini + Groq (65-125 s)
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
-1. Start B6: paste its prompt from PROMPTS.md (plan with Opus, build with Sonnet: `/model opusplan`). New: `app/services/pipeline.py`, `app/services/planner.py`, `app/routers/analyses.py`, `prompts/judge_project.md`, `judge_design.md`, `plan_roadmap.md`, `tests`. Needs live keys and the hotspot only for the final live run (token expires 2026-10-14).
-2. B6 builds `ScoringInputs` (`app/services/scoring_inputs.py`) and stores `inputs.model_dump(mode="json")` in `analyses.signals`: `resume` = `resume.extract_resume()` result; `has_contact` from a regex over the RAW resume text (before PII stripping); `linkedin_skill_ids` = `catalogue.find_skills_in_text(linkedin text)`; `github_linked`, `weeks` (from `GithubSnapshot.weeks`, convert to `schemas.api.WeekCount` if needed), `last_active_date`, `today` = request date; one `ProjectInput` per analysed repo (`project_id=scoring.project_id_for(title)`, `signals`, `skills`, `language_skills`, `flags` from `RuleFlag` plus `vague_description`/`claim_mismatch`, `claimed_skill_ids` after matching resume projects to repos by URL or fuzzy name) and per portfolio URL (`kind="design"`, `design=DesignInput` from the judge). Carry `understanding`/`covered_skill_ids`/`latest_quiz_id` over from `profiles.project_understanding`.
-3. Then `result = scoring.score(inputs)` gives `breakdown`, `coverage`, `claims`, `gaps`, `projects` (numeric `ProjectAudit` fields; B6 fills `what_it_does`, `honest_rewrite`, `issues` from the judge), `consistency`, `evidence`, `notes`; `scoring.role_fits(inputs)`; roadmap gains via `scoring.changes_gain(inputs, [SimulationChange(...)])` (gap: `skill_gain`, flag: `flag_gain`, milestone: one call with all addressed changes). The simulate route calls `scoring.simulate(ScoringInputs.model_validate(analysis.signals), request)` and maps `SimulationError` to a 422 `validation_error`.
+1. Start B7: paste its prompt from PROMPTS.md (plan with Opus, build with Sonnet: `/model opusplan`). New: `app/services/matching.py` (+ `prompts/extract_job.md`), `app/routers/jobs.py`, `applications.py`, `cohorts.py`, `app/services/cohorts.py`, `scripts/seed_demo.py`. Contract endpoints still unrouted after B6: matchJob, applications CRUD + tailorResume (P2), cohorts (4), quizzes (B9).
+2. B7 reads finished analyses from the DB: `analyses.report` (full `AnalysisReport` JSON) and `analyses.signals` (`ScoringInputs` JSON, rescore with `scoring.score`). `matchJob`: use the profile's latest `done` analysis (409 `analysis`-less profile per contract); skills via `catalogue.normalize_skill`; credit per level from `scoring.CREDIT`. The seed script builds synthetic students by running `scoring.score` over generated `ScoringInputs` and storing `report`/`signals` rows (no LLM, no GitHub): construct them with `tests/scoring_helpers.py`-style builders and `scoring.role_fits`.
+3. B9 (quiz) contract with this code: `profiles.project_understanding` is a dict keyed by project URL (repo URL or portfolio URL) with values `{"understanding": "demonstrated|partial|not_demonstrated", "covered_skill_ids": [...], "quiz_id": "<uuid>"}`; `analysis_inputs.carry_understanding` reads it and a re-analysis keeps it. B9's submit re-scores via `ScoringInputs.model_validate(analysis.signals)` with updated projects, then rebuilds the stored report's `score`, `claims`, `gaps`, `projects` the same way `pipeline._run` assembles them.
 4. After any route or schema change: `cd apps/api && uv run python scripts/check_contract.py --only-implemented`.
-5. Human: renew the GitHub token (expires 2026-10-14) in `careerlens-api/apps/api/.env` before B6's live run.
+5. Human: the GitHub token expires 2026-10-14; renew it in `careerlens-api/apps/api/.env`. Supabase needs the hotspot (college Wi-Fi blocks the DB ports).
 
 ## Task board
 <!-- status: todo | doing | done | blocked · commit = short sha of the commit that finished it -->
@@ -32,7 +32,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | B3 | Ingest, PII stripping, LLM gateway, resume extraction | done | 1ced9ff | verified live 2026-10-07: Gemini fast and Groq both extract the fixture resume |
 | B4 | GitHub collector, detectors, repo signals, rule flags | done | 024b6f8 | fixture: UtkarshTheWise (14 repos, 768 KB); `claim_mismatch` and `vague_description` flags are B6 |
 | B5 | scoring.py + what-if + unit tests | done | c5b479d | 106 new tests; run on the recorded real profile and checked by hand |
-| B6 | Pipeline, analyses endpoints, judging, roadmap planner, role-fit | todo | | also `PATCH /v1/analyses/{id}/roadmap/{milestone_id}` (added at freeze) |
+| B6 | Pipeline, analyses endpoints, judging, roadmap planner, role-fit | done | SHA_B6 | 5 endpoints incl. the milestone PATCH; live run verified; 102 new tests |
 | B7 | Jobs match, applications, cohorts, seed_demo.py | todo | | |
 | B9 | Project Understanding Check (quiz) | todo | | also `GET /v1/quizzes/{id}/result`; 429 detail key is `retake_available_at`, not `retry_at` as the B9 prompt says |
 | B8 | Hardening, contract check green, deploy, keep-alive | todo | | Supabase JWT verification lands here |
@@ -75,9 +75,18 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - Confidence: others = GitHub + LinkedIn + readable portfolio item; >= 2 others (and GitHub, unless a design role) = high, 1+ = medium, else low (cap 60). Design roles with no portfolio score project quality 0 (penalised); engineering roles with no projects are "no data" (reweighted).
 - Simulate: `ci` also adds a `ci-cd` hit to that project; a null `project_id` applies `add_signals` to every code project; resolving an `understanding_gap` flag assumes `demonstrated`; unknown ids raise `SimulationError`. Ids: project `proj-<slug>`, flag `flag-<slug>-<code-with-dashes>`, gap `gap-<skill_id>`.
 - Free-text skill matching (`catalogue.find_skills_in_text`) skips a stoplist of ambiguous words ("next", "spring", "node", "caching" ...); it feeds only weak/moderate evidence.
+- Pipeline (`services/pipeline.py`): own DB session per job, `status`+`progress` written per stage (10/25/40/55/70/85/92/100), failures of GitHub / one project review / a portfolio page / the planner degrade with a `notes` line instead of failing; only a missing resume or a failed resume extraction fails the job. Restart recovery fails stuck rows at startup.
+- Reviews: max 6 per analysis, resume-matched repos first then by role relevance; untouched forks never reviewed; a repo not on the resume is judged on its tagline plus the first 600 chars of its README.
+- Portfolio pages (`services/portfolio.py`) are fetched with SSRF protection (public addresses only, standard ports, hand-followed redirects re-checked, 1 MB, HTML only); residual DNS-rebinding risk is documented in the module.
+- Roadmap (`services/planner.py`): the model picks ids and writes deliverables, Python validates ids, strips URLs, attaches catalogue resources, computes gains with `scoring.changes_gain`, orders by gain per hour, 4-7 milestones (top-up from a deterministic fallback), and always keeps an `understanding_gap` milestone.
 - Recorded fixtures: `tests/fixtures/github/<login>/<fingerprint>.json` (status + body, never headers), replayed by `scripts/github_fixtures.py:ReplayTransport`; re-record with `uv run python scripts/record_github.py <login>` (needs token + a network that reaches api.github.com). Changing a GraphQL query changes its fingerprint, so re-record after editing `OVERVIEW_QUERY`, `commit_facts_query` or `files_query`.
 
 ## Gotchas learned (one line each, append)
+- Pipeline tests drive the real code with `Env` in `tests/test_pipeline.py` (replayed GitHub fixture, `SchemaProvider` scripted LLM from `tests/llm_fakes.py`, stub page fetcher, `on_stage` recorder); the route gets its deps from `get_pipeline_deps`, which tests override. Starlette's TestClient finishes background tasks before returning, so a test can read the finished analysis right after the POST.
+- The LLM gateway cache is shared across calls in one test (same prompt = cache hit), so tests that call a stage twice with different scripted replies must pass `refresh=True` or they get the first reply back.
+- `strip_pii` treats a name-like first line as the person's name; READMEs and project descriptions must use `header_name=False` or "Campus API" becomes "[NAME]".
+- The service is not multi-process safe for jobs: analyses run in the web process's thread pool; `recover_interrupted` fails any stuck row at startup.
+- Live timings (hotspot, Gemini 3.5 flash + Groq fallback): cold run 65 s (GitHub ~25 s, six project reviews ~30 s, roadmap 4 s); a run with new prompts 125 s. Everything after is cached for 24 h.
 - The backend reads `careerlens-api/apps/api/.env`. The main checkout `careerlens/apps/api/.env` is a different file; keys edited there do nothing until copied over (done once on 2026-10-07, old file kept as `.env.bak`).
 - Live check 2026-10-07: `gemini-3.5-flash-lite` ok (~2 s), Groq `openai/gpt-oss-120b` ok (<1 s, strict schema works for ResumeProfile), `gemini-3.8-flash` returns 504 after the full timeout on a one-word prompt (3 tries); `gemini-3.7-flash` and `gemini-3.6-flash` answer in 3-4 s.
 - Supabase from this laptop/network (checked 2026-10-07): the direct host `db.<ref>.supabase.co` does not resolve (IPv6-only); the session pooler host resolves but TCP 5432 and 6543 time out while 443 works, i.e. the network blocks database ports. Use SQLite locally.

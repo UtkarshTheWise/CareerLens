@@ -327,3 +327,31 @@ def test_repos_without_an_analysis_are_not_projects():
     projects, _ = build_project_inputs(snapshot(repo("a"), repo("b")), {"a": analysis("a")}, {}, {}, [], {})
     assert [p.title for p in projects] == ["a"]
     assert build_project_inputs(None, {}, {}, {}, [], {}) == ([], {})
+
+
+def test_a_repo_not_on_the_resume_is_described_by_its_tagline_and_readme_opening():
+    provider = SchemaProvider({"ProjectJudgement": project_judgement()})
+    readme = "# Habit tracker\n\nTracks daily goals offline in localStorage. " + "More detail. " * 100
+    r = repo("habits", description="Daily habits", readme=readme)
+    with SessionLocal() as db:
+        judge_project(
+            r, analysis("habits"), None, ROLE, student_name="", db=db, providers=[provider], refresh=False
+        )
+    user = provider.calls[0]["user"]
+    section = user[user.index("STUDENT'S DESCRIPTION:") : user.index("TECHNOLOGIES THE STUDENT CLAIMS")]
+    assert "Daily habits" in section and "Tracks daily goals offline in localStorage" in section
+    assert len(section) < 900  # only the opening, not the whole README
+    assert "(no description written)" not in user
+
+
+def test_a_resume_description_wins_over_the_readme():
+    provider = SchemaProvider({"ProjectJudgement": project_judgement()})
+    r = repo("habits", description="tagline", readme="README text that must not be the description")
+    with SessionLocal() as db:
+        judge_project(
+            r, analysis("habits"), rp("habits", description="Resume says: offline habit tracker"), ROLE,
+            student_name="", db=db, providers=[provider], refresh=False,
+        )  # fmt: skip
+    user = provider.calls[0]["user"]
+    section = user[user.index("STUDENT'S DESCRIPTION:") : user.index("TECHNOLOGIES THE STUDENT CLAIMS")]
+    assert "Resume says: offline habit tracker" in section and "must not be the description" not in section

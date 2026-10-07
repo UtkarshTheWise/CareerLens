@@ -38,6 +38,7 @@ logger = logging.getLogger("careerlens.analysis")
 MAX_JUDGED = 6  # docs/PIPELINE.md stage 5: one call per project, at most six
 NAME_SIMILARITY = 0.85
 README_EXCERPT_CHARS = 1500
+README_OPENING_CHARS = 600  # the part of a README used as the description of a repo not on the resume
 
 # Severities for the two flags B6 raises (B4's live in detectors.FLAG_SEVERITY).
 EXTRA_SEVERITY = {"vague_description": "low", "claim_mismatch": "medium"}
@@ -155,9 +156,14 @@ def judge_project(
     refresh: bool,
 ) -> ProjectJudgement:
     names = [student_name] if student_name else []
-    description = (
-        resume_project.description if resume_project else repo.description
-    ) or "(no description written)"
+    if resume_project is not None:
+        description = resume_project.description
+    else:
+        # Not on the resume: the student's own words about it are the repo's one-liner and the start of
+        # its README. Judging the one-liner alone would flag every well-documented repo with a short tagline.
+        opening = " ".join(repo.readme.split())[:README_OPENING_CHARS]
+        description = "\n".join(part for part in (repo.description or "", opening) if part)
+    description = description or "(no description written)"
     claimed = resume_project.mentioned_technologies if resume_project else []
     s = analysis.signals
     prompt = load_prompt("judge_project")
