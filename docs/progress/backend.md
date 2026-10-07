@@ -10,25 +10,23 @@ Keep under ~150 lines. Commit it together with the code it describes.
 ## Status
 - **Track:** backend · **Owns:** `apps/api/`, `data/`
 - **Branch / worktree:** `backend/claude` · `../careerlens-api`
-- **Last updated:** 2026-10-07 15:20 IST by Claude Code (Opus 5.5)
-- **Current task:** B2 (catalogues): built and tested, wrap-up left (stopped at a usage limit).
-- **State:** in progress   <!-- not started | in progress | blocked | done -->
-- **Last green checks:** 2026-10-07 14:25 IST, from `apps/api`: `uv run pytest -q` (45 passed, with B2) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (3/29 routed, 0 mismatches)
+- **Last updated:** 2026-10-07 15:50 IST by Claude Code (Opus 5.5)
+- **Current task:** B2 done. Next: B3 (ingest, LLM gateway, resume extraction).
+- **State:** done   <!-- not started | in progress | blocked | done -->
+- **Last green checks:** 2026-10-07 15:48 IST, from `apps/api`: `uv run pytest -q` (45 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (3/29 routed, 0 mismatches) · `scripts/check_resource_urls.py` (0 failed)
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
-1. `cd apps/api && uv run python scripts/check_resource_urls.py`. Last run: 127 ok, 2 blocked (w3.org WAI, tableau.com: bot-blocked, open in a browser), 1 failed. The failed one (`design-systems-storybook`) was repointed to `https://storybook.js.org/tutorials/` and NOT re-checked: confirm it answers, else replace it with another free design-systems resource.
-2. Optional tidy in `data/resources.yaml`: the script printed `moved` for ~15 URLs (redirects, all still working); update them to the final URLs it printed, e.g. `interaction-design.org/literature/topics/...` -> `ixdf.org/literature/topics/...`.
-3. Run `uv run pytest -q && uv run ruff check . && uv run python scripts/check_contract.py --only-implemented`, start the server and `curl /v1/roles` (expect 7 roles).
-4. Append the B2 entry to `docs/handoff/backend.md` (catalogue contents, URL check result, note that skills with `detectors: {}` are evidenced by experience/portfolio, not an error for B4/B5).
-5. Mark B2 `done` with its sha here, commit `feat(data): skill, role and resource catalogues with validated loaders`, push. Then B3.
+1. Start B3: paste its prompt from PROMPTS.md. New files: `apps/api/app/services/ingest.py`, `app/services/llm.py`, `app/schemas/llm.py`, `app/prompts/extract_resume.md`, `app/routers/profiles.py` (add POST /v1/profiles, GET/PATCH/DELETE /v1/profiles/{id}, POST .../documents).
+2. B3 adds dependencies (pdfplumber, python-docx, google-genai, groq, python-multipart is already in fastapi[standard]): `cd apps/api && uv add <pkg>` and give the reason in the handoff entry.
+3. After any route or schema change: `cd apps/api && uv run python scripts/check_contract.py --only-implemented`.
 
 ## Task board
 <!-- status: todo | doing | done | blocked · commit = short sha of the commit that finished it -->
 | Id | Task | Status | Commit | Notes |
 |---|---|---|---|---|
 | B1 | Scaffold FastAPI, config, DB, errors, /health, /v1/roles, /v1/me, check_contract.py | done | 35c1be2 | all contract schemas already in `app/schemas/api.py` |
-| B2 | Catalogues: skills.yaml, roles.yaml, resources.yaml + loaders/tests | doing | wip commit | 63 skills, 7 roles, 130 resources, name lists, loaders + 29 tests done; wrap-up steps in Resume here |
+| B2 | Catalogues: skills.yaml, roles.yaml, resources.yaml + loaders/tests | done | e67462c | 63 skills, 7 roles, 130 resources; all links checked live |
 | B3 | Ingest, PII stripping, LLM gateway, resume extraction | todo | | |
 | B4 | GitHub collector, detectors, repo signals, rule flags | todo | | |
 | B5 | scoring.py + what-if + unit tests | todo | | |
@@ -38,8 +36,8 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | B8 | Hardening, contract check green, deploy, keep-alive | todo | | Supabase JWT verification lands here |
 
 ## In-progress detail
-- **Files touched, not finished:** `data/resources.yaml` (one replaced URL unverified; redirected URLs not yet updated)
-- **What works right now:** `GET /health`, `GET /v1/roles`, `GET /v1/me` (demo profile, created on first call under `DEV_AUTH=1`); every error in the contract `Error` shape (404/405/422/500 + `ApiError`); CORS for `CORS_ORIGINS` and `chrome-extension://*`; tables created at startup.
+- **Files touched, not finished:** none
+- **What works right now:** `GET /health`, `GET /v1/roles` (7 real roles), `GET /v1/me` (demo profile, created on first call under `DEV_AUTH=1`); every error in the contract `Error` shape (404/405/422/500 + `ApiError`); CORS for `CORS_ORIGINS` and `chrome-extension://*`; tables created at startup.
 - **Stubbed / fake (search `TODO(progress)`):**
   - `app/deps.py:get_auth_subject`: with `DEV_AUTH=0` every request gets 401 (no Supabase JWT verification yet) → B8.
 - **Known failing tests / checks:** none. `check_contract.py` without `--only-implemented` exits 1 by design until all 29 operations are routed.
@@ -58,6 +56,8 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - Per-project quiz understanding will live in `profiles.project_understanding` (JSON keyed by repo/portfolio URL).
 
 ## Gotchas learned (one line each, append)
+- `scripts/check_resource_urls.py` is live and manual; w3.org and tableau.com answer 403 to scripts (reported as `blocked`, not a failure).
+- Skills with `detectors: {}` are intentional (no repo footprint); evidence for them comes from experience and portfolio items.
 - `uv` lives in `~/.local/bin`; in Git Bash run `export PATH="$HOME/.local/bin:$PATH"` first if `uv` isn't found.
 - Tests set `DATABASE_URL=sqlite:///:memory:` and `DEV_AUTH=1` in `tests/conftest.py` before importing the app, so they never read the real `.env` database.
 - `Settings.cors_origins` is a comma-separated string (a `list[str]` field would make pydantic-settings expect JSON in `.env`); use `settings.cors_origin_list`.
