@@ -28,7 +28,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 |---|---|---|---|---|
 | B1 | Scaffold FastAPI, config, DB, errors, /health, /v1/roles, /v1/me, check_contract.py | done | 35c1be2 | all contract schemas already in `app/schemas/api.py` |
 | B2 | Catalogues: skills.yaml, roles.yaml, resources.yaml + loaders/tests | done | e67462c | 63 skills, 7 roles, 130 resources; all links checked live |
-| B3 | Ingest, PII stripping, LLM gateway, resume extraction | done | SHA_B3 | live LLM call unverified (no keys); profile CRUD + upload real |
+| B3 | Ingest, PII stripping, LLM gateway, resume extraction | done | 1ced9ff | live LLM call unverified (no keys); profile CRUD + upload real |
 | B4 | GitHub collector, detectors, repo signals, rule flags | todo | | |
 | B5 | scoring.py + what-if + unit tests | todo | | |
 | B6 | Pipeline, analyses endpoints, judging, roadmap planner, role-fit | todo | | also `PATCH /v1/analyses/{id}/roadmap/{milestone_id}` (added at freeze) |
