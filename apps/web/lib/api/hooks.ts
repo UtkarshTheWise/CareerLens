@@ -40,7 +40,7 @@ export function useStartAnalysis() {
   });
 }
 export function useListAnalyses(input: OperationInputs["listAnalyses"] | undefined, control: QueryControl = {}) { return useQuery({ queryKey: queryKeys.listAnalyses(input), queryFn: ({ signal }) => operations.listAnalyses(input!, signal), enabled: Boolean(input?.profile_id) && (control.enabled ?? true) }); }
-export function useGetAnalysis(input: OperationInputs["getAnalysis"] | undefined, control: QueryControl = {}) { return useQuery({ queryKey: queryKeys.getAnalysis(input), queryFn: ({ signal }) => operations.getAnalysis(input!, signal), enabled: Boolean(input?.analysis_id) && (control.enabled ?? true), refetchInterval: (query) => analysisPollInterval(query.state.data) }); }
+export function useGetAnalysis(input: OperationInputs["getAnalysis"] | undefined, control: QueryControl = {}) { return useQuery({ queryKey: queryKeys.getAnalysis(input), queryFn: ({ signal }) => operations.getAnalysis(input!, signal), enabled: Boolean(input?.analysis_id) && (control.enabled ?? true), refetchInterval: (query) => query.state.status === "error" ? false : analysisPollInterval(query.state.data) }); }
 export function useSimulateAnalysis() { return useMutation({ mutationFn: (input: OperationInputs["simulateAnalysis"]) => operations.simulateAnalysis(input) }); }
 export function useUpdateMilestone() {
   const cache = useQueryClient(); return useMutation({

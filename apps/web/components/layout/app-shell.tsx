@@ -29,7 +29,7 @@ function Navigation({ onNavigate }: { onNavigate?: () => void }) {
       const active = pathname === href || pathname.startsWith(href + "/");
       const target = href === "/report" ? (profile?.latest_analysis_id ? `/report/${encodeURIComponent(profile.latest_analysis_id)}` : null) : href;
       if (!target) return <span key={href} className="nav-link text-muted-readable" aria-disabled="true" title="Analyse a profile to open a report"><Icon size={20} strokeWidth={1.75} aria-hidden="true"/>{title}<span className="sr-only"> — an analysis is required</span></span>;
-      return <Link key={href} href={target} onClick={onNavigate} className="nav-link text-muted-readable" aria-current={active ? "page" : undefined}><Icon size={20} strokeWidth={1.75} aria-hidden="true"/>{title}{active && <ChevronRight className="ml-auto" size={16} aria-hidden="true"/>}</Link>;
+      return <Link key={href} href={target} onClick={onNavigate} className={`nav-link ${active ? "text-primary-foreground" : "text-muted-readable"}`} aria-current={active ? "page" : undefined}><Icon size={20} strokeWidth={1.75} aria-hidden="true"/>{title}{active && <ChevronRight className="ml-auto" size={16} aria-hidden="true"/>}</Link>;
     })}
   </nav>;
 }
@@ -45,11 +45,11 @@ function ProfileChip() {
 }
 export function AppShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false); const pathname = usePathname();
-  const title = pathname.startsWith("/dev/components") ? "Component kit" : pathname.startsWith("/dev/roles") ? "Target roles" : destinations.find(item => pathname.startsWith(item.href))?.title || "CareerLens";
+  const title = pathname.startsWith("/onboarding") ? "Profile setup" : pathname.startsWith("/dev/components") ? "Component kit" : pathname.startsWith("/dev/roles") ? "Target roles" : destinations.find(item => pathname.startsWith(item.href))?.title || "CareerLens";
   return <div className="min-h-dvh lg:grid lg:grid-cols-[280px_minmax(0,1fr)]">
     <a href="#main-content" className="fixed top-3 left-3 z-50 -translate-y-24 rounded-control bg-primary px-4 py-3 text-primary-foreground focus:translate-y-0">Skip to content</a>
     <aside className="sticky top-0 hidden h-dvh flex-col border-r border-border bg-surface p-6 lg:flex">
-      <Brand/><div className="mt-12"><p className="mb-4 px-4 text-xs font-medium text-muted-readable">Workspace</p><Navigation/></div>
+      <Brand/><div className="mt-8"><Link href="/onboarding" className="nav-link bg-surface-2 text-primary-text">Analyse a profile<ArrowUpRight size={16} aria-hidden="true"/></Link></div><div className="mt-8"><p className="mb-4 px-4 text-xs font-medium text-muted-readable">Workspace</p><Navigation/></div>
       <div className="mt-auto border-t border-border pt-6"><p className="text-sm font-semibold">Built on evidence.</p><p className="mt-1 text-xs text-muted-readable">Your work tells your story.</p><Link href="/dev/roles" className="mt-4 inline-flex items-center gap-2 text-xs font-medium text-primary-text">Explore target roles<ArrowUpRight size={14} aria-hidden="true"/></Link></div>
     </aside>
     <div className="min-w-0">
