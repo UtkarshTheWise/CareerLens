@@ -9,8 +9,26 @@ from typing import Any
 
 from sqlalchemy import JSON, Boolean, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.types import TypeDecorator
 
 from app.db.base import Base
+
+
+class UtcDateTime(TypeDecorator):
+    """Timezone-aware UTC datetimes on every backend (SQLite hands back naive values)."""
+
+    impl = DateTime(timezone=True)
+    cache_ok = True
+
+    def process_bind_param(self, value: datetime | None, dialect) -> datetime | None:
+        if value is not None and value.tzinfo is None:
+            value = value.replace(tzinfo=UTC)
+        return value.astimezone(UTC) if value is not None else None
+
+    def process_result_value(self, value: datetime | None, dialect) -> datetime | None:
+        if value is not None and value.tzinfo is None:
+            value = value.replace(tzinfo=UTC)
+        return value
 
 
 def _uuid() -> str:
@@ -50,7 +68,7 @@ class Profile(Base):
     project_understanding: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
     latest_analysis_id: Mapped[str | None] = mapped_column(String(36))
     latest_score: Mapped[float | None] = mapped_column(Float)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    created_at: Mapped[datetime] = mapped_column(UtcDateTime, default=utcnow)
 
     cohort: Mapped[Cohort | None] = relationship(back_populates="profiles")
     documents: Mapped[list["Document"]] = relationship(back_populates="profile", cascade="all, delete-orphan")
@@ -77,7 +95,7 @@ class Document(Base):
     filename: Mapped[str | None] = mapped_column(String(255))
     text: Mapped[str] = mapped_column(Text, default="")
     page_count: Mapped[int | None] = mapped_column(Integer)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    created_at: Mapped[datetime] = mapped_column(UtcDateTime, default=utcnow)
 
     profile: Mapped[Profile] = relationship(back_populates="documents")
 
@@ -96,8 +114,8 @@ class Analysis(Base):
     verified_skills: Mapped[int | None] = mapped_column(Integer)
     report: Mapped[dict[str, Any] | None] = mapped_column(JSON)  # AnalysisReport JSON
     signals: Mapped[dict[str, Any] | None] = mapped_column(JSON)  # stored inputs for simulate / re-score
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
-    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(UtcDateTime, default=utcnow)
+    finished_at: Mapped[datetime | None] = mapped_column(UtcDateTime)
 
     profile: Mapped[Profile] = relationship(back_populates="analyses")
 
@@ -116,9 +134,9 @@ class Application(Base):
     evidence_match: Mapped[float | None] = mapped_column(Float)
     description: Mapped[str | None] = mapped_column(Text)
     notes: Mapped[str | None] = mapped_column(Text)
-    applied_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
+    applied_at: Mapped[datetime | None] = mapped_column(UtcDateTime)
+    created_at: Mapped[datetime] = mapped_column(UtcDateTime, default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(UtcDateTime, default=utcnow, onupdate=utcnow)
 
     profile: Mapped[Profile] = relationship(back_populates="applications")
 
@@ -132,5 +150,5 @@ class CacheEntry(Base):
     kind: Mapped[str] = mapped_column(String(20), index=True)  # llm | github | http
     value: Mapped[Any] = mapped_column(JSON)
     is_json: Mapped[bool] = mapped_column(Boolean, default=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
-    expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(UtcDateTime, default=utcnow)
+    expires_at: Mapped[datetime | None] = mapped_column(UtcDateTime)

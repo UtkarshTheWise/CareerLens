@@ -1,0 +1,4 @@
+# Byte-exact fixtures: the hand-built PDFs are pure ASCII, so git would otherwise treat them
+# as text and rewrite their line endings, breaking the xref offsets.
+*.pdf binary
+*.docx binary
