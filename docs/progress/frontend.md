@@ -3,22 +3,23 @@
 ## Status
 - **Track:** frontend; owns apps/web, apps/extension and frontend workspace files.
 - **Branch / worktree:** frontend/codex; C:/Users/User/Desktop/CareerLens/careerlens-web
-- **Last updated:** 2026-10-07 17:34 Asia/Dubai by Codex (GPT 6.1 Sol, user-selected).
-- **Current task:** F1 implementation complete and published at 99a083e; final completion snapshot publication pending.
-- **State:** F1 validated and published; pause before F2 after completion snapshot push
-- **Last green checks:** Remote implementation SHA matches local 99a083e. Latest main e762cb4 and initial frontend branch published; client regeneration without schema drift, client typecheck, web typecheck, production build and eight API transport tests passed. Final web lint/typecheck/build passed. Browser checks and visual review passed in both themes at 320/375/390/414/768/1440px.
+- **Last updated:** 2026-10-07 18:48 Asia/Dubai by Codex (GPT 6.1 Sol, user-selected).
+- **Current task:** F2 implemented and validated; implementation publication checkpoint next.
+- **State:** in progress; do not start F3
+- **Last green checks:** final web lint/typecheck/build; transport tests 8/8; all twelve components, controlled states, chart keyboard/data alternatives, normal/reduced motion, both themes, six viewport widths and axe scans passed. Main baseline e762cb4; F1 completion beacd4a published.
 
 ## Resume here (exact next step)
-1. Work only in C:/Users/User/Desktop/CareerLens/careerlens-web. Read AGENTS.md, apps/web/AGENTS.md, docs/DESIGN.md, docs/plans/frontend-F1.md, F1 in PROMPTS.md and the last five handoffs.
-2. F1 implementation commit 99a083ef5ee1a0d612d6f0198f80531633f26cec is verified on origin/frontend/codex. All F1 checks passed. Publish the final docs completion commit from regular Windows PowerShell: git -C "C:\Users\User\Desktop\CareerLens\careerlens-web" push origin frontend/codex.
-3. Verify the public remote using the corrected launcher in the chat outputs directory; do not retry Windows credentials from the sandbox. Report F1 and pause. F2 is not authorized until the user asks to continue.
-4. On the user's continuation, fetch main via the launcher, review shared/nested rules, DESIGN, F2 in PROMPTS.md and the last five handoffs, then plan F2. Prompt order remains F2 F3 F4 F9 F5 F6 F7 F8 with a report and pause after each.
+1. Work only in C:/Users/User/Desktop/CareerLens/careerlens-web. Read this snapshot, shared/nested AGENTS, DESIGN, docs/plans/frontend-F2.md, F2 in PROMPTS and the last five handoffs.
+2. F2 implementation and runtime acceptance are complete. Review git status/diff; commit apps/web, F2 plan, this snapshot and the appended frontend handoff. Publish via regular Windows PowerShell: git -C "C:\Users\User\Desktop\CareerLens\careerlens-web" push origin frontend/codex.
+3. Verify origin/frontend/codex matches the implementation SHA using the corrected public-fetch launcher. Record the SHA and F2 done in this snapshot, commit/publish the completion checkpoint. Report F2 and pause before F3.
+4. F3 begins only on the user's continuation. Fetch main, review rules/DESIGN/F3/handoffs, plan onboarding/polling using existing typed hooks and StageProgress. Order remains F3 F4 F9 F5 F6 F7 F8; report and pause after each.
+
 ## Task board
 | Id | Task | Status | Commit | Notes |
 |---|---|---|---|---|
-| F1 | Scaffold, tokens, shell, client/hooks | done | 99a083e | Implementation published; completion docs push pending |
-| F2 | Component kit | todo | | Await F1 completion and user continuation |
-| F3 | Onboarding + polling UI | todo | | |
+| F1 | Scaffold, tokens, shell, client/hooks | done | 99a083e | Implementation and beacd4a checkpoint published |
+| F2 | Component kit | doing | | All checks pass; publication remains |
+| F3 | Onboarding + polling UI | todo | | Await F2 report and user continuation |
 | F4 | Dashboard + report + simulator | todo | | |
 | F9 | Quiz screens | todo | | |
 | F5 | Roadmap + history | todo | | |
@@ -27,41 +28,34 @@
 | F8 | Extension | todo | | |
 
 ## In-progress detail
-- **Files touched:** apps/web configuration, global tokens/providers, sidebar/topbar/theme/profile, route shells, /dev/roles, lib/api operations/query keys/hooks/upload/transport, focused API tests; workspace dependency lock/config; F1 plan.
-- **What works:** 29 operations and hooks use frozen generated paths. Eight native Node HTTP transport/poll/retry tests pass. Static Prism and production web run; browser acceptance and visual review passed.
-- **Stubbed / fake:** TODO(progress) in components/layout/section-shell.tsx: dashboard/report/roadmap/tracker/placement/settings feature bodies are later prompts. Temporary roles page is a real API proof. No fabricated metrics or analyses.
-- **Known failing checks:** None. Implementation publication verified; final docs snapshot publication is the remaining coordination step.
+- **Files touched:** apps/web/components/career, shadcn card/popover/tabs/checkbox, /dev/components page/fixture, semantic/chart tokens and preview shell title; F2 plan/progress/handoff.
+- **What works:** twelve exported F2 components; API-derived reasons, bands, levels, flags, milestones and stages; Recharts trends/stacks with data alternatives; 800ms SVG rings, exact computed DESIGN shadows/radius/padding and non-looping reduced-motion spinner; safe evidence/resource links; controlled milestone save states; honest missing-data states.
+- **Stubbed / fake:** /dev/components uses frozen synthetic contract examples and explicitly illustrative history/delta. Milestone preview is local state with no API writes/persistence. F1 section-shell TODO(progress) feature bodies remain later prompts. No F3/extension/client scoring implementation.
+- **Known failing checks:** none. Publication is the remaining completion step.
 
 ## Decisions
-- Prompt order F1 F2 F3 F4 F9 F5 F6 F7 F8; pause after every prompt. User later authorized F1 execution without another plan approval pause.
-- Reviewed all supplied project Markdown and all current docs Markdown, including DESIGN and new backend prompt files after pulling B1-B6.
-- Frozen v0.2.0 contract and P0/integration handoff supersede older archive examples. Run Prism without -d.
-- Use official shadcn registry components/Radix, locked DESIGN palette and locally bundled Plus Jakarta Sans. Hallmark/taste apply to quality within dashboard scope.
-- Exact DESIGN tokens preserved; named readable text foregrounds supplement them to meet contrast requirements.
-- Root packageManager remains pnpm@10.12.3. Local tooling copy is in the chat work/tools directory.
-- Preserve old unverified drafts in ../careerlens; none are merged into this worktree.
+- User resumed F2 on 2026-10-07. Strict order F1 F2 F3 F4 F9 F5 F6 F7 F8 with a pause after every prompt; no parallel later-prompt work.
+- F1 implementation and completion checkpoint were verified published; fresh public fetch showed origin/main still e762cb4 (B1-B6). Frozen v0.2.0 contract unchanged.
+- Reviewed DESIGN, F2, shared/nested rules and all three track handoffs. Prior review of all authored Markdown remains valid; no new remote docs arrived.
+- Hallmark component scope and taste quality rules apply within the locked dashboard system. Preserve Plus Jakarta Sans and exact DESIGN colors/radii/shadows; named readable foregrounds supplement semantic colors.
+- F2 adds no project dependencies. Official shadcn registry card/popover/tabs/checkbox use existing radix-ui and styling dependencies.
+- Scores, bands, deltas, weights and gains come from supplied data. No frontend scoring or band inference. Readiness Why includes all five components; coverage includes its definition.
+- Preserve old unverified drafts in ../careerlens; nothing copied from them.
 
 ## Gotchas
-- Codex Windows environment contains PATH and Path. Prepending only PATH did not repair Git credential-helper shell lookup; a ProcessStartInfo launcher normalizes them and pins installed Git/helper directories.
-- Corrected launcher avoids git-remote-https crash. Sandboxed Windows Credential Manager still cannot authenticate; do not repeatedly retry authenticated Git here.
-- User added safe.directory for this exact frontend worktree and signed in through the regular Windows terminal; initial branch push succeeded. Subsequent pushes may need the same regular terminal.
-- Sandbox-safe fetch launcher: C:/Users/User/Documents/Codex/2026-10-07/install-these-two-skills-from-github/work/Invoke-CareerLensGit.ps1 (use -c credential.helper= fetch origin for public fetch).
-- Official shadcn registry cn imports need their configured @/lib/utils alias. Registry components currently use radix-ui.
-- tsx/os.userInfo and esbuild CLI hit Windows sandbox permissions; tests now use Node native TypeScript transform plus a local module-resolution hook. All eight pass.
+- Codex Windows environment has both PATH and Path; the corrected ProcessStartInfo launcher normalizes child PATH, pins installed Git/helpers and uses OpenSSL. Public Git operations avoid the earlier git-remote-https crash.
+- Sandbox-safe public fetch: chat outputs/Invoke-CareerLensGit.ps1 -c credential.helper= fetch origin. Windows sandbox cannot access user Credential Manager; authenticated pushes require the regular Windows terminal. User already trusted this exact worktree and authenticated successfully.
+- Native Node tests need Node 22.16+ (tested 24.19) and tests/register.mjs; tsx/os.userInfo failed under sandbox, so do not revert the runner casually.
+- Browser checks wait for Radix closing animations and Recharts ResizeObserver dimensions before assertions. shadcn default shadow-sm was replaced with the DESIGN shadow-card; computed light/dark shadows match. Reduced motion limits CSS animation to one brief iteration. Dark moderate-pill foreground was corrected from 3.97:1 to an AA-passing named token, preserving the supplied violet background.
+- Chromium capture-beyond-viewport can paint the translated, unfocused skip link in tall element captures. Computed live position remains -84px with no focus; normal viewport screenshots confirm it is offscreen. Use viewport captures for visual evidence, not this capture artifact.
 
 ## Blocked on
-- No implementation blocker. Publishing the completion snapshot requires the user's Windows credential context if sandbox authentication remains unavailable.
+- No implementation blocker. Publishing commits needs the user's normal Windows credential context.
 
-## Environment
-- API default NEXT_PUBLIC_API_URL=http://localhost:4010; development bearer dev from @careerlens/api-client.
-- Mock: pnpm mock (static contract examples, no -d). Production preview: http://127.0.0.1:3000/dev/roles; started with pnpm --filter web start.
-- Client: schema generated from contract v0.2.0; Next transpiles @careerlens/api-client.
-- Node bundled 24.19.0; pnpm executable: chat work/tools/node_modules/pnpm/bin/pnpm.cjs (10.12.3).
-
-## F1 validation evidence
-- pnpm --filter web lint / typecheck / build: pass (final source); pnpm --filter web test: 8/8 pass.
-- pnpm gen:client: pass; generated schema has zero content diff; API client typecheck: pass.
-- Browser: roles/profile HTTP, Bearer dev 200 and missing bearer 401, six destinations, active navigation, persistent light/dark/system themes, mobile Escape/focus return and skip link: pass.
-- Roles loading/empty/error/retry states: pass; no application console/runtime errors.
-- Both themes at 320/375/390/414/768/1440px: no horizontal overflow or wrapped controls; screenshots visually reviewed. axe WCAG A/AA scans: zero violations; this is an automated check, not a full accessibility certification.
-- Evidence and reusable Git launcher: C:/Users/User/Documents/Codex/2026-10-07/install-these-two-skills-from-github/outputs/. Browser harness is in chat work/browser_f1.cjs.
+## Environment and validation
+- Static Prism: pnpm mock (:4010, no -d); production web: pnpm --filter web start, http://127.0.0.1:3000/dev/components.
+- F2 final lint/typecheck/build passed; eight existing HTTP transport tests passed. No API contract/client regeneration needed: protected paths and generated schema have no changes.
+- Browser: all twelve components; five-component readiness reasons, signed deltas/evidence links, coverage definition, keyboard tabs/data table, milestone checked/saving/error/retry/disabled, queued/running/done/failed analysis, loading/empty/error views, reduced/normal motion: pass. No app console/runtime errors.
+- Both themes at 320/375/390/414/768/1440px: no horizontal overflow or wrapped clickable text; viewport screenshots visually reviewed, plus component sections at mobile/desktop. Desktop axe WCAG A/AA: zero violations in both themes (not a full manual certification).
+- Evidence: chat outputs/F2-browser-checks.json, F2-{light,dark}-accessibility.json, F2-*-viewport.png; harness chat work/browser_f2.cjs.
+- Runtime Node 24.19.0; pnpm 10.12.3 via chat work/tools/node_modules/pnpm/bin/pnpm.cjs. Root packageManager unchanged.

@@ -85,4 +85,27 @@
   .nav-link:not([aria-current="page"]):hover { background: var(--surface-2); color: var(--text); }
 }
 :focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R5 V4 — F2 component kit. */
+:root {
+  --success-readable: #087A39; --warning-readable: #8B5900; --danger-readable: #B42332;
+  --success-tint: #ECFDF3; --warning-tint: #FFF7DF; --danger-tint: #FFF1F2;
+  --chart-grid: var(--border); --chart-axis: var(--muted-readable);
+}
+:root[data-theme="dark"] {
+  --chip-text: #211A64; --success-readable: #6EE7B7; --warning-readable: #FCD34D; --danger-readable: #FDA4AF;
+  --success-tint: #103329; --warning-tint: #342A15; --danger-tint: #351C24;
+}
+@theme inline {
+  --color-success-readable: var(--success-readable); --color-warning-readable: var(--warning-readable); --color-danger-readable: var(--danger-readable);
+  --color-card: var(--surface); --color-card-foreground: var(--text); --color-input: var(--border);
+}
+@layer components {
+  .status-pill { display: inline-flex; align-items: center; border: 1px solid transparent; border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 500; line-height: 1.5; white-space: nowrap; }
+  .tone-success { background: var(--success-tint); color: var(--success-readable); }
+  .tone-warning { background: var(--warning-tint); color: var(--warning-readable); }
+  .tone-primary { background: var(--primary-soft); color: var(--chip-text); }
+  .tone-muted { background: var(--surface-2); color: var(--muted-readable); border-color: var(--border); }
+  .tone-danger-outline { background: var(--danger-tint); color: var(--danger-readable); border-color: var(--danger); }
+}

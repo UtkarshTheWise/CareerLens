@@ -45,7 +45,7 @@ function ProfileChip() {
 }
 export function AppShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false); const pathname = usePathname();
-  const title = pathname.startsWith("/dev/roles") ? "Target roles" : destinations.find(item => pathname.startsWith(item.href))?.title || "CareerLens";
+  const title = pathname.startsWith("/dev/components") ? "Component kit" : pathname.startsWith("/dev/roles") ? "Target roles" : destinations.find(item => pathname.startsWith(item.href))?.title || "CareerLens";
   return <div className="min-h-dvh lg:grid lg:grid-cols-[280px_minmax(0,1fr)]">
     <a href="#main-content" className="fixed top-3 left-3 z-50 -translate-y-24 rounded-control bg-primary px-4 py-3 text-primary-foreground focus:translate-y-0">Skip to content</a>
     <aside className="sticky top-0 hidden h-dvh flex-col border-r border-border bg-surface p-6 lg:flex">

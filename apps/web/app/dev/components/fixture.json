@@ -1,0 +1,486 @@
+{
+  "score": {
+    "total": 65.1,
+    "band": "developing",
+    "confidence": "high",
+    "capped": false,
+    "components": [
+      {
+        "key": "skill_evidence",
+        "label": "Skill evidence",
+        "weight": 0.4,
+        "score": 58,
+        "contribution": 23.2,
+        "reasons": [
+          {
+            "text": "Python, FastAPI, SQL and Docker verified in repo 'campus-api' (34 authored commits)",
+            "delta": 44,
+            "evidence_ids": [
+              "ev-campus-api-repo",
+              "ev-campus-api-dockerfile"
+            ]
+          },
+          {
+            "text": "pytest is used in 'campus-api' tests, credited at moderate",
+            "delta": 8,
+            "evidence_ids": [
+              "ev-campus-api-tests"
+            ]
+          },
+          {
+            "text": "React, Kubernetes and AWS are claimed without a linked artifact yet",
+            "delta": 6,
+            "evidence_ids": [
+              "ev-resume-skills"
+            ]
+          },
+          {
+            "text": "Redis and CI/CD are required for this role and have no evidence yet",
+            "delta": -28,
+            "evidence_ids": []
+          }
+        ]
+      },
+      {
+        "key": "project_quality",
+        "label": "Project quality",
+        "weight": 0.25,
+        "score": 64,
+        "contribution": 16,
+        "reasons": [
+          {
+            "text": "'campus-api' scored 83/100: tests, lockfile and Dockerfile present; no CI workflow",
+            "delta": 41.5,
+            "evidence_ids": [
+              "ev-campus-api-repo"
+            ]
+          },
+          {
+            "text": "'weather-dashboard' scored 45/100: README is still the framework default",
+            "delta": 22.5,
+            "evidence_ids": [
+              "ev-weather-repo"
+            ]
+          }
+        ]
+      },
+      {
+        "key": "consistency",
+        "label": "Consistency",
+        "weight": 0.15,
+        "score": 72.3,
+        "contribution": 10.8,
+        "reasons": [
+          {
+            "text": "Active in 18 of the last 26 weeks",
+            "delta": 34.6,
+            "evidence_ids": []
+          },
+          {
+            "text": "Weekly activity is fairly even (variation 0.82)",
+            "delta": 17.7,
+            "evidence_ids": []
+          },
+          {
+            "text": "Last activity 6 days ago",
+            "delta": 20,
+            "evidence_ids": []
+          }
+        ]
+      },
+      {
+        "key": "experience",
+        "label": "Experience",
+        "weight": 0.1,
+        "score": 72,
+        "contribution": 7.2,
+        "reasons": [
+          {
+            "text": "2 roles found: one internship and one freelance project",
+            "delta": 100,
+            "evidence_ids": [
+              "ev-exp-internship"
+            ]
+          },
+          {
+            "text": "3 of 10 experience bullets include a number",
+            "delta": -28,
+            "evidence_ids": [
+              "ev-exp-internship"
+            ]
+          }
+        ]
+      },
+      {
+        "key": "resume_quality",
+        "label": "Resume quality",
+        "weight": 0.1,
+        "score": 79,
+        "contribution": 7.9,
+        "reasons": [
+          {
+            "text": "All five required sections found",
+            "delta": 40,
+            "evidence_ids": []
+          },
+          {
+            "text": "3 of 10 bullets are quantified",
+            "delta": 9,
+            "evidence_ids": []
+          },
+          {
+            "text": "Length is one page",
+            "delta": 15,
+            "evidence_ids": []
+          },
+          {
+            "text": "8 skills listed, 2 of them unverified",
+            "delta": 15,
+            "evidence_ids": [
+              "ev-resume-skills"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "coverage": 62.5,
+  "claims": [
+    {
+      "skill_id": "docker",
+      "skill_name": "Docker",
+      "claimed": true,
+      "level": "strong",
+      "reason": "Dockerfile and compose.yaml in 'campus-api', where you authored 34 of 36 commits",
+      "evidence_ids": [
+        "ev-campus-api-dockerfile",
+        "ev-campus-api-repo"
+      ]
+    },
+    {
+      "skill_id": "python",
+      "skill_name": "Python",
+      "claimed": true,
+      "level": "strong",
+      "reason": "Primary language of 'campus-api' (34 authored commits)",
+      "evidence_ids": [
+        "ev-campus-api-repo"
+      ]
+    },
+    {
+      "skill_id": "fastapi",
+      "skill_name": "FastAPI",
+      "claimed": true,
+      "level": "strong",
+      "reason": "fastapi is a dependency of 'campus-api' and its routers import it",
+      "evidence_ids": [
+        "ev-campus-api-repo"
+      ]
+    },
+    {
+      "skill_id": "sql",
+      "skill_name": "SQL",
+      "claimed": true,
+      "level": "strong",
+      "reason": "SQLAlchemy and psycopg in 'campus-api' dependencies",
+      "evidence_ids": [
+        "ev-campus-api-repo"
+      ]
+    },
+    {
+      "skill_id": "pytest",
+      "skill_name": "pytest",
+      "claimed": true,
+      "level": "moderate",
+      "reason": "Tests found in 'campus-api/tests'; also named in an internship bullet",
+      "evidence_ids": [
+        "ev-campus-api-tests",
+        "ev-exp-internship"
+      ]
+    },
+    {
+      "skill_id": "react",
+      "skill_name": "React",
+      "claimed": true,
+      "level": "weak",
+      "reason": "Mentioned in the 'weather-dashboard' description; no React dependency found in the repo",
+      "evidence_ids": [
+        "ev-weather-repo"
+      ]
+    },
+    {
+      "skill_id": "kubernetes",
+      "skill_name": "Kubernetes",
+      "claimed": true,
+      "level": "unverified",
+      "reason": "Appears only in the skills list",
+      "evidence_ids": [
+        "ev-resume-skills"
+      ]
+    },
+    {
+      "skill_id": "aws",
+      "skill_name": "AWS",
+      "claimed": true,
+      "level": "unverified",
+      "reason": "Appears only in the skills list",
+      "evidence_ids": [
+        "ev-resume-skills"
+      ]
+    },
+    {
+      "skill_id": "redis",
+      "skill_name": "Redis",
+      "claimed": false,
+      "level": "missing",
+      "reason": "Required for Backend Developer; not claimed and not found in any repository",
+      "evidence_ids": []
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-campus-api-repo",
+      "kind": "repo",
+      "source": "github",
+      "label": "campus-api (34 of 36 commits authored)",
+      "url": "https://github.com/careerlens-demo/campus-api",
+      "details": {
+        "authored_commits": 34,
+        "total_commits": 36,
+        "is_fork": false
+      }
+    },
+    {
+      "id": "ev-campus-api-dockerfile",
+      "kind": "file",
+      "source": "github",
+      "label": "campus-api/Dockerfile",
+      "url": "https://github.com/careerlens-demo/campus-api/blob/main/Dockerfile",
+      "details": null
+    },
+    {
+      "id": "ev-campus-api-tests",
+      "kind": "file",
+      "source": "github",
+      "label": "campus-api/tests",
+      "url": "https://github.com/careerlens-demo/campus-api/tree/main/tests",
+      "details": null
+    },
+    {
+      "id": "ev-weather-repo",
+      "kind": "repo",
+      "source": "github",
+      "label": "weather-dashboard (14 of 14 commits authored)",
+      "url": "https://github.com/careerlens-demo/weather-dashboard",
+      "details": {
+        "authored_commits": 14,
+        "total_commits": 14,
+        "is_fork": false
+      }
+    },
+    {
+      "id": "ev-exp-internship",
+      "kind": "experience",
+      "source": "resume",
+      "label": "Backend intern, 2 months",
+      "url": null,
+      "details": null
+    },
+    {
+      "id": "ev-resume-skills",
+      "kind": "resume_text",
+      "source": "resume",
+      "label": "Skills section of the resume",
+      "url": null,
+      "details": null
+    }
+  ],
+  "flag": {
+    "flag_id": "flag-weather-default-readme",
+    "code": "default_readme",
+    "severity": "medium",
+    "reason": "The README is still the starter template, so a reader can't see what you built.",
+    "fix": "Write a README: problem, architecture diagram, setup, screenshots, results.",
+    "estimated_gain": 1.6
+  },
+  "milestone": {
+    "id": "ms-1",
+    "order": 1,
+    "title": "Add CI to campus-api",
+    "deliverable": "A GitHub Actions workflow in campus-api that runs pytest on every push, with a passing badge in the README",
+    "addresses": [
+      "gap-ci-cd"
+    ],
+    "resources": [
+      {
+        "id": "github-actions-docs",
+        "title": "GitHub Actions documentation",
+        "url": "https://docs.github.com/en/actions",
+        "type": "documentation",
+        "skill_id": "ci-cd",
+        "hours": 2
+      }
+    ],
+    "effort_hours": 3,
+    "estimated_gain": 4.5,
+    "done": false
+  },
+  "cohort": {
+    "cohort_id": "6b1f4c2a-9d3e-4f7a-8c55-2e0a7d9b1c44",
+    "role_id": "sde-backend",
+    "student_count": 40,
+    "analysed_count": 38,
+    "median_score": 56.5,
+    "median_coverage": 48,
+    "bands": {
+      "not_ready": 12,
+      "developing": 20,
+      "ready": 6
+    },
+    "histogram": [
+      {
+        "bucket": "0-9",
+        "count": 0
+      },
+      {
+        "bucket": "10-19",
+        "count": 0
+      },
+      {
+        "bucket": "20-29",
+        "count": 2
+      },
+      {
+        "bucket": "30-39",
+        "count": 4
+      },
+      {
+        "bucket": "40-49",
+        "count": 6
+      },
+      {
+        "bucket": "50-59",
+        "count": 10
+      },
+      {
+        "bucket": "60-69",
+        "count": 7
+      },
+      {
+        "bucket": "70-79",
+        "count": 6
+      },
+      {
+        "bucket": "80-89",
+        "count": 3
+      },
+      {
+        "bucket": "90-100",
+        "count": 0
+      }
+    ],
+    "top_missing_skills": [
+      {
+        "skill_id": "ci-cd",
+        "skill_name": "CI/CD",
+        "students": 24
+      },
+      {
+        "skill_id": "redis",
+        "skill_name": "Redis",
+        "students": 21
+      },
+      {
+        "skill_id": "kubernetes",
+        "skill_name": "Kubernetes",
+        "students": 19
+      },
+      {
+        "skill_id": "system-design",
+        "skill_name": "System Design",
+        "students": 17
+      },
+      {
+        "skill_id": "aws",
+        "skill_name": "AWS",
+        "students": 15
+      }
+    ],
+    "unverified_rate_by_skill": [
+      {
+        "skill_id": "kubernetes",
+        "skill_name": "Kubernetes",
+        "claimed_by": 14,
+        "unverified_rate": 78.6
+      },
+      {
+        "skill_id": "aws",
+        "skill_name": "AWS",
+        "claimed_by": 16,
+        "unverified_rate": 68.8
+      },
+      {
+        "skill_id": "docker",
+        "skill_name": "Docker",
+        "claimed_by": 22,
+        "unverified_rate": 36.4
+      },
+      {
+        "skill_id": "react",
+        "skill_name": "React",
+        "claimed_by": 18,
+        "unverified_rate": 33.3
+      },
+      {
+        "skill_id": "sql",
+        "skill_name": "SQL",
+        "claimed_by": 34,
+        "unverified_rate": 17.6
+      }
+    ],
+    "at_risk_count": 14,
+    "understanding": {
+      "quizzed": 15,
+      "demonstrated": 8,
+      "partial": 4,
+      "not_demonstrated": 3,
+      "by_skill": [
+        {
+          "skill_id": "python",
+          "skill_name": "Python",
+          "claimed_by": 36,
+          "built_and_explained_rate": 19.4
+        },
+        {
+          "skill_id": "sql",
+          "skill_name": "SQL",
+          "claimed_by": 34,
+          "built_and_explained_rate": 14.7
+        },
+        {
+          "skill_id": "docker",
+          "skill_name": "Docker",
+          "claimed_by": 22,
+          "built_and_explained_rate": 13.6
+        }
+      ]
+    },
+    "by_department": [
+      {
+        "department": "CSE",
+        "students": 24,
+        "median_score": 58.2
+      },
+      {
+        "department": "IT",
+        "students": 10,
+        "median_score": 54
+      },
+      {
+        "department": "ECE",
+        "students": 6,
+        "median_score": 47.5
+      }
+    ]
+  }
+}
