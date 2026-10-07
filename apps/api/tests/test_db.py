@@ -19,3 +19,9 @@ def test_plain_postgres_urls_use_the_installed_driver(given, expected):
 def test_engine_for_a_dashboard_style_url_uses_psycopg3():
     engine = make_engine("postgresql://user:secret@localhost:5432/postgres")  # no connection is opened
     assert engine.dialect.driver == "psycopg"
+
+
+def test_row_level_security_is_a_noop_on_sqlite():
+    from app.db.base import enable_row_level_security
+
+    enable_row_level_security(make_engine("sqlite:///:memory:"))  # must not raise

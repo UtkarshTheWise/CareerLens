@@ -36,3 +36,15 @@ def create_all() -> None:
     from app.db import models  # noqa: F401  (registers the tables on Base.metadata)
 
     Base.metadata.create_all(engine)
+    enable_row_level_security(engine)
+
+
+def enable_row_level_security(target: Engine) -> None:
+    """Supabase exposes every table in `public` through its REST API to anyone holding the project's
+    public anon key. Turning on RLS with no policies closes that door; this backend connects as the
+    `postgres` owner role, which bypasses RLS, so it is unaffected. No-op on SQLite. Idempotent."""
+    if target.dialect.name != "postgresql":
+        return
+    with target.begin() as conn:
+        for table in Base.metadata.sorted_tables:
+            conn.exec_driver_sql(f'ALTER TABLE "{table.name}" ENABLE ROW LEVEL SECURITY')
