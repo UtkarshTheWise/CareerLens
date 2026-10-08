@@ -5,7 +5,8 @@ export type Settings = {
   theme: "system" | "light" | "dark";
 };
 export const defaults: Settings = {
-  apiUrl: "http://localhost:8000",
+  // A production build bakes in its API with VITE_API_URL (optional chaining: Node tests have no import.meta.env).
+  apiUrl: (import.meta.env?.VITE_API_URL as string | undefined) || "http://localhost:8000",
   profileId: "",
   theme: "system",
 };

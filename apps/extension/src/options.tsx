@@ -15,6 +15,13 @@ import {
   type Settings,
 } from "./settings";
 import { getMe, message } from "./api";
+import {
+  authConfigured,
+  currentAccount,
+  signInWithGoogle,
+  signOut,
+  type Account,
+} from "./auth";
 import { Card, Status } from "./components";
 function Options() {
   useSettings();
@@ -22,7 +29,47 @@ function Options() {
     [ready, setReady] = useState(false),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
-    [status, setStatus] = useState("");
+    [status, setStatus] = useState(""),
+    [account, setAccount] = useState<Account | null>(null);
+  useEffect(() => {
+    let alive = true;
+    void currentAccount()
+      .then((value) => {
+        if (alive) setAccount(value);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, []);
+  async function signIn() {
+    if (busy) return;
+    setBusy(true);
+    setError("");
+    setStatus("");
+    try {
+      await signInWithGoogle();
+      setAccount(await currentAccount());
+      setStatus("Signed in. Use Fetch my profile, then save settings.");
+    } catch (e) {
+      setError(message(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function leave() {
+    if (busy) return;
+    setBusy(true);
+    try {
+      await signOut();
+      setAccount(null);
+      setStatus("Signed out.");
+    } catch (e) {
+      setError(message(e));
+    } finally {
+      setBusy(false);
+    }
+  }
   useEffect(() => {
     let alive = true;
     void loadSettings()
@@ -87,6 +134,42 @@ function Options() {
         </span>
         <h1 style={{ fontSize: 22 }}>CareerLens options</h1>
       </header>
+      {authConfigured && (
+        <Card>
+          <h2 className="posting-title">Account</h2>
+          {account ? (
+            <>
+              <p className="muted">
+                Signed in as {account.name || account.email}
+                {account.name && account.email ? ` (${account.email})` : ""}.
+              </p>
+              <button
+                type="button"
+                className="button"
+                disabled={!ready || busy}
+                onClick={() => void leave()}
+              >
+                Sign out
+              </button>
+            </>
+          ) : (
+            <>
+              <p className="muted">
+                Sign in with the same Google account you use in the CareerLens
+                web app. The extension keeps your session on this device only.
+              </p>
+              <button
+                type="button"
+                className="button primary"
+                disabled={!ready || busy}
+                onClick={() => void signIn()}
+              >
+                {busy ? "Working…" : "Sign in with Google"}
+              </button>
+            </>
+          )}
+        </Card>
+      )}
       <Card>
         <h2 className="posting-title">Connect your profile</h2>
         <p className="muted">
@@ -106,9 +189,9 @@ function Options() {
             />
           </label>
           <p className="muted" id="api-help">
-            Local development defaults to http://localhost:8000 and sends Bearer
-            dev. Custom remote APIs must allow requests from this extension
-            through CORS. No production login is configured here.
+            {authConfigured
+              ? "Requests carry your signed-in Google session. The API must allow requests from this extension through CORS (the CareerLens API already does)."
+              : "Development build: local APIs get a dev token; remote APIs need a build with sign-in configured."}
           </p>
           <label>
             Profile ID

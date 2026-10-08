@@ -2,17 +2,20 @@
   "manifest_version": 3,
   "name": "CareerLens — Job evidence",
   "version": "0.1.0",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA8Y5VZozQ7vy0+Mzb/XbDyMsR3TujyDP6zNGlUHeNjhvVagZ+nIzAbzL1Ecr1v7Dg5HkukoDZCD2DwwlFMdUWtlGVT8h+sYt+coVyt8oYbJmkME675AsgZnjDBLSrqwXgzh+bKylgiC2vRBjhPFgJT31YkwnnRqRE9zr+Bbt1hN4/n2V45Y/P/eHsEr4tXENj+wa4a+C/Np1EgVcI6tI09dh/CLmVInqfCADnBwlieMn4ur/h7n4NmZaos3/tpQsYvq9UOvemDVzCyjBm3hshTH1DEQB/elWtpBAu06RCunz1wFiLDZq6g8wwABDckyjMoHCvKrmR0KvMuQb5hhcdVwIDAQAB",
   "description": "Compare a job posting with your evidence-backed skills and save it to your tracker.",
   "minimum_chrome_version": "116",
   "permissions": [
     "activeTab",
+    "identity",
     "scripting",
-    "storage",
-    "sidePanel"
+    "sidePanel",
+    "storage"
   ],
   "host_permissions": [
     "http://localhost/*",
-    "http://127.0.0.1/*"
+    "http://127.0.0.1/*",
+    "https://*.supabase.co/*"
   ],
   "action": {
     "default_title": "Open CareerLens job panel"
