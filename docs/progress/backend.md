@@ -10,21 +10,18 @@ Keep under ~150 lines. Commit it together with the code it describes.
 ## Status
 - **Track:** backend · **Owns:** `apps/api/`, `data/`
 - **Branch / worktree:** `backend/claude` · `../careerlens-api`
-- **Last updated:** 2026-10-07 23:59 IST by Claude Code (Sonnet 5.5)
-- **Current task:** B9 in progress, commits 1-3 of 5 done (generation, the six endpoints, verify results re-score the analysis). Next: seed quiz results (commit 4), then docs + live run (commit 5).
-- **State:** in progress   <!-- not started | in progress | blocked | done -->
-- **Last green checks:** 2026-10-07 23:55 IST, from `apps/api`: `uv run pytest -q` (474 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (22/29 routed, 0 mismatches) · live `matchJob` with Gemini extraction
+- **Last updated:** 2026-10-08 01:30 IST by Claude Code (Sonnet 5.5)
+- **Current task:** B9 done and verified live (practice + verify quiz on real GitHub + Gemini). Next: B8 (hardening, deploy).
+- **State:** done   <!-- not started | in progress | blocked | done -->
+- **Last green checks:** 2026-10-08 01:20 IST, from `apps/api`: `uv run pytest -q` (585 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (28/29 routed, 0 mismatches; `tailorResume` is P2) · live quiz run (see the B9 handoff entry)
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
-0. B9 is built in 5 commits (approved plan: `~/.claude/plans/refactored-giggling-bachman.md`). DONE, commit 1: tables `quizzes/quiz_questions/quiz_answers` (`db/models.py`), `quiz_cooldown_minutes` (config), `services/quiz_context.py`, `services/quiz.py` (`mix_for`, `validate_question`, `generate_questions`, `create_quiz`), `GeneratedQuiz`/`QuizGrading` (`schemas/llm.py`), prompts `quiz_generate.md` + `quiz_grade.md` (grade unused yet), tests `test_quiz_context.py`, `test_quiz_generation.py`, helpers `tests/quiz_helpers.py` (FakeGitHub, scripted replies).
-0b. DONE, commit 2: `services/quiz_timing.py` (clocks: 60 s MCQ / 180 s short + 10 s grace, whole-quiz deadline, 30 min abandon rule), `quiz_grading.py` (q_score / quiz score / thresholds, MCQ, one batched grader call with one retry on an incomplete reply), `quiz_views.py` (the only place keys become response fields), `quiz_flow.py` (settle, start_quiz with cooldown 429 `retake_available_at` + 409 `quiz_in_progress`, open_quiz, answer_question, submit_quiz, build_result, result_for, list_summaries), `routers/quizzes.py` (6 operations, `get_clock` dependency), `deps.get_quiz_for`, `quiz_questions.grading_context`; tests `test_quiz_scoring.py`, `test_quizzes_api.py` (31 flow tests with a fake clock).
-0c. DONE, commit 3: `services/quiz_effects.py:apply_verify_result` (called from `quiz_flow.submit_quiz` for verify quizzes that were not abandoned): sets understanding / covered skills / `latest_quiz_id` / `gap_flag` on the stored inputs, re-scores, re-plans the roadmap (ticks kept by `addresses`), keeps model-written project text, stores via `pipeline.store_report`, updates `profile.latest_score` and `profile.project_understanding[url]`, fills `QuizResult.score_update` + `.flag`. `pipeline.save_report` now = `store_report` + finished_at + profile latest. Tests `test_quiz_effects.py` (10), helpers `Env` / `new_env` / `make_analysis(with_report=True)` in `tests/quiz_helpers.py`.
-1. NEXT, commit 4: `scripts/seed_demo.py:generate_inputs` gives ~60 % of students a verify result on their top project before scoring (so the 12/18/10 band quota still holds; projects have no URL, so only the stored inputs carry it), update `tests/test_seed.py`. Commit 5: docs + handoff with one example quiz (questions only) from a live run (real GitHub + Gemini/Groq, throwaway SQLite: analysis -> practice + verify quiz on the best repo -> answer -> submit -> check `score_update`, flag, milestone, cooldown 429).
-2. B9 contract with this code: `profiles.project_understanding` is a dict keyed by project URL (repo URL or portfolio URL) with values `{"understanding": "demonstrated|partial|not_demonstrated", "covered_skill_ids": [...], "quiz_id": "<uuid>"}`; `analysis_inputs.carry_understanding` reads it and a re-analysis keeps it. B9's submit re-scores via `ScoringInputs.model_validate(analysis.signals)` with updated projects, then rebuilds the stored report's `score`, `claims`, `gaps`, `projects` as `scripts/seed_demo.py:build_report` and `pipeline._run` do, and stores it with `pipeline.save_report(analysis, inputs, report)`.
-3. B9 item 5 (seed gives ~60 % of students a verify result): set `ProjectInput.understanding` / `covered_skill_ids` on the generated inputs in `scripts/seed_demo.py:generate_inputs` before scoring. Seeded projects have no URLs, so key by `project_id` there. Cohort insights already read `ProjectAudit.understanding` of each student's top counted project, and `tests/test_seed.py` asserts the 12/18/10 bands, which a quiz bonus can shift: re-check it.
+1. Start B8 (hardening, contract check green, deploy, keep-alive): paste its prompt from PROMPTS.md (plan with Opus, build with Sonnet: `/model opusplan`). Known B8 items: Supabase JWT verification in `app/deps.py:get_auth_subject` (`TODO(progress)`); restrict the cohort routes to placement staff (`TODO(progress)` in `routers/cohorts.py`); structured logging (uvicorn hides the app's INFO logs, so stage timings are invisible); `/health` should probe the LLM provider; `check_contract.py` without `--only-implemented` exits 1 until `tailorResume` (P2) is routed or dropped from the check.
+2. Quiz map for whoever touches it: `services/quiz_context.py` (files) -> `quiz.py` (generate + validate + store) -> `quiz_flow.py` (start / open / answer / submit / result, calls `quiz_timing.py`, `quiz_grading.py`, `quiz_effects.py`) -> `quiz_views.py` (the only place keys become response fields) -> `routers/quizzes.py`. Verify result -> `quiz_effects.apply_verify_result` re-scores `analysis.signals`, rewrites the stored report and `profiles.project_understanding[url]`.
+3. Not yet seen live: a `demonstrated`/`partial` verify result with the real grader (the live run used deliberately poor answers), and whether the replacement-questions round now succeeds on Groq after the 413 fix (quotas blocked the re-check). Re-run: `cd apps/api && PYTHONPATH=. DEV_AUTH=1 DATABASE_URL=sqlite:///<scratch>/live.db uv run python <scratch>/live_quiz.py` (scripts were in the session scratchpad; recreate from the handoff steps: profile + resume upload + analysis, practice quiz, verify quiz, answers, submit).
 4. After any route or schema change: `cd apps/api && uv run python scripts/check_contract.py --only-implemented`. Seed locally with `cd apps/api && uv run python scripts/seed_demo.py` (uses `DATABASE_URL`).
-5. Human: the GitHub token expires 2026-10-14; renew it in `careerlens-api/apps/api/.env`. Supabase needs the hotspot (college Wi-Fi blocks the DB ports).
+5. Human: the GitHub token expires 2026-10-14; renew it in `careerlens-api/apps/api/.env`. Supabase needs the hotspot (college Wi-Fi blocks the DB ports). Gemini/Groq free-tier quotas were exhausted on 2026-10-07/08; pre-generate demo quizzes before judging.
 
 ## Task board
 <!-- status: todo | doing | done | blocked · commit = short sha of the commit that finished it -->
@@ -37,7 +34,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | B5 | scoring.py + what-if + unit tests | done | c5b479d | 106 new tests; run on the recorded real profile and checked by hand |
 | B6 | Pipeline, analyses endpoints, judging, roadmap planner, role-fit | done | 70d91bc | 5 endpoints incl. the milestone PATCH; live run verified; 102 new tests |
 | B7 | Jobs match, applications, cohorts, seed_demo.py | done | e0dc64d | 9 ops routed (22/29); live extract_job check passed; 49 new tests |
-| B9 | Project Understanding Check (quiz) | todo | | also `GET /v1/quizzes/{id}/result`; 429 detail key is `retake_available_at`, not `retry_at` as the B9 prompt says |
+| B9 | Project Understanding Check (quiz) | done | see git log | 6 ops routed (28/29); 112 new tests; live practice + verify run; 429 detail key is `retake_available_at` (contract), not `retry_at` as the B9 prompt says |
 | B8 | Hardening, contract check green, deploy, keep-alive | todo | | Supabase JWT verification lands here |
 
 ## In-progress detail
@@ -112,7 +109,9 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - `Settings.cors_origins` is a comma-separated string (a `list[str]` field would make pydantic-settings expect JSON in `.env`); use `settings.cors_origin_list`.
 - Starlette prints a deprecation warning about `httpx` in `TestClient`; harmless.
 
+- Quiz: verify createQuiz returns `questions: []` (the clock starts at the first getQuiz); a never-served verify quiz is closed after 30 min as abandoned with no effect on evidence; unanswered past limit + 10 s grace = timed out; a submit re-plans the roadmap (ticks kept by `addresses`); a grader reply missing a question or key point is asked for again once, then a retryable 503; Groq 413 counts as unavailable so the gateway falls through.
 - Tests import the seed as `scripts.seed_demo` (the rootdir is on the path); the script itself only imports from `app`.
+- Quiz tests use `Env`/`new_env`/`make_analysis(with_report=True)` from `tests/quiz_helpers.py` (fake clock via the `get_clock` dependency, `FakeGitHub`, `grading_reply`); scripted replies live in `SchemaProvider.replies`.
 - Bash tool heredocs with apostrophes sometimes fail with "unexpected EOF"; write files with the Write/Edit tools instead.
 
 ## Blocked on / open questions

@@ -10,7 +10,8 @@ Rules:
   listing; design projects use path = the page URL and section = a heading or phrase copied from
   the page. Never invent files, functions or behaviour.
 - Ask about behaviour, data flow, design trade-offs, failure cases and extensions. Never ask
-  trivia answerable by glancing at the snippet (names, line counts, import lists).
+  trivia answerable by glancing at the snippet (names, line counts, import lists, which constant or
+  function holds a value). Good: "what happens when X is empty?". Bad: "which constant sets Y?".
 - MCQ: 4 options with ids a, b, c, d, exactly one correct, distractors plausible for someone who
   has NOT read the code.
 - Short answer: provide 3-5 key_points grounded in the code, plus acceptable_alternatives

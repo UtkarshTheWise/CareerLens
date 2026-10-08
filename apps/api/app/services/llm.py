@@ -163,7 +163,8 @@ class GroqProvider:
             # APITimeoutError is a subclass of APIConnectionError
             raise ProviderUnavailable(f"groq {type(exc).__name__}") from exc
         except groq.APIStatusError as exc:
-            if exc.status_code >= 500:
+            # 413: the request is over this plan's per-request token limit; another provider may take it
+            if exc.status_code >= 500 or exc.status_code == 413:
                 raise ProviderUnavailable(f"groq HTTP {exc.status_code}") from exc
             raise LLMError(
                 "llm_request_rejected", f"Groq rejected the request (HTTP {exc.status_code})"

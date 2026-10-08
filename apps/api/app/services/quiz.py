@@ -196,7 +196,7 @@ def generate_questions(
             known = {_clean(q.prompt).lower() for q in valid}
             more = [q for q in ask(wanted, extra) if _clean(q.prompt).lower() not in known]
         except LLMError as exc:
-            logger.warning("quiz replacement request failed: %s", exc.code)
+            logger.warning("quiz replacement request failed: %s (%s)", exc.code, exc.message)
             more = []
         chosen, missing = pick([*valid, *more], slots)
     final = [q for q in chosen if q is not None]

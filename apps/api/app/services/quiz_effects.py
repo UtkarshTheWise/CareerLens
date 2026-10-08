@@ -52,9 +52,9 @@ def _where(ref: dict | None, kind: str) -> str:
 def gap_flag(quiz: models.Quiz) -> FlagInput:
     """The understanding_gap text (QUIZ.md section 5), written from the weakest questions. Never says
     the student didn't build anything: it names what to review."""
-    weak = sorted(
+    weak = sorted(  # short answers first: their key points read as topics, an MCQ's answer sentence does not
         (q for q in quiz.questions if q.answer is not None and (q.answer.score or 0.0) < WEAK_Q),
-        key=lambda q: ((q.answer.score or 0.0), q.order),
+        key=lambda q: (q.type != "short_answer", (q.answer.score or 0.0), q.order),
     )[:GAP_QUESTIONS]
     if not weak:
         return FlagInput(
@@ -66,7 +66,8 @@ def gap_flag(quiz: models.Quiz) -> FlagInput:
     first = weak[0]
     path = (first.source_ref or {}).get("path") or "the project"
     where = "" if quiz.kind == "design" else f" in {path}"
-    reason = f'Your answers didn\'t yet cover "{topic_text(first)}"{where}.'
+    topic = topic_text(first).replace('"', "'").rstrip(".")
+    reason = f'Your answers didn\'t yet cover "{topic}"{where}.'
     places = [_where(q.source_ref, quiz.kind) for q in weak]
     review = " and ".join(dict.fromkeys(places))
     fix = f"Review {review}; explain the flow to a friend; retake the check after the cool-down."
