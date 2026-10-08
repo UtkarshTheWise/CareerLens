@@ -9,23 +9,26 @@ Keep under ~150 lines. Commit it together with the code it describes.
 
 ## Status
 - **Track:** integration · **Owns:** wiring + drift fixes across the repo (Phase 3 only)
-- **Branch / worktree:** `integration` · main checkout `careerlens/`
-- **Last updated:** 2026-10-07 13:57 IST by Claude Code (Opus 5.5)
-- **Current task:** Phase 0 contract freeze: done. Phase 3 (I1) not started.
-- **State:** not started   <!-- not started | in progress | blocked | done -->
-- **Last green checks:** 2026-10-07 `npx @redocly/cli lint contracts/openapi.yaml` valid · `pnpm gen:client` · `tsc --noEmit -p packages/api-client` · Prism static mock serves `/v1/roles` (200 with bearer, 401 without)
+- **Branch / worktree:** `integration` · worktree `../careerlens-integration` (no deny rules; the backend worktree denies apps/web and apps/extension)
+- **Last updated:** 2026-10-08 Claude Code (Sonnet 5.5)
+- **Current task:** I2 in progress. Merged `origin/frontend/codex` into `main` (B1-B9 + B8) cleanly (no overlapping files). Baseline green. Next: end-to-end smoke (real backend, contract-shape checks), then Google sign-in for web and extension.
+- **State:** in progress   <!-- not started | in progress | blocked | done -->
+- **Last green checks:** 2026-10-08, from the integration worktree (Node 22.16.0, pnpm 10.12.3): `pnpm install --frozen-lockfile` · `pnpm gen:client` (no content diff) · web `lint`, `typecheck`, `build`, 22 native tests · extension `build` and 20 tests · backend 653 tests / ruff / `check_contract.py` (29/29) on the same commit
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
-1. Start I1: run its prompt from PROMPTS.md.
+1. Approved plan: `~/.claude/plans/refactored-giggling-bachman.md` (Phase 3 with real Google sign-in via Supabase). Order now: (a) `scripts/smoke_e2e.py` + `docs/DEMO_CHECKLIST.md` (I3), (b) web sign-in (`apps/web`: `lib/auth`, `app/login`, `app/auth/callback`, token in `lib/api/client.ts`), (c) extension sign-in (`apps/extension/src/auth.ts`, `identity` permission, manifest `key`), (d) `docs/AUTH_SETUP.md`, (e) independent review (I4), (f) fast-forward `main` to `integration` with the user's OK.
+2. Work in `D:/Programming/DataQuest/CareerLens/careerlens-integration` (branch `integration`). The shell resets to the backend worktree each call: always `cd` to the integration worktree first.
+3. Needed from the human for sign-in: Supabase URL + anon key, token type (HS256 secret or signing keys), Google provider enabled in Supabase, staff emails, deployed web URL. Until then the apps keep dev mode (`Bearer dev`).
+4. Machine quirk: `D:\postcss.config.mjs` exists at the drive root and Vite picks it up when building anything under `D:\`; the extension's Vite configs now pin an inline empty PostCSS config. Do not delete the stray file (not ours).
 
 ## Task board
 <!-- status: todo | doing | done | blocked · commit = short sha of the commit that finished it -->
 | Id | Task | Status | Commit | Notes |
 |---|---|---|---|---|
 | P0 | Contract freeze v0.2.0, root workspace, api-client, .env.example | done | see `git log --grep freeze` | awaiting human tag `v0.2.0` |
-| I1 | Integration plan (plan mode) | todo | | |
-| I2 | Merge, regenerate client, drift fixes, builds green | todo | | |
+| I1 | Integration plan (plan mode) | done | | approved plan includes Google sign-in |
+| I2 | Merge, regenerate client, drift fixes, builds green | doing | | merge + baseline done; sign-in work pending |
 | I3 | End-to-end smoke script + demo checklist | todo | | |
 | I4 | Independent review + fixes | todo | | |
 
