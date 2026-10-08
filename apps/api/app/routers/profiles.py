@@ -2,7 +2,7 @@ import logging
 from typing import Literal
 
 from fastapi import APIRouter, Depends, File, Form, Response, UploadFile
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
 from app import catalogue
@@ -49,6 +49,13 @@ def create_profile(
         if taken is not None:
             raise ApiError(409, "conflict", "This account already has a profile", {"profile_id": taken})
         profile.auth_subject = subject
+    else:
+        # DEV_AUTH has one pretend user. The profile they create becomes "their" profile, so /v1/me and the
+        # dashboard follow the person who just onboarded instead of the seeded demo student.
+        db.execute(
+            update(models.Profile).where(models.Profile.auth_subject == DEV_SUBJECT).values(auth_subject=None)
+        )
+        profile.auth_subject = DEV_SUBJECT
     db.add(profile)
     db.commit()
     return profile

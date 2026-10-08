@@ -17,7 +17,9 @@ logger = logging.getLogger("careerlens.health")
 router = APIRouter(tags=["meta"], responses=ERROR_RESPONSES)
 
 
-@router.get("/health", operation_id="getHealth", response_model=HealthResponse)
+@router.get(
+    "/health", operation_id="getHealth", response_model=HealthResponse, response_model_exclude_none=True
+)  # the contract has no null llm_provider: leave it out when none is configured
 def get_health(settings: Settings = Depends(get_settings), db: Session = Depends(get_db)) -> HealthResponse:
     """Ok only if the database answers; the daily keep-alive ping therefore keeps Supabase awake too.
     `llm_provider` is the provider that last answered in this process (no LLM call is made here)."""

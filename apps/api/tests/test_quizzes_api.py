@@ -393,7 +393,7 @@ def test_practice_submit_reports_a_score_and_never_an_understanding(env):
     env.answer(quiz_id, questions[0]["id"], choice_id=questions[0]["correct"])
     result = env.submit(quiz_id).json()
     assert result["mode"] == "practice" and result["understanding"] is None
-    assert result["retake_available_at"] is None and result["focus_lost_total"] is None
+    assert result["retake_available_at"] is None and "focus_lost_total" not in result
     assert result["score_update"] is None and result["flag"] is None
     assert 0 < result["score"] < 100
     listing = env.client.get(f"/v1/profiles/{env.profile_id}/quizzes").json()

@@ -11,13 +11,13 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - **Track:** integration · **Owns:** wiring + drift fixes across the repo (Phase 3 only)
 - **Branch / worktree:** `integration` · worktree `../careerlens-integration` (no deny rules; the backend worktree denies apps/web and apps/extension)
 - **Last updated:** 2026-10-08 Claude Code (Sonnet 5.5)
-- **Current task:** I2 in progress. Merged `origin/frontend/codex` into `main` (B1-B9 + B8) cleanly (no overlapping files). Baseline green. Next: end-to-end smoke (real backend, contract-shape checks), then Google sign-in for web and extension.
+- **Current task:** I2 in progress. Merged `origin/frontend/codex` into `main` (B1-B9 + B8) cleanly (no overlapping files). Baseline green. End-to-end smoke written and green in both auth modes (242 + 257 checks), 3 backend drifts fixed. Next: Google sign-in for web and extension, then the independent review.
 - **State:** in progress   <!-- not started | in progress | blocked | done -->
 - **Last green checks:** 2026-10-08, from the integration worktree (Node 22.16.0, pnpm 10.12.3): `pnpm install --frozen-lockfile` · `pnpm gen:client` (no content diff) · web `lint`, `typecheck`, `build`, 22 native tests · extension `build` and 20 tests · backend 653 tests / ruff / `check_contract.py` (29/29) on the same commit
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
-1. Approved plan: `~/.claude/plans/refactored-giggling-bachman.md` (Phase 3 with real Google sign-in via Supabase). Order now: (a) `scripts/smoke_e2e.py` + `docs/DEMO_CHECKLIST.md` (I3), (b) web sign-in (`apps/web`: `lib/auth`, `app/login`, `app/auth/callback`, token in `lib/api/client.ts`), (c) extension sign-in (`apps/extension/src/auth.ts`, `identity` permission, manifest `key`), (d) `docs/AUTH_SETUP.md`, (e) independent review (I4), (f) fast-forward `main` to `integration` with the user's OK.
+1. Approved plan: `~/.claude/plans/refactored-giggling-bachman.md` (Phase 3 with real Google sign-in via Supabase). Order now: (a) DONE `apps/api/scripts/smoke_e2e.py` (+ `tests/e2e_server.py` harness) and `docs/DEMO_CHECKLIST.md` (I3); run `cd apps/api && uv run python scripts/smoke_e2e.py` (both modes), (b) web sign-in (`apps/web`: `lib/auth`, `app/login`, `app/auth/callback`, token in `lib/api/client.ts`), (c) extension sign-in (`apps/extension/src/auth.ts`, `identity` permission, manifest `key`), (d) `docs/AUTH_SETUP.md`, (e) independent review (I4), (f) fast-forward `main` to `integration` with the user's OK.
 2. Work in `D:/Programming/DataQuest/CareerLens/careerlens-integration` (branch `integration`). The shell resets to the backend worktree each call: always `cd` to the integration worktree first.
 3. Needed from the human for sign-in: Supabase URL + anon key, token type (HS256 secret or signing keys), Google provider enabled in Supabase, staff emails, deployed web URL. Until then the apps keep dev mode (`Bearer dev`).
 4. Machine quirk: `D:\postcss.config.mjs` exists at the drive root and Vite picks it up when building anything under `D:\`; the extension's Vite configs now pin an inline empty PostCSS config. Do not delete the stray file (not ours).
@@ -29,7 +29,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | P0 | Contract freeze v0.2.0, root workspace, api-client, .env.example | done | see `git log --grep freeze` | awaiting human tag `v0.2.0` |
 | I1 | Integration plan (plan mode) | done | | approved plan includes Google sign-in |
 | I2 | Merge, regenerate client, drift fixes, builds green | doing | | merge + baseline done; sign-in work pending |
-| I3 | End-to-end smoke script + demo checklist | todo | | |
+| I3 | End-to-end smoke script + demo checklist | done | see git log | green in dev and token mode; found and fixed 3 backend drifts |
 | I4 | Independent review + fixes | todo | | |
 
 ## In-progress detail
@@ -39,6 +39,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - **Known failing tests / checks:** —
 
 ## Decisions made (one line each, append)
+- 2026-10-08 Drifts found by the smoke test and fixed in the BACKEND (contract unchanged): `/health` sent `llm_provider: null` (contract: string, now omitted); practice `QuizResult` sent `focus_lost_total: null` (now omitted); under DEV_AUTH `/v1/me` ignored a freshly created profile (the newest profile now becomes the dev user's).
 - 2026-10-07 Contract frozen at v0.2.0. Later changes only via CCR (docs/HANDOFF.md).
 - Freeze added: `GET /v1/quizzes/{quiz_id}/result`, `PATCH /v1/analyses/{analysis_id}/roadmap/{milestone_id}`, `default` Error response on every operation, `QuizStatus` schema.
 - Freeze changed: `ProjectAudit.repo_url` → `url` (+ `demo_url`, `counted_in_score`, `design_subscores`, `signals`, `issues`); `SkillGap.claimed` (required); `AnalysisStatus.progress` required; `AnalysisSummary.verified_skills`; `QuizQuestion.time_remaining_s`; `QuizAnswerFeedback.choice_id`/`text`; `CohortStudent.github_username`/`analysis_id`; removed `more_commits` from `add_signals`; 429 detail key is `retake_available_at`.

@@ -20,7 +20,7 @@ def test_health_reports_status_version_and_needs_no_sign_in(client, no_dev_auth)
     res = client.get("/health")
     assert res.status_code == 200
     body = res.json()
-    assert body["status"] == "ok" and body["version"] == API_VERSION and "llm_provider" in body
+    assert body["status"] == "ok" and body["version"] == API_VERSION
 
 
 def test_health_names_the_provider_that_last_answered(client):
@@ -29,7 +29,7 @@ def test_health_names_the_provider_that_last_answered(client):
     class Verdict(BaseModel):
         ok: bool
 
-    assert client.get("/health").json()["llm_provider"] in (
+    assert client.get("/health").json().get("llm_provider") in (
         None,
         "gemini",
         "groq",
@@ -97,3 +97,11 @@ def test_every_external_call_has_a_timeout_constant():
 
     assert github.TIMEOUT_S <= 30 and portfolio.TIMEOUT_S <= 15
     assert set(llm.TIMEOUT_S) == {"fast", "smart"} and max(llm.TIMEOUT_S.values()) <= 90
+
+
+def test_a_missing_provider_is_left_out_not_null(client, monkeypatch):
+    """The contract types llm_provider as a string: with no provider configured the key must be absent."""
+    from app.config import Settings, get_settings
+
+    app.dependency_overrides[get_settings] = lambda: Settings(_env_file=None, dev_auth=True)
+    assert "llm_provider" not in client.get("/health").json()
