@@ -49,7 +49,7 @@ function ProfileChip() {
 }
 export function AppShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false); const pathname = usePathname(); const router = useRouter(); const auth = useAuth();
-  const bare = pathname === "/login" || pathname.startsWith("/auth/");
+  const bare = pathname === "/" || pathname === "/login" || pathname.startsWith("/auth/");
   useEffect(() => { if (auth.status === "signed-out" && !bare) router.replace("/login"); }, [auth.status, bare, router]);
   // Sign-in pages stand alone. When sign-in is on, nothing else renders (and no API call is made) until a session exists.
   if (bare) return <>{children}</>;

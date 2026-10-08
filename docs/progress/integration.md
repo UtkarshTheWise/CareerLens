@@ -32,6 +32,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | I2 | Merge, regenerate client, drift fixes, builds green | done | see git log | clean merge; client unchanged; sign-in added for web + extension |
 | I3 | End-to-end smoke script + demo checklist | done | see git log | green in dev and token mode; found and fixed 3 backend drifts |
 | I4 | Independent review + fixes | done | see git log | 6 fixes + 7 open decisions in docs/handoff/integration.md |
+| I6 | Animated landing page at `/` (Get started -> /login) | done | see git log | `/` is now a bare route in app-shell; respects reduced motion |
 | I5 | `/extension` install page + zip, Settings "your own AI key" (BYOK headers), prod push | done | see git log | extension itself has no key field yet (follow-up) |
 
 ## In-progress detail
