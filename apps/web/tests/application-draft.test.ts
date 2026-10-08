@@ -1,0 +1,23 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { applicationDraft } from "../lib/application-draft";
+test("manual applications trim fields, leave match scores absent and reject unsafe URL or invalid dates", () => {
+  const form = new FormData();
+  form.set("company", " Acme ");
+  form.set("title", " Developer ");
+  const draft = applicationDraft(form, "profile");
+  assert.equal(draft.company, "Acme");
+  assert.equal(draft.status, "saved");
+  assert.equal(draft.keyword_match, undefined);
+  form.set("url", "javascript:alert(1)");
+  assert.throws(() => applicationDraft(form, "profile"), /HTTP/);
+  form.set("url", "https://user:pass@example.com");
+  assert.throws(() => applicationDraft(form, "profile"), /HTTP/);
+  form.set("url", "https://example.com/job");
+  form.set("deadline", "2026-02-30");
+  assert.throws(() => applicationDraft(form, "profile"), /deadline/);
+  form.set("deadline", "2026-10-11");
+  assert.equal(applicationDraft(form, "profile").deadline, "2026-10-11");
+  form.set("title", " ");
+  assert.throws(() => applicationDraft(form, "profile"), /required/);
+});

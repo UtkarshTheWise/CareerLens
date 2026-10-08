@@ -1,0 +1,84 @@
+import { number } from "./shared";
+export type GaugeSegment = { label: string; value: number };
+const colors = [
+  "var(--primary-deep)",
+  "var(--primary)",
+  "var(--primary-soft)",
+  "var(--data-1)",
+  "var(--data-2)",
+];
+export function SegmentedGauge({
+  segments,
+  label,
+}: {
+  segments: GaugeSegment[];
+  label: string;
+}) {
+  const total = segments.reduce(
+    (sum, segment) => sum + Math.max(0, segment.value),
+    0,
+  );
+  const circumference = 2 * Math.PI * 58;
+  let offset = 0;
+  return (
+    <div
+      data-component="SegmentedGauge"
+      className="flex min-w-0 flex-col items-center gap-5"
+    >
+      <svg
+        viewBox="0 0 144 144"
+        className="w-44 max-w-full -rotate-90"
+        role="img"
+        aria-label={`${label}: ${segments.map((s) => `${s.label} ${number(s.value)}%`).join(", ")}`}
+      >
+        <title>{label}</title>
+        <circle
+          cx="72"
+          cy="72"
+          r="58"
+          fill="none"
+          stroke="var(--surface-2)"
+          strokeWidth="14"
+        />
+        {total > 0 &&
+          segments.map((segment, index) => {
+            const length = (Math.max(0, segment.value) / total) * circumference;
+            const start = offset;
+            offset += length;
+            return (
+              <circle
+                key={segment.label}
+                cx="72"
+                cy="72"
+                r="58"
+                fill="none"
+                stroke={colors[index % colors.length]}
+                strokeWidth="14"
+                strokeDasharray={`${Math.max(0, length - 3)} ${circumference}`}
+                strokeDashoffset={-start}
+              />
+            );
+          })}
+      </svg>
+      {total === 0 ? (
+        <p className="text-sm text-muted-readable">No breakdown available.</p>
+      ) : (
+        <ul className="w-full space-y-3">
+          {segments.map((segment, index) => (
+            <li key={segment.label} className="flex items-center gap-2 text-xs">
+              <span
+                className="size-2 shrink-0 rounded-full"
+                style={{ background: colors[index % colors.length] }}
+                aria-hidden="true"
+              />
+              <span className="flex-1">{segment.label}</span>
+              <span className="font-medium tabular-nums">
+                {number(segment.value)}%
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
