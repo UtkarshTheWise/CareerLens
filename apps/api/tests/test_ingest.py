@@ -145,3 +145,29 @@ def test_header_name_detection_can_be_switched_off_for_titles():
     assert strip_pii(text, ["Priya Raman"]).text.startswith("[NAME]")  # a resume: the first line is the name
     kept = strip_pii(text, ["Priya Raman"], header_name=False).text
     assert kept == text  # a README or description: the first line is a title
+
+
+def test_a_pdf_with_too_many_pages_is_refused_before_it_is_read(monkeypatch):
+    from pathlib import Path
+
+    from app.services import ingest
+
+    monkeypatch.setattr(ingest, "MAX_PDF_PAGES", 1)  # the two-page fixture résumé is now "too long"
+    data = (Path(__file__).parent / "fixtures" / "resume.pdf").read_bytes()
+    with pytest.raises(ApiError) as caught:
+        extract_text("long.pdf", data)
+    assert caught.value.status_code == 422 and "pages" in caught.value.message
+
+
+def test_a_docx_that_unpacks_to_a_huge_size_is_refused():
+    import io
+    import zipfile
+
+    from app.services import ingest
+
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("word/document.xml", b"0" * (ingest.MAX_DOCX_UNPACKED_BYTES + 1))
+    with pytest.raises(ApiError) as caught:
+        extract_text("bomb.docx", buffer.getvalue())
+    assert caught.value.status_code == 422

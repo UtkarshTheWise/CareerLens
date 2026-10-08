@@ -22,6 +22,7 @@ from app.prompts import load_prompt
 from app.schemas.api import AnalysisReport, QuizCreate, QuizMode
 from app.schemas.llm import GeneratedQuestion, GeneratedQuiz
 from app.services.github import GitHubClient, TreeEntry, fetch_files
+from app.services.ingest import restore_pii, strip_pii
 from app.services.llm import LLMError, generate_structured
 from app.services.pipeline import PipelineDeps
 from app.services.portfolio import fetch_page
@@ -34,6 +35,7 @@ logger = logging.getLogger("careerlens.quiz")
 VERIFY_QUESTIONS = 6
 PRACTICE_DEFAULT = 6
 MIN_QUESTIONS = {"verify": 4, "practice": 3}
+_FIELD_SEP = "\n=====FIELD=====\n"
 MCQ_SECONDS = 60
 SHORT_SECONDS = 180
 SNIPPET_MAX_LINES = 30
@@ -159,10 +161,21 @@ def generate_questions(
     attempt: int,
     db: Session,
     providers,
+    student_name: str | None = None,
 ) -> list[GeneratedQuestion]:
-    """Ask for the mix, validate, and ask once more for whatever is missing."""
+    """Ask for the mix, validate, and ask once more for whatever is missing.
+
+    Everything the model reads about the student (their description, the README, their code) goes through
+    `strip_pii` first (AGENTS.md); the placeholders in its questions are put back before they are checked
+    against the real material.
+    """
     prompt = load_prompt("quiz_generate")
     minimum = min(MIN_QUESTIONS[mode], len(slots))
+    fields = [ctx.description or "(none given)", ctx.readme or "(none)", ctx.prompt_material() or "(none)"]
+    stripped = strip_pii(
+        _FIELD_SEP.join(fields), known_names=[student_name] if student_name else [], header_name=False
+    )
+    description, readme, material = stripped.text.split(_FIELD_SEP)
 
     def ask(slots_wanted: list[Slot], extra: str) -> list[GeneratedQuestion]:
         user = prompt.user(
@@ -172,22 +185,23 @@ def generate_questions(
             attempt=str(attempt),
             mix=_mix_text(slots_wanted),
             extra=extra,
-            description=ctx.description or "(none given)",
+            description=description,
             claimed=_skill_list(ctx.claimed),
             detected=_skill_list(ctx.detected),
-            readme=ctx.readme or "(none)",
-            material=ctx.prompt_material() or "(none)",
+            readme=readme,
+            material=material,
         )
         result = generate_structured(
             GeneratedQuiz, prompt.system, user, tier="smart", db=db, providers=providers
         )
+        result = restore_pii(result, stripped.mapping)
         return [v for q in result.questions if (v := validate_question(q, ctx)) is not None]
 
     valid = ask(slots, "")
     chosen, missing = pick(valid, slots)
     if missing:
         wanted = [s for s, c in zip(slots, chosen, strict=True) if c is None]
-        seen = "; ".join(_clean(q.prompt)[:80] for q in valid)
+        seen = strip_pii("; ".join(_clean(q.prompt)[:80] for q in valid), header_name=False).text
         extra = (
             f"\nREPLACEMENTS: you already wrote {len(valid)} usable questions ({seen}). "
             f"Write only the {len(wanted)} missing ones listed above, on different topics.\n"
@@ -400,7 +414,7 @@ def create_quiz(
     count = VERIFY_QUESTIONS if body.mode == QuizMode.verify else (body.question_count or PRACTICE_DEFAULT)
     slots = mix_for(mode, ctx.kind, count)
     try:
-        questions = generate_questions(ctx, slots, mode, attempt, db, deps.providers)
+        questions = generate_questions(ctx, slots, mode, attempt, db, deps.providers, analysis.profile.name)
     except LLMError as exc:
         raise llm_error(exc) from exc
 

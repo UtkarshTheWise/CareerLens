@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.db import models
 from app.deps import get_application_for, get_auth_subject, get_db, load_profile
+from app.rate_limit import limited
 from app.routers import ERROR_RESPONSES
 from app.routers.analyses import get_pipeline_deps
 from app.schemas.api import Application, ApplicationCreate, ApplicationUpdate, Error, TailoredResume
@@ -87,6 +88,7 @@ def delete_application(
 @router.post(
     "/v1/applications/{application_id}/tailored-resume",
     operation_id="tailorResume",
+    dependencies=[Depends(limited("tailor", "rate_limit_tailor_per_hour"))],
     response_model=TailoredResume,
     responses={
         409: {"model": Error, "description": "Profile has no completed analysis"},

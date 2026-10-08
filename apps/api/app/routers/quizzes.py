@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.config import Settings, get_settings
 from app.db import models
 from app.deps import get_analysis_for, get_db, get_profile_for, get_quiz_for
+from app.rate_limit import limited
 from app.routers import ERROR_RESPONSES
 from app.routers.analyses import get_pipeline_deps
 from app.schemas.api import (
@@ -34,6 +35,7 @@ def get_clock() -> Clock:
 @router.post(
     "/v1/analyses/{analysis_id}/quizzes",
     operation_id="createQuiz",
+    dependencies=[Depends(limited("quiz", "rate_limit_quizzes_per_hour"))],
     response_model=Quiz,
     status_code=201,
     responses={429: {"model": Error, "description": "Verify cooldown active or LLM quota exhausted"}},

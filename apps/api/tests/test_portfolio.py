@@ -229,3 +229,14 @@ def test_readable_pages_are_cached_and_failures_are_not():
             transport=page_transport(status=500, calls=calls),
         )
         assert len(calls) == 4  # the failure was fetched twice, so it was not cached
+
+
+def test_a_malformed_host_is_unsafe_not_a_crash():
+    """getaddrinfo raises UnicodeError for empty or over-long DNS labels; one bad link must not fail an analysis."""
+    from app.services.portfolio import UnsafeUrl, check_url, fetch_page
+
+    for url in ("http://exa..mple.com/", "http://" + "a" * 70 + ".com/", "http://.example.com/"):
+        with pytest.raises(UnsafeUrl):
+            check_url(url)
+    page = fetch_page("http://exa..mple.com/")
+    assert page.readable is False

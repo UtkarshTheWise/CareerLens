@@ -101,6 +101,10 @@ def settle(
             db.commit()
     deadline = total_deadline(quiz)
     if deadline is not None and now > deadline:
+        if not any(has_answer(q.answer) for q in quiz.questions):
+            # Opened but never answered: the same as not starting. Walking away never lowers a score.
+            _close_abandoned(db, quiz, now, settings)
+            return
         try:
             submit_quiz(db, quiz, deps, now, settings, auto=True)
         except (LLMError, ApiError) as exc:
@@ -212,10 +216,13 @@ def answer_question(
         timed_out=late,
         answered_at=now,
     )
-    question.answer = answer
     if verify:  # graded at submit; nothing but "recorded" goes back
+        question.answer = answer
         db.commit()
         return feedback_out(question, reveal=False)
+    # Practice: grade first, attach the answer to the session afterwards. The grading call commits when it
+    # succeeds; an answer attached earlier would be saved ungraded if the grader then failed, and a resend
+    # would be refused as "already answered".
     try:
         if question.type == "mcq":
             grade_mcq(question, answer)
@@ -230,6 +237,7 @@ def answer_question(
             "llm_unavailable",
             "The grader is busy right now. Your answer wasn't lost: try sending it again.",
         ) from exc
+    question.answer = answer
     db.commit()
     return feedback_out(question, reveal=True)
 

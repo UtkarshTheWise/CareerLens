@@ -8,6 +8,7 @@ from app import catalogue
 from app.db import models
 from app.deps import get_analysis_for, get_db, get_profile_for
 from app.errors import ApiError, not_found
+from app.rate_limit import limited
 from app.routers import ERROR_RESPONSES
 from app.schemas.api import (
     Analysis,
@@ -35,6 +36,7 @@ def get_pipeline_deps() -> PipelineDeps:
 @router.post(
     "/v1/profiles/{profile_id}/analyses",
     operation_id="startAnalysis",
+    dependencies=[Depends(limited("analysis", "rate_limit_analyses_per_hour"))],
     response_model=AnalysisStatus,
     status_code=202,
     responses={409: {"model": Error, "description": "Profile has no resume yet"}},

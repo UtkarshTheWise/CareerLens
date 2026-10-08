@@ -85,7 +85,7 @@ def check_url(url: str, resolver: Resolver = default_resolver) -> None:
     except ValueError:
         try:
             addresses = resolver(parts.hostname)
-        except OSError as exc:
+        except (OSError, ValueError) as exc:  # ValueError covers UnicodeError for empty or over-long labels
             raise UnsafeUrl("the host name could not be resolved") from exc
     if not addresses:
         raise UnsafeUrl("the host name could not be resolved")

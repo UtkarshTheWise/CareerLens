@@ -11,16 +11,17 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - **Track:** integration · **Owns:** wiring + drift fixes across the repo (Phase 3 only)
 - **Branch / worktree:** `integration` · worktree `../careerlens-integration` (no deny rules; the backend worktree denies apps/web and apps/extension)
 - **Last updated:** 2026-10-08 Claude Code (Sonnet 5.5)
-- **Current task:** I2 in progress. Merged `origin/frontend/codex` into `main` (B1-B9 + B8) cleanly (no overlapping files). Baseline green. End-to-end smoke written and green in both auth modes (242 + 257 checks), 3 backend drifts fixed. Web and extension Google sign-in done and documented (`docs/AUTH_SETUP.md`); 27 web + 24 extension tests, both build in configured and unconfigured modes. Next: independent review (I4), then ask the human to do the `docs/AUTH_SETUP.md` section 5 manual checks, then fast-forward `main`.
-- **State:** in progress   <!-- not started | in progress | blocked | done -->
-- **Last green checks:** 2026-10-08, from the integration worktree (Node 22.16.0, pnpm 10.12.3): `pnpm install --frozen-lockfile` · `pnpm gen:client` (no content diff) · web `lint`, `typecheck`, `build`, 22 native tests · extension `build` and 20 tests · backend 653 tests / ruff / `check_contract.py` (29/29) on the same commit
+- **Current task:** I1-I4 done: merge, baseline, smoke test, Google sign-in (web + extension), independent review and its fixes. Waiting on the human for Supabase/Google values and the manual checks, then fast-forward `main` to `integration`.
+- **State:** done   <!-- not started | in progress | blocked | done -->
+- **Last green checks:** 2026-10-08, integration worktree (Node 22.16.0, pnpm 10.12.3): backend 666 tests / ruff / `check_contract.py` 29/29 · `apps/api/scripts/smoke_e2e.py` 499 checks (dev + token mode) · web lint, typecheck, build (also configured), 27 tests · extension typecheck, build, 24 tests
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
-1. Approved plan: `~/.claude/plans/refactored-giggling-bachman.md` (Phase 3 with real Google sign-in via Supabase). Order now: (a) DONE `apps/api/scripts/smoke_e2e.py` (+ `tests/e2e_server.py` harness) and `docs/DEMO_CHECKLIST.md` (I3); run `cd apps/api && uv run python scripts/smoke_e2e.py` (both modes), (b) DONE web sign-in (`lib/auth/{supabase,session,user}.ts`, `components/auth/*`, `app/login`, `app/auth/callback`, token middleware `authMiddleware` in `lib/api/client.ts`, gate + sign-out in `app-shell.tsx`, name prefill in onboarding; on only when `NEXT_PUBLIC_SUPABASE_URL` and `_ANON_KEY` are set, see `apps/web/.env.example`), (c) DONE extension sign-in (`src/auth.ts` Supabase client over `chrome.storage.local`, `chrome.identity.launchWebAuthFlow` + PKCE, `src/auth-helpers.ts` tested, `api.ts` token per request, Options "Account" card, manifest `identity` + `key`; extension id `bchilaidlnimfdagenlcpoannjomfkil`; on only when `VITE_SUPABASE_URL`/`_ANON_KEY` are set), (d) DONE `docs/AUTH_SETUP.md`, (e) independent review (I4), (f) fast-forward `main` to `integration` with the user's OK.
-2. Work in `D:/Programming/DataQuest/CareerLens/careerlens-integration` (branch `integration`). The shell resets to the backend worktree each call: always `cd` to the integration worktree first.
-3. Needed from the human for sign-in: Supabase URL + anon key, token type (HS256 secret or signing keys), Google provider enabled in Supabase, staff emails, deployed web URL. Until then the apps keep dev mode (`Bearer dev`).
-4. Machine quirk: `D:\postcss.config.mjs` exists at the drive root and Vite picks it up when building anything under `D:\`; the extension's Vite configs now pin an inline empty PostCSS config. Do not delete the stray file (not ours).
+1. Ask the human to follow `docs/AUTH_SETUP.md` (Google Cloud + Supabase), then give you: Supabase URL, anon key, token type (HS256 secret or signing keys), staff emails, deployed web URL. Put them in `apps/web/.env.local`, `apps/extension/.env.local` (rebuild) and the API env (Render). Then the human runs the manual checks in `docs/AUTH_SETUP.md` section 5 and `docs/DEMO_CHECKLIST.md`.
+2. With the human's OK: `cd` to the backend worktree or the integration worktree and fast-forward `main` (`git push origin integration:main` after `git fetch` shows `origin/main` is an ancestor). Update `docs/progress/backend.md` / `frontend.md` only to say integration is done (do not rewrite their history).
+3. Open decisions from the review are listed in `docs/handoff/integration.md` (cohort membership for real students is the important one).
+4. Re-run after any change: `cd apps/api && uv run python scripts/smoke_e2e.py` (both modes) and the web/extension checks above.
+5. Work in `D:/Programming/DataQuest/CareerLens/careerlens-integration`; the shell resets to the backend worktree on every call, so `cd` first.
 
 ## Task board
 <!-- status: todo | doing | done | blocked · commit = short sha of the commit that finished it -->
@@ -28,9 +29,9 @@ Keep under ~150 lines. Commit it together with the code it describes.
 |---|---|---|---|---|
 | P0 | Contract freeze v0.2.0, root workspace, api-client, .env.example | done | see `git log --grep freeze` | awaiting human tag `v0.2.0` |
 | I1 | Integration plan (plan mode) | done | | approved plan includes Google sign-in |
-| I2 | Merge, regenerate client, drift fixes, builds green | doing | | merge + baseline done; sign-in work pending |
+| I2 | Merge, regenerate client, drift fixes, builds green | done | see git log | clean merge; client unchanged; sign-in added for web + extension |
 | I3 | End-to-end smoke script + demo checklist | done | see git log | green in dev and token mode; found and fixed 3 backend drifts |
-| I4 | Independent review + fixes | todo | | |
+| I4 | Independent review + fixes | done | see git log | 6 fixes + 7 open decisions in docs/handoff/integration.md |
 
 ## In-progress detail
 - **Files touched, not finished:** —

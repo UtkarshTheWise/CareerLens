@@ -14,6 +14,7 @@ from app.db import models
 from app.prompts import load_prompt
 from app.schemas.api import Understanding
 from app.schemas.llm import GradedAnswer, QuizGrading
+from app.services.ingest import restore_pii, strip_pii
 from app.services.llm import LLMError, Provider, Tier, generate_structured
 
 logger = logging.getLogger("careerlens.quiz")
@@ -90,17 +91,41 @@ def grade_without_answer(question: models.QuizQuestion, answer: models.QuizAnswe
 # ---------------------------------------------------------------- the model's part
 
 
-def _item(question: models.QuizQuestion, answer: models.QuizAnswer) -> str:
-    lines = [f"QUESTION_ID: {question.id}", f"Question: {question.prompt}"]
-    if question.grading_context:
+_SEP = "\n=====FIELD=====\n"
+
+
+def _item(question: models.QuizQuestion, prompt_text: str, context: str, answer_text: str) -> str:
+    """One question for the grader. The three free-text fields arrive already stripped of personal details."""
+    lines = [f"QUESTION_ID: {question.id}", f"Question: {prompt_text}"]
+    if context:
         where = question.source_ref.get("path", "") if question.source_ref else ""
-        lines.append(f"Code or page text the question is about ({where}):\n{question.grading_context}")
+        lines.append(f"Code or page text the question is about ({where}):\n{context}")
     lines.append("Key points, in order:")
     lines += [f"{n}. {text}" for n, text in enumerate(question.key_points, start=1)]
     if question.acceptable_alternatives:
         lines.append("Acceptable alternatives: " + "; ".join(question.acceptable_alternatives))
-    lines.append(f"Student's answer: {(answer.text or '').strip()[:MAX_ANSWER_CHARS]}")
+    # The answer is the student's text and may try to give orders: it is fenced, and the system prompt says
+    # that nothing inside the fence is an instruction.
+    fenced = answer_text.replace("<student_answer>", "").replace("</student_answer>", "")
+    lines.append(f"Student's answer:\n<student_answer>\n{fenced}\n</student_answer>")
     return "\n".join(lines)
+
+
+def _stripped_items(pairs: list[tuple[models.QuizQuestion, models.QuizAnswer]]) -> tuple[str, dict[str, str]]:
+    """The grader prompt body with names, emails, phones and links replaced by placeholders (AGENTS.md), and
+    the mapping to put them back into the model's feedback."""
+    fields = []
+    for question, answer in pairs:
+        fields += [
+            question.prompt,
+            question.grading_context or "",
+            (answer.text or "").strip()[:MAX_ANSWER_CHARS],
+        ]
+    name = pairs[0][0].quiz.profile.name
+    stripped = strip_pii(_SEP.join(fields), known_names=[name] if name else [], header_name=False)
+    parts = stripped.text.split(_SEP)
+    items = [_item(q, *parts[3 * n : 3 * n + 3]) for n, (q, _) in enumerate(pairs)]
+    return "\n\n---\n\n".join(items), stripped.mapping
 
 
 def _aligned(question: models.QuizQuestion, graded: GradedAnswer) -> bool:
@@ -122,7 +147,8 @@ def grade_short_answers(
     if not pairs:
         return
     prompt = load_prompt("quiz_grade")
-    user = prompt.user(items="\n\n---\n\n".join(_item(q, a) for q, a in pairs))
+    body, mapping = _stripped_items(pairs)
+    user = prompt.user(items=body)
     by_id = {q.id: (q, a) for q, a in pairs}
     for attempt in (0, 1):
         result = generate_structured(
@@ -146,6 +172,7 @@ def grade_short_answers(
         answer.key_results = [
             {"text": k, "status": p.status} for k, p in zip(question.key_points, g.key_points, strict=True)
         ]
-        answer.incorrect_statements = [s for s in g.incorrect_statements if s.strip()][:5]
-        answer.score = short_answer_score([p.status for p in g.key_points], len(answer.incorrect_statements))
-        answer.feedback = g.feedback.strip() or None
+        statements = [restore_pii(s, mapping) for s in g.incorrect_statements if s.strip()][:5]
+        answer.incorrect_statements = statements
+        answer.score = short_answer_score([p.status for p in g.key_points], len(statements))
+        answer.feedback = restore_pii(g.feedback.strip(), mapping) or None

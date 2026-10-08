@@ -29,6 +29,11 @@ class Settings(BaseSettings):
     # Comma-separated emails or Supabase user ids that may see cohort data (placement staff).
     placement_staff: str = ""
     dev_auth: bool = False
+    # Uses of the operations that spend shared LLM/GitHub quota, per signed-in user per hour (0 = off).
+    rate_limit_analyses_per_hour: int = 12
+    rate_limit_quizzes_per_hour: int = 30
+    rate_limit_tailor_per_hour: int = 30
+    rate_limit_match_per_hour: int = 120
     log_level: str = "INFO"
     log_format: str = "json"  # json | text
     max_body_kb: int = 1024  # any request body except a document upload

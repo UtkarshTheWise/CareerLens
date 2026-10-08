@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.db import models
 from app.deps import get_auth_subject, get_db, load_profile
 from app.errors import ApiError
+from app.rate_limit import limited
 from app.routers import ERROR_RESPONSES
 from app.schemas.api import Error, JobMatch, JobMatchRequest
 from app.services import matching
@@ -22,6 +23,7 @@ def get_llm_providers() -> list[Provider] | None:
 @router.post(
     "/v1/jobs/match",
     operation_id="matchJob",
+    dependencies=[Depends(limited("match", "rate_limit_match_per_hour"))],
     response_model=JobMatch,
     responses={409: {"model": Error, "description": "Profile has no completed analysis"}},
 )

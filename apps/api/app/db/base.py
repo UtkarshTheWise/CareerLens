@@ -36,7 +36,11 @@ def make_engine(database_url: str, statement_timeout_ms: int = 0) -> Engine:
     if statement_timeout_ms > 0:
         connect_args["options"] = f"-c statement_timeout={statement_timeout_ms}"
     return create_engine(
-        database_url, pool_pre_ping=True, pool_recycle=DB_POOL_RECYCLE_S, connect_args=connect_args
+        database_url,
+        pool_pre_ping=True,
+        pool_recycle=DB_POOL_RECYCLE_S,
+        connect_args=connect_args,
+        hide_parameters=True,  # a failed insert must not put resume or answer text into the error log
     )
 
 

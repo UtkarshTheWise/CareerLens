@@ -2,7 +2,8 @@ import type { Schema } from "./shared";
 const states = {
   demonstrated: { label: "Verified understanding", tone: "tone-success" },
   partial: { label: "Partial", tone: "tone-warning" },
-  not_demonstrated: { label: "Review needed", tone: "tone-danger-outline" },
+  // "Not demonstrated yet", in a warning tone: it is an invitation to review, never a verdict on who built it.
+  not_demonstrated: { label: "Not demonstrated yet", tone: "tone-warning" },
   not_taken: { label: "Not taken", tone: "tone-muted" },
 } satisfies Record<Schema["Understanding"], { label: string; tone: string }>;
 export function UnderstandingBadge({

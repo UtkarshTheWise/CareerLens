@@ -163,14 +163,31 @@ def test_practice_and_abandoned_quizzes_leave_the_report_alone(env):
         assert analysis.report == original and analysis.profile.project_understanding == {}
 
 
-def test_an_auto_submitted_quiz_is_scored_like_any_other_verify_result(env):
+def test_an_auto_submitted_quiz_with_some_answers_is_scored_like_any_other_verify_result(env):
     quiz_id = env.create().json()["id"]
+    first = env.questions(quiz_id)[0]
     env.get(quiz_id)
+    env.answer(quiz_id, first["id"], choice_id=first["correct"])  # one real answer, then the student leaves
     env.clock.advance(60 * 60)
     assert env.get(quiz_id).json()["status"] == "submitted"
     after, _ = stored(env)
     assert project_of(after).understanding == Understanding.not_demonstrated
     assert env.result(quiz_id).json()["score_update"]["delta"] < 0
+
+
+def test_a_quiz_opened_but_never_answered_is_abandoned_not_scored(env):
+    """Walking away from a started quiz without answering anything is the same as skipping it."""
+    before, _ = stored(env)
+    quiz_id = env.create().json()["id"]
+    env.get(quiz_id)  # the first question is served and its clock starts
+    env.clock.advance(60 * 60)
+    assert env.get(quiz_id).json()["status"] == "submitted"
+    result = env.result(quiz_id).json()
+    assert result["understanding"] is None and result["score_update"] is None and result["flag"] is None
+    after, profile = stored(env)
+    assert after.score.total == before.score.total and profile.project_understanding == {}
+    with SessionLocal() as db:
+        assert db.get(models.Quiz, quiz_id).abandoned is True
 
 
 # ---------------------------------------------------------------- what stays
