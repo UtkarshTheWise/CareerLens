@@ -4,16 +4,25 @@
 - **Track:** frontend; owns apps/web/apps/extension and frontend workspace files.
 - **Branch / worktree:** frontend/codex; C:/Users/User/Desktop/CareerLens/careerlens-web.
 - **Last updated:** 2026-10-08 Asia/Dubai by Codex (GPT-6).
-- **Current task:** F8 implementation published; final SHA completion checkpoint is being published. All frontend prompts complete; pause for user.
-- **Baseline:** frontend 6e3a61a8a9a4f63523790522e1226ed9f4870db9 verified published. Local main e762cb48916f07fd939e9ad0ddb0b0d815f3305f; public main 622ea0ba9073ffe9531a43a99d569eb32e0c1b12 adds only CareerLens_DataQuest3.pptx. Contract v0.2.0 unchanged; no rebase/client regeneration needed for a contract change.
+- **Current task:** F5–F9 refinements implemented and validated; awaiting normal user PowerShell publication. Original prompt order remains complete.
+- **Baseline:** frontend/codex c1d608fb3962e3737ddc0a89fd4533ed06467378 verified published. Local main e762cb4; public main 622ea0b adds only the presentation. Contract v0.2.0 unchanged; no contract rebase/client regeneration needed.
 - **F8 green checks:** strict typecheck and both Vite production builds; 20 native fixture/settings tests; genuine unpacked Chromium toolbar/side panel/activeTab/scripting/storage/HTTP; Match/Gaps/Save/options in both themes at 320/375/390/414/768px, eight zero-violation axe scans; screenshot review; retry/409/empty/duplicate/stale states; normalized llm posting saved with original URL; reduced motion; frozen offline install with every existing lock entry preserved.
 - **Prior green checks:** F5–F7 final web lint/typecheck/build, 22 tests, production/browser/Prism checks; responsive themes and a11y; F9 quiz completed and published. No web source changed in F8.
 
 ## Resume here (exact next step)
-1. F8 implementation f337cdd44b98e312ccb6696a430e11a9c215d95d is published. Final docs checkpoint publication is handled by outputs/Publish-F8.ps1; verify after user reports done. No repeat implementation checks needed.
-2. Publisher validates the reviewed SHA256 manifest and branch/baseline, commits F8, pushes --no-thin without force, records implementation SHA in the completion template, appends publication handoff, commits/pushes checkpoint. Its outputs/F8-published-commits.json permits safe resume if a push fails.
-3. After user reports done: read git log/status, verify public origin/frontend/codex equals local HEAD and recorded checkpoint, verify clean tree and F8 implementation SHA. Update only chat outputs/F8-progress-report.md with checkpoint SHA; no extra repo self-SHA commit.
-4. Pause for user after publication. Frontend prompt order finished; Phase 3 integration belongs to Claude. Read both progress and all handoff logs before integration. Do not merge or modify backend/contract/generated schema.
+1. All refinement checks passed. Run chat outputs/Publish-Refinements.ps1 in regular user PowerShell; no repeat implementation work/checks needed.
+2. Publisher preflights branch/baseline/SHA256 manifest, makes five focused commits and pushes each --no-thin without force, saves SHAs, appends publication handoff, then commits/pushes completion checkpoint. Its outputs/Refinement-published-commits.json permits resume after push failures.
+3. After user reports done: read git log/status, verify public frontend/codex equals local HEAD and recorded checkpoint, verify five implementation SHAs and clean tree. Update only chat outputs/Refinement-progress-report.md with SHAs; no self-SHA repository commit.
+4. Do not start integration, edit backend/contracts/generated schema, or repeat sandbox Git ACL/credential fixes. Phase 3 belongs to Claude.
+
+## Refinement detail (F5–F9)
+- F5: next deliverable, All/To do/Done counts, estimated gains labelled, role selector isolates history, confirmed milestone mutations reconcile cache instead of permanently shadowing later updates.
+- F6: student directory directly after KPIs, name/readiness/coverage sorting, 20-row pages, filter reset/result count, whole-cohort CSV scope, compact histogram and readable bands, six-skill previews/show all. Mobile controls and chart/table overflow scoped.
+- F7: continuous five-stage board/grouped view, company/title search, update/deadline/company sorting, refresh, compact side-by-side rings, calendar deadlines and notes/details, focus restored after moves; query cache acknowledges updates and rollback clears overlays.
+- F8: compact results header, actual description preview, setup shortcut, field/date validation; HTML paragraph boundaries, domain suffix boundaries, relative/tracking URL and selected LinkedIn matching, reject ambiguous/unrelated structured postings before DOM fallback.
+- F9: compact question/result spacing, quiet 30/10-second timer announcements, complete progress dots, synchronous latest-input snapshot, readable returned choice text, practice/result focus, direct question review links. Verify/privacy/immutable retry guards preserved.
+- Checks: web lint/typecheck/production build; extension typecheck/build; 28 web + 25 extension native tests; stateful original/new browser flows; genuine unpacked Chromium; light/dark six web widths (320/375/390/414/768/1440), five extension widths; 33 zero-violation axe reports; screenshot review and final mobile label/ring geometry checks; git diff --check.
+- No new dependencies or backend/contracts/generated-client/root workspace changes. Synthetic fixtures remain scratch/test-only. Real backend/auth/persistence/idempotency/live-job end-to-end validation remains Phase 3; these checks do not certify it.
 
 ## Task board
 | Id | Task | Status | Commit |

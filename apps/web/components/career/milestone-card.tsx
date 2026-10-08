@@ -34,7 +34,7 @@ export function MilestoneCard({
           {milestone.order}
         </span>
         <span className="status-pill tone-success">
-          {signed(milestone.estimated_gain)} pts
+          Est. {signed(milestone.estimated_gain)} pts
         </span>
       </div>
       <h2>{milestone.title}</h2>

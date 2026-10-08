@@ -2,11 +2,13 @@ import type { components } from "@careerlens/api-client";
 import type { TrendPeriod, TrendPoint } from "@/components/career/trend-card";
 export function scoreHistory(
   rows: components["schemas"]["AnalysisSummary"][],
+  roleId?: string,
 ): Record<TrendPeriod, TrendPoint[]> {
   const scans = rows
     .filter(
       (r) =>
         r.status === "done" &&
+        (!roleId || r.role_id === roleId) &&
         r.score != null &&
         Number.isFinite(r.score) &&
         Number.isFinite(Date.parse(r.created_at)),
