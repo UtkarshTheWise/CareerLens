@@ -237,3 +237,111 @@ test("LinkedIn listings/expired redirects rejected; selected SPA jobs allowed", 
     null,
   );
 });
+
+test("structured descriptions preserve paragraph/list boundaries and inline words", () => {
+  const posting = jsonld(
+    doc(
+      '<script type="application/ld+json">' +
+        JSON.stringify({
+          "@type": "JobPosting",
+          title: "Developer",
+          description:
+          "<p>Build <strong>reliable</strong> systems.</p><p>Requirements:</p><ul><li>React</li><li>TypeScript</li></ul><style>.private{}</style>",
+        }) +
+        "</script>",
+    ),
+    "https://example.com/jobs/1",
+  );
+  assert.equal(
+    posting?.description,
+    "Build reliable systems.\nRequirements:\nReact\nTypeScript",
+  );
+});
+test("ambiguous recommendations and unrelated explicit URLs do not become the current job", () => {
+  const jobs = [
+    {
+      "@type": "JobPosting",
+      title: "Wrong 1",
+      description: "A",
+      url: "/jobs/2",
+    },
+    {
+      "@type": "JobPosting",
+      title: "Wrong 2",
+      description: "B",
+      url: "/jobs/3",
+    },
+  ];
+  const html =
+    '<script type="application/ld+json">' +
+    JSON.stringify(jobs) +
+    '</script><h1>Actual job</h1><div class="job-description">Actual requirements</div>';
+  assert.equal(jsonld(doc(html), "https://example.com/jobs/1"), null);
+  assert.equal(
+    extractPosting(doc(html), "https://example.com/jobs/1").title,
+    "Actual job",
+  );
+  assert.equal(
+    jsonld(
+      doc(
+        '<script type="application/ld+json">' +
+          JSON.stringify(jobs[0]) +
+          "</script>",
+      ),
+      "https://example.com/jobs/1",
+    ),
+    null,
+  );
+});
+test("relative job URLs match across harmless tracking and fragments", () => {
+  const html =
+    '<script type="application/ld+json">' +
+    JSON.stringify({
+      "@type": "JobPosting",
+      title: " Current ",
+      description: "A",
+      url: "/jobs/1/?utm_source=mail#apply",
+    }) +
+    "</script>";
+  assert.equal(
+    jsonld(doc(html), "https://example.com/jobs/1")?.title,
+    "Current",
+  );
+});
+test("selected LinkedIn job matches its structured URL instead of recommendations", () => {
+  const url = "https://www.linkedin.com/jobs/search/?currentJobId=123";
+  const jobs = [
+    {
+      "@type": "JobPosting",
+      title: "Recommended",
+      description: "A",
+      url: "https://www.linkedin.com/jobs/view/456/",
+    },
+    {
+      "@type": "JobPosting",
+      title: "Selected",
+      description: "B",
+      url: "https://www.linkedin.com/jobs/view/123/",
+    },
+  ];
+  assert.equal(
+    jsonld(
+      doc(
+        '<script type="application/ld+json">' +
+          JSON.stringify(jobs) +
+          "</script>",
+        url,
+      ),
+      url,
+    )?.title,
+    "Selected",
+  );
+});
+test("blank structured titles fall back to the visible posting", () => {
+  const html =
+    '<script type="application/ld+json">{"@type":"JobPosting","title":"  ","description":"Wrong"}</script><h1>Actual job</h1><div class="job-description">Actual requirements</div>';
+  assert.equal(
+    extractPosting(doc(html), "https://example.com/jobs/1").title,
+    "Actual job",
+  );
+});

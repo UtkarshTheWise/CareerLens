@@ -69,8 +69,18 @@ export function htmlText(doc: Document, html: unknown) {
     "text/html",
   );
   parsed.querySelectorAll("script,style,noscript").forEach((e) => e.remove());
+  parsed
+    .querySelectorAll("br")
+    .forEach((e) => e.replaceWith(parsed.createTextNode("\n")));
+  parsed
+    .querySelectorAll(
+      "p,div,li,h1,h2,h3,h4,h5,h6,section,article,blockquote,tr",
+    )
+    .forEach((e) => e.append(parsed.createTextNode("\n")));
   return (parsed.body.textContent || "")
-    .replace(/\s+/g, " ")
+    .replace(/[ \t\r]+/g, " ")
+    .replace(/ *\n */g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
     .trim()
     .slice(0, 20000);
 }

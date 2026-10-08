@@ -562,3 +562,20 @@ details p {
   font-weight: 600;
   color: var(--primary-text);
 }
+
+/* Hallmark refinement: inspect the actual extracted text without crowding results. */
+.posting-preview summary {
+  justify-content: flex-start;
+  font-size: 12px;
+  font-weight: 600;
+}
+.description-preview {
+  max-height: 240px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted-readable);
+  padding-right: 8px;
+}

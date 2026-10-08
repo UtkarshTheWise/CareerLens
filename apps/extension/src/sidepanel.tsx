@@ -18,6 +18,7 @@ import "@fontsource/plus-jakarta-sans/600.css";
 import "@fontsource/plus-jakarta-sans/700.css";
 import "./styles.css";
 import { useSettings, type Settings } from "./settings";
+import { dateOnly } from "./adapters/shared";
 import { activeTab, extractActive } from "./browser";
 import { matchJob, createApplication, message } from "./api";
 import { Card, Ring, LevelPill, Status } from "./components";
@@ -140,6 +141,10 @@ function Panel() {
       setError("Enter the company and job title before saving.");
       return;
     }
+    if (deadline && dateOnly(deadline) !== deadline) {
+      setError("Choose a valid calendar deadline.");
+      return;
+    }
     const ctrl = new AbortController();
     request.current = ctrl;
     setBusy(true);
@@ -214,11 +219,16 @@ function Panel() {
       </header>
       <Card>
         <span className="caption">JOB MATCH</span>
-        <h2 className="posting-title">See where your evidence fits.</h2>
-        <p className="muted">
-          Open a job page, then analyse it against your CareerLens profile. Page
-          text is sent to your configured API only when you click below.
-        </p>
+        {!result && (
+          <>
+            <h2 className="posting-title">See where your evidence fits.</h2>
+            <p className="muted">
+              Open a job page, then analyse it against your CareerLens profile.
+              Page text is sent to your configured API only when you click
+              below.
+            </p>
+          </>
+        )}
         <button
           className="button primary"
           disabled={busy || !settings}
@@ -229,7 +239,15 @@ function Panel() {
         </button>
         {!settings && !settingsError && <Status>Loading settings…</Status>}
         {settings && !settings.profileId && (
-          <Status>Set your profile in Options to get started.</Status>
+          <>
+            <Status>Set your profile in Options to get started.</Status>
+            <button
+              className="button ghost"
+              onClick={() => void chrome.runtime.openOptionsPage()}
+            >
+              Set up profile
+            </button>
+          </>
         )}
         {settingsError && <Status error>{settingsError}</Status>}
         {notice && <Status>{notice}</Status>}
@@ -305,6 +323,12 @@ function Panel() {
                       ? "visible text, interpreted by the API"
                       : "manual posting"}
               </p>
+              <details className="posting-preview">
+                <summary>Review extracted description</summary>
+                <p className="description-preview">
+                  {result.posting.description}
+                </p>
+              </details>
             </Card>
             {tab === 0 ? (
               <>
@@ -403,6 +427,7 @@ function Panel() {
                     <input
                       className="input"
                       required
+                      maxLength={2000}
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       disabled={busy || !!saved}
@@ -413,6 +438,7 @@ function Panel() {
                     <input
                       className="input"
                       required
+                      maxLength={2000}
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
                       disabled={busy || !!saved}
@@ -433,6 +459,7 @@ function Panel() {
                     <textarea
                       className="input"
                       rows={3}
+                      maxLength={4000}
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       disabled={busy || !!saved}

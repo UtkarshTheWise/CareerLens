@@ -12,15 +12,17 @@ export function extractPosting(doc: Document, url: string): Posting {
   const structured = jsonld(doc, url);
   if (structured) return structured;
   const host = new URL(url).hostname;
-  const adapters = host.endsWith("linkedin.com")
+  const isHost = (domain: string) =>
+    host === domain || host.endsWith("." + domain);
+  const adapters = isHost("linkedin.com")
     ? [linkedin]
-    : host.endsWith("greenhouse.io") || host.endsWith("greenhouse.com")
+    : isHost("greenhouse.io") || isHost("greenhouse.com")
       ? [greenhouse]
-      : host.endsWith("lever.co")
+      : isHost("lever.co")
         ? [lever]
-        : host.endsWith("myworkdayjobs.com")
+        : isHost("myworkdayjobs.com")
           ? [workday]
-          : host.endsWith("naukri.com")
+          : isHost("naukri.com")
             ? [naukri]
             : [];
   for (const adapter of [...adapters, generic]) {

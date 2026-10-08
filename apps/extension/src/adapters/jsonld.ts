@@ -34,13 +34,48 @@ export function jsonld(doc: Document, url: string): Posting | null {
     }
   }
   const jobs = found.filter(
-    (j) => typeof j.title === "string" && htmlText(doc, j.description),
+    (j) =>
+      typeof j.title === "string" &&
+      j.title.trim() &&
+      htmlText(doc, j.description),
   );
+  function identity(raw: string) {
+    try {
+      const parsed = new URL(raw, url);
+      parsed.hash = "";
+      for (const key of Array.from(parsed.searchParams.keys())) {
+        if (key.startsWith("utm_") || ["fbclid", "gclid"].includes(key))
+          parsed.searchParams.delete(key);
+      }
+      parsed.pathname = parsed.pathname.replace(/\/$/, "");
+      parsed.searchParams.sort();
+      return parsed.href;
+    } catch {
+      return "";
+    }
+  }
+  const current = new URL(url);
+  const selectedId = current.searchParams.get("currentJobId");
   const job =
-    jobs.find(
-      (j) =>
-        typeof j.url === "string" && j.url.split("#")[0] === url.split("#")[0],
-    ) || jobs[0];
+    jobs.find((j) => {
+      if (typeof j.url !== "string") return false;
+      if (identity(j.url) === identity(url)) return true;
+      try {
+        const candidate = new URL(j.url, url);
+        return (
+          !!selectedId &&
+          (current.hostname === "linkedin.com" ||
+            current.hostname.endsWith(".linkedin.com")) &&
+          candidate.hostname === current.hostname &&
+          candidate.pathname.replace(/\/$/, "") === "/jobs/view/" + selectedId
+        );
+      } catch {
+        return false;
+      }
+    }) ||
+    (jobs.length === 1 && typeof jobs[0].url !== "string"
+      ? jobs[0]
+      : undefined);
   if (!job) return null;
   const org = job.hiringOrganization;
   const company =
@@ -76,7 +111,7 @@ export function jsonld(doc: Document, url: string): Posting | null {
     return parts.length ? [parts.join(", ")] : [];
   });
   return {
-    title: job.title as string,
+    title: (job.title as string).trim(),
     company,
     location: locations.join("; ") || null,
     description: htmlText(doc, job.description),
