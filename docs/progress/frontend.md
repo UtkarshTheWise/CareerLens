@@ -4,13 +4,13 @@
 - **Track:** frontend; owns apps/web/apps/extension and frontend workspace files.
 - **Branch / worktree:** frontend/codex; C:/Users/User/Desktop/CareerLens/careerlens-web.
 - **Last updated:** 2026-10-08 Asia/Dubai by Codex (GPT-6).
-- **Current task:** F8 implemented and validated; implementation and completion-checkpoint publication pending. All frontend prompts have been implemented in prescribed order.
+- **Current task:** F8 implementation published; final SHA completion checkpoint is being published. All frontend prompts complete; pause for user.
 - **Baseline:** frontend 6e3a61a8a9a4f63523790522e1226ed9f4870db9 verified published. Local main e762cb48916f07fd939e9ad0ddb0b0d815f3305f; public main 622ea0ba9073ffe9531a43a99d569eb32e0c1b12 adds only CareerLens_DataQuest3.pptx. Contract v0.2.0 unchanged; no rebase/client regeneration needed for a contract change.
 - **F8 green checks:** strict typecheck and both Vite production builds; 20 native fixture/settings tests; genuine unpacked Chromium toolbar/side panel/activeTab/scripting/storage/HTTP; Match/Gaps/Save/options in both themes at 320/375/390/414/768px, eight zero-violation axe scans; screenshot review; retry/409/empty/duplicate/stale states; normalized llm posting saved with original URL; reduced motion; frozen offline install with every existing lock entry preserved.
 - **Prior green checks:** F5–F7 final web lint/typecheck/build, 22 tests, production/browser/Prism checks; responsive themes and a11y; F9 quiz completed and published. No web source changed in F8.
 
 ## Resume here (exact next step)
-1. Implementation is complete; do not repeat green checks without new source changes/failures. User must run chat outputs/Publish-F8.ps1 in regular PowerShell because sandbox cannot write shared Git metadata or use saved Windows credentials.
+1. F8 implementation f337cdd44b98e312ccb6696a430e11a9c215d95d is published. Final docs checkpoint publication is handled by outputs/Publish-F8.ps1; verify after user reports done. No repeat implementation checks needed.
 2. Publisher validates the reviewed SHA256 manifest and branch/baseline, commits F8, pushes --no-thin without force, records implementation SHA in the completion template, appends publication handoff, commits/pushes checkpoint. Its outputs/F8-published-commits.json permits safe resume if a push fails.
 3. After user reports done: read git log/status, verify public origin/frontend/codex equals local HEAD and recorded checkpoint, verify clean tree and F8 implementation SHA. Update only chat outputs/F8-progress-report.md with checkpoint SHA; no extra repo self-SHA commit.
 4. Pause for user after publication. Frontend prompt order finished; Phase 3 integration belongs to Claude. Read both progress and all handoff logs before integration. Do not merge or modify backend/contract/generated schema.
@@ -26,7 +26,7 @@
 | F5 | Roadmap/history | done | 7b5123f24d8ca2ee835946300b275b1ede51bf5d |
 | F6 | Placement cell | done | 71d29d12363cd49645ceffcb809d0a411fb4a056 |
 | F7 | Tracker | done | c1cb8d5245ded875e6517c21b87be265cea3cf5a |
-| F8 | Extension | validated; publication pending | pending publication |
+| F8 | Extension | done | f337cdd44b98e312ccb6696a430e11a9c215d95d |
 
 ## F8 implementation / next files
 - apps/extension: MV3 manifest, three Vite entry points and separately built classic IIFE extractor; React panel/options; copied DESIGN token/font theme; Match/Gaps/Save, returned rings/levels/lists/summary; explicit application save with both API match scores.
