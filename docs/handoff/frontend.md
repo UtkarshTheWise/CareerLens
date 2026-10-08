@@ -108,3 +108,12 @@ All recorded F8 checks passed; this completion checkpoint records the published 
 ### [2026-10-08] codex - F5-F9 audit and refinement
 User-authorized refinement after the original prompts were published. Roadmap task filters and role-specific history; actionable placement directory/sort/pagination/compact charts; continuous tracker pipeline/search/sort/refresh/deadlines/details and cache/focus fixes; extension extraction disambiguation/paragraph preservation/description preview; compact quiz with readable returned choices and quiet timer announcements. DESIGN.md tokens/fonts/themes preserved. Hallmark in-place audit used; taste explicitly excludes these product workflows.
 Validated web lint/typecheck/build, extension typecheck/build, 53 native tests, stateful original/new browser flows, genuine unpacked toolbar/activeTab/scripting/storage/API, both themes/mobile/desktop, 33 zero-violation axe reports and screenshot/geometry review. Fixtures are synthetic test data; real backend/auth/live end-to-end integration remains Phase 3. No dependencies, backend, contracts, generated client or root workspace edits. Reviewed publisher will make five commits, push each normally, and record SHAs in a completion checkpoint; pending user PowerShell because shared metadata/Windows credentials are inaccessible to the sandbox.
+
+### [2026-10-08] codex - F5-F9 refinement publication
+F5-F9 refinements published: 6847cc3c1ccae53125987617a343efddb10b636f
+- F5 refinement: caf271b1b73f0ba071d3f4b485d46fb0db5c5d48
+- F6 refinement: d11ee8a3cb77d6bb92d2695cb679a7d49fe157ad
+- F7 refinement: 7ea7b8a181e143d5c03123fc81b3f368f6820d71
+- F8 refinement: 6b51cb010599ac0d5983b8b9312b06a0bfcabd0b
+- F9 refinement: 6847cc3c1ccae53125987617a343efddb10b636f
+All five refinement commits are published. Completion checkpoint records their SHAs; verify final public frontend/codex against local HEAD and this script's state JSON. No backend/contract/generated client/root workspace changes; Phase 3 remains separate.

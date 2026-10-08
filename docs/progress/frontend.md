@@ -4,16 +4,23 @@
 - **Track:** frontend; owns apps/web/apps/extension and frontend workspace files.
 - **Branch / worktree:** frontend/codex; C:/Users/User/Desktop/CareerLens/careerlens-web.
 - **Last updated:** 2026-10-08 Asia/Dubai by Codex (GPT-6).
-- **Current task:** F5–F9 refinements implemented and validated; awaiting normal user PowerShell publication. Original prompt order remains complete.
+- **Current task:** All five F5–F9 refinement implementations published; final SHA completion checkpoint being published. Pause for user after verification.
 - **Baseline:** frontend/codex c1d608fb3962e3737ddc0a89fd4533ed06467378 verified published. Local main e762cb4; public main 622ea0b adds only the presentation. Contract v0.2.0 unchanged; no contract rebase/client regeneration needed.
 - **F8 green checks:** strict typecheck and both Vite production builds; 20 native fixture/settings tests; genuine unpacked Chromium toolbar/side panel/activeTab/scripting/storage/HTTP; Match/Gaps/Save/options in both themes at 320/375/390/414/768px, eight zero-violation axe scans; screenshot review; retry/409/empty/duplicate/stale states; normalized llm posting saved with original URL; reduced motion; frozen offline install with every existing lock entry preserved.
 - **Prior green checks:** F5–F7 final web lint/typecheck/build, 22 tests, production/browser/Prism checks; responsive themes and a11y; F9 quiz completed and published. No web source changed in F8.
 
 ## Resume here (exact next step)
-1. All refinement checks passed. Run chat outputs/Publish-Refinements.ps1 in regular user PowerShell; no repeat implementation work/checks needed.
+1. All five implementations are published. Complete/verify the SHA checkpoint using chat outputs/Publish-Refinements.ps1. No repeat implementation checks needed.
 2. Publisher preflights branch/baseline/SHA256 manifest, makes five focused commits and pushes each --no-thin without force, saves SHAs, appends publication handoff, then commits/pushes completion checkpoint. Its outputs/Refinement-published-commits.json permits resume after push failures.
 3. After user reports done: read git log/status, verify public frontend/codex equals local HEAD and recorded checkpoint, verify five implementation SHAs and clean tree. Update only chat outputs/Refinement-progress-report.md with SHAs; no self-SHA repository commit.
 4. Do not start integration, edit backend/contracts/generated schema, or repeat sandbox Git ACL/credential fixes. Phase 3 belongs to Claude.
+
+## Published refinement commits
+- F5 refinement: caf271b1b73f0ba071d3f4b485d46fb0db5c5d48
+- F6 refinement: d11ee8a3cb77d6bb92d2695cb679a7d49fe157ad
+- F7 refinement: 7ea7b8a181e143d5c03123fc81b3f368f6820d71
+- F8 refinement: 6b51cb010599ac0d5983b8b9312b06a0bfcabd0b
+- F9 refinement: 6847cc3c1ccae53125987617a343efddb10b636f
 
 ## Refinement detail (F5–F9)
 - F5: next deliverable, All/To do/Done counts, estimated gains labelled, role selector isolates history, confirmed milestone mutations reconcile cache instead of permanently shadowing later updates.
