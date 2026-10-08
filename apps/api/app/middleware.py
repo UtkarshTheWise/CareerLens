@@ -24,8 +24,21 @@ UPLOAD_PATH = re.compile(r"^/v1/profiles/[^/]+/documents/?$")
 REQUEST_ID = re.compile(r"^[A-Za-z0-9_-]{8,64}$")
 
 
+DRAIN_MAX_BYTES = 32 * 1024 * 1024  # how much of a refused body is read and thrown away before replying
+
+
 class _TooLarge(Exception):
     pass
+
+
+async def _drain(receive: Receive, budget: int = DRAIN_MAX_BYTES) -> None:
+    """Read and discard the rest of a refused body. Replying while the client is still sending makes the
+    connection reset, and the browser then reports a network error instead of our 413."""
+    while budget > 0:
+        message = await receive()
+        if message["type"] != "http.request" or not message.get("more_body", False):
+            return
+        budget -= len(message.get("body", b""))
 
 
 def _json(status: int, body: dict[str, Any], extra: list[tuple[bytes, bytes]] | None = None) -> list[Message]:
@@ -67,6 +80,7 @@ class BodySizeLimitMiddleware:
         limit = self._limit_for(scope)
         declared = dict(scope.get("headers", [])).get(b"content-length")
         if declared is not None and declared.isdigit() and int(declared) > limit:
+            await _drain(receive)
             for message in self._too_large(limit):
                 await send(message)
             return
@@ -98,6 +112,7 @@ class BodySizeLimitMiddleware:
         try:
             await self.app(scope, limited_receive, guarded_send)
         except _TooLarge:
+            await _drain(receive)
             if not started:
                 for message in self._too_large(limit):
                     await send(message)

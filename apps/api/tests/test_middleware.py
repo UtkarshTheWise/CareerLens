@@ -172,3 +172,54 @@ def test_configure_logging_is_idempotent(fmt):
     finally:
         configure_logging("INFO", "json")
         root.handlers = [h for h in root.handlers if h in before or getattr(h, "_careerlens_handler", False)]
+
+
+# ---------------------------------------------------------------- refusing without a connection reset
+
+
+def run_asgi(chunks: list[bytes], declared: int | None):
+    """Drive BodySizeLimitMiddleware directly; returns (sent messages, chunks the client still had unread
+    when the first response byte went out)."""
+    import asyncio
+
+    from app.middleware import BodySizeLimitMiddleware
+
+    queue = list(chunks)
+    sent: list[dict] = []
+    unread_at_reply: list[int] = []
+
+    async def app(scope, receive, send):  # an app that would read the body and answer 200
+        while (await receive()).get("more_body"):
+            pass
+        await send({"type": "http.response.start", "status": 200, "headers": []})
+        await send({"type": "http.response.body", "body": b"ok"})
+
+    async def receive():
+        body = queue.pop(0)
+        return {"type": "http.request", "body": body, "more_body": bool(queue)}
+
+    async def send(message):
+        if message["type"] == "http.response.start":
+            unread_at_reply.append(len(queue))
+        sent.append(message)
+
+    headers = [(b"content-length", str(declared).encode())] if declared is not None else []
+    scope = {"type": "http", "method": "POST", "path": "/v1/profiles", "headers": headers}
+    asyncio.run(BodySizeLimitMiddleware(app, max_bytes=100, max_upload_bytes=1000)(scope, receive, send))
+    return sent, unread_at_reply[0]
+
+
+def test_a_refused_body_is_read_to_the_end_before_the_413_is_sent():
+    sent, unread = run_asgi([b"x" * 60] * 5, declared=300)  # declared too big
+    assert sent[0]["status"] == 413 and unread == 0
+    sent, unread = run_asgi([b"x" * 60] * 5, declared=None)  # chunked: crosses the limit while streaming
+    assert (
+        sent[0]["status"] == 413
+        and unread == 0
+        and len([m for m in sent if m["type"] == "http.response.start"]) == 1
+    )
+
+
+def test_a_body_within_the_limit_reaches_the_app_untouched():
+    sent, _ = run_asgi([b"x" * 30] * 3, declared=90)
+    assert sent[0]["status"] == 200
