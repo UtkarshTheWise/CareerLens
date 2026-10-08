@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.catalogue import validate_catalogue
-from app.config import API_VERSION, get_settings
+from app.config import API_VERSION, check_settings, get_settings
 from app.db.base import SessionLocal, create_all
 from app.errors import register_error_handlers
 from app.routers import analyses, applications, cohorts, jobs, meta, profiles, quizzes
@@ -13,6 +13,7 @@ from app.services.pipeline import recover_interrupted
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    check_settings(get_settings())  # refuse an unsafe production configuration
     validate_catalogue()  # refuse to start on broken data/*.yaml
     create_all()  # prototype: no migrations yet
     with SessionLocal() as db:

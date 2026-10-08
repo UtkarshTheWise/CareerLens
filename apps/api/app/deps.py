@@ -1,4 +1,5 @@
 from collections.abc import Iterator
+from dataclasses import dataclass
 from uuid import UUID
 
 from fastapi import Depends, Request
@@ -9,8 +10,10 @@ from app.config import Settings, get_settings
 from app.db import models
 from app.db.base import SessionLocal
 from app.errors import ApiError, not_found
+from app.services.auth import verify_token
 
 DEV_SUBJECT = "dev"
+STAFF_ROLE = "placement"  # Supabase app_metadata.role that marks placement staff
 
 
 def get_db() -> Iterator[Session]:
@@ -26,14 +29,38 @@ def _bearer_token(request: Request) -> str | None:
     return token.strip() or None if scheme.lower() == "bearer" else None
 
 
-def get_auth_subject(request: Request, settings: Settings = Depends(get_settings)) -> str:
-    """Who is calling. DEV_AUTH=1 accepts any request as the demo user."""
+@dataclass(frozen=True)
+class AuthContext:
+    subject: str
+    email: str | None = None
+    is_staff: bool = False  # may see cohort data (placement staff)
+
+
+def get_auth_context(request: Request, settings: Settings = Depends(get_settings)) -> AuthContext:
+    """Who is calling. DEV_AUTH=1 accepts any request as the demo user (and as staff)."""
     if settings.dev_auth:
-        return DEV_SUBJECT
-    if _bearer_token(request) is None:
+        return AuthContext(DEV_SUBJECT, None, True)
+    token = _bearer_token(request)
+    if token is None:
         raise ApiError(401, "unauthorized", "Missing bearer token")
-    # TODO(progress): verify the Supabase JWT with SUPABASE_JWT_SECRET and return its `sub` (B8).
-    raise ApiError(401, "unauthorized", "Token verification is not available yet; run with DEV_AUTH=1")
+    claims = verify_token(token, settings)
+    allowed = settings.staff_set
+    staff = (
+        claims.app_role == STAFF_ROLE
+        or claims.sub.lower() in allowed
+        or (claims.email is not None and claims.email.lower() in allowed)
+    )
+    return AuthContext(claims.sub, claims.email, staff)
+
+
+def get_auth_subject(context: AuthContext = Depends(get_auth_context)) -> str:
+    return context.subject
+
+
+def require_staff(context: AuthContext = Depends(get_auth_context)) -> AuthContext:
+    if not context.is_staff:
+        raise ApiError(403, "forbidden", "Cohort data is only available to placement staff.")
+    return context
 
 
 def demo_profile(db: Session) -> models.Profile:

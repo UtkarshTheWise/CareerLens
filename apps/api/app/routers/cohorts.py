@@ -7,15 +7,14 @@ from sqlalchemy.orm import Session
 
 from app import catalogue
 from app.db import models
-from app.deps import get_auth_subject, get_db
+from app.deps import get_db, require_staff
 from app.errors import ApiError, not_found
 from app.routers import ERROR_RESPONSES
 from app.schemas.api import Cohort, CohortInsights, CohortStudent
 from app.services import cohorts
 
-# TODO(progress): cohort data is for placement staff. DEV_AUTH callers see everything; B8 restricts these
-# routes to staff once the auth provider says who they are (the contract has no staff role yet).
-router = APIRouter(tags=["cohorts"], responses=ERROR_RESPONSES, dependencies=[Depends(get_auth_subject)])
+# Cohort data is for placement staff only (docs/QUIZ.md rule 5): every route here needs `require_staff`.
+router = APIRouter(tags=["cohorts"], responses=ERROR_RESPONSES, dependencies=[Depends(require_staff)])
 
 
 def _cohort(db: Session, cohort_id: UUID) -> models.Cohort:
