@@ -28,6 +28,14 @@ _STRICT_UNSUPPORTED = {
 }  # fmt: skip
 
 
+_last_ok: dict[str, str | None] = {"provider": None}  # the provider that last answered, for /health
+
+
+def active_provider(settings: Settings) -> str | None:
+    """The provider that last answered a call in this process, else the first one configured."""
+    return _last_ok["provider"] or settings.llm_provider
+
+
 class LLMError(Exception):
     """The gateway could not produce a valid object. `code` is safe to show to a client."""
 
@@ -307,6 +315,7 @@ def generate_structured[T: BaseModel](
             "llm provider=%s model=%s tier=%s schema=%s latency_ms=%d outcome=ok",
             provider.name, model, tier, schema.__name__, (time.perf_counter() - started) * 1000,
         )  # fmt: skip
+        _last_ok["provider"] = provider.name
         db.merge(CacheEntry(key=key, kind="llm", value=result.model_dump(mode="json")))
         db.commit()
         return result

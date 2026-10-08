@@ -29,6 +29,12 @@ class Settings(BaseSettings):
     # Comma-separated emails or Supabase user ids that may see cohort data (placement staff).
     placement_staff: str = ""
     dev_auth: bool = False
+    log_level: str = "INFO"
+    log_format: str = "json"  # json | text
+    max_body_kb: int = 1024  # any request body except a document upload
+    max_upload_kb: int = 6144  # document upload: a 5 MB file plus multipart overhead
+    # 0 = off. Some poolers reject the startup option this needs; see apps/api/README.md.
+    db_statement_timeout_ms: int = 0
     # Wait between verify quizzes on one project (docs/QUIZ.md): 1 h for the hackathon, 24 h in production.
     quiz_cooldown_minutes: int = 60
     # Comma-separated; extension origins are allowed by regex in main.py.
