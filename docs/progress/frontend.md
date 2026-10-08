@@ -5,13 +5,13 @@
 - **Branch:** frontend/codex.
 - **Worktree:** C:/Users/User/Documents/Codex/2026-10-07/install-these-two-skills-from-github/work/careerlens-design. Original desktop checkout unchanged.
 - **Last updated:** 2026-10-08 Asia/Dubai, Codex.
-- **Current task:** Carbon & Citron consistency implementation validated; final commit/publication in progress.
+- **Current task:** Carbon & Citron implementation complete and committed as 2bdb325; publication requires user's regular Windows terminal. All checks passed; do not repeat implementation work.
 - **Baseline:** frontend 8ebed6bfb7676ce4228ae1ee4c8010617c85e6d9; main 0cf0a4120663030bd48f26a180b582e4feeff05f merged without conflicts. Backend/contracts/generated client match main exactly.
 
 ## Resume here
-1. Read Git status and this checkpoint. User resumed after the explicit pause. UI implementation and checks are complete; do not repeat checks unless code changes.
-2. Publish the staged merge tree to frontend/codex, retaining ordered parents frontend 8ebed6b and main 0cf0a41. No force updates. GitHub connector is available; Windows Git credential isolation does not require user input when it succeeds.
-3. Verify remote SHA, align scratch metadata to the identical published tree without discarding files, then publish a documentation checkpoint with the implementation SHA. Original desktop checkout can pull later using the user's regular terminal.
+1. Read Git status and this checkpoint. UI implementation and checks are complete; no repeat checks unless code changes.
+2. GitHub connector creation failed with 403 Resource not accessible by integration. Normal Git push failed because sandbox cannot persist/read Windows wincredman credentials. No force update or credential/ACL workaround attempted.
+3. User should run chat outputs/Publish-Design.ps1 in their regular PowerShell window. It trusts only this exact checkout for that command, validates branch/HEAD/clean tree, pushes --no-thin, and verifies the remote SHA. After user reports success, verify public frontend/codex equals local HEAD and update only the chat progress report; no self-SHA repository commit is needed. Original desktop checkout can pull later using the user's regular terminal.
 4. Never repeat NTFS/credential workarounds or overwrite backend/contracts/other tracks. App previews use local synthetic contract fixtures; no real user records are changed.
 
 ## Task board
@@ -23,7 +23,8 @@
 | Dashboard/report/onboarding/roadmap/tracker/placement/settings/quiz consistency | done |
 | Extension styles and packaged stylesheet | done |
 | Frontend checks and responsive review | passed |
-| Commit/push and remote verification | in progress |
+| Implementation commit | done: 2bdb325 |
+| Push and remote verification | waiting for user's Windows credentials |
 
 ## Implementation
 - User-approved Carbon & Citron replaces prior indigo/violet DESIGN palette: warm black, ivory, muted citron, sage/ochre status colours and functional error red. Named web/extension token files are identical. Light/system options and stored preferences remain available; new web default is dark.
