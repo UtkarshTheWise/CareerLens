@@ -2,6 +2,7 @@
 /* Hallmark · pre-emit critique: P4 H4 E4 S4 R5 V3 — DESIGN-locked onboarding flow. */
 import { useRef, useState, type FormEvent, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import { displayName, useAuth } from "@/components/auth/auth-provider";
 import {
   ArrowLeft,
   ArrowRight,
@@ -74,7 +75,13 @@ function FieldBlock({
     </div>
   );
 }
+/** The signed-in Google name pre-fills the form. The shell renders pages only once sign-in is known, so
+ * the name is stable when the form mounts. */
 export function OnboardingWizard() {
+  const { user } = useAuth();
+  return <WizardForm initialName={displayName(user) ?? ""} />;
+}
+function WizardForm({ initialName }: { initialName: string }) {
   const router = useRouter();
   const roles = useListRoles();
   const createProfile = useCreateProfile();
@@ -83,7 +90,7 @@ export function OnboardingWizard() {
   const analyse = useStartAnalysis();
   const [step, setStep] = useState(0);
   const [values, setValues] = useState<WizardValues>({
-    name: "",
+    name: initialName,
     resume: null,
     linkedinMode: "none",
     linkedinFile: null,
