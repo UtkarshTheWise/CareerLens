@@ -10,10 +10,10 @@ import {
   useListCohortStudents,
   useExportCohort,
 } from "@/lib/api/hooks";
+import { studentDirectory, type StudentSort } from "@/lib/student-directory";
 import { errorMessage } from "@/lib/api/transport";
 import {
   KpiCard,
-  StackedBars,
   ScoreRing,
   BandBadge,
   UnderstandingBadge,
@@ -64,7 +64,7 @@ export function PlacementScreen() {
           support.
         </p>
       </header>
-      <Card className="space-y-4 p-6">
+      <Card className="gap-4 p-6">
         {cohorts.isPending || roles.isPending ? (
           <Loading />
         ) : cohorts.isError ? (
@@ -123,15 +123,44 @@ export function PlacementScreen() {
 function Counts({
   title,
   rows,
+  histogram = false,
 }: {
   title: string;
+  histogram?: boolean;
   rows: { label: string; count: number }[];
 }) {
   const maximum = Math.max(1, ...rows.map((r) => r.count));
   return (
-    <Card className="space-y-4 p-6">
+    <Card className="min-w-0 gap-4 p-6">
       <h2 className="text-lg font-semibold">{title}</h2>
-      {rows.length ? (
+      {rows.length && histogram ? (
+        <div
+          role="region"
+          aria-label={title}
+          tabIndex={0}
+          className="overflow-x-auto focus-visible:ring-2 focus-visible:ring-primary"
+        >
+          <ul
+            className="flex h-56 min-w-[480px] items-end gap-2"
+            aria-label="Students by readiness score bucket"
+          >
+            {rows.map((r, i) => (
+              <li
+                key={i}
+                className="flex h-full min-w-0 flex-1 flex-col justify-end gap-2 text-center text-xs"
+              >
+                <span className="tabular-nums">{r.count}</span>
+                <div
+                  aria-hidden="true"
+                  className="mx-1 min-h-0 rounded-t-control bg-primary"
+                  style={{ height: (r.count / maximum) * 150 }}
+                />
+                <span className="min-h-8 text-muted-readable">{r.label}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : rows.length ? (
         <ul className="space-y-4" aria-label={title}>
           {rows.map((r, i) => (
             <li key={i} className="space-y-2">
@@ -171,8 +200,10 @@ function Rates({
   }[];
   kind: string;
 }) {
+  const [expanded, setExpanded] = useState(false);
+  const visible = expanded ? rows : rows.slice(0, 6);
   return (
-    <Card className="min-w-0 space-y-4 p-6">
+    <Card className="min-w-0 gap-4 p-6">
       <h2 className="text-lg font-semibold">{title}</h2>
       {rows.length ? (
         <div
@@ -197,7 +228,7 @@ function Rates({
               </tr>
             </thead>
             <tbody>
-              {rows.map((r) => (
+              {visible.map((r) => (
                 <tr key={r.skill_id} className="border-t border-border">
                   <th scope="row" className="p-3 font-medium">
                     {r.skill_name}
@@ -211,6 +242,15 @@ function Rates({
         </div>
       ) : (
         <p className="text-sm text-muted-readable">No skill rates returned.</p>
+      )}
+      {rows.length > 6 && (
+        <Button
+          variant="outline"
+          aria-expanded={expanded}
+          onClick={() => setExpanded((v) => !v)}
+        >
+          {expanded ? "Show fewer skills" : `Show all ${rows.length} skills`}
+        </Button>
       )}
     </Card>
   );
@@ -226,6 +266,8 @@ function CohortView({
     insights = useGetCohortInsights(input),
     [risk, setRisk] = useState(false),
     [search, setSearch] = useState(""),
+    [sort, setSort] = useState<StudentSort>("name"),
+    [page, setPage] = useState(0),
     students = useListCohortStudents({
       ...input,
       query: { ...input.query, at_risk_only: risk },
@@ -236,13 +278,14 @@ function CohortView({
     [exportError, setExportError] = useState(""),
     [exported, setExported] = useState(false);
   const data = insights.data,
-    rows = (students.data || []).filter(
-      (s) =>
-        (!risk || s.at_risk) &&
-        (s.name + " " + (s.department || ""))
-          .toLowerCase()
-          .includes(search.trim().toLowerCase()),
+    rows = studentDirectory(
+      (students.data || []).filter((s) => !risk || s.at_risk),
+      search,
+      sort,
     );
+  const pageCount = Math.max(1, Math.ceil(rows.length / 20));
+  const currentPage = Math.min(page, pageCount - 1);
+  const visibleRows = rows.slice(currentPage * 20, currentPage * 20 + 20);
   async function download() {
     if (lock.current) return;
     lock.current = true;
@@ -329,83 +372,11 @@ function CohortView({
               }
             />
           </div>
-          <div className="grid items-start gap-4 lg:grid-cols-2">
-            <StackedBars
-              title="Readiness bands"
-              description="Analysed students, grouped by the service's readiness band."
-              series={["Not ready", "Developing", "Ready"]}
-              data={[
-                {
-                  label: "Students",
-                  first: data.bands.not_ready,
-                  second: data.bands.developing,
-                  third: data.bands.ready,
-                },
-              ]}
-            />
-            <Counts
-              title="Score distribution"
-              rows={data.histogram.map((r) => ({
-                label: r.bucket,
-                count: r.count,
-              }))}
-            />
-            <Counts
-              title="Most common missing skills"
-              rows={data.top_missing_skills.map((r) => ({
-                label: r.skill_name,
-                count: r.students,
-              }))}
-            />
-            <Rates
-              title="Unverified claim rates"
-              kind="Unverified"
-              rows={[...data.unverified_rate_by_skill]
-                .sort((a, b) => b.unverified_rate - a.unverified_rate)
-                .map((r) => ({ ...r, rate: r.unverified_rate }))}
-            />
-          </div>
-          <Card className="space-y-4 p-6">
-            <h2 className="text-lg font-semibold">Project understanding</h2>
-            <p className="text-xs text-muted-readable">
-              Latest verify status on each student&apos;s top project.
-              Individual quiz answers and focus data stay private.
-            </p>
-            {data.understanding ? (
-              <dl className="grid grid-cols-2 gap-4 md:grid-cols-4">
-                {[
-                  ["Quizzed", data.understanding.quizzed],
-                  ["Demonstrated", data.understanding.demonstrated],
-                  ["Partial", data.understanding.partial],
-                  ["Not demonstrated yet", data.understanding.not_demonstrated],
-                ].map(([label, value]) => (
-                  <div key={label}>
-                    <dt className="text-xs text-muted-readable">{label}</dt>
-                    <dd className="mt-2 text-3xl font-bold tabular-nums">
-                      {value}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            ) : (
-              <p className="text-sm text-muted-readable">
-                Understanding statistics were not returned.
-              </p>
-            )}
-          </Card>
-          <Rates
-            title="Built and explained"
-            kind="Built + explained"
-            rows={(data.understanding?.by_skill || []).map((r) => ({
-              ...r,
-              rate: r.built_and_explained_rate,
-            }))}
-          />
         </>
       ) : (
         <Card className="p-6">No cohort insights returned.</Card>
       )}
-      <Card className="min-w-0 space-y-5 p-6">
+      <Card className="min-w-0 gap-5 p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-lg font-semibold">Students</h2>
           <Button
@@ -427,7 +398,7 @@ function CohortView({
           </p>
         )}
         <div className="flex flex-wrap items-center gap-4">
-          <label className="min-w-0 flex-1 space-y-2 text-xs font-semibold">
+          <label className="w-full min-w-0 space-y-2 text-xs font-semibold sm:w-auto sm:flex-1">
             Search students
             <input
               type="search"
@@ -435,19 +406,67 @@ function CohortView({
               placeholder="Name or department"
               className={control}
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(0);
+              }}
             />
           </label>
           <label className="flex min-h-11 items-center gap-3 text-sm">
             <input
               type="checkbox"
               checked={risk}
-              onChange={(e) => setRisk(e.target.checked)}
+              onChange={(e) => {
+                setRisk(e.target.checked);
+                setPage(0);
+              }}
               className="size-5 accent-primary"
             />
             At risk only
           </label>
         </div>
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <label className="max-w-xs space-y-2 text-xs font-semibold">
+            Sort students
+            <select
+              aria-label="Sort students"
+              className={control}
+              value={sort}
+              onChange={(e) => {
+                setSort(e.target.value as StudentSort);
+                setPage(0);
+              }}
+            >
+              <option value="name">Name A–Z</option>
+              <option value="readiness">Readiness: lowest first</option>
+              <option value="coverage">Coverage: lowest first</option>
+            </select>
+          </label>
+          {(search || risk) && (
+            <Button
+              variant="outline"
+              onClick={() => {
+                setSearch("");
+                setRisk(false);
+                setPage(0);
+              }}
+            >
+              Clear filters
+            </Button>
+          )}
+        </div>
+        <p className="text-xs text-muted-readable">
+          CSV exports the full selected cohort and role, including students
+          outside these filters.
+        </p>
+        {!students.isPending && !students.isError && (
+          <p role="status" className="text-xs text-muted-readable">
+            {rows.length} {rows.length === 1 ? "student" : "students"} found
+            {rows.length
+              ? ` · showing ${currentPage * 20 + 1}–${Math.min((currentPage + 1) * 20, rows.length)}`
+              : ""}
+          </p>
+        )}
         {students.isPending ? (
           <Loading />
         ) : students.isError ? (
@@ -491,14 +510,150 @@ function CohortView({
                 </tr>
               </thead>
               <tbody>
-                {rows.map((s) => (
+                {visibleRows.map((s) => (
                   <StudentRow key={s.profile_id} student={s} />
                 ))}
               </tbody>
             </table>
           </div>
         )}
+        {pageCount > 1 && (
+          <nav
+            aria-label="Student pages"
+            className="flex flex-wrap items-center justify-between gap-3"
+          >
+            <Button
+              variant="outline"
+              disabled={currentPage === 0}
+              onClick={() => setPage(currentPage - 1)}
+            >
+              Previous page
+            </Button>
+            <span className="text-xs text-muted-readable">
+              Page {currentPage + 1} of {pageCount}
+            </span>
+            <Button
+              variant="outline"
+              disabled={currentPage + 1 >= pageCount}
+              onClick={() => setPage(currentPage + 1)}
+            >
+              Next page
+            </Button>
+          </nav>
+        )}
       </Card>
+      {data && (
+        <div className="space-y-6">
+          {" "}
+          <div className="grid min-w-0 grid-cols-1 items-start gap-4 lg:grid-cols-2">
+            <Card className="gap-4 p-6">
+              <h2 className="text-lg font-semibold">Readiness bands</h2>
+              <p className="text-xs text-muted-readable">
+                Analysed students, grouped by the service&apos;s readiness band.
+              </p>
+              <ul className="space-y-4" aria-label="Readiness bands">
+                {(
+                  [
+                    ["not_ready", "Not ready"],
+                    ["developing", "Developing"],
+                    ["ready", "Ready"],
+                  ] as const
+                ).map(([key, label]) => (
+                  <li key={key} className="space-y-2">
+                    <div className="flex items-center justify-between gap-3">
+                      <BandBadge band={key} />
+                      <span className="tabular-nums text-sm">
+                        {data.bands[key]} students
+                      </span>
+                    </div>
+                    <div
+                      aria-hidden="true"
+                      className="h-3 overflow-hidden rounded-full bg-surface-2"
+                    >
+                      <div
+                        className="h-full rounded-full bg-primary"
+                        style={{
+                          width:
+                            (data.bands[key] /
+                              Math.max(
+                                1,
+                                data.bands.not_ready +
+                                  data.bands.developing +
+                                  data.bands.ready,
+                              )) *
+                              100 +
+                            "%",
+                        }}
+                      />
+                    </div>
+                    <span className="sr-only">
+                      {label}: {data.bands[key]}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+            <Counts
+              title="Score distribution"
+              histogram
+              rows={data.histogram.map((r) => ({
+                label: r.bucket,
+                count: r.count,
+              }))}
+            />
+            <Counts
+              title="Most common missing skills"
+              rows={data.top_missing_skills.map((r) => ({
+                label: r.skill_name,
+                count: r.students,
+              }))}
+            />
+            <Rates
+              title="Unverified claim rates"
+              kind="Unverified"
+              rows={[...data.unverified_rate_by_skill]
+                .sort((a, b) => b.unverified_rate - a.unverified_rate)
+                .map((r) => ({ ...r, rate: r.unverified_rate }))}
+            />
+          </div>
+          <Card className="gap-4 p-6">
+            <h2 className="text-lg font-semibold">Project understanding</h2>
+            <p className="text-xs text-muted-readable">
+              Latest verify status on each student&apos;s top project.
+              Individual quiz answers and focus data stay private.
+            </p>
+            {data.understanding ? (
+              <dl className="grid grid-cols-2 gap-4 md:grid-cols-4">
+                {[
+                  ["Quizzed", data.understanding.quizzed],
+                  ["Demonstrated", data.understanding.demonstrated],
+                  ["Partial", data.understanding.partial],
+                  ["Not demonstrated yet", data.understanding.not_demonstrated],
+                ].map(([label, value]) => (
+                  <div key={label}>
+                    <dt className="text-xs text-muted-readable">{label}</dt>
+                    <dd className="mt-2 text-3xl font-bold tabular-nums">
+                      {value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            ) : (
+              <p className="text-sm text-muted-readable">
+                Understanding statistics were not returned.
+              </p>
+            )}
+          </Card>
+          <Rates
+            title="Built and explained"
+            kind="Built + explained"
+            rows={(data.understanding?.by_skill || []).map((r) => ({
+              ...r,
+              rate: r.built_and_explained_rate,
+            }))}
+          />
+        </div>
+      )}
     </>
   );
 }
