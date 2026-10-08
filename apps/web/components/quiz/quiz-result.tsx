@@ -31,6 +31,10 @@ export function QuizResult({
   const [now, setNow] = useState(0);
   const [retakeAt, setRetakeAt] = useState(result.retake_available_at);
   const reduced = useReducedMotion();
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    heading.current?.focus();
+  }, []);
   const analysis = useGetAnalysis(
     { analysis_id: quiz.analysis_id },
     { enabled: Boolean(result.score_update) },
@@ -71,12 +75,18 @@ export function QuizResult({
         <p className="text-xs font-semibold text-primary-text">
           {result.mode === "practice" ? "Practice complete" : "Verify complete"}
         </p>
-        <h1 className="text-2xl font-semibold">Your quiz result</h1>
+        <h1
+          ref={heading}
+          tabIndex={-1}
+          className="text-2xl font-semibold outline-none"
+        >
+          Your quiz result
+        </h1>
         <p className="break-anywhere text-sm text-muted-readable">
           {quiz.project_title}
         </p>
       </header>
-      <Card className="space-y-5 p-6">
+      <Card className="gap-5 p-6">
         <div className="flex flex-wrap items-center justify-center gap-6">
           <ScoreRing
             label="Quiz score"
@@ -116,7 +126,7 @@ export function QuizResult({
         </div>
       </Card>
       {result.score_update && (
-        <Card className="space-y-4 p-6">
+        <Card className="gap-4 p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-lg font-semibold">Readiness score update</h2>
             <motion.p
@@ -169,7 +179,7 @@ export function QuizResult({
       )}
       {result.flag && <FlagCard flag={result.flag} />}
       <div className="grid items-start gap-4 md:grid-cols-2">
-        <Card className="space-y-4 p-6">
+        <Card className="gap-4 p-6">
           <h2 className="text-lg font-semibold">Strengths</h2>
           {result.strengths.length ? (
             <ul className="space-y-3 text-sm leading-relaxed">
@@ -183,7 +193,7 @@ export function QuizResult({
             </p>
           )}
         </Card>
-        <Card className="space-y-4 p-6">
+        <Card className="gap-4 p-6">
           <h2 className="text-lg font-semibold">Topics to review</h2>
           {result.review_topics.length ? (
             <ul className="space-y-4">
@@ -203,9 +213,28 @@ export function QuizResult({
       </div>
       <section className="space-y-4">
         <h2 className="text-lg font-semibold">Question-by-question review</h2>
+        {!!result.per_question.length && (
+          <nav aria-label="Review questions" className="flex flex-wrap gap-2">
+            {result.per_question.map((item, i) => (
+              <a
+                key={item.question_id}
+                href={"#review-" + encodeURIComponent(item.question_id)}
+                className="inline-flex min-h-11 items-center rounded-control border border-border px-3 text-xs text-primary-text underline"
+              >
+                Question{" "}
+                {quiz.questions.find((q) => q.id === item.question_id)?.order ||
+                  i + 1}
+              </a>
+            ))}
+          </nav>
+        )}
         {result.per_question.length ? (
           result.per_question.map((item, i) => (
-            <Card key={item.question_id} className="space-y-4 p-6">
+            <Card
+              key={item.question_id}
+              id={"review-" + encodeURIComponent(item.question_id)}
+              className="scroll-mt-24 gap-4 p-6"
+            >
               <h3 className="text-sm font-semibold">
                 Question{" "}
                 {quiz.questions.find((q) => q.id === item.question_id)?.order ||
@@ -220,7 +249,10 @@ export function QuizResult({
                   }
                 </p>
               )}
-              <QuizFeedback feedback={item} />
+              <QuizFeedback
+                feedback={item}
+                question={quiz.questions.find((q) => q.id === item.question_id)}
+              />
             </Card>
           ))
         ) : (
@@ -229,7 +261,7 @@ export function QuizResult({
           </p>
         )}
       </section>
-      <Card className="space-y-4 p-6">
+      <Card className="gap-4 p-6">
         <h2 className="text-lg font-semibold">Keep practising</h2>
         {retakeAt && (
           <div className="space-y-2 text-xs text-muted-readable">

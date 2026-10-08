@@ -183,7 +183,7 @@ export function QuizScreen({ quizId }: { quizId: string }) {
         <p className="text-sm text-muted-readable">{quiz.project_title}</p>
       </header>
       {!active ? (
-        <Card className="space-y-5 p-6" data-component="QuizIntro">
+        <Card className="gap-5 p-6" data-component="QuizIntro">
           <h2 className="text-lg font-semibold">Explain the work you know.</h2>
           <p className="text-sm leading-relaxed text-muted-readable">
             {quiz.total_questions} questions about your project. Answers are
@@ -237,12 +237,23 @@ export function QuizScreen({ quizId }: { quizId: string }) {
           </p>
         </Card>
       ) : feedback ? (
-        <Card className="space-y-5 p-6">
-          <h2 className="text-lg font-semibold">Practice feedback</h2>
+        <Card className="gap-5 p-6">
+          <h2
+            className="text-lg font-semibold"
+            tabIndex={-1}
+            ref={(el) => {
+              if (el) el.focus();
+            }}
+          >
+            Practice feedback
+          </h2>
           <p className="text-sm text-muted-readable">
             {feedback.question.prompt}
           </p>
-          <QuizFeedback feedback={feedback.answer} />
+          <QuizFeedback
+            feedback={feedback.answer}
+            question={feedback.question}
+          />
           <Button
             className="min-h-11"
             onClick={() => {
@@ -270,7 +281,7 @@ export function QuizScreen({ quizId }: { quizId: string }) {
           onRefresh={retryQuiz}
         />
       ) : (
-        <Card className="space-y-4 p-6">
+        <Card className="gap-4 p-6">
           <h2 className="text-lg font-semibold">
             {lastRecorded && lastRecorded.order >= quiz.total_questions
               ? "Ready to submit"

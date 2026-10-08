@@ -1,6 +1,7 @@
 "use client";
 /* Hallmark · pre-emit critique: P4 H4 E4 S5 R5 V3 — focused, server-timed quiz. */
 import { useEffect, useRef, useState } from "react";
+import { timerNotice } from "@/lib/quiz-presentation";
 import { answerPayload, duration, secondsLeft } from "@/lib/quiz";
 import { errorMessage } from "@/lib/api/transport";
 import type { Schema } from "@/components/career/shared";
@@ -127,7 +128,7 @@ export function QuizCard({
       ? Math.min(1, remaining / question.time_limit_s)
       : 0;
   return (
-    <Card className="min-w-0 space-y-5 p-6" data-component="QuizCard">
+    <Card className="min-w-0 gap-4 p-5 sm:p-6" data-component="QuizCard">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="text-xs font-semibold text-primary-text">
@@ -148,7 +149,7 @@ export function QuizCard({
                 ? "Remaining time unavailable"
                 : `${remaining} seconds remaining`
             }
-            className="relative size-24 shrink-0"
+            className="relative size-20 shrink-0"
           >
             <svg
               viewBox="0 0 100 100"
@@ -168,7 +169,11 @@ export function QuizCard({
                 cy="50"
                 r="42"
                 fill="none"
-                stroke="var(--primary)"
+                stroke={
+                  remaining != null && remaining <= 30
+                    ? "var(--warning-readable)"
+                    : "var(--primary)"
+                }
                 strokeWidth="8"
                 strokeLinecap="round"
                 strokeDasharray={`${fraction * circumference} ${circumference}`}
@@ -183,8 +188,18 @@ export function QuizCard({
           </div>
         )}
       </div>
+      {verify && (
+        <p
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          className="text-xs font-medium text-warning-readable"
+        >
+          {timerNotice(remaining)}
+        </p>
+      )}
       <ol aria-label="Question progress" className="flex flex-wrap gap-2">
-        {Array.from({ length: Math.min(total, 10) }, (_, i) => (
+        {Array.from({ length: total }, (_, i) => (
           <li
             key={i}
             aria-current={i + 1 === question.order ? "step" : undefined}
@@ -238,7 +253,10 @@ export function QuizCard({
                     name={`answer-${question.id}`}
                     value={option.id}
                     checked={choice === option.id}
-                    onChange={() => setChoice(option.id)}
+                    onChange={() => {
+                      values.current.choice = option.id;
+                      setChoice(option.id);
+                    }}
                     className="mt-1 size-4 shrink-0 accent-primary"
                   />
                   <span className="break-anywhere">{option.text}</span>
@@ -261,9 +279,12 @@ export function QuizCard({
             <textarea
               id={`answer-${question.id}`}
               value={text}
-              onChange={(e) => setText(e.target.value)}
+              onChange={(e) => {
+                values.current.text = e.target.value;
+                setText(e.target.value);
+              }}
               maxLength={2000}
-              rows={7}
+              rows={5}
               disabled={disabled}
               onPaste={(e) => {
                 if (verify) {
@@ -332,7 +353,7 @@ export function QuizCard({
         ) : (
           <Button
             type="submit"
-            className="min-h-11"
+            className="min-h-11 w-full sm:w-auto"
             disabled={
               disabled ||
               (question.type === "mcq" && !choice) ||

@@ -1,3 +1,4 @@
+import { choiceText } from "@/lib/quiz-presentation";
 import { safeUrl, number, type Schema } from "@/components/career/shared";
 export function SourceLink({
   source,
@@ -30,8 +31,10 @@ export function SourceLink({
 }
 export function QuizFeedback({
   feedback,
+  question,
 }: {
   feedback: Schema["QuizAnswerFeedback"];
+  question?: Schema["QuizQuestion"];
 }) {
   return (
     <div className="space-y-4" data-component="QuizFeedback">
@@ -47,7 +50,7 @@ export function QuizFeedback({
       )}
       {feedback.choice_id && (
         <p className="text-xs text-muted-readable">
-          Your choice: {feedback.choice_id}
+          Your choice: {choiceText(question, feedback.choice_id)}
         </p>
       )}
       {feedback.text != null && (
@@ -60,7 +63,8 @@ export function QuizFeedback({
       )}
       {feedback.correct_choice_id && (
         <p className="text-xs">
-          Correct choice returned by the service: {feedback.correct_choice_id}
+          Correct choice returned by the service:{" "}
+          {choiceText(question, feedback.correct_choice_id)}
         </p>
       )}
       {!!feedback.key_points?.length && (
