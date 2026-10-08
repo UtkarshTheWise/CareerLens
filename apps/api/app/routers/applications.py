@@ -8,7 +8,10 @@ from sqlalchemy.orm import Session
 from app.db import models
 from app.deps import get_application_for, get_auth_subject, get_db, load_profile
 from app.routers import ERROR_RESPONSES
-from app.schemas.api import Application, ApplicationCreate, ApplicationUpdate
+from app.routers.analyses import get_pipeline_deps
+from app.schemas.api import Application, ApplicationCreate, ApplicationUpdate, Error, TailoredResume
+from app.services.pipeline import PipelineDeps
+from app.services.tailor import tailor_resume as build_tailored_resume
 
 router = APIRouter(tags=["applications"], responses=ERROR_RESPONSES)
 
@@ -79,3 +82,21 @@ def delete_application(
     db.delete(application)
     db.commit()
     return Response(status_code=204)
+
+
+@router.post(
+    "/v1/applications/{application_id}/tailored-resume",
+    operation_id="tailorResume",
+    response_model=TailoredResume,
+    responses={
+        409: {"model": Error, "description": "Profile has no completed analysis"},
+        429: {"model": Error, "description": "LLM quota exhausted"},
+    },
+)
+def tailor_resume(
+    application: models.Application = Depends(get_application_for),
+    db: Session = Depends(get_db),
+    deps: PipelineDeps = Depends(get_pipeline_deps),
+) -> TailoredResume:
+    """Rewrite the student's own bullets for this job, using only verified evidence (P2)."""
+    return build_tailored_resume(db, application, providers=deps.providers)

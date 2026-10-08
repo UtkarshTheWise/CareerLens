@@ -173,3 +173,16 @@ class QuizGrading(BaseModel):
     """The model only classifies key points; Python computes every number."""
 
     answers: list[GradedAnswer] = Field(default_factory=list)
+
+
+# ---------- truthful tailoring (docs/PIPELINE.md, P2) ----------
+class TailoredBulletDraft(BaseModel):
+    bullet_id: str  # b1, b2 ... as given in the prompt
+    rewritten: str
+    evidence_ids: list[str] = Field(default_factory=list)
+
+
+class TailoredDraft(BaseModel):
+    """The model only rewrites; Python decides what is allowed to stand (services/tailor.py)."""
+
+    bullets: list[TailoredBulletDraft] = Field(default_factory=list)
