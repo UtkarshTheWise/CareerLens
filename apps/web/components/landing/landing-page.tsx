@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { animate, motion, useMotionValue, useReducedMotion, useTransform } from "framer-motion";
 import { ArrowRight, FileSearch, GitBranch, Route, ScanLine, ShieldCheck } from "lucide-react";
+import { Credit } from "@/components/layout/credit";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -182,6 +183,7 @@ export function LandingPage() {
             </motion.li>
           ))}
         </ul>
+        <Credit />
       </main>
     </div>
   );
