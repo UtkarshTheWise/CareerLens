@@ -9,23 +9,20 @@ Keep under ~150 lines. Commit it together with the code it describes.
 
 ## Status
 - **Track:** backend · **Owns:** `apps/api/`, `data/`
-- **Branch / worktree:** `backend/claude` · `../careerlens-api`
-- **Last updated:** 2026-10-08 01:30 IST by Claude Code (Sonnet 5.5)
-- **Current task:** B8 in progress (plan: `~/.claude/plans/refactored-giggling-bachman.md`). Commits 1-3 of 5 done: auth/staff/production guard; body limit, request log, JSON logging, DB timeouts, health; real tailorResume (29/29 routed). Commit 4 (README, render.yaml, keepalive.yml) done. Next: final docs and the handoff with every endpoint's status (commit 5).
-- **State:** in progress   <!-- not started | in progress | blocked | done -->
-- **Last green checks:** 2026-10-08 01:20 IST, from `apps/api`: `uv run pytest -q` (585 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (28/29 routed, 0 mismatches; `tailorResume` is P2) · live quiz run (see the B9 handoff entry)
+- **Branch / worktree:** `backend/claude` · `../careerlens-api` (B1-B9 are also on `main`, merged 2026-10-08)
+- **Last updated:** 2026-10-08 03:15 IST by Claude Code (Sonnet 5.5)
+- **Current task:** B8 done (auth, staff routes, limits, logging, health, real `tailorResume`, README, render.yaml, keep-alive). Backend track complete; next is Phase 3 integration with Codex's F8.
+- **State:** done   <!-- not started | in progress | blocked | done -->
+- **Last green checks:** 2026-10-08 03:10 IST, from `apps/api`: `uv run pytest -q` (653 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py` with NO flags (29/29, 0 mismatches) · real uvicorn smoke test with `DEV_AUTH=0` (auth, staff, 413, startup guard, logs)
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
-0. B8 is built in 5 commits (approved plan `~/.claude/plans/refactored-giggling-bachman.md`). DONE, commit 1: `services/auth.py` (HS256 secret or JWKS, pinned algorithms, audience/issuer/exp/sub required, generic 401), `deps.get_auth_context` / `require_staff` (staff = `PLACEMENT_STAFF` email or id, or `app_metadata.role == placement`; DEV_AUTH = staff), cohorts router uses `require_staff`, `config.check_settings` (production refuses DEV_AUTH or no token key) called in the lifespan, new env vars `SUPABASE_URL`, `PLACEMENT_STAFF`, `ENVIRONMENT`, dependency `pyjwt[crypto]`, tests `test_auth.py`.
-0b. DONE, commit 2: `app/middleware.py` (413 Error-shaped body limit, 6 MB upload / 1 MB else, counts chunked bodies; request log with `X-Request-ID`, route template only), `app/logging_config.py` (JSON lines; httpx/pdfminer/pdfplumber/PIL pinned to WARNING because pdfminer DEBUG logs contain the resume text), `db/base.make_engine` (connect_timeout 10, pool_recycle 300, prepare_threshold off, optional `DB_STATEMENT_TIMEOUT_MS`, default off because poolers may reject the startup option), `/health` = last successful provider + `SELECT 1` (503 `db_unavailable`), new env `LOG_LEVEL`, `LOG_FORMAT`, `MAX_BODY_KB`, `MAX_UPLOAD_KB`, `DB_STATEMENT_TIMEOUT_MS`; tests `test_middleware.py`, `test_health.py`.
-0c. DONE, commit 3: real `tailorResume` (`services/tailor.py`, `prompts/tailor_resume.md`, `TailoredDraft`): the model rewrites; Python keeps a rewrite only if it adds no unverified skill and no new number, takes `original` from the stored resume, filters evidence ids, computes `numbers_without_evidence` and `skills_order` itself; refuses with 409 `no_analysis` / 422 `no_description` / 429 on LLM outage. `check_contract.py` now passes with NO flags (29/29). Tests `test_tailor.py`; `test_check_contract.py` updated. NOT yet run against a real model.
-0d. DONE, commit 4: `apps/api/README.md`, `render.yaml` (free web service, every secret `sync: false`, `ENVIRONMENT=production`), `.github/workflows/keepalive.yml` (daily `/health` with retries), `tests/test_deploy_files.py`; real-server smoke test passed over HTTP (auth, staff, 413 with the body drained so browsers see the 413 and not a connection reset, startup guard).
-1. NEXT (commit 5, docs only; the old commit-4 notes follow for reference): `check_contract.py` green with no flags (fix `test_check_contract.py`), `apps/api/README.md`, `render.yaml`, `.github/workflows/keepalive.yml`. Commit 5: docs + handoff with every endpoint's status.
-2. Quiz map for whoever touches it: `services/quiz_context.py` (files) -> `quiz.py` (generate + validate + store) -> `quiz_flow.py` (start / open / answer / submit / result, calls `quiz_timing.py`, `quiz_grading.py`, `quiz_effects.py`) -> `quiz_views.py` (the only place keys become response fields) -> `routers/quizzes.py`. Verify result -> `quiz_effects.apply_verify_result` re-scores `analysis.signals`, rewrites the stored report and `profiles.project_understanding[url]`.
-3. Not yet seen live: a `demonstrated`/`partial` verify result with the real grader (the live run used deliberately poor answers), and whether the replacement-questions round now succeeds on Groq after the 413 fix (quotas blocked the re-check). Re-run: `cd apps/api && PYTHONPATH=. DEV_AUTH=1 DATABASE_URL=sqlite:///<scratch>/live.db uv run python <scratch>/live_quiz.py` (scripts were in the session scratchpad; recreate from the handoff steps: profile + resume upload + analysis, practice quiz, verify quiz, answers, submit).
-4. After any route or schema change: `cd apps/api && uv run python scripts/check_contract.py --only-implemented`. Seed locally with `cd apps/api && uv run python scripts/seed_demo.py` (uses `DATABASE_URL`).
-5. Human: the GitHub token expires 2026-10-14; renew it in `careerlens-api/apps/api/.env`. Supabase needs the hotspot (college Wi-Fi blocks the DB ports). Gemini/Groq free-tier quotas were exhausted on 2026-10-07/08; pre-generate demo quizzes before judging.
+1. Merge the latest `backend/claude` into `main` again (B8 commits are on `backend/claude` only; `main` has B1-B9), so Codex can pull. Then wait for Codex's F8 (extension) and start Phase 3 on the `integration` branch (`PROMPTS.md`, phase 3): run the real backend against `apps/web` and `apps/extension`, fix contract drift, bug-fix only, no new features.
+2. Not verified live yet (all work offline): (a) `tailorResume` with a real model, (b) a `demonstrated`/`partial` verify quiz with the real grader and whether the quiz replacement round now succeeds on Groq after the 413 fix, (c) token verification against a real Supabase project (HS256 secret and the JWKS path), (d) the Render deploy and the keep-alive workflow. Quotas: Gemini/Groq free tiers were exhausted on 2026-10-07/08.
+3. Deploy checklist is in `apps/api/README.md` and `render.yaml`. Needs the human: a personal GitHub repo, Render + Supabase accounts, the `sync: false` env values, the `API_URL` repository secret, and `PLACEMENT_STAFF` (emails of the placement staff) before the cohort screens show anything in production.
+4. Quiz map: `services/quiz_context.py` -> `quiz.py` -> `quiz_flow.py` (-> `quiz_timing.py`, `quiz_grading.py`, `quiz_effects.py`) -> `quiz_views.py` (the only place answer keys become response fields) -> `routers/quizzes.py`. Auth map: `services/auth.py` (token) -> `deps.get_auth_context` / `require_staff`. Tailoring: `services/tailor.py`.
+5. After any route or schema change: `cd apps/api && uv run python scripts/check_contract.py` (no flag now). Seed locally with `uv run python scripts/seed_demo.py`.
+6. Human: the GitHub token expires 2026-10-14; renew it in `careerlens-api/apps/api/.env`. Supabase needs the hotspot (college Wi-Fi blocks the DB ports). Pre-generate demo quizzes before judging.
 
 ## Task board
 <!-- status: todo | doing | done | blocked · commit = short sha of the commit that finished it -->
@@ -39,14 +36,14 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | B6 | Pipeline, analyses endpoints, judging, roadmap planner, role-fit | done | 70d91bc | 5 endpoints incl. the milestone PATCH; live run verified; 102 new tests |
 | B7 | Jobs match, applications, cohorts, seed_demo.py | done | e0dc64d | 9 ops routed (22/29); live extract_job check passed; 49 new tests |
 | B9 | Project Understanding Check (quiz) | done | see git log | 6 ops routed (28/29); 112 new tests; live practice + verify run; 429 detail key is `retake_available_at` (contract), not `retry_at` as the B9 prompt says |
-| B8 | Hardening, contract check green, deploy, keep-alive | todo | | Supabase JWT verification lands here |
+| B8 | Hardening, contract check green, deploy, keep-alive | done | see git log | JWT auth + staff routes, limits, JSON logs, health with DB check, real tailorResume, README, render.yaml, keepalive.yml; 653 tests; deploy itself not done (needs accounts) |
 
 ## In-progress detail
 - **Files touched, not finished:** none
-- **What works right now:** `GET /health`, `GET /v1/roles` (7 real roles), `GET /v1/me` (demo profile, created on first call under `DEV_AUTH=1`), profile create/get/patch/delete, document upload (PDF/DOCX -> text); every error in the contract `Error` shape (404/405/422/500 + `ApiError`); CORS for `CORS_ORIGINS` and `chrome-extension://*`; tables created at startup. Services with no route yet: `github.collect()`, `detectors.analyse()`, `resume.extract_resume()`, `llm.generate_structured()`.
+- **What works right now:** all 29 contract operations (see the B8 handoff entry for each one's status); every error in the contract `Error` shape; CORS for `CORS_ORIGINS` and `chrome-extension://*`; tables created at startup; Supabase token auth and staff-only cohort routes.
 - **Stubbed / fake (search `TODO(progress)`):**
-  - `app/deps.py:get_auth_subject`: with `DEV_AUTH=0` every request gets 401 (no Supabase JWT verification yet) → B8.
-- **Known failing tests / checks:** none. `pytest -m live` passes (1 real call). Real server verified against Supabase on 2026-10-07 (create/upload/delete profile). `check_contract.py` without `--only-implemented` exits 1 by design until all 29 operations are routed.
+  - none in code. Not verified live: see Resume here, item 2.
+- **Known failing tests / checks:** none. `pytest -m live` passes (1 real call). Real server verified against Supabase on 2026-10-07 (create/upload/delete profile). `check_contract.py` passes with no flags.
 
 ## Decisions made (one line each, append)
 - Tables are created with `Base.metadata.create_all` at startup; no Alembic for the prototype.
