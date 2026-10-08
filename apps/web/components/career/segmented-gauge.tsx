@@ -37,8 +37,8 @@ export function SegmentedGauge({
           cy="72"
           r="58"
           fill="none"
-          stroke="var(--surface-2)"
-          strokeWidth="14"
+          stroke="var(--control)"
+          strokeWidth="7"
         />
         {total > 0 &&
           segments.map((segment, index) => {
@@ -53,7 +53,7 @@ export function SegmentedGauge({
                 r="58"
                 fill="none"
                 stroke={colors[index % colors.length]}
-                strokeWidth="14"
+                strokeWidth="7"
                 strokeDasharray={`${Math.max(0, length - 3)} ${circumference}`}
                 strokeDashoffset={-start}
               />

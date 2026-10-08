@@ -22,14 +22,40 @@ class Settings(BaseSettings):
     ollama_model: str = "llama3.2"
     github_token: str = ""
     database_url: str = "sqlite:///./dev.db"
-    supabase_jwt_secret: str = ""
+    supabase_jwt_secret: str = ""  # HS256 projects; asymmetric projects use SUPABASE_URL (JWKS) instead
+    supabase_url: str = ""
+    # development | production. Production refuses DEV_AUTH and needs a way to verify tokens.
+    environment: str = "development"
+    # Comma-separated emails or Supabase user ids that may see cohort data (placement staff).
+    placement_staff: str = ""
     dev_auth: bool = False
+    # Uses of the operations that spend shared LLM/GitHub quota, per signed-in user per hour (0 = off).
+    rate_limit_analyses_per_hour: int = 12
+    rate_limit_quizzes_per_hour: int = 30
+    rate_limit_tailor_per_hour: int = 30
+    rate_limit_match_per_hour: int = 120
+    log_level: str = "INFO"
+    log_format: str = "json"  # json | text
+    max_body_kb: int = 1024  # any request body except a document upload
+    max_upload_kb: int = 6144  # document upload: a 5 MB file plus multipart overhead
+    # 0 = off. Some poolers reject the startup option this needs; see apps/api/README.md.
+    db_statement_timeout_ms: int = 0
+    # Wait between verify quizzes on one project (docs/QUIZ.md): 1 h for the hackathon, 24 h in production.
+    quiz_cooldown_minutes: int = 60
     # Comma-separated; extension origins are allowed by regex in main.py.
     cors_origins: str = "http://localhost:3000"
 
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
+
+    @property
+    def staff_set(self) -> frozenset[str]:
+        return frozenset(v.strip().lower() for v in self.placement_staff.split(",") if v.strip())
+
+    @property
+    def is_production(self) -> bool:
+        return self.environment.strip().lower() == "production"
 
     @property
     def llm_provider(self) -> str | None:
@@ -45,3 +71,16 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
+
+
+def check_settings(settings: Settings) -> None:
+    """Refuse to start in a configuration that would be unsafe in production."""
+    if not settings.is_production:
+        return
+    problems = []
+    if settings.dev_auth:
+        problems.append("DEV_AUTH=1 would accept every request as the demo user")
+    if not (settings.supabase_jwt_secret or settings.supabase_url):
+        problems.append("set SUPABASE_JWT_SECRET (HS256) or SUPABASE_URL (JWKS) so tokens can be verified")
+    if problems:
+        raise RuntimeError("Unsafe production configuration: " + "; ".join(problems))

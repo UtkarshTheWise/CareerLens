@@ -1,0 +1,26 @@
+# Daily ping so the free Render instance stays warm and the free Supabase project is never idle for a week.
+# /health runs a real `SELECT 1` against the database, so one request covers both.
+# Add the repository secret API_URL (for example https://careerlens-api.onrender.com) under
+# Settings > Secrets and variables > Actions.
+name: keepalive
+
+on:
+  schedule:
+    - cron: "17 5 * * *" # 05:17 UTC every day
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ping /health
+        env:
+          API_URL: ${{ secrets.API_URL }}
+        run: |
+          test -n "$API_URL" || { echo "Set the API_URL repository secret"; exit 1; }
+          # Render's free tier needs about a minute to wake: retry for a while before giving up.
+          curl --fail --silent --show-error --retry 5 --retry-delay 20 --retry-all-errors \
+            --max-time 90 "${API_URL%/}/health"

@@ -3,14 +3,17 @@ import copy
 from scripts.check_contract import check, load_app_spec, load_contract, main
 
 
-def test_implemented_routes_and_all_schemas_match_the_contract():
-    assert check(load_contract(), load_app_spec(), only_implemented=True) == []
-    assert main(["--only-implemented"]) == 0
+def test_every_contract_operation_is_routed_and_matches_with_no_flags():
+    assert check(load_contract(), load_app_spec()) == []
+    assert main([]) == 0 and main(["--only-implemented"]) == 0
 
 
 def test_unrouted_paths_fail_without_the_flag():
-    problems = check(load_contract(), load_app_spec())
+    app_spec = copy.deepcopy(load_app_spec())
+    del app_spec["paths"]["/v1/jobs/match"]  # as if matchJob had not been routed
+    problems = check(load_contract(), app_spec)
     assert any("not routed" in p for p in problems)
+    assert check(load_contract(), app_spec, only_implemented=True) == []
 
 
 def test_detects_schema_drift():

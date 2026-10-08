@@ -8,6 +8,7 @@ from app import catalogue
 from app.db import models
 from app.deps import get_analysis_for, get_db, get_profile_for
 from app.errors import ApiError, not_found
+from app.rate_limit import limited
 from app.routers import ERROR_RESPONSES
 from app.schemas.api import (
     Analysis,
@@ -21,20 +22,24 @@ from app.schemas.api import (
     SimulationResult,
 )
 from app.services import scoring
+from app.services.byok import get_user_providers
+from app.services.llm import Provider
 from app.services.pipeline import PipelineDeps, run_analysis
 from app.services.scoring_inputs import ScoringInputs, SimulationError
 
 router = APIRouter(tags=["analyses"], responses=ERROR_RESPONSES)
 
 
-def get_pipeline_deps() -> PipelineDeps:
-    """The real LLM providers, GitHub client and page fetcher. Tests override this dependency."""
-    return PipelineDeps()
+def get_pipeline_deps(user_providers: list[Provider] | None = Depends(get_user_providers)) -> PipelineDeps:
+    """The real LLM providers (or only the student's own key, if sent), GitHub client and page fetcher.
+    Tests override this dependency."""
+    return PipelineDeps(providers=user_providers)
 
 
 @router.post(
     "/v1/profiles/{profile_id}/analyses",
     operation_id="startAnalysis",
+    dependencies=[Depends(limited("analysis", "rate_limit_analyses_per_hour"))],
     response_model=AnalysisStatus,
     status_code=202,
     responses={409: {"model": Error, "description": "Profile has no resume yet"}},

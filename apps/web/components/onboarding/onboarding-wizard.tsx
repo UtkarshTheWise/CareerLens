@@ -2,6 +2,7 @@
 /* Hallmark · pre-emit critique: P4 H4 E4 S4 R5 V3 — DESIGN-locked onboarding flow. */
 import { useRef, useState, type FormEvent, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import { displayName, useAuth } from "@/components/auth/auth-provider";
 import {
   ArrowLeft,
   ArrowRight,
@@ -38,7 +39,7 @@ const steps = [
   { label: "Target role", icon: Target },
 ];
 const control =
-  "w-full min-w-0 rounded-control border border-border bg-surface-2 px-3 py-3 text-sm outline-none transition-colors hover:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger active:border-primary";
+  "w-full min-w-0 rounded-control border border-input bg-surface-2 px-3 py-3 text-sm outline-none transition-colors hover:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger active:border-primary";
 function FieldBlock({
   id,
   label,
@@ -74,7 +75,13 @@ function FieldBlock({
     </div>
   );
 }
+/** The signed-in Google name pre-fills the form. The shell renders pages only once sign-in is known, so
+ * the name is stable when the form mounts. */
 export function OnboardingWizard() {
+  const { user } = useAuth();
+  return <WizardForm initialName={displayName(user) ?? ""} />;
+}
+function WizardForm({ initialName }: { initialName: string }) {
   const router = useRouter();
   const roles = useListRoles();
   const createProfile = useCreateProfile();
@@ -83,7 +90,7 @@ export function OnboardingWizard() {
   const analyse = useStartAnalysis();
   const [step, setStep] = useState(0);
   const [values, setValues] = useState<WizardValues>({
-    name: "",
+    name: initialName,
     resume: null,
     linkedinMode: "none",
     linkedinFile: null,

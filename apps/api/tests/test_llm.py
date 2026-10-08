@@ -254,7 +254,13 @@ def test_gemini_timeout_is_unavailable(monkeypatch):
 
 @pytest.mark.parametrize(
     ("status", "expected"),
-    [(429, ProviderUnavailable), (500, ProviderUnavailable), (400, LLMError), (401, LLMError)],
+    [
+        (429, ProviderUnavailable),
+        (500, ProviderUnavailable),
+        (413, ProviderUnavailable),
+        (400, LLMError),
+        (401, LLMError),
+    ],
 )
 def test_groq_error_mapping_and_strict_schema(monkeypatch, status, expected):
     import groq

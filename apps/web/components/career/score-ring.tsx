@@ -22,11 +22,11 @@ export function ScoreRing({
   const circumference = 2 * Math.PI * 58;
   const color =
     band === "ready"
-      ? "var(--success)"
+      ? "var(--success-readable)"
       : band === "developing"
-        ? "var(--warning)"
+        ? "var(--warning-readable)"
         : band === "not_ready"
-          ? "var(--danger)"
+          ? "var(--danger-readable)"
           : "var(--primary)";
   return (
     <div
@@ -49,8 +49,8 @@ export function ScoreRing({
             cy="72"
             r="58"
             fill="none"
-            stroke="var(--surface-2)"
-            strokeWidth="14"
+            stroke="var(--control)"
+            strokeWidth="7"
           />
           <motion.circle
             cx="72"
@@ -58,14 +58,14 @@ export function ScoreRing({
             r="58"
             fill="none"
             stroke={color}
-            strokeWidth="14"
+            strokeWidth="7"
             strokeLinecap="round"
             // Match server/client markup; reduced motion settles instantly after hydration.
             initial={{ strokeDasharray: `0 ${circumference}` }}
             animate={{
               strokeDasharray: `${circumference * (valid ? value! / 100 : 0)} ${circumference}`,
             }}
-            transition={{ duration: reduced ? 0 : 0.8, ease: "easeOut" }}
+            transition={{ duration: reduced ? 0 : 0.4, ease: "easeOut" }}
           />
         </svg>
         <div
@@ -73,7 +73,7 @@ export function ScoreRing({
           className={`absolute inset-0 flex flex-col items-center justify-center gap-1 text-center ${compact ? "px-3" : "px-7"}`}
         >
           <span
-            className={`${compact ? "text-xl" : "text-4xl"} font-bold tracking-tight tabular-nums`}
+            className={`${compact ? "text-xl" : "text-4xl"} font-semibold tracking-tight tabular-nums`}
           >
             {valid ? number(value!) : "—"}
           </span>

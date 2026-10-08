@@ -10,7 +10,7 @@ export function ThemeToggle() {
   const { theme, resolvedTheme, setTheme } = useTheme();
   const Icon = mounted && resolvedTheme === "dark" ? Moon : Sun;
   return <DropdownMenu><DropdownMenuTrigger asChild>
-    <Button variant="ghost" size="icon" aria-label="Choose color theme" className="size-10 rounded-control bg-surface-2"><Icon size={20} strokeWidth={1.75} aria-hidden="true"/></Button>
+    <Button variant="ghost" size="icon" aria-label="Choose color theme" className="size-11 rounded-control bg-surface-2"><Icon size={20} strokeWidth={1.75} aria-hidden="true"/></Button>
   </DropdownMenuTrigger><DropdownMenuContent align="end" className="min-w-44">
     <DropdownMenuLabel>Appearance</DropdownMenuLabel>
     <DropdownMenuRadioGroup value={mounted ? theme : "system"} onValueChange={setTheme}>

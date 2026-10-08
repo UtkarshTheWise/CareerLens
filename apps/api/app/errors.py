@@ -60,5 +60,9 @@ def register_error_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(Exception)
     async def _unhandled(request: Request, exc: Exception) -> JSONResponse:
+        from app.services.llm import LLMError  # late: the gateway imports this module's neighbours
+
+        if isinstance(exc, LLMError) and exc.code == "llm_key_rejected":  # the student's own key was refused
+            return JSONResponse(_body("invalid_llm_key", exc.message), 400)
         logger.exception("Unhandled error on %s %s", request.method, request.url.path)
         return JSONResponse(_body("internal_error", "Something went wrong on our side"), 500)

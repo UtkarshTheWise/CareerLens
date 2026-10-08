@@ -5,6 +5,9 @@ import { resolve } from "node:path";
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   base: "./",
+  // Tailwind runs through @tailwindcss/vite. An inline (empty) PostCSS config stops Vite from walking up
+  // the directory tree and picking up an unrelated postcss.config.* outside this repository.
+  css: { postcss: {} },
   build: {
     rolldownOptions: {
       input: {

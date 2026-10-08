@@ -7,7 +7,7 @@ import io
 import logging
 import re
 import zipfile
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any
 
 from pydantic import BaseModel
@@ -17,6 +17,8 @@ from app.errors import ApiError
 logger = logging.getLogger("careerlens.ingest")
 
 MAX_UPLOAD_BYTES = 5 * 1024 * 1024
+MAX_PDF_PAGES = 25
+MAX_DOCX_UNPACKED_BYTES = 50 * 1024 * 1024
 
 
 @dataclass(frozen=True)
@@ -43,6 +45,9 @@ def _pdf_text(data: bytes) -> ExtractedDocument:
     import pdfplumber
 
     with pdfplumber.open(io.BytesIO(data)) as pdf:
+        total = len(pdf.pages)
+        if total > MAX_PDF_PAGES:  # a resume is a few pages; thousands would tie up a request thread
+            raise ApiError(422, "unsupported_file", f"This PDF has {total} pages; a resume should be a few.")
         pages = [page.extract_text() or "" for page in pdf.pages]
     return ExtractedDocument("\n\n".join(p.strip() for p in pages if p.strip()), len(pages))
 
@@ -50,6 +55,12 @@ def _pdf_text(data: bytes) -> ExtractedDocument:
 def _docx_text(data: bytes) -> ExtractedDocument:
     import docx
 
+    try:
+        with zipfile.ZipFile(io.BytesIO(data)) as archive:  # refuse a zip bomb before parsing it
+            if sum(i.file_size for i in archive.infolist()) > MAX_DOCX_UNPACKED_BYTES:
+                raise ApiError(422, "unsupported_file", "This document is too large once unpacked.")
+    except zipfile.BadZipFile:
+        pass  # python-docx reports the damaged file below
     document = docx.Document(io.BytesIO(data))
     lines = [p.text for p in document.paragraphs]
     for table in document.tables:
@@ -80,6 +91,7 @@ def extract_text(filename: str | None, data: bytes) -> ExtractedDocument:
             "no_text_extracted",
             "No text found in this file. If it is a scanned image, upload a text-based PDF or DOCX instead.",
         )
+    doc = replace(doc, text=doc.text.replace("\x00", ""))  # Postgres text columns reject NUL characters
     logger.info("Extracted %s: %d bytes, %s pages, %d chars", kind, len(data), doc.page_count, len(doc.text))
     return doc
 

@@ -246,7 +246,7 @@ export function QuizCard({
               question.options.map((option) => (
                 <label
                   key={option.id}
-                  className={`flex min-h-14 cursor-pointer items-start gap-3 rounded-control border p-4 text-sm leading-relaxed transition-colors focus-within:ring-2 focus-within:ring-primary ${choice === option.id ? "border-primary bg-primary/5" : "border-border bg-surface-2 hover:border-primary"} ${disabled ? "cursor-not-allowed opacity-70" : ""}`}
+                  className={`flex min-h-14 cursor-pointer items-start gap-3 rounded-control border p-4 text-sm leading-relaxed transition-colors focus-within:ring-2 focus-within:ring-primary ${choice === option.id ? "border-primary bg-primary/5" : "border-input bg-surface-2 hover:border-primary"} ${disabled ? "cursor-not-allowed opacity-70" : ""}`}
                 >
                   <input
                     type="radio"
@@ -292,7 +292,7 @@ export function QuizCard({
                   setPasteNotice(true);
                 }
               }}
-              className="w-full resize-y rounded-control border border-border bg-surface-2 p-4 text-sm leading-relaxed outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-70"
+              className="w-full resize-y rounded-control border border-input bg-surface-2 p-4 text-sm leading-relaxed outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-70"
               aria-describedby={`answer-help-${question.id}`}
             />
             <p

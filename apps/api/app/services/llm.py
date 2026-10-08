@@ -28,6 +28,14 @@ _STRICT_UNSUPPORTED = {
 }  # fmt: skip
 
 
+_last_ok: dict[str, str | None] = {"provider": None}  # the provider that last answered, for /health
+
+
+def active_provider(settings: Settings) -> str | None:
+    """The provider that last answered a call in this process, else the first one configured."""
+    return _last_ok["provider"] or settings.llm_provider
+
+
 class LLMError(Exception):
     """The gateway could not produce a valid object. `code` is safe to show to a client."""
 
@@ -97,8 +105,15 @@ def to_strict_schema(schema: dict[str, Any]) -> dict[str, Any]:
 # ---------------------------------------------------------------- providers
 
 
+def key_rejected(provider: "Provider") -> "LLMError":
+    return LLMError(
+        "llm_key_rejected", f"Your {provider.name.capitalize()} key was rejected. Check it in Settings."
+    )
+
+
 class GeminiProvider:
     name = "gemini"
+    user_key = False  # True for a provider built from a key the student supplied (services/byok.py)
 
     def __init__(self, settings: Settings):
         from google import genai
@@ -123,6 +138,8 @@ class GeminiProvider:
         except errors.APIError as exc:
             if exc.code == 429 or (exc.code or 0) >= 500:
                 raise ProviderUnavailable(f"gemini HTTP {exc.code}") from exc
+            if self.user_key and (exc.code in (401, 403) or "api key" in str(exc).lower()):
+                raise key_rejected(self) from exc
             raise LLMError("llm_request_rejected", f"Gemini rejected the request (HTTP {exc.code})") from exc
         except httpx.HTTPError as exc:
             raise ProviderUnavailable(f"gemini {type(exc).__name__}") from exc
@@ -131,6 +148,7 @@ class GeminiProvider:
 
 class GroqProvider:
     name = "groq"
+    user_key = False
 
     def __init__(self, settings: Settings):
         import groq
@@ -163,8 +181,11 @@ class GroqProvider:
             # APITimeoutError is a subclass of APIConnectionError
             raise ProviderUnavailable(f"groq {type(exc).__name__}") from exc
         except groq.APIStatusError as exc:
-            if exc.status_code >= 500:
+            # 413: the request is over this plan's per-request token limit; another provider may take it
+            if exc.status_code >= 500 or exc.status_code == 413:
                 raise ProviderUnavailable(f"groq HTTP {exc.status_code}") from exc
+            if self.user_key and exc.status_code in (401, 403):
+                raise key_rejected(self) from exc
             raise LLMError(
                 "llm_request_rejected", f"Groq rejected the request (HTTP {exc.status_code})"
             ) from exc
@@ -306,6 +327,8 @@ def generate_structured[T: BaseModel](
             "llm provider=%s model=%s tier=%s schema=%s latency_ms=%d outcome=ok",
             provider.name, model, tier, schema.__name__, (time.perf_counter() - started) * 1000,
         )  # fmt: skip
+        if not getattr(provider, "user_key", False):
+            _last_ok["provider"] = provider.name
         db.merge(CacheEntry(key=key, kind="llm", value=result.model_dump(mode="json")))
         db.commit()
         return result

@@ -174,7 +174,9 @@ def _judge(
                 providers=deps.providers,
                 refresh=refresh,
             )
-        except LLMError:
+        except LLMError as exc:
+            if exc.code == "llm_key_rejected":
+                raise
             notes.append(f"'{name}' could not be reviewed right now and was scored without that review.")
 
     page_fetcher = deps.fetch_page or (lambda url, session, fresh: fetch_page(url, session, refresh=fresh))
@@ -197,7 +199,9 @@ def _judge(
                     refresh=refresh,
                 )
             )
-        except LLMError:
+        except LLMError as exc:
+            if exc.code == "llm_key_rejected":
+                raise
             notes.append(
                 "A portfolio page could not be reviewed right now and was scored as having no evidence."
             )
@@ -219,6 +223,29 @@ def _with_text(projects, texts: dict[str, ProjectText]):
             )
         out.append(audit)
     return out
+
+
+def store_report(analysis: models.Analysis, inputs: ScoringInputs, report: AnalysisReport) -> None:
+    """Put a report, its scoring inputs and the headline numbers on the analysis row."""
+    analysis.report = report.model_dump(mode="json")
+    analysis.signals = inputs.model_dump(mode="json")
+    analysis.score = report.score.total
+    analysis.coverage = report.coverage
+    analysis.verified_skills = sum(
+        1 for c in report.claims if c.claimed and c.level.value in ("strong", "moderate")
+    )
+
+
+def save_report(analysis: models.Analysis, inputs: ScoringInputs, report: AnalysisReport) -> None:
+    """Store a finished report and make it the profile's latest.
+
+    Does not set `status` or commit: the pipeline does that through `_set_stage`, the seed script directly.
+    """
+    store_report(analysis, inputs, report)
+    analysis.finished_at = datetime.now(UTC)
+    profile = analysis.profile
+    profile.latest_analysis_id = analysis.id
+    profile.latest_score = report.score.total
 
 
 def _run(db: Session, analysis: models.Analysis, deps: PipelineDeps, refresh: bool) -> None:
@@ -298,16 +325,7 @@ def _run(db: Session, analysis: models.Analysis, deps: PipelineDeps, refresh: bo
         evidence=result.evidence,
         notes=notes + result.notes + plan_notes,
     )
-    analysis.report = report.model_dump(mode="json")
-    analysis.signals = inputs.model_dump(mode="json")
-    analysis.score = report.score.total
-    analysis.coverage = report.coverage
-    analysis.verified_skills = sum(
-        1 for c in report.claims if c.claimed and c.level.value in ("strong", "moderate")
-    )
-    analysis.finished_at = datetime.now(UTC)
-    profile.latest_analysis_id = analysis.id
-    profile.latest_score = report.score.total
+    save_report(analysis, inputs, report)
     _set_stage(db, analysis, deps, "done", 100)
     logger.info(
         "analysis %s done score=%s ms=%d stages=%s",

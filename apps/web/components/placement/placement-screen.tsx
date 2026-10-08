@@ -24,7 +24,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 const control =
-  "min-h-11 w-full min-w-0 rounded-control border border-border bg-surface-2 px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
+  "min-h-11 w-full min-w-0 rounded-control border border-input bg-surface-2 px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
 function Failure({ error, retry }: { error: Error; retry: () => void }) {
   return (
     <div role="alert" className="space-y-3">

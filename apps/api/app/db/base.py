@@ -18,17 +18,33 @@ def normalize_database_url(database_url: str) -> str:
     return database_url
 
 
-def make_engine(database_url: str) -> Engine:
+DB_CONNECT_TIMEOUT_S = 10
+DB_POOL_RECYCLE_S = 300  # Supabase's pooler drops idle connections; reconnect before they go stale
+
+
+def make_engine(database_url: str, statement_timeout_ms: int = 0) -> Engine:
     database_url = normalize_database_url(database_url)
     if database_url.startswith("sqlite"):
         kwargs: dict = {"connect_args": {"check_same_thread": False}}
         if ":memory:" in database_url:
             kwargs["poolclass"] = StaticPool  # one shared connection, or each session sees an empty DB
         return create_engine(database_url, **kwargs)
-    return create_engine(database_url, pool_pre_ping=True)
+    connect_args: dict = {
+        "connect_timeout": DB_CONNECT_TIMEOUT_S,
+        "prepare_threshold": None,  # no server-side prepared statements: safe behind a transaction pooler
+    }
+    if statement_timeout_ms > 0:
+        connect_args["options"] = f"-c statement_timeout={statement_timeout_ms}"
+    return create_engine(
+        database_url,
+        pool_pre_ping=True,
+        pool_recycle=DB_POOL_RECYCLE_S,
+        connect_args=connect_args,
+        hide_parameters=True,  # a failed insert must not put resume or answer text into the error log
+    )
 
 
-engine = make_engine(get_settings().database_url)
+engine = make_engine(get_settings().database_url, get_settings().db_statement_timeout_ms)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
 
 

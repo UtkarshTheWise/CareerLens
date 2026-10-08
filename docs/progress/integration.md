@@ -9,25 +9,31 @@ Keep under ~150 lines. Commit it together with the code it describes.
 
 ## Status
 - **Track:** integration · **Owns:** wiring + drift fixes across the repo (Phase 3 only)
-- **Branch / worktree:** `integration` · main checkout `careerlens/`
-- **Last updated:** 2026-10-07 13:57 IST by Claude Code (Opus 5.5)
-- **Current task:** Phase 0 contract freeze: done. Phase 3 (I1) not started.
-- **State:** not started   <!-- not started | in progress | blocked | done -->
-- **Last green checks:** 2026-10-07 `npx @redocly/cli lint contracts/openapi.yaml` valid · `pnpm gen:client` · `tsc --noEmit -p packages/api-client` · Prism static mock serves `/v1/roles` (200 with bearer, 401 without)
+- **Branch / worktree:** `integration` · worktree `../careerlens-integration` (no deny rules; the backend worktree denies apps/web and apps/extension)
+- **Last updated:** 2026-10-08 Claude Code (Sonnet 5.5)
+- **Current task:** I5 (extension install page, bring-your-own AI key) done on `integration`, ready to fast-forward to `main`. Before that, I1-I4 done: merge, baseline, smoke test, Google sign-in (web + extension), independent review and its fixes. Waiting on the human for Supabase/Google values and the manual checks, then fast-forward `main` to `integration`.
+- **State:** done   <!-- not started | in progress | blocked | done -->
+- **Last green checks:** 2026-10-08, integration worktree (Node 22.16.0, pnpm 10.12.3): backend 683 tests / ruff / `check_contract.py` 29/29 · `apps/api/scripts/smoke_e2e.py` 499 checks (dev + token mode) · web lint, typecheck, build (also configured), native tests incl. ai-key · extension typecheck, build, 24 tests
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
-1. Start I1: run its prompt from PROMPTS.md.
+1. Ask the human to follow `docs/AUTH_SETUP.md` (Google Cloud + Supabase), then give you: Supabase URL, anon key, token type (HS256 secret or signing keys), staff emails, deployed web URL. Put them in `apps/web/.env.local`, `apps/extension/.env.local` (rebuild) and the API env (Render). Then the human runs the manual checks in `docs/AUTH_SETUP.md` section 5 and `docs/DEMO_CHECKLIST.md`.
+2. With the human's OK: `cd` to the backend worktree or the integration worktree and fast-forward `main` (`git push origin integration:main` after `git fetch` shows `origin/main` is an ancestor). Update `docs/progress/backend.md` / `frontend.md` only to say integration is done (do not rewrite their history).
+3. Open decisions from the review are listed in `docs/handoff/integration.md` (cohort membership for real students is the important one).
+4. Re-run after any change: `cd apps/api && uv run python scripts/smoke_e2e.py` (both modes) and the web/extension checks above.
+5. Work in `D:/Programming/DataQuest/CareerLens/careerlens-integration`; the shell resets to the backend worktree on every call, so `cd` first.
 
 ## Task board
 <!-- status: todo | doing | done | blocked · commit = short sha of the commit that finished it -->
 | Id | Task | Status | Commit | Notes |
 |---|---|---|---|---|
 | P0 | Contract freeze v0.2.0, root workspace, api-client, .env.example | done | see `git log --grep freeze` | awaiting human tag `v0.2.0` |
-| I1 | Integration plan (plan mode) | todo | | |
-| I2 | Merge, regenerate client, drift fixes, builds green | todo | | |
-| I3 | End-to-end smoke script + demo checklist | todo | | |
-| I4 | Independent review + fixes | todo | | |
+| I1 | Integration plan (plan mode) | done | | approved plan includes Google sign-in |
+| I2 | Merge, regenerate client, drift fixes, builds green | done | see git log | clean merge; client unchanged; sign-in added for web + extension |
+| I3 | End-to-end smoke script + demo checklist | done | see git log | green in dev and token mode; found and fixed 3 backend drifts |
+| I4 | Independent review + fixes | done | see git log | 6 fixes + 7 open decisions in docs/handoff/integration.md |
+| I6 | Animated landing page at `/` (Get started -> /login) | done | see git log | `/` is now a bare route in app-shell; respects reduced motion |
+| I5 | `/extension` install page + zip, Settings "your own AI key" (BYOK headers), prod push | done | see git log | extension itself has no key field yet (follow-up) |
 
 ## In-progress detail
 - **Files touched, not finished:** —
@@ -36,6 +42,8 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - **Known failing tests / checks:** —
 
 ## Decisions made (one line each, append)
+- 2026-10-08 Sign-in is Supabase + Google (user's choice). Apps stay in dev mode when the Supabase env values are empty. Extension id is fixed by a committed public `key`; the private key was discarded on purpose.
+- 2026-10-08 Drifts found by the smoke test and fixed in the BACKEND (contract unchanged): `/health` sent `llm_provider: null` (contract: string, now omitted); practice `QuizResult` sent `focus_lost_total: null` (now omitted); under DEV_AUTH `/v1/me` ignored a freshly created profile (the newest profile now becomes the dev user's).
 - 2026-10-07 Contract frozen at v0.2.0. Later changes only via CCR (docs/HANDOFF.md).
 - Freeze added: `GET /v1/quizzes/{quiz_id}/result`, `PATCH /v1/analyses/{analysis_id}/roadmap/{milestone_id}`, `default` Error response on every operation, `QuizStatus` schema.
 - Freeze changed: `ProjectAudit.repo_url` → `url` (+ `demo_url`, `counted_in_score`, `design_subscores`, `signals`, `issues`); `SkillGap.claimed` (required); `AnalysisStatus.progress` required; `AnalysisSummary.verified_skills`; `QuizQuestion.time_remaining_s`; `QuizAnswerFeedback.choice_id`/`text`; `CohortStudent.github_username`/`analysis_id`; removed `more_commits` from `add_signals`; 429 detail key is `retake_available_at`.

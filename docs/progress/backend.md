@@ -9,19 +9,20 @@ Keep under ~150 lines. Commit it together with the code it describes.
 
 ## Status
 - **Track:** backend · **Owns:** `apps/api/`, `data/`
-- **Branch / worktree:** `backend/claude` · `../careerlens-api`
-- **Last updated:** 2026-10-07 23:00 IST by Claude Code (Sonnet 5.5)
-- **Current task:** B6 done and verified live. Next: B7 (jobs, applications, cohorts, seed).
+- **Branch / worktree:** `backend/claude` · `../careerlens-api` (B1-B9 are also on `main`, merged 2026-10-08)
+- **Last updated:** 2026-10-08 03:15 IST by Claude Code (Sonnet 5.5)
+- **Current task:** B8 done (auth, staff routes, limits, logging, health, real `tailorResume`, README, render.yaml, keep-alive). Backend track complete; next is Phase 3 integration with Codex's F8.
 - **State:** done   <!-- not started | in progress | blocked | done -->
-- **Last green checks:** 2026-10-07 22:50 IST, from `apps/api`: `uv run pytest -q` (425 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py --only-implemented` (13/29 routed, 0 mismatches) · live analysis on real GitHub + Gemini + Groq (65-125 s)
+- **Last green checks:** 2026-10-08 03:10 IST, from `apps/api`: `uv run pytest -q` (653 passed) · `uv run ruff check .` · `uv run python scripts/check_contract.py` with NO flags (29/29, 0 mismatches) · real uvicorn smoke test with `DEV_AUTH=0` (auth, staff, 413, startup guard, logs)
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
-1. Start B7: paste its prompt from PROMPTS.md (plan with Opus, build with Sonnet: `/model opusplan`). New: `app/services/matching.py` (+ `prompts/extract_job.md`), `app/routers/jobs.py`, `applications.py`, `cohorts.py`, `app/services/cohorts.py`, `scripts/seed_demo.py`. Contract endpoints still unrouted after B6: matchJob, applications CRUD + tailorResume (P2), cohorts (4), quizzes (B9).
-2. B7 reads finished analyses from the DB: `analyses.report` (full `AnalysisReport` JSON) and `analyses.signals` (`ScoringInputs` JSON, rescore with `scoring.score`). `matchJob`: use the profile's latest `done` analysis (409 `analysis`-less profile per contract); skills via `catalogue.normalize_skill`; credit per level from `scoring.CREDIT`. The seed script builds synthetic students by running `scoring.score` over generated `ScoringInputs` and storing `report`/`signals` rows (no LLM, no GitHub): construct them with `tests/scoring_helpers.py`-style builders and `scoring.role_fits`.
-3. B9 (quiz) contract with this code: `profiles.project_understanding` is a dict keyed by project URL (repo URL or portfolio URL) with values `{"understanding": "demonstrated|partial|not_demonstrated", "covered_skill_ids": [...], "quiz_id": "<uuid>"}`; `analysis_inputs.carry_understanding` reads it and a re-analysis keeps it. B9's submit re-scores via `ScoringInputs.model_validate(analysis.signals)` with updated projects, then rebuilds the stored report's `score`, `claims`, `gaps`, `projects` the same way `pipeline._run` assembles them.
-4. After any route or schema change: `cd apps/api && uv run python scripts/check_contract.py --only-implemented`.
-5. Human: the GitHub token expires 2026-10-14; renew it in `careerlens-api/apps/api/.env`. Supabase needs the hotspot (college Wi-Fi blocks the DB ports).
+1. Merge the latest `backend/claude` into `main` again (B8 commits are on `backend/claude` only; `main` has B1-B9), so Codex can pull. Then wait for Codex's F8 (extension) and start Phase 3 on the `integration` branch (`PROMPTS.md`, phase 3): run the real backend against `apps/web` and `apps/extension`, fix contract drift, bug-fix only, no new features.
+2. Not verified live yet (all work offline): (a) `tailorResume` with a real model, (b) a `demonstrated`/`partial` verify quiz with the real grader and whether the quiz replacement round now succeeds on Groq after the 413 fix, (c) token verification against a real Supabase project (HS256 secret and the JWKS path), (d) the Render deploy and the keep-alive workflow. Quotas: Gemini/Groq free tiers were exhausted on 2026-10-07/08.
+3. Deploy checklist is in `apps/api/README.md` and `render.yaml`. Needs the human: a personal GitHub repo, Render + Supabase accounts, the `sync: false` env values, the `API_URL` repository secret, and `PLACEMENT_STAFF` (emails of the placement staff) before the cohort screens show anything in production.
+4. Quiz map: `services/quiz_context.py` -> `quiz.py` -> `quiz_flow.py` (-> `quiz_timing.py`, `quiz_grading.py`, `quiz_effects.py`) -> `quiz_views.py` (the only place answer keys become response fields) -> `routers/quizzes.py`. Auth map: `services/auth.py` (token) -> `deps.get_auth_context` / `require_staff`. Tailoring: `services/tailor.py`.
+5. After any route or schema change: `cd apps/api && uv run python scripts/check_contract.py` (no flag now). Seed locally with `uv run python scripts/seed_demo.py`.
+6. Human: the GitHub token expires 2026-10-14; renew it in `careerlens-api/apps/api/.env`. Supabase needs the hotspot (college Wi-Fi blocks the DB ports). Pre-generate demo quizzes before judging.
 
 ## Task board
 <!-- status: todo | doing | done | blocked · commit = short sha of the commit that finished it -->
@@ -33,16 +34,16 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | B4 | GitHub collector, detectors, repo signals, rule flags | done | 024b6f8 | fixture: UtkarshTheWise (14 repos, 768 KB); `claim_mismatch` and `vague_description` flags are B6 |
 | B5 | scoring.py + what-if + unit tests | done | c5b479d | 106 new tests; run on the recorded real profile and checked by hand |
 | B6 | Pipeline, analyses endpoints, judging, roadmap planner, role-fit | done | 70d91bc | 5 endpoints incl. the milestone PATCH; live run verified; 102 new tests |
-| B7 | Jobs match, applications, cohorts, seed_demo.py | todo | | |
-| B9 | Project Understanding Check (quiz) | todo | | also `GET /v1/quizzes/{id}/result`; 429 detail key is `retake_available_at`, not `retry_at` as the B9 prompt says |
-| B8 | Hardening, contract check green, deploy, keep-alive | todo | | Supabase JWT verification lands here |
+| B7 | Jobs match, applications, cohorts, seed_demo.py | done | e0dc64d | 9 ops routed (22/29); live extract_job check passed; 49 new tests |
+| B9 | Project Understanding Check (quiz) | done | see git log | 6 ops routed (28/29); 112 new tests; live practice + verify run; 429 detail key is `retake_available_at` (contract), not `retry_at` as the B9 prompt says |
+| B8 | Hardening, contract check green, deploy, keep-alive | done | see git log | JWT auth + staff routes, limits, JSON logs, health with DB check, real tailorResume, README, render.yaml, keepalive.yml; 653 tests; deploy itself not done (needs accounts) |
 
 ## In-progress detail
 - **Files touched, not finished:** none
-- **What works right now:** `GET /health`, `GET /v1/roles` (7 real roles), `GET /v1/me` (demo profile, created on first call under `DEV_AUTH=1`), profile create/get/patch/delete, document upload (PDF/DOCX -> text); every error in the contract `Error` shape (404/405/422/500 + `ApiError`); CORS for `CORS_ORIGINS` and `chrome-extension://*`; tables created at startup. Services with no route yet: `github.collect()`, `detectors.analyse()`, `resume.extract_resume()`, `llm.generate_structured()`.
+- **What works right now:** all 29 contract operations (see the B8 handoff entry for each one's status); every error in the contract `Error` shape; CORS for `CORS_ORIGINS` and `chrome-extension://*`; tables created at startup; Supabase token auth and staff-only cohort routes.
 - **Stubbed / fake (search `TODO(progress)`):**
-  - `app/deps.py:get_auth_subject`: with `DEV_AUTH=0` every request gets 401 (no Supabase JWT verification yet) → B8.
-- **Known failing tests / checks:** none. `pytest -m live` passes (1 real call). Real server verified against Supabase on 2026-10-07 (create/upload/delete profile). `check_contract.py` without `--only-implemented` exits 1 by design until all 29 operations are routed.
+  - none in code. Not verified live: see Resume here, item 2.
+- **Known failing tests / checks:** none. `pytest -m live` passes (1 real call). Real server verified against Supabase on 2026-10-07 (create/upload/delete profile). `check_contract.py` passes with no flags.
 
 ## Decisions made (one line each, append)
 - Tables are created with `Base.metadata.create_all` at startup; no Alembic for the prototype.
@@ -79,6 +80,9 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - Reviews: max 6 per analysis, resume-matched repos first then by role relevance; untouched forks never reviewed; a repo not on the resume is judged on its tagline plus the first 600 chars of its README.
 - Portfolio pages (`services/portfolio.py`) are fetched with SSRF protection (public addresses only, standard ports, hand-followed redirects re-checked, 1 MB, HTML only); residual DNS-rebinding risk is documented in the module.
 - Roadmap (`services/planner.py`): the model picks ids and writes deliverables, Python validates ids, strips URLs, attaches catalogue resources, computes gains with `scoring.changes_gain`, orders by gain per hour, 4-7 milestones (top-up from a deterministic fallback), and always keeps an `understanding_gap` milestone.
+- Matching (`services/matching.py`): skills resolve by alias, then by text scan ("Docker and Kubernetes"); unknown strings are not counted but named in `summary`; `scoring.skill_levels` gives levels for skills outside the analysed role. Cohort views re-score a student's stored signals when the requested role differs from the analysed one.
+- Cohorts: plain Python over ORM rows (same on SQLite and Postgres); unverified rate needs >= 2 claimants; `understanding` is always returned (zeros and empty `by_skill` until quizzes exist); CSV cells starting with `= + - @` get a leading `'`.
+- Seed: seeded RNG (2027) draws synthetic `ScoringInputs` until `scoring.score` lands in the wanted band, so 12/18/10 holds exactly; analyses are saved through `pipeline.save_report`; roadmaps come from the planner's no-LLM fallback; no usernames or URLs are invented.
 - Recorded fixtures: `tests/fixtures/github/<login>/<fingerprint>.json` (status + body, never headers), replayed by `scripts/github_fixtures.py:ReplayTransport`; re-record with `uv run python scripts/record_github.py <login>` (needs token + a network that reaches api.github.com). Changing a GraphQL query changes its fingerprint, so re-record after editing `OVERVIEW_QUERY`, `commit_facts_query` or `files_query`.
 
 ## Gotchas learned (one line each, append)
@@ -105,6 +109,11 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - Tests set `DATABASE_URL=sqlite:///:memory:` and `DEV_AUTH=1` in `tests/conftest.py` before importing the app, so they never read the real `.env` database.
 - `Settings.cors_origins` is a comma-separated string (a `list[str]` field would make pydantic-settings expect JSON in `.env`); use `settings.cors_origin_list`.
 - Starlette prints a deprecation warning about `httpx` in `TestClient`; harmless.
+
+- Quiz: verify createQuiz returns `questions: []` (the clock starts at the first getQuiz); a never-served verify quiz is closed after 30 min as abandoned with no effect on evidence; unanswered past limit + 10 s grace = timed out; a submit re-plans the roadmap (ticks kept by `addresses`); a grader reply missing a question or key point is asked for again once, then a retryable 503; Groq 413 counts as unavailable so the gateway falls through.
+- Tests import the seed as `scripts.seed_demo` (the rootdir is on the path); the script itself only imports from `app`.
+- Quiz tests use `Env`/`new_env`/`make_analysis(with_report=True)` from `tests/quiz_helpers.py` (fake clock via the `get_clock` dependency, `FakeGitHub`, `grading_reply`); scripted replies live in `SchemaProvider.replies`.
+- Bash tool heredocs with apostrophes sometimes fail with "unexpected EOF"; write files with the Write/Edit tools instead.
 
 ## Blocked on / open questions
 - none

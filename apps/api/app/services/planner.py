@@ -227,6 +227,8 @@ def plan_roadmap(
         )
         drafts = _validated(plan, candidates, resources)
     except LLMError as exc:
+        if exc.code == "llm_key_rejected":
+            raise
         logger.warning("roadmap planner unavailable: %s", exc.code)
         notes.append(
             "The roadmap was built from the gaps and flags directly because the AI planner was unavailable."

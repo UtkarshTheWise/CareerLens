@@ -4,7 +4,8 @@
   "packageManager": "pnpm@10.12.3",
   "scripts": {
     "gen:client": "openapi-typescript contracts/openapi.yaml -o packages/api-client/schema.d.ts",
-    "mock": "prism mock contracts/openapi.yaml -p 4010"
+    "mock": "prism mock contracts/openapi.yaml -p 4010",
+    "pack:extension": "pnpm --filter extension build && python scripts/pack_extension.py"
   },
   "devDependencies": {
     "openapi-typescript": "^7.4.0",

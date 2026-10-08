@@ -34,8 +34,8 @@ export function Ring({
             cy="60"
             r="48"
             fill="none"
-            stroke="var(--surface-2)"
-            strokeWidth="12"
+            stroke="var(--control)"
+            strokeWidth="7"
           />
           <circle
             className="ring-arc"
@@ -44,7 +44,7 @@ export function Ring({
             r="48"
             fill="none"
             stroke="var(--primary)"
-            strokeWidth="12"
+            strokeWidth="7"
             strokeLinecap="round"
             strokeDasharray={c}
             strokeDashoffset={ready && valid ? c * (1 - value / 100) : c}

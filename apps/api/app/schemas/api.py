@@ -490,7 +490,8 @@ class QuizResult(ApiModel):
     per_question: list[QuizAnswerFeedback]
     strengths: list[str]
     review_topics: list[ReviewTopic]
-    focus_lost_total: int | None = None
+    # The contract has no null here: practice results leave the key out.
+    focus_lost_total: int | None = Field(default=None, exclude_if=lambda v: v is None)
     flag: ProjectFlag | None = None
     score_update: SimulationResult | None = None
     retake_available_at: datetime | None = None

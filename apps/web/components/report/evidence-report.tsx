@@ -124,7 +124,7 @@ export function EvidenceReport({
             </label>
             <select
               id="claim-level"
-              className="min-h-11 max-w-full rounded-control border border-border bg-surface px-3 text-sm"
+              className="min-h-11 max-w-full rounded-control border border-input bg-surface px-3 text-sm"
               value={level}
               onChange={(e) => setLevel(e.target.value as typeof level)}
             >

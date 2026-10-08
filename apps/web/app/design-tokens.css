@@ -1,0 +1,29 @@
+/* Carbon & Citron. Keep web and extension token files identical. */
+:root {
+  color-scheme: light;
+  --bg: #f2f0e6; --surface: #faf9f3; --surface-2: #e9eadc; --surface-3: #dde2cb;
+  --border: #d2d6c4; --control: #7a826b; --text: #1c2115; --muted: #606650;
+  --primary: #535f32; --primary-soft: #dde2cb; --primary-deep: #343f24;
+  --primary-text: #485528; --on-primary: #faf9f3; --chip-text: #343f24;
+  --data-1: #426346; --data-2: #6c7042; --data-3: #a9b48d;
+  --success: #426346; --warning: #84661f; --danger: #ad3d40; --tag: #e2dbb7;
+  --success-readable: #365639; --warning-readable: #705719; --danger-readable: #a03437;
+  --success-tint: #e4ecdd; --warning-tint: #eee6cc; --danger-tint: #f4e3df;
+  --code-warm: #775324; --overlay: rgb(12 14 12 / .65);
+  --radius-card: 18px; --radius-control: 10px; --shadow-card: none;
+  --font-body: "Plus Jakarta Sans", sans-serif; --muted-readable: var(--muted);
+  --design-shadow-card: var(--shadow-card); --chart-grid: var(--border); --chart-axis: var(--muted);
+  --ease: cubic-bezier(.22,1,.36,1); --duration: 220ms;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0c0e0c; --surface: #151914; --surface-2: #1e241b; --surface-3: #262e21;
+  --border: #333b2e; --control: #77806a; --text: #f2f0e6; --muted: #a6ad9e;
+  --primary: #d1d59c; --primary-soft: #333d27; --primary-deep: #899568;
+  --primary-text: #d1d59c; --on-primary: #1c2115; --chip-text: #d1d59c;
+  --data-1: #c0d4a9; --data-2: #a8b687; --data-3: #77856a;
+  --success: #c0d4a9; --warning: #c5b996; --danger: #ad3d40; --tag: #3e3926;
+  --success-readable: #c0d4a9; --warning-readable: #d2c4a2; --danger-readable: #eeb4ab;
+  --success-tint: #253020; --warning-tint: #332e21; --danger-tint: #35221f;
+  --code-warm: #d2c4a2;
+}

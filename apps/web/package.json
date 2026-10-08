@@ -9,11 +9,12 @@
     "start": "next start --hostname 127.0.0.1",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-transform-types --import ./tests/register.mjs --test tests/api.test.ts"
+    "test": "node --experimental-transform-types --import ./tests/register.mjs --test tests/api.test.ts tests/ai-key.test.ts"
   },
   "dependencies": {
     "@careerlens/api-client": "workspace:*",
     "@fontsource/plus-jakarta-sans": "5.3.0",
+    "@supabase/supabase-js": "^2.117.3",
     "@tanstack/react-query": "5.104.1",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",

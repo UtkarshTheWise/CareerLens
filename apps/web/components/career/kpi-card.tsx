@@ -38,7 +38,7 @@ export function KpiCard({
         </span>
       </div>
       <CardState state={state} message={message}>
-        <div className="text-4xl font-bold tracking-tight tabular-nums">
+        <div className="text-4xl font-semibold tracking-tight tabular-nums">
           {value ?? "—"}
         </div>
         {delta && (
