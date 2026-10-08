@@ -2,17 +2,18 @@
 
 ## Status
 - **Track:** frontend; owns apps/web/apps/extension and frontend workspace files.
-- **Branch / worktree:** frontend/codex; C:/Users/User/Desktop/CareerLens/careerlens-web
-- **Last updated:** 2026-10-07 22:45 Asia/Dubai by Codex (GPT-6).
-- **Current task:** F5, F6 and F7 complete; implementation commits published. This final SHA checkpoint is being published. Pause before F8.
-- **Baseline:** F9 implementation ff8072fe2137014737c81dbcecaf4754c418037b and completion 5cfc2e2c39a0aa2174b1c39fbf4ff7e8fb1b5ab5 verified published. Main e762cb48916f07fd939e9ad0ddb0b0d815f3305f unchanged; contract v0.2.0.
-- **Green checks:** final lint, strict typecheck, production build; 22 native tests; eight production browser groups; both themes, roadmap/placement/tracker/dialog at 320/375/390/414/768/1440px; eight zero-violation axe scans; representative visual review; actual static Prism queries, milestone/application PATCH 200, CSV export 200 and application create 201. Mini-ring/full-ring and overlay final visual smoke passed in normal/reduced motion; two additional dialog scans passed.
+- **Branch / worktree:** frontend/codex; C:/Users/User/Desktop/CareerLens/careerlens-web.
+- **Last updated:** 2026-10-08 Asia/Dubai by Codex (GPT-6).
+- **Current task:** F8 implemented and validated; implementation and completion-checkpoint publication pending. All frontend prompts have been implemented in prescribed order.
+- **Baseline:** frontend 6e3a61a8a9a4f63523790522e1226ed9f4870db9 verified published. Local main e762cb48916f07fd939e9ad0ddb0b0d815f3305f; public main 622ea0ba9073ffe9531a43a99d569eb32e0c1b12 adds only CareerLens_DataQuest3.pptx. Contract v0.2.0 unchanged; no rebase/client regeneration needed for a contract change.
+- **F8 green checks:** strict typecheck and both Vite production builds; 20 native fixture/settings tests; genuine unpacked Chromium toolbar/side panel/activeTab/scripting/storage/HTTP; Match/Gaps/Save/options in both themes at 320/375/390/414/768px, eight zero-violation axe scans; screenshot review; retry/409/empty/duplicate/stale states; normalized llm posting saved with original URL; reduced motion; frozen offline install with every existing lock entry preserved.
+- **Prior green checks:** F5–F7 final web lint/typecheck/build, 22 tests, production/browser/Prism checks; responsive themes and a11y; F9 quiz completed and published. No web source changed in F8.
 
 ## Resume here (exact next step)
-1. User explicitly authorized continuous F5–F7, pausing only for Git input. Implementation is complete; do not repeat green checks absent source changes/failures. No F8.
-2. F5/F6/F7 implementation commits are published and recorded below. Verify this completion HEAD matches public origin/frontend/codex and the tree is clean, then report/pause before F8.
-3. No implementation tests need repeating for this docs-only checkpoint. Scratch output reports can record its final SHA without another repository commit.
-4. On user F8 authorization: read apps/extension/AGENTS, PROMPTS F8, DESIGN, PIPELINE and generated job/app schemas; implement extension only. Backend B7/B9 and real integration remain separate tracks.
+1. Implementation is complete; do not repeat green checks without new source changes/failures. User must run chat outputs/Publish-F8.ps1 in regular PowerShell because sandbox cannot write shared Git metadata or use saved Windows credentials.
+2. Publisher validates the reviewed SHA256 manifest and branch/baseline, commits F8, pushes --no-thin without force, records implementation SHA in the completion template, appends publication handoff, commits/pushes checkpoint. Its outputs/F8-published-commits.json permits safe resume if a push fails.
+3. After user reports done: read git log/status, verify public origin/frontend/codex equals local HEAD and recorded checkpoint, verify clean tree and F8 implementation SHA. Update only chat outputs/F8-progress-report.md with checkpoint SHA; no extra repo self-SHA commit.
+4. Pause for user after publication. Frontend prompt order finished; Phase 3 integration belongs to Claude. Read both progress and all handoff logs before integration. Do not merge or modify backend/contract/generated schema.
 
 ## Task board
 | Id | Task | Status | Commit |
@@ -25,32 +26,39 @@
 | F5 | Roadmap/history | done | 7b5123f24d8ca2ee835946300b275b1ede51bf5d |
 | F6 | Placement cell | done | 71d29d12363cd49645ceffcb809d0a411fb4a056 |
 | F7 | Tracker | done | c1cb8d5245ded875e6517c21b87be265cea3cf5a |
-| F8 | Extension | todo | |
+| F8 | Extension | validated; publication pending | pending publication |
 
-## Implementation / next files
-- F5: app/roadmap/page.tsx, components/roadmap/roadmap-screen.tsx, lib/score-history.ts, tests/score-history.test.ts and docs/plans/frontend-F5.md. Server-order deliverables, immediate local done state persisted by existing generated mutation, rollback/retry/lock; completion progress never changes score. History only completed returned samples; periods relative to latest sample, no averaging; report explanation links.
-- F6: app/placement/page.tsx, components/placement/placement-screen.tsx, docs/plans/frontend-F6.md, compact rendering in components/career/score-ring.tsx. Catalog-driven cohorts/roles, independent query states, KPIs/definitions, band stack/histogram/missing counts, unverified/understanding/built-explained tables, student search/server-risk query and actual CSV Blob download. Returned counts/rates/statuses only, report links for readiness reasons; no private quiz data.
-- F7: app/tracker/page.tsx, components/tracker/tracker-screen.tsx, lib/application-draft.ts, tests/application-draft.test.ts, docs/plans/frontend-F7.md. Native drag plus keyboard/touch select, optimistic local move with per-card lock/acknowledgment/rollback/retry; manual Radix dialog draft/validation/add lock. Missing match data remains unavailable. CSV export does not fabricate table contents.
-- F9 remains complete. Cached quiz resume refreshes server timing; active card stays mounted across answer invalidation so exact retry snapshot survives. Quiz generation/grading/retake enforcement remains B9.
-- Stubbed/fake: no new product fake data or client scoring. Scratch synthetic fixtures outside repo cover stateful behavior. Static Prism is stateless. B7 applications/cohorts and B9 quizzes are unrouted on current main; real integration is Phase 3. F8/settings beyond requested prompts not started.
-- Dependencies/protected files: none added for F5–F7. Backend/data/contract/generated client/extension/root packages and lock unchanged. Only Codex web and own plans/progress/append-only handoff changed.
+## F8 implementation / next files
+- apps/extension: MV3 manifest, three Vite entry points and separately built classic IIFE extractor; React panel/options; copied DESIGN token/font theme; Match/Gaps/Save, returned rings/levels/lists/summary; explicit application save with both API match scores.
+- src/adapters: jsonld + linkedin/greenhouse/lever/workday/naukri/generic + shared/index. Arrays/@graph, strip description HTML, calendar deadline validation; selectors then visible main text <=20k/source llm. No inferred company/skills/metrics.
+- src/browser.ts: active HTTP(S) job only, isolated scripting, original/current page identity validation and extractor result deletion. LinkedIn profiles and listings without an individual job/currentJobId are rejected before DOM reads. Panel invalidates/aborts on tab close/switch/navigation or profile/API change.
+- src/settings.ts/options.tsx: storage.local only API URL/profile UUID/theme, default localhost8000, generated getMe button, theme system/light/dark, validation/loading/error states. No keys, persisted posting/results or production auth setup.
+- src/api.ts uses generated createApiClient and contract models only; dev/local sends Bearer dev. Local API host permissions only localhost/127.0.0.1; remote APIs require extension-origin CORS. README contains load/reload/setup/limits.
+- src/adapters/__tests__: four saved synthetic HTML snippets and 20 tests covering all adapters/JSON-LD/fallback/hidden content/size/eligibility/dates/settings. No product synthetic data.
+- docs/plans/frontend-F8.md; own progress; append-only own handoff. Root lock adds extension importer/tooling only; baseline importer/package/snapshot values preserved exactly. Backend/data/contracts/generated client/root package/workspace/web unchanged.
 
-## Decisions
-- Order F1 → F2 → F3 → F4 → F9 → F5 → F6 → F7 → F8. Latest user instruction overrides earlier pauses: continue F5–F7 until Git input is needed.
-- User wants speed with value: batch independent reads/checks, scope validation to changes, avoid repeating green tests without cause. Keep executable checkpoints and conventional commits/pushes.
-- DESIGN/design-refs lock Plus Jakarta Sans, themes/tokens, F2 components. Hallmark state/accessibility guidance applies; taste excludes dashboards/data tables/multistep product UI.
-- Generated API shapes only; no scoring, inferred bands or invented resources. Milestone completion uses contract PATCH; re-scan measures score changes. Compact ScoreRing changes only sizes below 120 px; default 160 px presentation preserved.
-- API summaries omit full reasons: history/placement link to actual evidence reports; aggregate and match explanations describe supplied data rather than inventing reasons.
+## Prior implementation
+- F5: roadmap/history screen and score-history helper/tests. Contract milestone mutation, immediate local state/rollback/retry/lock; returned history samples only; report explanation links.
+- F6: placement screen, API cohorts/roles/students, returned KPI/bands/histogram/skills/understanding tables, actual CSV Blob export; no client scores. Compact F2 ScoreRing typography preserves 160px default.
+- F7: tracker screen/application-draft helper/tests, native drag plus keyboard/touch status select, optimistic mutation/rollback/retry/lock; validated manual dialog, original returned match scores or unavailable.
+- F9: project quiz remains complete. Server timing refresh, mounted active question and immutable retry snapshot; generation/grading/retake enforcement belongs to B9.
 
-## Gotchas
-- Sandbox PATH/Path duplicates caused earlier git-remote-https crashes. Chat launcher normalizes PATH and pins installed Git/helpers/OpenSSL; public ls-remote works. Metadata index.lock/FETCH_HEAD deny ACLs and saved Windows credentials require normal user terminal; never repeat ACL fixes or use bypass metadata.
-- F4 GitHub server-error retries: full fsck passed, later --no-thin succeeded; cause remains unproven. F567 publisher uses normal non-force --no-thin pushes.
-- Next re-adds installed docs guidance to web AGENTS; preserve committed block. next-env unchanged after final build. Read installed guides before framework changes.
-- Static Prism cannot prove persistence/backend scoring; stateful fixtures cover UI flows, Phase 3 verifies live integration. Axe is not a full manual audit.
-- Dialog overlay uses existing --overlay token; score rings need compact typography for 72/88px sizes. Native drag is desktop; status select provides keyboard/touch equivalence.
+## Stubbed / fake / integration limits
+- No runtime fake data or frontend scoring added. Scratch job HTML and local stateful API are synthetic test fixtures; real match scoring, backend persistence/auth and full web/extension integration are Phase 3.
+- Live public Greenhouse and Lever extraction succeeded (200, source dom/jsonld, real descriptions). Two searched LinkedIn job URLs expired/redirected to listings; final guard rejects the redirect. Saved LinkedIn job fixture passed real unpacked injection. Recheck a current live individual LinkedIn posting in integration.
+- Chrome store packaging/signing/publishing not requested. dist is generated and ignored; rebuild/load unpacked per extension README. Exactly-once create after a lost server acknowledgement needs backend idempotency absent from the contract; pending/acknowledged saves are locally locked.
 
-## Commands and evidence
-- Node24.19.0: C:/Users/User/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe. pnpm10.12.3: chat work/tools/node_modules/pnpm/bin/pnpm.cjs; prepend runtime bin to PATH. Existing store C:/Users/User/Desktop/CareerLens/.pnpm-store.
-- Web checks: pnpm --filter web lint; pnpm --filter web typecheck; pnpm --filter web build. Native: apps/web node --experimental-transform-types --import ./tests/register.mjs --test tests/api.test.ts tests/onboarding.test.ts tests/report-presentation.test.ts tests/quiz.test.ts tests/score-history.test.ts tests/application-draft.test.ts.
-- Production web :3000; static Prism :4010. Chat work/browser_f567.cjs and f567-fixture.cjs cover states/themes; prism_f567.cjs tests actual HTTP. Tools/fixtures stay outside repo.
-- Chat outputs/F567-browser-checks.json, F567-prism-check.json, eight F567-*-accessibility.json files, light/dark screen/dialog screenshots, export-smoke.csv, F567-progress-report.md, F5/F6/F7-plan.md, publication snapshots/script. F9 prior evidence retained.
+## Decisions / gotchas
+- Order F1 → F2 → F3 → F4 → F9 → F5 → F6 → F7 → F8. User wants speed/value: batch independent work and scope checks to changes.
+- DESIGN locks Plus Jakarta Sans/tokens/themes. Hallmark states/a11y applied; taste excludes dashboards/multistep product UI. Ring wrapper named match-ring to avoid Tailwind's ring utility.
+- Use explicit chrome.action.onClicked to open sidePanel synchronously within toolbar gesture: automatic openPanelOnActionClick failed to grant activeTab in the unpacked test. Never inject on toolbar open; only Analyse reads content.
+- Unpacked service workers can retain old builds in reused Chrome profiles; reload extension and close old panel. Browser checks use fresh profiles. CDP toolbar action requires tab target and browser-level session; actual panel target attached directly (no Chrome API shims).
+- Earlier duplicate PATH/Path Git crashes resolved by chat read launcher. Shared index.lock/FETCH_HEAD ACLs and Credential Manager isolation require normal user PowerShell for Git writes; never repeat ACL fixes or bypass metadata. Normal non-force --no-thin pushes used after prior GitHub server errors (cause unproven).
+- New source EOF is one newline; publisher checks staged whitespace before commit. UTF-8/BOM publisher supports Windows PowerShell 5, reads UTF-8 templates and appends handoff without replacing previous entries.
+- Next may update web AGENTS; preserve committed guide block. Static Prism is stateless; axe is not a full manual audit. No checks need repeating for SHA-only docs publication.
+
+## Commands / evidence
+- Node24.19.0 C:/Users/User/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe; prepend bin to PATH. pnpm10.12.3 chat work/tools/node_modules/pnpm/bin/pnpm.cjs; existing store C:/Users/User/Desktop/CareerLens/.pnpm-store.
+- pnpm --filter extension typecheck; pnpm --filter extension build; pnpm --filter extension test. Frozen offline install passed. Extractor dist/extractor.js is standalone IIFE; extension pages contain only packaged code/fonts under strict CSP.
+- Chat outputs/F8-build-check.txt, F8-browser-checks.json, F8-supplemental-checks.json, eight F8-*-accessibility.json scans, light/dark panel/options screenshots, F8-live-extraction.json, F8-linkedin-live-check.json, F8-main-update-check.json, F8-progress-report.md and Publish-F8.ps1.
+- Scratch harnesses work/browser_f8.cjs, f8-supplemental.cjs, f8-live.cjs use Chromium in work/browsers and disposable profiles; tests do not change production manifest or Chrome APIs. Six site adapters also have native unit coverage.

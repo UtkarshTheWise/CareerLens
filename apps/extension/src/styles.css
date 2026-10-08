@@ -1,0 +1,564 @@
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R5 V4 — F1 shell; runtime review follows. */
+@import "tailwindcss";
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+:root {
+  --bg: #f3f4f8; /* canvas */
+  --surface: #ffffff; /* cards */
+  --surface-2: #f7f8fc; /* inputs, table header, nested panels */
+  --border: #e5e7f0;
+  --text: #111827;
+  --muted: #6b7280;
+
+  --primary: #4157e0; /* indigo-blue (sidebar active, links, focus) */
+  --primary-soft: #c9d0ff; /* periwinkle rings, chart secondary line */
+  --primary-deep: #2e2a9e; /* dark arc of the gauge */
+
+  --data-1: #0b6b4f; /* deep emerald */
+  --data-2: #0e9f6e; /* emerald */
+  --data-3: #a7f0d2; /* mint */
+
+  --success: #12a150;
+  --warning: #f5a524;
+  --danger: #e5484d;
+  --tag: #fde047; /* yellow pill */
+
+  --radius-card: 20px;
+  --radius-control: 12px;
+  --shadow-card:
+    0 1px 2px rgba(17, 24, 39, 0.04), 0 8px 24px rgba(17, 24, 39, 0.06);
+}
+
+:root[data-theme="dark"] {
+  --bg: #0a0a0c;
+  --surface: #141418;
+  --surface-2: #1c1c22;
+  --border: #2a2a32;
+  --text: #f4f4f5;
+  --muted: #a1a1aa;
+
+  --primary: #7c3aed; /* violet */
+  --primary-soft: #a78bfa;
+  --primary-deep: #5b21b6;
+
+  --data-1: #34d399;
+  --data-2: #10b981;
+  --data-3: #065f46;
+
+  --highlight-gradient: linear-gradient(
+    135deg,
+    #f97316 0%,
+    #c026d3 55%,
+    #6d28d9 100%
+  );
+  --shadow-card:
+    0 0 0 1px rgba(255, 255, 255, 0.04), 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-primary: var(--primary);
+  --color-primary-text: var(--primary-text);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-deep: var(--primary-deep);
+  --color-data-1: var(--data-1);
+  --color-data-2: var(--data-2);
+  --color-data-3: var(--data-3);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-tag: var(--tag);
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+  --color-primary-foreground: var(--on-primary);
+  --color-secondary: var(--surface-2);
+  --color-secondary-foreground: var(--text);
+  --color-accent: var(--surface-2);
+  --color-accent-foreground: var(--text);
+  --color-muted-foreground: var(--muted-readable);
+  --color-muted-readable: var(--muted-readable);
+  --color-chip-text: var(--chip-text);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--text);
+  --color-destructive: var(--danger);
+  --color-ring: var(--primary);
+  --radius-card: 20px;
+  --radius-control: 12px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
+  --shadow-card: var(--design-shadow-card);
+  --font-sans: var(--font-body);
+}
+
+:root {
+  --design-shadow-card: var(--shadow-card);
+  --muted-readable: #626a79;
+  --chip-text: #2e2a9e;
+  --font-body: "Plus Jakarta Sans", sans-serif;
+  --primary-text: #4157e0;
+  --on-primary: #ffffff;
+  --overlay: rgba(10, 10, 12, 0.55);
+}
+:root[data-theme="dark"] {
+  --primary-text: #a78bfa;
+  --muted-readable: #a1a1aa;
+  color-scheme: dark;
+}
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html,
+  body {
+    overflow-x: clip;
+  }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.5;
+  }
+  h1 {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+  h2 {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  h1,
+  h2,
+  h3 {
+    overflow-wrap: anywhere;
+    min-width: 0;
+    font-style: normal;
+  }
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 4px;
+  }
+  ::selection {
+    background: var(--primary-soft);
+    color: var(--text);
+  }
+}
+@layer components {
+  .break-anywhere {
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+  .icon-chip {
+    display: flex;
+    height: 40px;
+    width: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-control);
+    background: var(--surface-2);
+  }
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    padding: 12px 16px;
+    border-radius: var(--radius-control);
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .nav-link[aria-current="page"] {
+    background: var(--primary);
+    color: var(--on-primary);
+  }
+  .nav-link:not([aria-current="page"]):hover {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+}
+
+:root {
+  --code-warm: #92400e;
+}
+:root[data-theme="dark"] {
+  --code-warm: #fcd34d;
+}
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R5 V4 — F2 component kit. */
+:root {
+  --success-readable: #087a39;
+  --warning-readable: #8b5900;
+  --danger-readable: #b42332;
+  --success-tint: #ecfdf3;
+  --warning-tint: #fff7df;
+  --danger-tint: #fff1f2;
+  --chart-grid: var(--border);
+  --chart-axis: var(--muted-readable);
+}
+:root[data-theme="dark"] {
+  --chip-text: #211a64;
+  --success-readable: #6ee7b7;
+  --warning-readable: #fcd34d;
+  --danger-readable: #fda4af;
+  --success-tint: #103329;
+  --warning-tint: #342a15;
+  --danger-tint: #351c24;
+}
+@theme inline {
+  --color-success-readable: var(--success-readable);
+  --color-warning-readable: var(--warning-readable);
+  --color-danger-readable: var(--danger-readable);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--text);
+  --color-input: var(--border);
+}
+@layer components {
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+  .tone-success {
+    background: var(--success-tint);
+    color: var(--success-readable);
+  }
+  .tone-warning {
+    background: var(--warning-tint);
+    color: var(--warning-readable);
+  }
+  .tone-primary {
+    background: var(--primary-soft);
+    color: var(--chip-text);
+  }
+  .tone-muted {
+    background: var(--surface-2);
+    color: var(--muted-readable);
+    border-color: var(--border);
+  }
+  .tone-danger-outline {
+    background: var(--danger-tint);
+    color: var(--danger-readable);
+    border-color: var(--danger);
+  }
+}
+
+/* Hallmark · pre-emit critique: P4 H4 E4 S5 R5 V4 — DESIGN-locked companion panel. */
+body {
+  margin: 0;
+  min-width: 0;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+button,
+a,
+summary {
+  touch-action: manipulation;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+main {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+  display: grid;
+  gap: 20px;
+}
+p {
+  margin: 0;
+}
+h1,
+h2,
+h3 {
+  margin: 0;
+}
+.card {
+  min-width: 0;
+  display: grid;
+  gap: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 20px;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+.muted {
+  color: var(--muted-readable);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.error {
+  color: var(--danger-readable);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--radius-control);
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+  transition:
+    background 0.15s,
+    transform 0.15s;
+}
+.button:hover:not(:disabled) {
+  border-color: var(--primary);
+}
+.button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.button.primary {
+  background: var(--primary);
+  color: var(--on-primary);
+  border-color: var(--primary);
+}
+.button.ghost {
+  border: 0;
+  background: transparent;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+}
+.icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--surface-2);
+  color: var(--primary-text);
+}
+.tabs {
+  display: flex;
+  border-radius: 999px;
+  padding: 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  gap: 4px;
+}
+.tabs button {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  min-height: 44px;
+  border-radius: 999px;
+  color: var(--muted-readable);
+  font-size: 13px;
+  font-weight: 600;
+}
+.tabs button[aria-selected="true"] {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+[data-theme="dark"] .tabs button[aria-selected="true"] {
+  background: var(--highlight-gradient);
+}
+.ring-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.match-ring {
+  min-width: 0;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+  font-size: 12px;
+}
+.ring-picture {
+  width: 116px;
+  max-width: 100%;
+  position: relative;
+  aspect-ratio: 1;
+}
+.match-ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.match-ring strong {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.ring-arc {
+  transition: stroke-dashoffset 0.8s ease-out;
+}
+.match-ring details {
+  width: 100%;
+}
+summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-text);
+}
+details p {
+  text-align: left;
+}
+.pill {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 9px;
+  font-size: 11px;
+  white-space: nowrap;
+  background: var(--surface-2);
+  color: var(--muted-readable);
+}
+.level-strong {
+  background: var(--success-tint);
+  color: var(--success-readable);
+}
+.level-moderate {
+  background: var(--primary-soft);
+  color: var(--chip-text);
+}
+.level-weak {
+  background: var(--warning-tint);
+  color: var(--warning-readable);
+}
+.level-missing {
+  background: var(--danger-tint);
+  color: var(--danger-readable);
+  border-color: var(--danger);
+}
+.rows {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+.rows li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  font-size: 13px;
+}
+.rows span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.form {
+  display: grid;
+  gap: 16px;
+}
+.form label {
+  display: grid;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 13px;
+}
+.flow {
+  display: grid;
+  gap: 12px;
+}
+.posting-title {
+  font-size: 18px;
+  line-height: 1.5;
+}
+.tab-panel {
+  min-width: 0;
+  display: grid;
+  gap: 20px;
+}
+.url {
+  overflow-wrap: anywhere;
+  min-width: 0;
+  font-size: 12px;
+  color: var(--primary-text);
+}
+.skeleton {
+  height: 180px;
+  background: var(--surface-2);
+  border-radius: 20px;
+}
+.options {
+  max-width: 640px;
+}
+.caption {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary-text);
+}
