@@ -2,7 +2,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, FileSearch, Route, BriefcaseBusiness, GraduationCap, Settings, Menu, ArrowUpRight, ScanLine, ChevronRight, LogOut } from "lucide-react";
+import { LayoutDashboard, FileSearch, Route, BriefcaseBusiness, GraduationCap, Puzzle, Settings, Menu, ArrowUpRight, ScanLine, ChevronRight, LogOut } from "lucide-react";
 import { useGetMe } from "@/lib/api/hooks";
 import { displayName, useAuth } from "@/components/auth/auth-provider";
 import { ApiError, errorMessage } from "@/lib/api/transport";
@@ -16,6 +16,7 @@ const destinations = [
   { title: "Roadmap", href: "/roadmap", icon: Route },
   { title: "Tracker", href: "/tracker", icon: BriefcaseBusiness },
   { title: "Placement cell", href: "/placement", icon: GraduationCap },
+  { title: "Extension", href: "/extension", icon: Puzzle },
   { title: "Settings", href: "/settings", icon: Settings },
 ];
 function Brand() {

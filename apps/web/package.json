@@ -9,7 +9,7 @@
     "start": "next start --hostname 127.0.0.1",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-transform-types --import ./tests/register.mjs --test tests/api.test.ts"
+    "test": "node --experimental-transform-types --import ./tests/register.mjs --test tests/api.test.ts tests/ai-key.test.ts"
   },
   "dependencies": {
     "@careerlens/api-client": "workspace:*",

@@ -1,4 +1,5 @@
 import { createApiClient, type ApiClient } from "@careerlens/api-client";
+import { aiKeyHeaders } from "../ai-key";
 import { getAccessToken, handleUnauthorized } from "../auth/session";
 import { isAuthConfigured } from "../auth/supabase";
 
@@ -20,3 +21,15 @@ export const authMiddleware: Parameters<ApiClient["use"]>[0] = {
 };
 
 if (isAuthConfigured) apiClient.use(authMiddleware);
+
+// A student's own AI key (Settings) rides along on the requests that call a model, so those calls spend
+// their quota instead of the shared allowance. Independent of sign-in.
+export const aiKeyMiddleware: Parameters<ApiClient["use"]>[0] = {
+  async onRequest({ request }) {
+    const { pathname } = new URL(request.url);
+    for (const [name, value] of Object.entries(aiKeyHeaders(pathname, request.method))) request.headers.set(name, value);
+    return request;
+  },
+};
+
+apiClient.use(aiKeyMiddleware);

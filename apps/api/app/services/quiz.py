@@ -210,6 +210,8 @@ def generate_questions(
             known = {_clean(q.prompt).lower() for q in valid}
             more = [q for q in ask(wanted, extra) if _clean(q.prompt).lower() not in known]
         except LLMError as exc:
+            if exc.code == "llm_key_rejected":
+                raise
             logger.warning("quiz replacement request failed: %s (%s)", exc.code, exc.message)
             more = []
         chosen, missing = pick([*valid, *more], slots)
@@ -385,6 +387,8 @@ def llm_error(exc: LLMError) -> ApiError:
     """LLM trouble as the contract's 429 (quota) or a clear 502/503."""
     if exc.code == "llm_unavailable":
         return ApiError(429, "llm_unavailable", "The AI service is busy right now. Try again in a minute.")
+    if exc.code == "llm_key_rejected":
+        return ApiError(400, "invalid_llm_key", exc.message)
     if exc.code == "llm_not_configured":
         return ApiError(503, "llm_not_configured", exc.message)
     return ApiError(502, "quiz_generation_failed", "We couldn't write the questions this time. Try again.")

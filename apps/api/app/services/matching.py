@@ -83,6 +83,8 @@ def normalize_posting(
             "deadline": posting.deadline or _parse_date(extract.deadline),
         }
     except LLMError as exc:
+        if exc.code == "llm_key_rejected":
+            raise  # the student's own key is wrong: say so instead of quietly degrading
         logger.warning("job extraction unavailable: %s", exc.code)
         found = sorted(catalogue.find_skills_in_text(posting.description))
         update = {"required_skills": [_name(s) for s in found]}

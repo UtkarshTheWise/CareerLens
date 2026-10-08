@@ -11,9 +11,9 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - **Track:** integration · **Owns:** wiring + drift fixes across the repo (Phase 3 only)
 - **Branch / worktree:** `integration` · worktree `../careerlens-integration` (no deny rules; the backend worktree denies apps/web and apps/extension)
 - **Last updated:** 2026-10-08 Claude Code (Sonnet 5.5)
-- **Current task:** I1-I4 done: merge, baseline, smoke test, Google sign-in (web + extension), independent review and its fixes. Waiting on the human for Supabase/Google values and the manual checks, then fast-forward `main` to `integration`.
+- **Current task:** I5 (extension install page, bring-your-own AI key) done on `integration`, ready to fast-forward to `main`. Before that, I1-I4 done: merge, baseline, smoke test, Google sign-in (web + extension), independent review and its fixes. Waiting on the human for Supabase/Google values and the manual checks, then fast-forward `main` to `integration`.
 - **State:** done   <!-- not started | in progress | blocked | done -->
-- **Last green checks:** 2026-10-08, integration worktree (Node 22.16.0, pnpm 10.12.3): backend 666 tests / ruff / `check_contract.py` 29/29 · `apps/api/scripts/smoke_e2e.py` 499 checks (dev + token mode) · web lint, typecheck, build (also configured), 27 tests · extension typecheck, build, 24 tests
+- **Last green checks:** 2026-10-08, integration worktree (Node 22.16.0, pnpm 10.12.3): backend 683 tests / ruff / `check_contract.py` 29/29 · `apps/api/scripts/smoke_e2e.py` 499 checks (dev + token mode) · web lint, typecheck, build (also configured), native tests incl. ai-key · extension typecheck, build, 24 tests
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
@@ -32,6 +32,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | I2 | Merge, regenerate client, drift fixes, builds green | done | see git log | clean merge; client unchanged; sign-in added for web + extension |
 | I3 | End-to-end smoke script + demo checklist | done | see git log | green in dev and token mode; found and fixed 3 backend drifts |
 | I4 | Independent review + fixes | done | see git log | 6 fixes + 7 open decisions in docs/handoff/integration.md |
+| I5 | `/extension` install page + zip, Settings "your own AI key" (BYOK headers), prod push | done | see git log | extension itself has no key field yet (follow-up) |
 
 ## In-progress detail
 - **Files touched, not finished:** —

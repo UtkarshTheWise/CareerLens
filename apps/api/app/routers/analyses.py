@@ -22,15 +22,18 @@ from app.schemas.api import (
     SimulationResult,
 )
 from app.services import scoring
+from app.services.byok import get_user_providers
+from app.services.llm import Provider
 from app.services.pipeline import PipelineDeps, run_analysis
 from app.services.scoring_inputs import ScoringInputs, SimulationError
 
 router = APIRouter(tags=["analyses"], responses=ERROR_RESPONSES)
 
 
-def get_pipeline_deps() -> PipelineDeps:
-    """The real LLM providers, GitHub client and page fetcher. Tests override this dependency."""
-    return PipelineDeps()
+def get_pipeline_deps(user_providers: list[Provider] | None = Depends(get_user_providers)) -> PipelineDeps:
+    """The real LLM providers (or only the student's own key, if sent), GitHub client and page fetcher.
+    Tests override this dependency."""
+    return PipelineDeps(providers=user_providers)
 
 
 @router.post(

@@ -11,11 +11,12 @@ import time
 from collections import defaultdict, deque
 from collections.abc import Callable
 
-from fastapi import Depends
+from fastapi import Depends, Request
 
 from app.config import Settings, get_settings
 from app.deps import DEV_SUBJECT, AuthContext, get_auth_context
 from app.errors import ApiError
+from app.services.byok import has_user_key
 
 WINDOW_S = 3600.0
 
@@ -53,8 +54,12 @@ def limited(bucket: str, setting: str):
     """A dependency that counts one use of `bucket`; the limit comes from the Settings field `setting`."""
 
     def dependency(
-        context: AuthContext = Depends(get_auth_context), settings: Settings = Depends(get_settings)
+        request: Request,
+        context: AuthContext = Depends(get_auth_context),
+        settings: Settings = Depends(get_settings),
     ) -> None:
+        if has_user_key(request):  # their own key spends their own quota, not the shared allowance
+            return
         check(bucket, context.subject, getattr(settings, setting))
 
     return dependency

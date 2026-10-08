@@ -174,7 +174,9 @@ def _judge(
                 providers=deps.providers,
                 refresh=refresh,
             )
-        except LLMError:
+        except LLMError as exc:
+            if exc.code == "llm_key_rejected":
+                raise
             notes.append(f"'{name}' could not be reviewed right now and was scored without that review.")
 
     page_fetcher = deps.fetch_page or (lambda url, session, fresh: fetch_page(url, session, refresh=fresh))
@@ -197,7 +199,9 @@ def _judge(
                     refresh=refresh,
                 )
             )
-        except LLMError:
+        except LLMError as exc:
+            if exc.code == "llm_key_rejected":
+                raise
             notes.append(
                 "A portfolio page could not be reviewed right now and was scored as having no evidence."
             )

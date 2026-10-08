@@ -232,6 +232,8 @@ def answer_question(
             grade_without_answer(question, answer)
     except LLMError as exc:
         db.rollback()
+        if exc.code == "llm_key_rejected":
+            raise ApiError(400, "invalid_llm_key", exc.message) from exc
         raise ApiError(
             503,
             "llm_unavailable",
@@ -334,6 +336,8 @@ def submit_or_fail(
         return submit_quiz(db, quiz, deps, now, settings)
     except LLMError as exc:
         db.rollback()
+        if exc.code == "llm_key_rejected":
+            raise ApiError(400, "invalid_llm_key", exc.message) from exc
         raise ApiError(
             503,
             "llm_unavailable",

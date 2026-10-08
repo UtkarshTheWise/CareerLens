@@ -9,15 +9,18 @@ from app.rate_limit import limited
 from app.routers import ERROR_RESPONSES
 from app.schemas.api import Error, JobMatch, JobMatchRequest
 from app.services import matching
+from app.services.byok import get_user_providers
 from app.services.llm import Provider
 from app.services.scoring_inputs import ScoringInputs
 
 router = APIRouter(tags=["jobs"], responses=ERROR_RESPONSES)
 
 
-def get_llm_providers() -> list[Provider] | None:
-    """None means the configured LLM providers. Tests override this dependency."""
-    return None
+def get_llm_providers(
+    user_providers: list[Provider] | None = Depends(get_user_providers),
+) -> list[Provider] | None:
+    """None means the configured LLM providers; the student's own key, if sent. Tests override this."""
+    return user_providers
 
 
 @router.post(

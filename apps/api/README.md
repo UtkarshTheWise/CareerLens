@@ -67,6 +67,17 @@ Read from `apps/api/.env` and the environment (see [`.env.example`](.env.example
 * Cohort routes (`/v1/cohorts/...`) need placement staff (`403` otherwise).
 * The first sign-in has no profile yet: `GET /v1/me` is `404` until the app calls `POST /v1/profiles`.
 
+## Bring your own AI key
+
+A student can use their own Gemini or Groq key so the shared free quota is not spent. The web app (Settings) keeps
+the key in the browser and sends `X-LLM-Provider` (`gemini` or `groq`) and `X-LLM-Key` on the requests that call a
+model: startAnalysis, createQuiz, getQuiz, answerQuizQuestion, submitQuiz, getQuizResult, matchJob, tailorResume.
+When present, only that key is used (no fallback to the shared keys), the per-user hourly limits are skipped, and it is
+held in memory for the request (an analysis keeps it for its background job). It is never stored, cached or logged. A
+malformed pair is `422 invalid_llm_key`; a key the provider rejects is `400 invalid_llm_key` (a failed analysis shows
+the same message). These headers are deliberately not in `contracts/openapi.yaml` and are hidden from the schema.
+See `app/services/byok.py`.
+
 ## What is logged
 
 One JSON line per request (id, method, route template, status, milliseconds) plus stage timings and LLM/GitHub

@@ -43,6 +43,10 @@ Cohort data is staff-only. An account counts as staff if its **email or user id 
 Supabase `app_metadata.role` is `placement` (set by an admin in the dashboard under Authentication → Users; the
 user cannot edit `app_metadata`). Everyone else gets a "staff only" message on the placement screen.
 
+The install page on the site (`/extension`) offers `apps/web/public/downloads/careerlens-extension.zip`. Rebuild it
+with `pnpm pack:extension` (needs `apps/extension/.env.local` with the production values) and commit the zip whenever
+the extension changes; the script checks the extension id and refuses to pack `.env` files.
+
 ## 5. Check it by hand (these need your real project)
 
 - [ ] Web: open the app → redirected to **Sign in** → Continue with Google → land on the dashboard; the header shows your name; **Sign out** returns to the sign-in page.
