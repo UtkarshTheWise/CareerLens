@@ -6,9 +6,9 @@ import { useStartAnalysis, useGetAnalysis } from "@/lib/api/hooks";
 import { errorMessage } from "@/lib/api/transport";
 import { useRouter } from "next/navigation";
 import { StageProgress } from "@/components/career";
-import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { PageHeader, Panel } from "@/components/layout/page";
 import { EvidenceReport } from "@/components/report/evidence-report";
 export function AnalysisProgress({
   analysisId,
@@ -51,29 +51,27 @@ export function AnalysisProgress({
   }
   return (
     <section className="mx-auto max-w-4xl space-y-6">
-      <div>
-        <p className="mb-2 text-xs font-semibold text-primary-text">
-          Your evidence analysis
-        </p>
-        <h1 className="text-2xl font-semibold">
-          {analysis.data?.status === "done"
+      <PageHeader
+        eyebrow="Your evidence analysis"
+        title={
+          analysis.data?.status === "done"
             ? "Your analysis is complete."
             : analysis.data?.status === "failed"
               ? "Your analysis stopped."
-              : "Connecting claims to evidence."}
-        </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-readable">
-          {analysis.data?.status === "done"
+              : "Connecting claims to evidence."
+        }
+        description={
+          analysis.data?.status === "done"
             ? "Your results have been saved. Keep this report URL to return to them."
             : analysis.data?.status === "failed"
               ? "Your saved profile is still available. Review the error below or start another analysis."
-              : "We’ll update this page as your documents and public work are reviewed. You can return to this report URL to check progress."}
-        </p>
-      </div>
+              : "We’ll update this page as your documents and public work are reviewed. You can return to this report URL to check progress."
+        }
+      />
       {analysis.isPending && (
-        <Card className="py-0">
-          <CardContent
-            className="space-y-4 p-6"
+        <Panel>
+          <div
+            className="space-y-4"
             role="status"
             aria-label="Loading analysis"
           >
@@ -83,15 +81,14 @@ export function AnalysisProgress({
               <Skeleton key={i} className="h-10 w-full" />
             ))}
             <p className="text-sm text-muted-readable">Loading analysis…</p>
-          </CardContent>
-        </Card>
+          </div>
+        </Panel>
       )}
       {analysis.isError && (
-        <div
-          role="alert"
-          className="space-y-3 rounded-card border border-danger bg-surface p-6"
-        >
-          <h2 className="font-semibold">Couldn’t refresh this analysis</h2>
+        <div role="alert" className="panel space-y-3 border-danger">
+          <h2 className="text-[17px] font-medium tracking-[-.02em]">
+            Couldn’t refresh this analysis
+          </h2>
           <p className="text-sm text-danger-readable">
             {errorMessage(analysis.error)}
           </p>
@@ -112,41 +109,39 @@ export function AnalysisProgress({
       )}
       {analysis.data && (
         <div className="grid items-start gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-          <Card className="py-0">
-            <CardContent className="p-6">
-              <StageProgress
-                status={analysis.data.status}
-                progress={analysis.data.progress}
-                error={analysis.data.error}
-              />
-            </CardContent>
-          </Card>
+          <Panel label="Progress">
+            <StageProgress
+              status={analysis.data.status}
+              progress={analysis.data.progress}
+              error={analysis.data.error}
+            />
+          </Panel>
           <div className="space-y-4">
             {analysis.data.status === "done" ? (
-              <Card className="py-0">
-                <CardContent className="space-y-3 p-6">
-                  <h2 className="font-semibold">Report unavailable</h2>
+              <Panel label="Report unavailable">
+                <div className="space-y-3">
                   <p className="text-sm leading-relaxed text-muted-readable">
                     This analysis finished, but no report was returned. Retry to
                     check for its results.
                   </p>
-                  <Button
-                    variant="outline"
-                    className="min-h-11"
-                    onClick={() => analysis.refetch()}
-                    disabled={analysis.isFetching}
-                  >
-                    Retry report
-                  </Button>
-                  <Button asChild variant="outline" className="min-h-11">
-                    <Link href="/onboarding">New analysis</Link>
-                  </Button>
-                </CardContent>
-              </Card>
+                  <div className="flex flex-wrap gap-3">
+                    <Button
+                      variant="outline"
+                      className="min-h-11"
+                      onClick={() => analysis.refetch()}
+                      disabled={analysis.isFetching}
+                    >
+                      Retry report
+                    </Button>
+                    <Button asChild variant="outline" className="min-h-11">
+                      <Link href="/onboarding">New analysis</Link>
+                    </Button>
+                  </div>
+                </div>
+              </Panel>
             ) : analysis.data.status === "failed" ? (
-              <Card className="py-0">
-                <CardContent className="space-y-4 p-6">
-                  <h2 className="font-semibold">Try again when you’re ready</h2>
+              <Panel label="Try again when you’re ready">
+                <div className="space-y-4">
                   {!analysis.data.error && (
                     <p className="text-sm text-muted-readable">
                       The analysis failed without an error message. Try again or
@@ -174,8 +169,8 @@ export function AnalysisProgress({
                       <Link href="/onboarding">Review inputs</Link>
                     </Button>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </Panel>
             ) : (
               <>
                 <div

@@ -3,6 +3,17 @@ import { useState } from "react";
 import { Activity, FileCheck2, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
+  Disclosure,
+  Metric,
+  PageHeader,
+  Panel,
+  Section,
+  SelectRowGroup,
+  StatusText,
+  TextLink,
+  type Tone,
+} from "@/components/layout/page";
+import {
   KpiCard,
   ScoreRing,
   SegmentedGauge,
@@ -82,6 +93,119 @@ function SectionHeading({
     </div>
   );
 }
+const tones: Tone[] = ["success", "warning", "danger", "muted", "primary"];
+const sampleSkills = [
+  { id: "python", title: "Python", secondary: "campus-api, 41 commits", status: <StatusText tone="success">Strong</StatusText> },
+  { id: "docker", title: "Docker", secondary: "Dockerfile in 2 repositories", status: <StatusText tone="primary">Moderate</StatusText> },
+  { id: "kubernetes", title: "Kubernetes", secondary: "Listed on the resume only", status: <StatusText tone="muted">Unverified claim</StatusText> },
+];
+const sampleDetail: Record<string, string> = {
+  python: "Strong: a project that uses Python has recent commits and tests. This is sample text for the gallery.",
+  docker: "Moderate: a Dockerfile is present, but there is no sign it was run in CI. Sample text.",
+  kubernetes: "Unverified claim: listed on the resume with no matching project yet. Sample text.",
+};
+
+/** The homepage language for signed-in screens: see docs/DESIGN.md "App screens". */
+function AppPrimitives() {
+  const [single, setSingle] = useState<string>("python");
+  const [multi, setMulti] = useState<string[]>(["python"]);
+  return (
+    <section aria-labelledby="app-primitives" className="space-y-2">
+      <h2 id="app-primitives" className="section-title">App screen primitives</h2>
+      <p className="lede">Eyebrow, page and section headers, panels, status text, selectable rows, disclosures and fields. Gallery text is sample content.</p>
+
+      <PageHeader eyebrow="Your workspace" title="Page header" description="One h1 per screen, with an optional lede and actions." actions={<Button variant="outline">Secondary action</Button>} />
+
+      <Section eyebrow="Section" title="Section with a hairline above" description="Sections are separated by rules, not nested cards.">
+        <div className="grid gap-6 md:grid-cols-2">
+          <Panel label="Panel with a label" footer={<><span>Coverage</span><span data-value>62.5%</span></>}>
+            <Metric value="65" unit="/ 100" label="Readiness 65 out of 100" />
+            <p className="lede mt-3">A panel is a flat surface with a rule under its label and a footer line.</p>
+          </Panel>
+          <Panel title="Panel with a title" actions={<TextLink href="/dashboard">Open</TextLink>}>
+            <div className="flex flex-wrap gap-4">
+              {tones.map((tone) => (
+                <StatusText key={tone} tone={tone}>{tone}</StatusText>
+              ))}
+            </div>
+            <p className="inset-note mt-4">An inset note holds explanations and sources.</p>
+            <p className="mt-4 flex gap-6">
+              <TextLink href="/dashboard">Internal link</TextLink>
+              <TextLink href="https://example.com" external>External link</TextLink>
+            </p>
+          </Panel>
+        </div>
+      </Section>
+
+      <Section title="Selectable rows">
+        <div className="grid gap-8 md:grid-cols-2">
+          <SelectRowGroup
+            label="Skills, one selected"
+            items={sampleSkills}
+            selectedId={single}
+            onSelect={setSingle}
+            detail={sampleDetail[single]}
+          />
+          <SelectRowGroup
+            label="Skills, several selected"
+            multiple
+            items={sampleSkills.map((s) => ({ ...s, secondary: undefined }))}
+            selectedIds={multi}
+            onSelect={(id) => setMulti((v) => (v.includes(id) ? v.filter((x) => x !== id) : [...v, id]))}
+          />
+        </div>
+      </Section>
+
+      <Section title="Disclosure and FAQ">
+        <div className="grid gap-8 md:grid-cols-2">
+          <div>
+            <Disclosure summary="Look at the deliverable">
+              <p className="inset-note">The thing a student produces to finish a milestone.</p>
+            </Disclosure>
+            <div className="border-t border-border" />
+          </div>
+          <div className="faq">
+            <details>
+              <summary>Native details row</summary>
+              <p>Used for troubleshooting and questions.</p>
+            </details>
+            <details>
+              <summary>Another row</summary>
+              <p>The marker is a plus that turns into a cross when open.</p>
+            </details>
+          </div>
+        </div>
+      </Section>
+
+      <Section title="Fields and chips">
+        <div className="grid max-w-3xl gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="g-field" className="field-label">Text field</label>
+            <input id="g-field" className="field" placeholder="Placeholder" />
+            <p className="field-hint">Hint text sits under the field.</p>
+          </div>
+          <div>
+            <label htmlFor="g-error" className="field-label">Field with an error</label>
+            <input id="g-error" className="field" aria-invalid="true" defaultValue="Wrong value" aria-describedby="g-error-text" />
+            <p id="g-error-text" className="field-error">Say what is wrong and how to fix it.</p>
+          </div>
+          <div className="sm:col-span-2 flex flex-wrap gap-2">
+            {["Python", "SQL", "FastAPI"].map((skill) => (
+              <span key={skill} className="chip">
+                {skill}
+                <button type="button" aria-label={"Remove " + skill}>×</button>
+              </span>
+            ))}
+          </div>
+          <div className="sm:col-span-2">
+            <Button size="lg" trailingArrow>Primary action</Button>
+          </div>
+        </div>
+      </Section>
+    </section>
+  );
+}
+
 export default function ComponentsPage() {
   const [state, setState] = useState<ViewState>("ready");
   const [milestone, setMilestone] = useState(fixture.milestone);
@@ -429,6 +553,7 @@ export default function ComponentsPage() {
           />
         </div>
       </section>
+      <AppPrimitives />
     </div>
   );
 }

@@ -283,44 +283,34 @@ function WizardForm({ initialName }: { initialName: string }) {
     }
   }
   return (
-    <section className="mx-auto max-w-5xl space-y-7">
-      <div className="max-w-2xl">
-        <p className="mb-2 text-xs font-semibold text-primary-text">
-          Your first analysis
-        </p>
-        <h1 className="text-2xl font-semibold tracking-tight">
-          Start with the work you’ve done.
-        </h1>
-        <p className="mt-3 text-sm leading-relaxed text-muted-readable">
-          Bring your resume, public work and a target role. CareerLens connects
-          your claims to evidence and shows where to grow next.
-        </p>
-      </div>
+    <section className="mx-auto max-w-5xl">
+      <PageHeader
+        eyebrow="Your first analysis"
+        title="Start with the work you’ve done."
+        description="Bring your resume, public work and a target role. CareerLens connects your claims to evidence and shows where to grow next."
+      />
       <ol
         aria-label="Onboarding steps"
-        className="grid grid-cols-3 gap-2 sm:gap-4"
+        className="mb-8 grid grid-cols-3 gap-2 sm:gap-4"
       >
-        {steps.map(({ label, icon: Icon }, index) => (
+        {steps.map(({ label }, index) => (
           <li
             key={label}
             aria-current={step === index ? "step" : undefined}
-            className={`min-w-0 rounded-control border p-3 sm:p-4 ${step === index ? "border-primary bg-primary-soft text-chip-text" : "border-border bg-surface text-muted-readable"}`}
+            className={`min-w-0 border-t-2 pt-3 ${step === index ? "border-primary text-primary-text" : "border-border text-muted-readable"}`}
           >
-            <div className="mb-2 flex items-center gap-2">
-              <span className="text-xs font-semibold">{index + 1}</span>
+            <p className="flex items-center gap-2 text-xs font-medium sm:text-sm">
+              <span className="tabular-nums">{index + 1}</span>
+              <span className="break-anywhere">{label}</span>
               {index < step ? (
-                <Check size={18} aria-label="Completed" />
-              ) : (
-                <Icon size={18} strokeWidth={1.75} aria-hidden="true" />
-              )}
-            </div>
-            <p className="text-xs font-semibold sm:text-sm">{label}</p>
+                <Check size={16} aria-label="Completed" />
+              ) : null}
+            </p>
           </li>
         ))}
       </ol>
-      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_260px]">
-        <Card className="py-0">
-          <CardContent className="p-5 sm:p-6">
+      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_260px]">
+        <Panel>
             <form ref={form} onSubmit={submit} noValidate aria-busy={busy}>
               <div className="mb-6">
                 <p className="mb-1 text-xs text-muted-readable">
@@ -354,9 +344,60 @@ function WizardForm({ initialName }: { initialName: string }) {
                         onChange={(e) => change("name", e.target.value)}
                       />
                     </FieldBlock>
+                    <fieldset className="space-y-3">
+                      <legend className="field-label">Resume</legend>
+                      <div className="flex flex-wrap gap-2">
+                        {(
+                          [
+                            ["upload", "Upload a file"],
+                            ["build", "Build it here"],
+                          ] as const
+                        ).map(([mode, label]) => (
+                          <label
+                            key={mode}
+                            className={`flex min-h-11 cursor-pointer items-center gap-2 whitespace-nowrap rounded-control border px-3 text-sm font-medium ${values.resumeMode === mode ? "border-primary bg-surface-3 text-primary-text" : "border-border"}`}
+                          >
+                            <input
+                              type="radio"
+                              name="resume-mode"
+                              value={mode}
+                              checked={values.resumeMode === mode}
+                              disabled={busy}
+                              onChange={() => {
+                                setValues({ ...values, resumeMode: mode });
+                                setErrors((old) => ({ ...old, resume: undefined }));
+                                setTouched((old) => ({ ...old, resume: false }));
+                              }}
+                              className="size-4 accent-primary"
+                            />
+                            {label}
+                          </label>
+                        ))}
+                      </div>
+                      {values.resumeMode === "build" ? (
+                        <p className="field-hint">
+                          No resume yet? Fill in the sections below. We turn them into a plain-text resume and analyse that.
+                        </p>
+                      ) : null}
+                    </fieldset>
+                    {values.resumeMode === "build" ? (
+                      <>
+                        {errors.resume ? (
+                          <p id="resume-help" role="alert" className="field-error">{errors.resume}</p>
+                        ) : null}
+                        <ResumeBuilder
+                          name={values.name}
+                          draft={values.resumeDraft}
+                          onChange={changeDraft}
+                          roleId={values.role || undefined}
+                          roles={roles.data ?? []}
+                          errors={builderErrors}
+                        />
+                      </>
+                    ) : (
                     <FieldBlock
                       id="resume"
-                      label="Resume"
+                      label="Resume file"
                       required
                       error={errors.resume}
                       hint="PDF or DOCX, up to 5 MB. Choose a document with selectable text."
@@ -397,6 +438,7 @@ function WizardForm({ initialName }: { initialName: string }) {
                         )}
                       </div>
                     </FieldBlock>
+                    )}
                     <fieldset className="space-y-3">
                       <legend className="mb-3 text-sm font-semibold">
                         LinkedIn profile{" "}
@@ -625,7 +667,9 @@ function WizardForm({ initialName }: { initialName: string }) {
                       <div>
                         <dt className="text-xs text-muted-readable">Resume</dt>
                         <dd className="mt-1 break-all">
-                          {values.resume?.name}
+                          {values.resumeMode === "build"
+                            ? "Built in CareerLens (resume.txt)"
+                            : values.resume?.name}
                         </dd>
                       </div>
                       <div>

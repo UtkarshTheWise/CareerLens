@@ -8,18 +8,19 @@ import { ReportOverview } from "@/components/report/report-overview";
 import { AnalysisProgress } from "@/components/analysis/analysis-progress";
 import { LevelPill, MilestoneCard, TrendCard } from "@/components/career";
 import { signed } from "@/components/career/shared";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PageHeader, Section, TextLink } from "@/components/layout/page";
+import { useReveal } from "@/lib/use-reveal";
 function EmptyDashboard() {
   return (
-    <div className="space-y-5 rounded-card border border-border bg-surface p-6">
-      <h1 className="text-2xl font-semibold">Your work, in focus.</h1>
-      <p className="max-w-xl text-sm leading-relaxed text-muted-readable">
-        Start an analysis to connect your resume and projects to the role you
-        want.
-      </p>
-      <Button asChild className="min-h-11">
+    <div>
+      <PageHeader
+        eyebrow="Your workspace"
+        title="Your work, in focus."
+        description="Start an analysis to connect your resume and projects to the role you want."
+      />
+      <Button asChild className="min-h-12" size="lg" trailingArrow>
         <Link href="/onboarding">Analyse a profile</Link>
       </Button>
     </div>
@@ -35,10 +36,11 @@ export function StudentDashboard() {
       : undefined,
     { staleTime: 0 },
   );
+  const lowerRef = useReveal<HTMLDivElement>();
   if (me.isPending || (id && analysis.isPending))
     return (
       <section className="space-y-5">
-        <h1 className="text-2xl font-semibold">Dashboard</h1>
+        <PageHeader eyebrow="Your workspace" title="Dashboard" />
         <div
           role="status"
           aria-label="Loading dashboard"
@@ -56,7 +58,7 @@ export function StudentDashboard() {
       return <EmptyDashboard />;
     return (
       <section className="space-y-4">
-        <h1 className="text-2xl font-semibold">Dashboard unavailable</h1>
+        <PageHeader eyebrow="Your workspace" title="Dashboard unavailable" />
         <p role="alert" className="text-sm text-danger-readable">
           {errorMessage(me.error)}
         </p>
@@ -85,27 +87,23 @@ export function StudentDashboard() {
     .sort((a, b) => a.order - b.order)
     .find((milestone) => !milestone.done);
   return (
-    <section className="space-y-7">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <p className="mb-2 text-xs font-semibold text-primary-text">
-            Your latest analysis
-          </p>
-          <h1 className="text-2xl font-semibold">Your work, in focus.</h1>
-          <p className="mt-3 text-sm text-muted-readable">
-            A clearer picture of your skills, backed by the work you’ve done.
-          </p>
-        </div>
-        <Button asChild variant="outline" className="min-h-11">
-          <Link href={`/report/${encodeURIComponent(id)}`}>
-            Open evidence report
-          </Link>
-        </Button>
-      </div>
+    <section>
+      <PageHeader
+        eyebrow="Your latest analysis"
+        title="Your work, in focus."
+        description="A clearer picture of your skills, backed by the work you’ve done."
+        actions={
+          <Button asChild variant="outline" className="min-h-11" trailingArrow>
+            <Link href={`/report/${encodeURIComponent(id)}`}>
+              Open evidence report
+            </Link>
+          </Button>
+        }
+      />
       {analysis.isError && (
         <div
           role="alert"
-          className="space-y-3 rounded-control border border-danger p-4 text-sm"
+          className="mb-6 space-y-3 rounded-control border border-danger p-4 text-sm"
         >
           <p className="text-danger-readable">{errorMessage(analysis.error)}</p>
           <Button
@@ -140,7 +138,7 @@ export function StudentDashboard() {
       {summaries.isError && (
         <div
           role="alert"
-          className="space-y-3 rounded-control border border-danger p-4 text-sm"
+          className="mt-6 space-y-3 rounded-control border border-danger p-4 text-sm"
         >
           <p className="text-danger-readable">
             {errorMessage(summaries.error)}
@@ -155,79 +153,75 @@ export function StudentDashboard() {
           </Button>
         </div>
       )}
-      <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
-        <div className="space-y-4">
-          <TrendCard
-            title="Consistency over time"
-            description={
-              report.consistency
-                ? `${report.consistency.active_weeks} active weeks. Monthly/yearly totals group weeks by their start date.`
-                : "No contribution timeline was returned."
-            }
-            series={["Commits"]}
-            datasets={consistencyDatasets(report.consistency?.weeks || [])}
-            state={report.consistency?.weeks.length ? "ready" : "empty"}
-            message="No contribution history is available for this analysis."
-          />
-          <Card className="py-0">
-            <CardContent className="p-6">
-              <h2 className="text-base font-semibold">Top gaps to work on</h2>
-              <div className="mt-4 space-y-3">
-                {report.gaps.slice(0, 3).map((gap) => (
-                  <div
-                    key={gap.gap_id}
-                    className="space-y-2 rounded-control border border-border p-4"
-                  >
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <h3 className="text-sm font-semibold">
-                        {gap.skill_name}
-                      </h3>
-                      <LevelPill level={gap.level} />
-                    </div>
-                    <p className="text-xs text-muted-readable">
-                      {gap.claimed
-                        ? "Claimed skill needs stronger evidence."
-                        : "Not claimed for this target role."}
-                    </p>
-                    <p className="text-xs font-medium text-success-readable">
-                      Estimated gain: {signed(gap.estimated_gain)} pts
-                    </p>
+      <div
+        ref={lowerRef}
+        className="reveal mt-2 grid items-start gap-x-12 gap-y-0 xl:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]"
+      >
+        <div className="min-w-0">
+          <Section className="xl:pt-8">
+            <TrendCard
+              title="Consistency over time"
+              description={
+                report.consistency
+                  ? `${report.consistency.active_weeks} active weeks. Monthly/yearly totals group weeks by their start date.`
+                  : "No contribution timeline was returned."
+              }
+              series={["Commits"]}
+              datasets={consistencyDatasets(report.consistency?.weeks || [])}
+              state={report.consistency?.weeks.length ? "ready" : "empty"}
+              message="No contribution history is available for this analysis."
+            />
+          </Section>
+          <Section eyebrow="Next" title="Top gaps to work on">
+            <div className="hairline-list">
+              {report.gaps.slice(0, 3).map((gap) => (
+                <div
+                  key={gap.gap_id}
+                  className="space-y-1 py-4 first:pt-0"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <h3 className="text-sm font-medium">{gap.skill_name}</h3>
+                    <LevelPill level={gap.level} variant="text" />
                   </div>
-                ))}
-                {!report.gaps.length && (
-                  <p className="text-sm text-muted-readable">
-                    No skill gaps were returned.
+                  <p className="text-xs text-muted-readable">
+                    {gap.claimed
+                      ? "Claimed skill needs stronger evidence."
+                      : "Not claimed for this target role."}
                   </p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+                  <p className="text-xs font-medium tabular-nums text-success-readable">
+                    Estimated gain: {signed(gap.estimated_gain)} pts
+                  </p>
+                </div>
+              ))}
+              {!report.gaps.length && (
+                <p className="text-sm text-muted-readable">
+                  No skill gaps were returned.
+                </p>
+              )}
+            </div>
+          </Section>
         </div>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-base font-semibold">Your next milestone</h2>
-            <Link
-              href="/roadmap"
-              className="inline-flex min-h-11 items-center whitespace-nowrap text-xs text-primary-text underline underline-offset-4"
-            >
-              Full roadmap
-            </Link>
-          </div>
+        <Section
+          className="min-w-0 xl:border-t-0 xl:pt-8"
+          eyebrow="Roadmap"
+          title="Your next milestone"
+          actions={<TextLink href="/roadmap">Full roadmap</TextLink>}
+        >
           {next ? (
-            <>
+            <div className="space-y-3">
               <MilestoneCard milestone={next} disabled />
               <p className="text-xs text-muted-readable">
                 Suggested next step from this analysis.
               </p>
-            </>
+            </div>
           ) : (
-            <p className="rounded-card bg-surface p-6 text-sm text-muted-readable">
+            <p className="inset-note">
               {report.roadmap.length
                 ? "All supplied milestones are marked complete."
                 : "No roadmap milestones were returned."}
             </p>
           )}
-        </div>
+        </Section>
       </div>
     </section>
   );
