@@ -124,8 +124,11 @@ function WizardForm({ initialName }: { initialName: string }) {
   useEffect(() => {
     const saved = loadDraft();
     draftLoaded.current = true;
-    if (saved && hasDraftContent(saved))
+    // Browser-only storage can only be read after hydration, so this one-time setState is intended.
+    if (saved && hasDraftContent(saved)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setValues((old) => ({ ...old, resumeMode: "build", resumeDraft: saved }));
+    }
   }, []);
   // Debounced: keep the draft in this browser only. Nothing is saved once the resume has been sent.
   useEffect(() => {

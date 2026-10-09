@@ -16,7 +16,7 @@ import { ApiError, errorMessage } from "@/lib/api/transport";
 import { scoreHistory } from "@/lib/score-history";
 import { AnalysisProgress } from "@/components/analysis/analysis-progress";
 import { MilestoneCard, TrendCard } from "@/components/career";
-import { Card } from "@/components/ui/card";
+import { PageHeader, Panel, Section, TextLink } from "@/components/layout/page";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 export function RoadmapScreen() {
@@ -39,23 +39,28 @@ export function RoadmapScreen() {
     );
   if (me.isError && !(me.error instanceof ApiError && me.error.status === 404))
     return (
-      <Card className="gap-4 p-6">
-        <h1>Roadmap unavailable</h1>
-        <p role="alert">{errorMessage(me.error)}</p>
-        <Button onClick={() => me.refetch()}>Retry profile</Button>
-      </Card>
+      <div className="panel space-y-4">
+        <h1 className="page-title">Roadmap unavailable</h1>
+        <p role="alert" className="text-sm text-danger-readable">
+          {errorMessage(me.error)}
+        </p>
+        <Button className="min-h-11" onClick={() => me.refetch()}>
+          Retry profile
+        </Button>
+      </div>
     );
   if (!id)
     return (
-      <Card className="gap-4 p-6">
-        <h1 className="text-2xl font-semibold">Your next steps</h1>
-        <p className="text-sm text-muted-readable">
-          Run an analysis to build a roadmap from your evidence gaps.
-        </p>
-        <Button asChild>
+      <div>
+        <PageHeader
+          eyebrow="Your roadmap"
+          title="Your next steps"
+          description="Run an analysis to build a roadmap from your evidence gaps."
+        />
+        <Button asChild size="lg" trailingArrow>
           <Link href="/onboarding">Analyse a profile</Link>
         </Button>
-      </Card>
+      </div>
     );
   if (!analysis.data?.report || analysis.data.status !== "done")
     return <AnalysisProgress analysisId={id} query={analysis} />;
@@ -70,75 +75,90 @@ export function RoadmapScreen() {
     ]),
   );
   return (
-    <section className="space-y-6">
-      <header className="space-y-2">
-        <h1 className="text-2xl font-semibold">Your next steps</h1>
-        <p className="text-sm text-muted-readable">
-          Small deliverables to strengthen the evidence behind your skills.
-        </p>
-      </header>
+    <section>
+      <PageHeader
+        eyebrow="Your roadmap"
+        title="Your next steps"
+        description="Small deliverables to strengthen the evidence behind your skills."
+      />
       <RoadmapTasks
         key={id}
         analysisId={id}
         milestones={analysis.data.report.roadmap}
       />
-      <label className="block max-w-sm space-y-2 text-xs font-semibold">
-        History target role
-        <select
-          aria-label="History target role"
-          value={historyRole}
-          onChange={(e) => setSelectedRole(e.target.value)}
-          className="min-h-11 w-full rounded-control border border-border bg-surface px-3 text-sm focus-visible:ring-2 focus-visible:ring-primary"
-        >
-          {roleIds.map((roleId) => (
-            <option key={roleId} value={roleId}>
-              {roles.data?.find((r) => r.id === roleId)?.name || roleId}
-            </option>
-          ))}
-        </select>
-      </label>
-      <div className="min-w-0 overflow-clip rounded-card">
-        <TrendCard
-          key={historyRole}
-          title="Readiness over time"
-          description="Completed scans for the selected role only. Periods end at its latest scan; values are not averaged. Open a scan below to review its reasons."
-          series={["Readiness"]}
-          datasets={scoreHistory(history.data || [], historyRole)}
-          state={
-            history.isPending ? "loading" : history.isError ? "error" : "ready"
-          }
-          message={
-            history.error
-              ? errorMessage(history.error)
-              : "No completed scans yet. Re-scan your profile to start a history."
-          }
-        />
-      </div>
-      {history.isError && (
-        <Button variant="outline" onClick={() => history.refetch()}>
-          Retry history
-        </Button>
-      )}
-      <Card className="gap-4 p-6">
-        <h2 className="text-lg font-semibold">Scan history</h2>
-        <ul className="space-y-3">
+      <Section
+        eyebrow="History"
+        title="Readiness over time"
+        actions={
+          <div>
+            <label htmlFor="history-role" className="field-label">
+              History target role
+            </label>
+            <select
+              id="history-role"
+              aria-label="History target role"
+              value={historyRole}
+              onChange={(e) => setSelectedRole(e.target.value)}
+              className="field w-full min-w-48"
+            >
+              {roleIds.map((roleId) => (
+                <option key={roleId} value={roleId}>
+                  {roles.data?.find((r) => r.id === roleId)?.name || roleId}
+                </option>
+              ))}
+            </select>
+          </div>
+        }
+      >
+        <div className="min-w-0 overflow-clip rounded-card">
+          <TrendCard
+            key={historyRole}
+            title="Readiness over time"
+            description="Completed scans for the selected role only. Periods end at its latest scan; values are not averaged. Open a scan below to review its reasons."
+            series={["Readiness"]}
+            datasets={scoreHistory(history.data || [], historyRole)}
+            state={
+              history.isPending
+                ? "loading"
+                : history.isError
+                  ? "error"
+                  : "ready"
+            }
+            message={
+              history.error
+                ? errorMessage(history.error)
+                : "No completed scans yet. Re-scan your profile to start a history."
+            }
+          />
+        </div>
+        {history.isError && (
+          <Button
+            className="mt-4 min-h-11"
+            variant="outline"
+            onClick={() => history.refetch()}
+          >
+            Retry history
+          </Button>
+        )}
+      </Section>
+      <Section eyebrow="History" title="Scan history">
+        <ul className="hairline-list">
           {completedScans.map((r) => (
             <li
               key={r.id}
-              className="flex flex-wrap items-center justify-between gap-3 text-sm"
+              className="flex flex-wrap items-center justify-between gap-3 py-3 text-sm first:pt-0"
             >
-              <span>
+              <span className="tabular-nums">
                 {r.created_at.slice(0, 10)} ·{" "}
                 {roles.data?.find((role) => role.id === r.role_id)?.name ||
                   r.role_id}{" "}
                 · {r.score ?? "—"} points
               </span>
-              <Link
-                className="inline-flex min-h-11 items-center text-primary-text underline"
-                href={"/report/" + encodeURIComponent(r.id)}
-              >
-                View reasons
-              </Link>
+              <span className="inline-flex min-h-11 items-center">
+                <TextLink href={"/report/" + encodeURIComponent(r.id)}>
+                  View reasons
+                </TextLink>
+              </span>
             </li>
           ))}
         </ul>
@@ -147,10 +167,10 @@ export function RoadmapScreen() {
             No completed scans to review.
           </p>
         )}
-        <Button asChild variant="outline">
+        <Button asChild variant="outline" className="mt-5 min-h-11" trailingArrow>
           <Link href="/onboarding">Re-scan profile</Link>
         </Button>
-      </Card>
+      </Section>
     </section>
   );
 }
@@ -224,9 +244,11 @@ function RoadmapTasks({
   }
   return (
     <>
-      <Card className="gap-3 p-6">
-        <div className="flex flex-wrap justify-between gap-2">
-          <h2 className="text-lg font-semibold">Roadmap progress</h2>
+      <Panel label="Roadmap progress">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 className="text-[17px] font-medium tracking-[-.02em]">
+            Deliverables completed
+          </h2>
           <span className="text-sm tabular-nums">
             {done} / {tasks.length} complete
           </span>
@@ -237,7 +259,7 @@ function RoadmapTasks({
           aria-valuemax={tasks.length || 1}
           aria-valuenow={done}
           aria-label="Completed roadmap deliverables"
-          className="h-3 overflow-hidden rounded-full bg-surface-2"
+          className="mt-3 h-1.5 overflow-hidden rounded-full bg-surface-2"
         >
           <div
             className="h-full rounded-full bg-primary"
@@ -246,75 +268,76 @@ function RoadmapTasks({
             }}
           />
         </div>
-        <p className="text-xs text-muted-readable">
+        <p className="mt-3 text-xs text-muted-readable">
           Checking off work records completion. Re-scan to measure any change in
           readiness.
         </p>
-      </Card>
-      {!!tasks.length && (
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="min-w-0 text-sm text-muted-readable">
-            {next ? (
-              <>
-                Next deliverable:{" "}
-                <span className="font-medium text-text">{next.title}</span>
-              </>
-            ) : (
-              "All deliverables complete. Re-scan with your new evidence when ready."
-            )}
-          </p>
-          <div
-            role="group"
-            aria-label="Roadmap filters"
-            className="flex flex-wrap gap-2"
-          >
-            {(["all", "todo", "done"] as const).map((value) => (
-              <Button
-                key={value}
-                variant={filter === value ? "default" : "outline"}
-                className="min-h-11"
-                aria-pressed={filter === value}
-                onClick={() => setFilter(value)}
+      </Panel>
+      <Section
+        eyebrow="Deliverables"
+        title="What to build next"
+        description={
+          tasks.length
+            ? next
+              ? `Next deliverable: ${next.title}`
+              : "All deliverables complete. Re-scan with your new evidence when ready."
+            : undefined
+        }
+        actions={
+          !!tasks.length && (
+            <div>
+              <label htmlFor="roadmap-filter" className="field-label">
+                Show
+              </label>
+              <select
+                id="roadmap-filter"
+                aria-label="Roadmap filters"
+                value={filter}
+                onChange={(e) =>
+                  setFilter(e.target.value as "all" | "todo" | "done")
+                }
+                className="field min-w-44"
               >
-                {value === "all"
-                  ? `All (${tasks.length})`
-                  : value === "todo"
-                    ? `To do (${tasks.length - done})`
-                    : `Done (${done})`}
-              </Button>
+                <option value="all">All ({tasks.length})</option>
+                <option value="todo">To do ({tasks.length - done})</option>
+                <option value="done">Done ({done})</option>
+              </select>
+            </div>
+          )
+        }
+      >
+        {tasks.length ? (
+          <div className="grid items-start gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {visible.map((m) => (
+              <MilestoneCard
+                key={m.id}
+                milestone={m}
+                onDoneChange={(value) => void change(m.id, value)}
+                saving={pending[m.id]}
+                error={errors[m.id]}
+                onRetry={() => void change(m.id, attempts[m.id])}
+              />
             ))}
+            {!visible.length && (
+              <p role="status" className="text-sm text-muted-readable">
+                No deliverables in this view. Choose another filter.
+              </p>
+            )}
           </div>
-        </div>
-      )}
-      {tasks.length ? (
-        <div className="grid items-start gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {visible.map((m) => (
-            <MilestoneCard
-              key={m.id}
-              milestone={m}
-              onDoneChange={(value) => void change(m.id, value)}
-              saving={pending[m.id]}
-              error={errors[m.id]}
-              onRetry={() => void change(m.id, attempts[m.id])}
-            />
-          ))}
-          {!visible.length && (
-            <p role="status" className="text-sm text-muted-readable">
-              No deliverables in this view. Choose another filter.
+        ) : (
+          <div className="panel space-y-4">
+            <h2 className="text-[17px] font-medium tracking-[-.02em]">
+              No milestones returned
+            </h2>
+            <p className="text-sm text-muted-readable">
+              Re-scan when you have new evidence to review.
             </p>
-          )}
-        </div>
-      ) : (
-        <Card className="gap-4 p-6">
-          <h2>No milestones returned</h2>
-          <p className="text-sm text-muted-readable">
-            Re-scan when you have new evidence to review.
-          </p>
-          <Button asChild>
-            <Link href="/onboarding">Re-scan profile</Link>
-          </Button>
-        </Card>
-      )}
+            <Button asChild className="min-h-11">
+              <Link href="/onboarding">Re-scan profile</Link>
+            </Button>
+          </div>
+        )}
+      </Section>
     </>
   );
 }

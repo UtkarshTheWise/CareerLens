@@ -219,18 +219,20 @@ function EntryList<T>({
 }) {
   const list = useRef<HTMLOListElement>(null);
   const addButton = useRef<HTMLButtonElement>(null);
-  const [focusAt, setFocusAt] = useState<number | "add" | null>(null);
+  // Where focus should land after the next change to the list (a ref: it must not trigger a render itself).
+  const focusAt = useRef<number | "add" | null>(null);
 
   useEffect(() => {
-    if (focusAt === null) return;
-    if (focusAt === "add") addButton.current?.focus();
+    const target = focusAt.current;
+    if (target === null) return;
+    focusAt.current = null;
+    if (target === "add") addButton.current?.focus();
     else
       list.current
         ?.querySelectorAll<HTMLElement>("[data-entry]")
-        [focusAt]?.querySelector<HTMLElement>("input, textarea")
+        [target]?.querySelector<HTMLElement>("input, textarea")
         ?.focus();
-    setFocusAt(null);
-  }, [focusAt, entries.length]);
+  }, [entries.length]);
 
   return (
     <div className="space-y-4">
@@ -246,8 +248,8 @@ function EntryList<T>({
                   size="sm"
                   aria-label={`Remove ${noun.toLowerCase()} ${index + 1}`}
                   onClick={() => {
+                    focusAt.current = index > 0 ? index - 1 : entries.length > 1 ? 0 : "add";
                     onChange(entries.filter((_, i) => i !== index));
-                    setFocusAt(index > 0 ? index - 1 : entries.length > 1 ? 0 : "add");
                   }}
                 >
                   <X aria-hidden="true" />
@@ -269,8 +271,8 @@ function EntryList<T>({
         variant="outline"
         disabled={entries.length >= MAX_ENTRIES}
         onClick={() => {
+          focusAt.current = entries.length;
           onChange([...entries, make()]);
-          setFocusAt(entries.length);
         }}
       >
         <Plus aria-hidden="true" />

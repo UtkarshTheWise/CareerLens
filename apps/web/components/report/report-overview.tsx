@@ -12,7 +12,7 @@ import {
   type Schema,
   type ViewState,
 } from "@/components/career/shared";
-import { Panel, StatusText, TextLink } from "@/components/layout/page";
+import { Panel, TextLink } from "@/components/layout/page";
 import { useReveal } from "@/lib/use-reveal";
 export const coverageDefinition =
   "Evidence Coverage is the percentage of claimed skills with strong or moderate evidence.";
@@ -225,9 +225,6 @@ export function ReportOverview({
           </ul>
         </section>
       )}
-      <StatusText tone="muted" className="sr-only">
-        Report overview
-      </StatusText>
     </div>
   );
 }
