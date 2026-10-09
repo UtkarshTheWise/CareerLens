@@ -1,9 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "./design-tokens.css";
+@import "./app-style.css";
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 @theme inline {
-  --color-bg: var(--bg); --color-surface: var(--surface); --color-surface-2: var(--surface-2);
+  --color-bg: var(--bg); --color-surface: var(--surface); --color-surface-2: var(--surface-2); --color-surface-3: var(--surface-3);
   --color-border: var(--border); --color-text: var(--text); --color-muted: var(--muted);
   --color-primary: var(--primary); --color-primary-text: var(--primary-text);
   --color-primary-soft: var(--primary-soft); --color-primary-deep: var(--primary-deep);

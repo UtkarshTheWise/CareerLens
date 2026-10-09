@@ -42,12 +42,19 @@ function Button({
   variant = "default",
   size = "default",
   asChild = false,
+  trailingArrow = false,
+  children,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
+    /** The homepage call-to-action arrow, kept 24px away from the label. */
+    trailingArrow?: boolean
   }) {
   const Comp = asChild ? Slot.Root : "button"
+  const arrow = trailingArrow ? (
+    <span aria-hidden="true" className="ml-6">↗</span>
+  ) : null
 
   return (
     <Comp
@@ -56,7 +63,14 @@ function Button({
       data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
-    />
+    >
+      {asChild && arrow ? (
+        <Slot.Slottable>{children}</Slot.Slottable>
+      ) : (
+        children
+      )}
+      {arrow}
+    </Comp>
   )
 }
 

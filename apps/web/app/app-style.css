@@ -1,0 +1,98 @@
+/* Homepage language for the signed-in app (docs/DESIGN.md "App screens").
+   Muted eyebrows, hairline-ruled sections, flat panels, coloured-text status, selectable rows and + disclosures.
+   Every value comes from design-tokens.css. Hover rules only apply to real pointers. */
+@layer components {
+  .eyebrow { font-size: 12px; line-height: 20px; font-weight: 500; letter-spacing: .045em; color: var(--muted-readable); }
+  .page-title { font-size: 30px; line-height: 38px; font-weight: 500; letter-spacing: -.045em; }
+  .section-title { font-size: 22px; line-height: 30px; font-weight: 500; letter-spacing: -.035em; }
+  .lede { max-width: 60ch; font-size: 15px; line-height: 26px; color: var(--muted-readable); }
+  @media (min-width: 900px) { .page-title { font-size: 36px; line-height: 44px; } }
+
+  .app-section { border-top: 1px solid var(--border); padding-block: 32px; }
+  .app-section:first-child { border-top: 0; padding-top: 0; }
+  @media (min-width: 1024px) { .app-section { padding-block: 40px; } }
+
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 24px; min-width: 0; }
+  @media (min-width: 640px) { .panel { padding: 28px; } }
+  .panel-header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; margin-bottom: 16px; }
+  .panel-label { display: block; padding-bottom: 12px; margin-bottom: 16px; border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 500; letter-spacing: .025em; color: var(--muted-readable); }
+  .panel-footer { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted-readable); }
+  .panel-footer :is(output, strong, [data-value]) { font-size: 13px; font-weight: 500; color: var(--text); font-variant-numeric: tabular-nums; }
+  .inset-note { background: var(--surface-2); border-radius: 8px; padding: 16px; font-size: 13px; line-height: 22px; color: var(--muted-readable); }
+  .hairline-list > * + * { border-top: 1px solid var(--border); }
+
+  .metric { display: inline-flex; align-items: baseline; gap: 8px; font-size: 44px; line-height: 1.1; font-weight: 600; letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+  .metric-unit { font-size: 14px; font-weight: 400; letter-spacing: 0; color: var(--muted-readable); }
+  @media (max-width: 639px) { .metric { font-size: 36px; } }
+
+  /* Status is coloured text with a dot, always next to its label (never colour alone). */
+  .status-text { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; line-height: 1.5; white-space: nowrap; }
+  .status-text::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: currentColor; flex: none; }
+  .tone-text-success { color: var(--success-readable); }
+  .tone-text-warning { color: var(--warning-readable); }
+  .tone-text-danger { color: var(--danger-readable); }
+  .tone-text-muted { color: var(--muted-readable); }
+  .tone-text-primary { color: var(--primary-text); }
+
+  /* Selectable explanation row (the homepage skill row). */
+  .select-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr) auto 12px; align-items: center; gap: 4px 16px; width: 100%; min-height: 48px; padding: 10px 12px; text-align: left; background: transparent; border: 0; border-radius: 8px; color: var(--text); font: inherit; font-size: 14px; cursor: pointer; transition: background var(--duration) var(--ease); }
+  .select-row[aria-pressed="true"] { background: var(--surface-3); }
+  .select-row::after { content: "↗"; font-size: 12px; opacity: 0; color: var(--primary-text); }
+  .select-row[aria-pressed="true"]::after { opacity: 1; }
+  @media (max-width: 639px) { .select-row { grid-template-columns: minmax(0, 1fr) auto 12px; } .select-row > :nth-child(2) { display: none; } }
+  .select-row-plain { grid-template-columns: minmax(0, 1fr) auto 12px; }
+
+  .disclosure-row { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 16px; min-height: 48px; padding-block: 12px; background: transparent; border: 0; border-top: 1px solid var(--border); color: var(--text); font: inherit; font-size: 14px; font-weight: 500; text-align: left; cursor: pointer; }
+  .disclosure-row::after { content: "+"; font-size: 20px; line-height: 1; color: var(--muted-readable); transition: transform 180ms var(--ease); flex: none; }
+  .disclosure-row[aria-expanded="true"]::after { transform: rotate(45deg); }
+
+  .faq > details { border-bottom: 1px solid var(--border); }
+  .faq > details:first-child { border-top: 1px solid var(--border); }
+  .faq summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 56px; cursor: pointer; list-style: none; font-size: 14px; font-weight: 500; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; font-size: 20px; color: var(--muted-readable); transition: transform 180ms var(--ease); }
+  .faq details[open] > summary::after { transform: rotate(45deg); }
+  .faq details > :not(summary) { padding-bottom: 20px; max-width: 60ch; font-size: 13px; line-height: 24px; color: var(--muted-readable); }
+
+  .text-link { font-size: 13px; color: var(--text); text-decoration: underline; text-decoration-color: var(--control); text-underline-offset: 5px; transition: text-decoration-color var(--duration) var(--ease), color var(--duration) var(--ease); }
+
+  .field { display: block; width: 100%; min-height: 44px; padding: 10px 12px; background: var(--surface); color: var(--text); border: 1px solid var(--control); border-radius: var(--radius-control); font: inherit; font-size: 14px; line-height: 1.5; }
+  .field::placeholder { color: var(--muted-readable); }
+  .field:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .field[aria-invalid="true"] { border-color: var(--danger-readable); }
+  textarea.field { min-height: 96px; resize: vertical; }
+  .field-label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 500; }
+  .field-hint { margin-top: 6px; font-size: 12px; line-height: 20px; color: var(--muted-readable); }
+  .field-error { margin-top: 6px; font-size: 12px; line-height: 20px; color: var(--danger-readable); }
+
+  .chip { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 4px 4px 4px 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface-2); font-size: 13px; }
+  .chip button { display: inline-flex; align-items: center; justify-content: center; min-width: 28px; min-height: 28px; border: 0; background: transparent; color: var(--muted-readable); cursor: pointer; border-radius: 4px; }
+
+  .reveal { transition: opacity 550ms var(--ease), transform 550ms var(--ease); }
+  .reveal[data-reveal-pending] { opacity: 0; transform: translateY(16px); }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .select-row:hover { background: var(--surface-2); }
+  .select-row[aria-pressed="true"]:hover { background: var(--surface-3); }
+  .disclosure-row:hover { background: var(--surface-2); }
+  .faq summary:hover { color: var(--primary-text); }
+  .text-link:hover { color: var(--primary-text); text-decoration-color: var(--primary-text); }
+  .chip button:hover { color: var(--text); background: var(--surface-3); }
+}
+
+.select-row:focus-visible, .disclosure-row:focus-visible, .faq summary:focus-visible, .text-link:focus-visible, .chip button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+@keyframes detail-enter { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+.detail-enter { animation: detail-enter 220ms var(--ease); }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal[data-reveal-pending] { opacity: 1; transform: none; transition: none; }
+  .detail-enter { animation: none; }
+}
+@media (forced-colors: active) {
+  .select-row[aria-pressed="true"] { outline: 2px solid Highlight; }
+  .panel, .inset-note, .chip { border: 1px solid CanvasText; }
+  .status-text::before { background: CanvasText; }
+  .disclosure-row, .app-section { border-color: CanvasText; }
+}
