@@ -31,16 +31,19 @@ export function KpiCard({
         : Minus;
   return (
     <CardFrame data-component="KpiCard">
-      <div className="flex items-start justify-between gap-3">
-        <h2 className="text-xs! font-medium! text-muted-readable">{label}</h2>
-        <span className="icon-chip shrink-0 text-primary-text">
-          <Icon size={20} strokeWidth={1.75} aria-hidden="true" />
-        </span>
+      <div className="flex items-start justify-between gap-3 border-b border-border pb-3">
+        <h2 className="text-xs! font-medium! tracking-[.025em]! text-muted-readable">
+          {label}
+        </h2>
+        <Icon
+          size={16}
+          strokeWidth={1.75}
+          aria-hidden="true"
+          className="shrink-0 text-muted-readable"
+        />
       </div>
       <CardState state={state} message={message}>
-        <div className="text-4xl font-semibold tracking-tight tabular-nums">
-          {value ?? "—"}
-        </div>
+        <div className="metric">{value ?? "—"}</div>
         {delta && (
           <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
             <span

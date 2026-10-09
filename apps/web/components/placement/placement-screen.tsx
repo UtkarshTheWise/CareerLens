@@ -1,8 +1,5 @@
 "use client";
-/* Hallmark · pre-emit critique: P4 H4 E4 S5 R5 V4 — cohort overview, actionable table. */
 import { useRef, useState } from "react";
-import Link from "next/link";
-import { Users, ScanLine, Gauge, CircleAlert, ShieldCheck } from "lucide-react";
 import {
   useListCohorts,
   useListRoles,
@@ -10,21 +7,43 @@ import {
   useListCohortStudents,
   useExportCohort,
 } from "@/lib/api/hooks";
-import { studentDirectory, type StudentSort } from "@/lib/student-directory";
+import { studentDirectory } from "@/lib/student-directory";
+import {
+  BAND_LABELS,
+  DEFAULT_FILTERS,
+  LEVEL_LABELS,
+  LIMIT_CHOICES,
+  SCORE_CHOICES,
+  SORT_LABELS,
+  cohortQuery,
+  filterSummary,
+  hasActiveFilters,
+  skillOptions,
+  type CohortFilters,
+  type CohortSort,
+  type MinLevel,
+} from "@/lib/cohort-filters";
 import { errorMessage } from "@/lib/api/transport";
 import {
-  KpiCard,
   ScoreRing,
   BandBadge,
   UnderstandingBadge,
   WhyPopover,
 } from "@/components/career";
 import { number, type Schema } from "@/components/career/shared";
-import { Card } from "@/components/ui/card";
+import {
+  Metric,
+  PageHeader,
+  Panel,
+  Section,
+  SelectRowGroup,
+  StatusText,
+  TextLink,
+  type Tone,
+} from "@/components/layout/page";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-const control =
-  "min-h-11 w-full min-w-0 rounded-control border border-input bg-surface-2 px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
+
 function Failure({ error, retry }: { error: Error; retry: () => void }) {
   return (
     <div role="alert" className="space-y-3">
@@ -53,18 +72,13 @@ export function PlacementScreen() {
       cohorts.data?.find((c) => c.id === selectedCohort) || cohorts.data?.[0],
     role = roles.data?.find((r) => r.id === selectedRole) || roles.data?.[0];
   return (
-    <section className="space-y-6">
-      <header className="space-y-2">
-        <p className="text-xs font-semibold text-primary-text">
-          Placement workspace
-        </p>
-        <h1 className="text-2xl font-semibold">Cohort readiness</h1>
-        <p className="max-w-2xl text-sm text-muted-readable">
-          See the evidence gaps to address together, then find students who need
-          support.
-        </p>
-      </header>
-      <Card className="gap-4 p-6">
+    <div>
+      <PageHeader
+        eyebrow="Placement workspace"
+        title="Cohort readiness"
+        description="See the evidence gaps to address together, then find the students who fit a role or need support."
+      />
+      <Section>
         {cohorts.isPending || roles.isPending ? (
           <Loading />
         ) : cohorts.isError ? (
@@ -77,11 +91,11 @@ export function PlacementScreen() {
           </p>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2">
-            <label className="space-y-2 text-xs font-semibold">
-              Cohort
+            <label>
+              <span className="field-label">Cohort</span>
               <select
                 aria-label="Cohort"
-                className={control}
+                className="field"
                 value={cohort.id}
                 onChange={(e) => setCohort(e.target.value)}
               >
@@ -92,11 +106,11 @@ export function PlacementScreen() {
                 ))}
               </select>
             </label>
-            <label className="space-y-2 text-xs font-semibold">
-              Target role
+            <label>
+              <span className="field-label">Target role</span>
               <select
                 aria-label="Target role"
-                className={control}
+                className="field"
                 value={role.id}
                 onChange={(e) => setRole(e.target.value)}
               >
@@ -109,15 +123,15 @@ export function PlacementScreen() {
             </label>
           </div>
         )}
-      </Card>
+      </Section>
       {cohort && role && (
         <CohortView
           key={cohort.id + role.id}
           cohortId={cohort.id}
-          roleId={role.id}
+          role={role}
         />
       )}
-    </section>
+    </div>
   );
 }
 function Counts({
@@ -131,8 +145,7 @@ function Counts({
 }) {
   const maximum = Math.max(1, ...rows.map((r) => r.count));
   return (
-    <Card className="min-w-0 gap-4 p-6">
-      <h2 className="text-lg font-semibold">{title}</h2>
+    <Panel title={title}>
       {rows.length && histogram ? (
         <div
           role="region"
@@ -170,7 +183,7 @@ function Counts({
               </div>
               <div
                 aria-hidden="true"
-                className="h-3 overflow-hidden rounded-full bg-surface-2"
+                className="h-2 overflow-hidden rounded-full bg-surface-2"
               >
                 <div
                   className="h-full rounded-full bg-data-2"
@@ -183,7 +196,7 @@ function Counts({
       ) : (
         <p className="text-sm text-muted-readable">No data returned.</p>
       )}
-    </Card>
+    </Panel>
   );
 }
 function Rates({
@@ -203,8 +216,7 @@ function Rates({
   const [expanded, setExpanded] = useState(false);
   const visible = expanded ? rows : rows.slice(0, 6);
   return (
-    <Card className="min-w-0 gap-4 p-6">
-      <h2 className="text-lg font-semibold">{title}</h2>
+    <Panel title={title}>
       {rows.length ? (
         <div
           role="region"
@@ -214,23 +226,23 @@ function Rates({
         >
           <table className="w-full text-left text-sm">
             <caption className="sr-only">{title}</caption>
-            <thead className="bg-surface-2 text-xs">
+            <thead className="border-b border-border text-xs text-muted-readable">
               <tr>
-                <th scope="col" className="p-3">
+                <th scope="col" className="py-3 pr-3 font-medium">
                   Skill
                 </th>
-                <th scope="col" className="p-3">
+                <th scope="col" className="p-3 font-medium">
                   Claimed by
                 </th>
-                <th scope="col" className="p-3">
+                <th scope="col" className="p-3 font-medium">
                   {kind}
                 </th>
               </tr>
             </thead>
             <tbody>
               {visible.map((r) => (
-                <tr key={r.skill_id} className="border-t border-border">
-                  <th scope="row" className="p-3 font-medium">
+                <tr key={r.skill_id} className="border-t border-border first:border-t-0">
+                  <th scope="row" className="py-3 pr-3 font-medium">
                     {r.skill_name}
                   </th>
                   <td className="p-3 tabular-nums">{r.claimed_by}</td>
@@ -246,46 +258,252 @@ function Rates({
       {rows.length > 6 && (
         <Button
           variant="outline"
+          className="mt-4"
           aria-expanded={expanded}
           onClick={() => setExpanded((v) => !v)}
         >
           {expanded ? "Show fewer skills" : `Show all ${rows.length} skills`}
         </Button>
       )}
-    </Card>
+    </Panel>
+  );
+}
+function MetricCell({
+  label,
+  value,
+  unit,
+  definition,
+}: {
+  label: string;
+  value: string | number;
+  unit?: string;
+  definition?: string;
+}) {
+  return (
+    <div className="min-w-0 py-4 sm:px-6 sm:first:pl-0">
+      <h3 className="eyebrow">{label}</h3>
+      <div className="mt-2">
+        <Metric value={value} unit={unit} />
+      </div>
+      {definition ? (
+        <div className="-ml-3 mt-1">
+          <WhyPopover label={label} definition={definition} />
+        </div>
+      ) : null}
+    </div>
+  );
+}
+const LEVEL_TEXT: Record<Schema["EvidenceLevel"], { label: string; tone: Tone }> = {
+  strong: { label: "Strong", tone: "success" },
+  moderate: { label: "Moderate", tone: "primary" },
+  weak: { label: "Weak", tone: "warning" },
+  unverified: { label: "Unverified claim", tone: "muted" },
+  missing: { label: "Missing", tone: "danger" },
+};
+const BAND_KEYS = ["not_ready", "developing", "ready"] as const;
+
+function FindStudents({
+  filters,
+  change,
+  options,
+}: {
+  filters: CohortFilters;
+  change: (next: Partial<CohortFilters>) => void;
+  options: { id: string; name: string }[];
+}) {
+  const noSkills = filters.skills.length === 0;
+  const toggleSkill = (id: string) =>
+    change({
+      skills: filters.skills.includes(id)
+        ? filters.skills.filter((s) => s !== id)
+        : [...filters.skills, id],
+    });
+  return (
+    <Panel label="Filters combine: every one you set must match">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+        <div className="min-w-0">
+          <h3 className="field-label">Skills</h3>
+          <p className="field-hint mb-3">
+            Choose up to 10. Students need evidence for the skill, not only a mention on a resume.
+          </p>
+          {options.length ? (
+            <div className="max-h-72 overflow-y-auto rounded-control border border-border px-2">
+              <SelectRowGroup
+                label="Skills to find"
+                multiple
+                selectedIds={filters.skills}
+                onSelect={toggleSkill}
+                items={options.map((o) => ({ id: o.id, title: o.name }))}
+              />
+            </div>
+          ) : (
+            <p className="text-sm text-muted-readable">No skills to choose from for this role yet.</p>
+          )}
+          <fieldset className="mt-5" disabled={filters.skills.length < 2}>
+            <legend className="field-label">A student must have</legend>
+            <div className="flex flex-wrap gap-x-6">
+              {(
+                [
+                  ["all", "All selected skills"],
+                  ["any", "Any selected skill"],
+                ] as const
+              ).map(([value, label]) => (
+                <label key={value} className="flex min-h-11 items-center gap-3 text-sm">
+                  <input
+                    type="radio"
+                    name="skill-match"
+                    value={value}
+                    checked={filters.skillMatch === value}
+                    onChange={() => change({ skillMatch: value })}
+                    className="size-5 accent-primary"
+                  />
+                  {label}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        </div>
+        <div className="grid min-w-0 content-start gap-4 sm:grid-cols-2">
+          <label>
+            <span className="field-label">Evidence for the skill</span>
+            <select
+              className="field"
+              disabled={noSkills}
+              value={filters.minLevel}
+              onChange={(e) => change({ minLevel: e.target.value as MinLevel })}
+            >
+              {(Object.keys(LEVEL_LABELS) as MinLevel[]).map((k) => (
+                <option key={k} value={k}>
+                  {LEVEL_LABELS[k]}
+                </option>
+              ))}
+            </select>
+            {noSkills ? <p className="field-hint">Choose a skill first.</p> : null}
+          </label>
+          <label>
+            <span className="field-label">Minimum readiness score</span>
+            <select
+              className="field"
+              value={filters.minScore ?? ""}
+              onChange={(e) =>
+                change({ minScore: e.target.value === "" ? null : Number(e.target.value) })
+              }
+            >
+              <option value="">Any</option>
+              {SCORE_CHOICES.map((n) => (
+                <option key={n} value={n}>
+                  {n}+
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            <span className="field-label">Order</span>
+            <select
+              className="field"
+              value={filters.sort}
+              onChange={(e) => change({ sort: e.target.value as CohortSort })}
+            >
+              {(Object.keys(SORT_LABELS) as CohortSort[]).map((k) => (
+                <option key={k} value={k}>
+                  {SORT_LABELS[k]}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            <span className="field-label">Show</span>
+            <select
+              className="field"
+              value={filters.limit ?? ""}
+              onChange={(e) =>
+                change({ limit: e.target.value === "" ? null : Number(e.target.value) })
+              }
+            >
+              <option value="">All</option>
+              {LIMIT_CHOICES.map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </select>
+          </label>
+          <fieldset className="sm:col-span-2">
+            <legend className="field-label">Readiness band</legend>
+            <div className="flex flex-wrap gap-x-6">
+              {BAND_KEYS.map((band) => (
+                <label key={band} className="flex min-h-11 items-center gap-3 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={filters.bands.includes(band)}
+                    onChange={(e) =>
+                      change({
+                        bands: e.target.checked
+                          ? [...filters.bands, band]
+                          : filters.bands.filter((b) => b !== band),
+                      })
+                    }
+                    className="size-5 accent-primary"
+                  />
+                  {BAND_LABELS[band]}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <label className="flex min-h-11 items-center gap-3 text-sm sm:col-span-2">
+            <input
+              type="checkbox"
+              checked={filters.atRiskOnly}
+              onChange={(e) => change({ atRiskOnly: e.target.checked })}
+              className="size-5 accent-primary"
+            />
+            At risk only
+          </label>
+        </div>
+      </div>
+    </Panel>
   );
 }
 function CohortView({
   cohortId,
-  roleId,
+  role,
 }: {
   cohortId: string;
-  roleId: string;
+  role: Schema["Role"];
 }) {
-  const input = { cohort_id: cohortId, query: { role_id: roleId } },
-    insights = useGetCohortInsights(input),
-    [risk, setRisk] = useState(false),
-    [search, setSearch] = useState(""),
-    [sort, setSort] = useState<StudentSort>("name"),
-    [page, setPage] = useState(0),
-    students = useListCohortStudents({
-      ...input,
-      query: { ...input.query, at_risk_only: risk },
+  const roleId = role.id,
+    insights = useGetCohortInsights({
+      cohort_id: cohortId,
+      query: { role_id: roleId },
     }),
+    [filters, setFilters] = useState<CohortFilters>(DEFAULT_FILTERS),
+    [search, setSearch] = useState(""),
+    [page, setPage] = useState(0),
+    input = { cohort_id: cohortId, query: cohortQuery(roleId, filters) },
+    students = useListCohortStudents(input),
     csv = useExportCohort(input),
     lock = useRef(false),
     [exporting, setExporting] = useState(false),
     [exportError, setExportError] = useState(""),
     [exported, setExported] = useState(false);
   const data = insights.data,
-    rows = studentDirectory(
-      (students.data || []).filter((s) => !risk || s.at_risk),
-      search,
-      sort,
-    );
+    options = skillOptions(role, data),
+    names = Object.fromEntries(options.map((o) => [o.id, o.name])),
+    active = hasActiveFilters(filters) || search.trim() !== "",
+    rows = studentDirectory(students.data || [], search);
+  const showMatches = filters.skills.length > 0;
   const pageCount = Math.max(1, Math.ceil(rows.length / 20));
   const currentPage = Math.min(page, pageCount - 1);
   const visibleRows = rows.slice(currentPage * 20, currentPage * 20 + 20);
+  function change(next: Partial<CohortFilters>) {
+    setFilters((f) => ({ ...f, ...next }));
+    setPage(0);
+  }
+  function clear() {
+    setFilters(DEFAULT_FILTERS);
+    setSearch("");
+    setPage(0);
+  }
   async function download() {
     if (lock.current) return;
     lock.current = true;
@@ -314,71 +532,57 @@ function CohortView({
   }
   return (
     <>
-      {insights.isPending ? (
-        <Loading />
-      ) : insights.isError ? (
-        <Card className="p-6">
+      <Section title="Cohort at a glance">
+        {insights.isPending ? (
+          <Loading />
+        ) : insights.isError ? (
           <Failure
             error={insights.error}
             retry={() => void insights.refetch()}
           />
-        </Card>
-      ) : data ? (
-        <>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-            <KpiCard label="Students" value={data.student_count} icon={Users} />
-            <KpiCard
-              label="Analysed"
-              value={data.analysed_count}
-              icon={ScanLine}
-            />
-            <KpiCard
-              label="Median readiness"
-              value={
-                data.median_score == null ? "—" : number(data.median_score)
-              }
-              icon={Gauge}
-              explanation={
-                <WhyPopover
-                  label="Median readiness"
-                  definition="The service returns the cohort median for this role. Individual score reasons are available from each student's report below."
-                />
-              }
-            />
-            <KpiCard
-              label="At risk"
-              value={data.at_risk_count}
-              icon={CircleAlert}
-              explanation={
-                <WhyPopover
-                  label="At risk"
-                  definition="At-risk status is supplied by the service; no cutoff is inferred in this view."
-                />
-              }
-            />
-            <KpiCard
-              label="Median coverage"
-              value={
-                data.median_coverage == null
-                  ? "—"
-                  : number(data.median_coverage) + "%"
-              }
-              icon={ShieldCheck}
-              explanation={
-                <WhyPopover
-                  label="Median coverage"
-                  definition="Evidence Coverage is the percentage of claimed skills with strong or moderate evidence. This is the service's cohort median."
-                />
-              }
-            />
-          </div>
-        </>
-      ) : (
-        <Card className="p-6">No cohort insights returned.</Card>
-      )}
-      <Card className="min-w-0 gap-5 p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold">Students</h2>
+        ) : data ? (
+          <Panel>
+            <div className="grid divide-y divide-border sm:grid-cols-2 sm:divide-y-0 sm:divide-x lg:grid-cols-5">
+              <MetricCell label="Students" value={data.student_count} />
+              <MetricCell label="Analysed" value={data.analysed_count} />
+              <MetricCell
+                label="Median readiness"
+                value={data.median_score == null ? "—" : number(data.median_score)}
+                unit={data.median_score == null ? undefined : "/ 100"}
+                definition="The service returns the cohort median for this role. Individual score reasons are available from each student's report below."
+              />
+              <MetricCell
+                label="At risk"
+                value={data.at_risk_count}
+                definition="At-risk status is supplied by the service; no cutoff is inferred in this view."
+              />
+              <MetricCell
+                label="Median coverage"
+                value={data.median_coverage == null ? "—" : number(data.median_coverage) + "%"}
+                definition="Evidence Coverage is the percentage of claimed skills with strong or moderate evidence. This is the service's cohort median."
+              />
+            </div>
+          </Panel>
+        ) : (
+          <p className="text-sm text-muted-readable">No cohort insights returned.</p>
+        )}
+      </Section>
+      <Section
+        title="Find students"
+        description="For example, two students with a good score and verified Docker. Results update as you choose, and the CSV export uses the same filters."
+        actions={
+          active ? (
+            <Button variant="outline" onClick={clear}>
+              Clear filters
+            </Button>
+          ) : null
+        }
+      >
+        <FindStudents filters={filters} change={change} options={options} />
+      </Section>
+      <Section
+        title="Students"
+        actions={
           <Button
             variant="outline"
             disabled={exporting}
@@ -386,86 +590,44 @@ function CohortView({
           >
             {exporting ? "Exporting…" : "Export CSV"}
           </Button>
-        </div>
+        }
+      >
         {exportError && (
-          <p role="alert" className="text-sm text-danger-readable">
+          <p role="alert" className="mb-4 text-sm text-danger-readable">
             {exportError}
           </p>
         )}
         {exported && (
-          <p role="status" className="text-xs text-success-readable">
-            CSV download prepared for the selected cohort and role.
+          <p role="status" className="mb-4 text-xs text-success-readable">
+            CSV download prepared with the current filters.
           </p>
         )}
-        <div className="flex flex-wrap items-center gap-4">
-          <label className="w-full min-w-0 space-y-2 text-xs font-semibold sm:w-auto sm:flex-1">
-            Search students
-            <input
-              type="search"
-              aria-label="Search students"
-              placeholder="Name or department"
-              className={control}
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                setPage(0);
-              }}
-            />
-          </label>
-          <label className="flex min-h-11 items-center gap-3 text-sm">
-            <input
-              type="checkbox"
-              checked={risk}
-              onChange={(e) => {
-                setRisk(e.target.checked);
-                setPage(0);
-              }}
-              className="size-5 accent-primary"
-            />
-            At risk only
-          </label>
-        </div>
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <label className="max-w-xs space-y-2 text-xs font-semibold">
-            Sort students
-            <select
-              aria-label="Sort students"
-              className={control}
-              value={sort}
-              onChange={(e) => {
-                setSort(e.target.value as StudentSort);
-                setPage(0);
-              }}
-            >
-              <option value="name">Name A–Z</option>
-              <option value="readiness">Readiness: lowest first</option>
-              <option value="coverage">Coverage: lowest first</option>
-            </select>
-          </label>
-          {(search || risk) && (
-            <Button
-              variant="outline"
-              onClick={() => {
-                setSearch("");
-                setRisk(false);
-                setPage(0);
-              }}
-            >
-              Clear filters
-            </Button>
-          )}
-        </div>
-        <p className="text-xs text-muted-readable">
-          CSV exports the full selected cohort and role, including students
-          outside these filters.
-        </p>
+        <label className="mb-4 block max-w-md">
+          <span className="field-label">Search students</span>
+          <input
+            type="search"
+            aria-label="Search students"
+            placeholder="Name or department"
+            className="field"
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(0);
+            }}
+          />
+        </label>
         {!students.isPending && !students.isError && (
-          <p role="status" className="text-xs text-muted-readable">
-            {rows.length} {rows.length === 1 ? "student" : "students"} found
-            {rows.length
-              ? ` · showing ${currentPage * 20 + 1}–${Math.min((currentPage + 1) * 20, rows.length)}`
-              : ""}
-          </p>
+          <div aria-live="polite" className="mb-4 text-sm">
+            <p className="font-medium">
+              {rows.length} {rows.length === 1 ? "student" : "students"} found
+              {rows.length
+                ? ` · showing ${currentPage * 20 + 1}–${Math.min((currentPage + 1) * 20, rows.length)}`
+                : ""}
+            </p>
+            {hasActiveFilters(filters) ? (
+              <p className="text-muted-readable">{filterSummary(filters, names)}</p>
+            ) : null}
+          </div>
         )}
         {students.isPending ? (
           <Loading />
@@ -475,52 +637,55 @@ function CohortView({
             retry={() => void students.refetch()}
           />
         ) : !rows.length ? (
-          <p className="text-sm text-muted-readable">
-            {search || risk
-              ? "No students match these filters."
+          <p className="inset-note">
+            {active
+              ? "No students match these filters. Try a lower evidence level or fewer skills."
               : "No students returned for this cohort and role."}
           </p>
         ) : (
-          <div
-            role="region"
-            aria-label="Cohort students table"
-            tabIndex={0}
-            className="overflow-x-auto focus-visible:ring-2 focus-visible:ring-primary"
-          >
-            <table className="w-full min-w-[860px] text-left text-sm">
-              <caption className="sr-only">
-                Students for the selected cohort and target role
-              </caption>
-              <thead className="bg-surface-2 text-xs">
-                <tr>
-                  {[
-                    "Student",
-                    "Department",
-                    "Readiness",
-                    "Band",
-                    "Coverage",
-                    "Top gap",
-                    "Understanding",
-                    "Support",
-                  ].map((h) => (
-                    <th key={h} scope="col" className="p-3">
-                      {h}
-                    </th>
+          <Panel className="p-0">
+            <div
+              role="region"
+              aria-label="Cohort students table"
+              tabIndex={0}
+              className="overflow-x-auto rounded-card focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              <table className={"w-full text-left text-sm " + (showMatches ? "min-w-[1060px]" : "min-w-[860px]")}>
+                <caption className="sr-only">
+                  Students for the selected cohort and target role
+                </caption>
+                <thead className="border-b border-border text-xs text-muted-readable">
+                  <tr>
+                    {[
+                      "Student",
+                      "Department",
+                      "Readiness",
+                      "Band",
+                      "Coverage",
+                      ...(showMatches ? ["Matched evidence"] : []),
+                      "Top gap",
+                      "Understanding",
+                      "Support",
+                    ].map((h) => (
+                      <th key={h} scope="col" className="p-4 font-medium">
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {visibleRows.map((s) => (
+                    <StudentRow key={s.profile_id} student={s} showMatches={showMatches} />
                   ))}
-                </tr>
-              </thead>
-              <tbody>
-                {visibleRows.map((s) => (
-                  <StudentRow key={s.profile_id} student={s} />
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </tbody>
+              </table>
+            </div>
+          </Panel>
         )}
         {pageCount > 1 && (
           <nav
             aria-label="Student pages"
-            className="flex flex-wrap items-center justify-between gap-3"
+            className="mt-4 flex flex-wrap items-center justify-between gap-3"
           >
             <Button
               variant="outline"
@@ -541,24 +706,16 @@ function CohortView({
             </Button>
           </nav>
         )}
-      </Card>
+      </Section>
       {data && (
-        <div className="space-y-6">
-          {" "}
+        <Section title="Cohort insights">
           <div className="grid min-w-0 grid-cols-1 items-start gap-4 lg:grid-cols-2">
-            <Card className="gap-4 p-6">
-              <h2 className="text-lg font-semibold">Readiness bands</h2>
-              <p className="text-xs text-muted-readable">
-                Analysed students, grouped by the service&apos;s readiness band.
-              </p>
+            <Panel
+              title="Readiness bands"
+              footer={<span>Analysed students, grouped by the service&apos;s readiness band.</span>}
+            >
               <ul className="space-y-4" aria-label="Readiness bands">
-                {(
-                  [
-                    ["not_ready", "Not ready"],
-                    ["developing", "Developing"],
-                    ["ready", "Ready"],
-                  ] as const
-                ).map(([key, label]) => (
+                {BAND_KEYS.map((key) => (
                   <li key={key} className="space-y-2">
                     <div className="flex items-center justify-between gap-3">
                       <BandBadge band={key} />
@@ -568,7 +725,7 @@ function CohortView({
                     </div>
                     <div
                       aria-hidden="true"
-                      className="h-3 overflow-hidden rounded-full bg-surface-2"
+                      className="h-2 overflow-hidden rounded-full bg-surface-2"
                     >
                       <div
                         className="h-full rounded-full bg-primary"
@@ -587,12 +744,12 @@ function CohortView({
                       />
                     </div>
                     <span className="sr-only">
-                      {label}: {data.bands[key]}
+                      {BAND_LABELS[key]}: {data.bands[key]}
                     </span>
                   </li>
                 ))}
               </ul>
-            </Card>
+            </Panel>
             <Counts
               title="Score distribution"
               histogram
@@ -616,92 +773,110 @@ function CohortView({
                 .map((r) => ({ ...r, rate: r.unverified_rate }))}
             />
           </div>
-          <Card className="gap-4 p-6">
-            <h2 className="text-lg font-semibold">Project understanding</h2>
-            <p className="text-xs text-muted-readable">
-              Latest verify status on each student&apos;s top project.
-              Individual quiz answers and focus data stay private.
-            </p>
-            {data.understanding ? (
-              <dl className="grid grid-cols-2 gap-4 md:grid-cols-4">
-                {[
-                  ["Quizzed", data.understanding.quizzed],
-                  ["Demonstrated", data.understanding.demonstrated],
-                  ["Partial", data.understanding.partial],
-                  ["Not demonstrated yet", data.understanding.not_demonstrated],
-                ].map(([label, value]) => (
-                  <div key={label}>
-                    <dt className="text-xs text-muted-readable">{label}</dt>
-                    <dd className="mt-2 text-3xl font-bold tabular-nums">
-                      {value}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            ) : (
-              <p className="text-sm text-muted-readable">
-                Understanding statistics were not returned.
-              </p>
-            )}
-          </Card>
-          <Rates
-            title="Built and explained"
-            kind="Built + explained"
-            rows={(data.understanding?.by_skill || []).map((r) => ({
-              ...r,
-              rate: r.built_and_explained_rate,
-            }))}
-          />
-        </div>
+          <div className="mt-4 space-y-4">
+            <Panel
+              title="Project understanding"
+              footer={
+                <span>
+                  Latest verify status on each student&apos;s top project. Individual quiz
+                  answers and focus data stay private.
+                </span>
+              }
+            >
+              {data.understanding ? (
+                <dl className="grid grid-cols-2 gap-4 md:grid-cols-4">
+                  {[
+                    ["Quizzed", data.understanding.quizzed],
+                    ["Demonstrated", data.understanding.demonstrated],
+                    ["Partial", data.understanding.partial],
+                    ["Not demonstrated yet", data.understanding.not_demonstrated],
+                  ].map(([label, value]) => (
+                    <div key={label}>
+                      <dt className="eyebrow">{label}</dt>
+                      <dd className="mt-2">
+                        <Metric value={value} />
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              ) : (
+                <p className="text-sm text-muted-readable">
+                  Understanding statistics were not returned.
+                </p>
+              )}
+            </Panel>
+            <Rates
+              title="Built and explained"
+              kind="Built + explained"
+              rows={(data.understanding?.by_skill || []).map((r) => ({
+                ...r,
+                rate: r.built_and_explained_rate,
+              }))}
+            />
+          </div>
+        </Section>
       )}
     </>
   );
 }
-function StudentRow({ student: s }: { student: Schema["CohortStudent"] }) {
+function StudentRow({
+  student: s,
+  showMatches,
+}: {
+  student: Schema["CohortStudent"];
+  showMatches: boolean;
+}) {
   return (
-    <tr className="border-t border-border">
-      <th scope="row" className="p-3 font-medium">
-        <div className="flex items-center gap-3">
-          <span className="icon-chip shrink-0" aria-hidden="true">
-            {s.name.slice(0, 1)}
-          </span>
-          <div>
-            {s.name}
-            {s.analysis_id && (
-              <Link
-                href={"/report/" + encodeURIComponent(s.analysis_id)}
-                className="mt-2 flex min-h-11 items-center text-xs text-primary-text underline"
-              >
+    <tr className="border-t border-border first:border-t-0">
+      <th scope="row" className="p-4 font-medium">
+        <div className="min-w-0">
+          <span className="break-anywhere">{s.name}</span>
+          {s.analysis_id && (
+            <div className="mt-1 flex min-h-11 items-center">
+              <TextLink href={"/report/" + encodeURIComponent(s.analysis_id)}>
                 View reasons
-              </Link>
-            )}
-          </div>
+              </TextLink>
+            </div>
+          )}
         </div>
       </th>
-      <td className="p-3">{s.department || "—"}</td>
-      <td className="p-3">
+      <td className="p-4">{s.department || "—"}</td>
+      <td className="p-4">
         <ScoreRing size={72} value={s.score} band={s.band} label="Readiness" />
       </td>
-      <td className="p-3">
+      <td className="p-4">
         <BandBadge band={s.band} />
       </td>
-      <td className="p-3 tabular-nums">{number(s.coverage)}%</td>
-      <td className="p-3">{s.top_gap || "—"}</td>
-      <td className="p-3">
+      <td className="p-4 tabular-nums">{number(s.coverage)}%</td>
+      {showMatches && (
+        <td className="p-4">
+          {s.matched_skills?.length ? (
+            <ul className="space-y-1" aria-label={"Evidence matched for " + s.name}>
+              {s.matched_skills.map((m) => (
+                <li key={m.skill_id}>
+                  <StatusText tone={LEVEL_TEXT[m.level].tone}>
+                    {m.skill_name}: {LEVEL_TEXT[m.level].label}
+                  </StatusText>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <span className="text-xs text-muted-readable">—</span>
+          )}
+        </td>
+      )}
+      <td className="p-4">{s.top_gap || "—"}</td>
+      <td className="p-4">
         {s.understanding ? (
           <UnderstandingBadge understanding={s.understanding} />
         ) : (
           <span className="text-xs text-muted-readable">Not returned</span>
         )}
       </td>
-      <td className="p-3">
-        <span
-          className={
-            "status-pill " + (s.at_risk ? "tone-warning" : "tone-muted")
-          }
-        >
+      <td className="p-4">
+        <StatusText tone={s.at_risk ? "warning" : "muted"}>
           {s.at_risk ? "At risk" : "No risk flag"}
-        </span>
+        </StatusText>
       </td>
     </tr>
   );

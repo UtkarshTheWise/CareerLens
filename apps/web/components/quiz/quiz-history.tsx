@@ -10,8 +10,8 @@ export function QuizHistory({ profileId }: { profileId: string }) {
   const query = useListQuizzes({ profile_id: profileId });
   return (
     <section className="space-y-4" data-component="QuizHistory">
-      <h2 className="text-lg font-semibold">Project check history</h2>
-      <p className="text-xs text-muted-readable">
+      <h2 className="section-title">Project check history</h2>
+      <p className="lede">
         Your project checks for this profile. Open a submitted result to review
         its feedback.
       </p>
@@ -22,9 +22,9 @@ export function QuizHistory({ profileId }: { profileId: string }) {
       ) : query.isError ? (
         <div
           role="alert"
-          className="space-y-3 rounded-card border border-danger bg-surface p-6"
+          className="panel space-y-3 border-danger-readable"
         >
-          <p className="text-sm text-danger-readable">
+          <p className="field-error">
             {errorMessage(query.error)}
           </p>
           <Button
@@ -37,16 +37,16 @@ export function QuizHistory({ profileId }: { profileId: string }) {
           </Button>
         </div>
       ) : query.data?.length ? (
-        <ul className="space-y-3">
+        <ul className="hairline-list border-y border-border">
           {[...query.data]
             .sort((a, b) => b.created_at.localeCompare(a.created_at))
             .map((quiz) => (
               <li
                 key={quiz.id}
-                className="flex flex-wrap items-center justify-between gap-4 rounded-card border border-border bg-surface p-6"
+                className="flex flex-wrap items-center justify-between gap-4 py-5"
               >
                 <div className="min-w-0 space-y-2">
-                  <h3 className="break-anywhere text-sm font-semibold">
+                  <h3 className="break-anywhere text-[15px] font-medium">
                     {quiz.project_title}
                   </h3>
                   <p className="break-anywhere text-xs text-muted-readable">
@@ -76,7 +76,7 @@ export function QuizHistory({ profileId }: { profileId: string }) {
             ))}
         </ul>
       ) : (
-        <p className="rounded-card border border-border bg-surface p-6 text-sm text-muted-readable">
+        <p className="inset-note">
           No project checks yet. Choose Practice or Verify on a project above.
         </p>
       )}

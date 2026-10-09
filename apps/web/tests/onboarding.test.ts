@@ -7,8 +7,11 @@ import {
   validateStep,
   type WizardValues,
 } from "../lib/onboarding";
+import { emptyDraft, emptyProject } from "../lib/resume-builder";
 const values: WizardValues = {
   name: "Synthetic Student",
+  resumeMode: "upload",
+  resumeDraft: emptyDraft(),
   resume: new File(["resume text"], "resume.pdf"),
   linkedinMode: "none",
   linkedinFile: null,
@@ -64,6 +67,20 @@ test("first step requires name and resume and validates only selected LinkedIn s
     ),
     {},
   );
+});
+test("build mode needs a finished draft instead of a file", () => {
+  const build = { ...values, resumeMode: "build" as const, resume: null };
+  assert.equal(validateStep(build, 0).resume, "Finish the required parts of your resume.");
+  const draft = {
+    ...emptyDraft(),
+    email: "asha@example.com",
+    skills: ["Python"],
+    projects: [{ ...emptyProject(), title: "Campus API" }],
+  };
+  assert.deepEqual(validateStep({ ...build, resumeDraft: draft }, 0), {});
+  assert.deepEqual(Object.keys(validateStep({ ...build, name: " ", resumeDraft: draft }, 0)), ["name"]);
+  // the uploaded file is ignored in build mode, and the draft is ignored in upload mode
+  assert.deepEqual(validateStep({ ...values, resumeDraft: draft, resume: null }, 0).resume !== undefined, true);
 });
 test("GitHub accepts optional username but rejects URLs and malformed boundaries", () => {
   for (const github of ["", "a", "a-b", "a".repeat(39)])

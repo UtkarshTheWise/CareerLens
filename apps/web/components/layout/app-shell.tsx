@@ -59,8 +59,8 @@ export function AppShell({ children }: { children: ReactNode }) {
   return <div className="min-h-dvh lg:grid lg:grid-cols-[240px_minmax(0,1fr)]">
     <a href="#main-content" className="fixed top-3 left-3 z-50 -translate-y-24 rounded-control bg-primary px-4 py-3 text-primary-foreground focus:translate-y-0">Skip to content</a>
     <aside className="sticky top-0 hidden h-dvh flex-col border-r border-border bg-surface p-5 lg:flex">
-      <Brand/><div className="mt-8"><Link href="/onboarding" className="nav-link bg-surface-2 text-primary-text">Analyse a profile<ArrowUpRight size={16} aria-hidden="true"/></Link></div><div className="mt-8"><p className="mb-4 px-4 text-xs font-medium text-muted-readable">Workspace</p><Navigation/></div>
-      <div className="mt-auto border-t border-border pt-6"><p className="text-sm font-semibold">Built on evidence.</p><p className="mt-1 text-xs text-muted-readable">Your work tells your story.</p><Link href="/dev/roles" className="mt-4 inline-flex items-center gap-2 text-xs font-medium text-primary-text">Explore target roles<ArrowUpRight size={14} aria-hidden="true"/></Link></div>
+      <Brand/><div className="mt-8"><Link href="/onboarding" className="nav-link bg-surface-2 text-primary-text">Analyse a profile<ArrowUpRight size={16} aria-hidden="true"/></Link></div><div className="mt-8"><p className="eyebrow mb-4 px-4">Workspace</p><Navigation/></div>
+      <div className="mt-auto border-t border-border pt-6"><p className="text-sm font-semibold">Built on evidence.</p><p className="mt-1 text-xs text-muted-readable">Your work tells your story.</p><Link href="/dev/roles" className="text-link mt-4 inline-flex min-h-11 items-center gap-2">Explore target roles<ArrowUpRight size={14} aria-hidden="true"/></Link></div>
     </aside>
     <div className="min-w-0">
       <header className="sticky top-0 z-20 flex h-[72px] items-center justify-between gap-3 border-b border-border bg-bg/90 backdrop-blur-xl px-4 sm:px-8">
@@ -72,7 +72,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
         <div className="flex shrink-0 items-center gap-2 sm:gap-4"><ThemeToggle/><div className="h-8 w-px bg-border"/><ProfileChip/>{auth.status === "signed-in" && <Button variant="ghost" size="icon" className="size-11 shrink-0 rounded-control" aria-label="Sign out" title="Sign out" onClick={() => void auth.signOut()}><LogOut size={18} aria-hidden="true"/></Button>}</div>
       </header>
-      <main id="main-content" tabIndex={-1} className="mx-auto max-w-[1440px] p-4 outline-none sm:p-8 lg:p-8">{children}</main>
+      <main id="main-content" tabIndex={-1} className="mx-auto max-w-[1440px] p-4 outline-none sm:p-8 lg:px-12">{children}</main>
     </div>
   </div>;
 }

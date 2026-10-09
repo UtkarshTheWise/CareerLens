@@ -1,13 +1,11 @@
 "use client";
 import { useState } from "react";
-import Link from "next/link";
-import { ArrowUpRight, KeyRound, LogOut, Puzzle, ShieldCheck } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { displayName, useAuth } from "@/components/auth/auth-provider";
+import { PageHeader, Panel, Section, TextLink } from "@/components/layout/page";
 import { Button } from "@/components/ui/button";
 import { clearAiKey, isValidKey, maskKey, providerLabel, readAiKey, saveAiKey, type AiKey, type AiProvider } from "@/lib/ai-key";
 
-const control =
-  "w-full min-w-0 rounded-control border border-input bg-surface-2 px-3 py-3 text-sm outline-none transition-colors hover:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface";
 const providers: Array<{ id: AiProvider; name: string; url: string; where: string }> = [
   { id: "gemini", name: "Google Gemini", url: "https://aistudio.google.com/apikey", where: "Google AI Studio" },
   { id: "groq", name: "Groq", url: "https://console.groq.com/keys", where: "the Groq console" },
@@ -17,12 +15,11 @@ function AccountCard() {
   const { status, user, signOut } = useAuth();
   const name = displayName(user);
   return (
-    <section aria-labelledby="account-title" className="rounded-card border border-border bg-surface p-6 shadow-card sm:p-8">
-      <h2 id="account-title">Account</h2>
+    <Section title="Account" className="max-w-3xl">
       {status === "signed-in" ? (
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <p className="min-w-0 text-sm">
-            <span className="block font-semibold">{name || "Signed in with Google"}</span>
+            <span className="block font-medium">{name || "Signed in with Google"}</span>
             <span className="block truncate text-muted-readable">{user?.email}</span>
           </p>
           <Button variant="outline" onClick={() => void signOut()}>
@@ -31,9 +28,9 @@ function AccountCard() {
           </Button>
         </div>
       ) : (
-        <p className="mt-2 text-sm text-muted-readable">Sign-in is not switched on in this environment.</p>
+        <p className="lede">Sign-in is not switched on in this environment.</p>
       )}
-    </section>
+    </Section>
   );
 }
 
@@ -65,21 +62,13 @@ function AiKeyCard() {
   }
 
   return (
-    <section aria-labelledby="ai-key-title" className="rounded-card border border-border bg-surface p-6 shadow-card sm:p-8">
-      <div className="flex items-start gap-4">
-        <div className="icon-chip shrink-0">
-          <KeyRound aria-hidden="true" size={20} strokeWidth={1.75} />
-        </div>
-        <div className="min-w-0">
-          <h2 id="ai-key-title">Your own AI key (optional)</h2>
-          <p className="mt-2 max-w-xl text-sm text-muted-readable">
-            CareerLens uses a small shared free allowance for the AI that reads your work and writes your quizzes. It can run out. Add a free key
-            of your own and your reports, quizzes and job matches use your allowance instead.
-          </p>
-        </div>
-      </div>
-
-      <p role="status" className="mt-5 rounded-control bg-surface-2 px-4 py-3 text-sm">
+    <Section
+      eyebrow="Optional"
+      title="Your own AI key"
+      description="CareerLens uses a small shared free allowance for the AI that reads your work and writes your quizzes. It can run out. Add a free key of your own and your reports, quizzes and job matches use your allowance instead."
+      className="max-w-3xl"
+    >
+      <p role="status" className="inset-note text-text">
         {saved ? (
           <>
             <strong>Using your {providerLabel(saved.provider)} key</strong> (ends {maskKey(saved.key)}).
@@ -92,31 +81,31 @@ function AiKeyCard() {
       </p>
 
       <form
-        className="mt-5 space-y-4"
+        className="mt-6 space-y-5"
         onSubmit={(event) => {
           event.preventDefault();
           save();
         }}
       >
         <fieldset className="space-y-2">
-          <legend className="text-sm font-semibold">Provider</legend>
+          <legend className="field-label">Provider</legend>
           <div className="flex flex-wrap gap-3">
             {providers.map((p) => (
-              <label key={p.id} className="flex cursor-pointer items-center gap-2 rounded-control border border-border bg-surface-2 px-4 py-3 text-sm has-[:checked]:border-primary">
+              <label key={p.id} className="flex min-h-11 cursor-pointer items-center gap-2 rounded-control border border-input bg-surface px-4 py-2 text-sm has-[:checked]:border-primary has-[:checked]:bg-surface-3">
                 <input type="radio" name="provider" value={p.id} checked={provider === p.id} onChange={() => setProvider(p.id)} />
                 {p.name}
               </label>
             ))}
           </div>
         </fieldset>
-        <div className="space-y-2">
-          <label htmlFor="ai-key" className="block text-sm font-semibold">
+        <div>
+          <label htmlFor="ai-key" className="field-label">
             {chosen.name} API key
           </label>
           <input
             id="ai-key"
             type="password"
-            className={control}
+            className="field"
             autoComplete="off"
             spellCheck={false}
             placeholder={saved ? "Paste a new key to replace the saved one" : "Paste your key"}
@@ -124,12 +113,8 @@ function AiKeyCard() {
             onChange={(event) => setDraft(event.target.value)}
             aria-describedby="ai-key-help"
           />
-          <p id="ai-key-help" className="text-xs text-muted-readable">
-            Create a free key in{" "}
-            <a href={chosen.url} target="_blank" rel="noreferrer noopener" className="font-semibold text-primary-text underline">
-              {chosen.where}
-            </a>
-            , then paste it here.
+          <p id="ai-key-help" className="field-hint">
+            Create a free key in <TextLink href={chosen.url} external>{chosen.where}</TextLink>, then paste it here.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -143,44 +128,34 @@ function AiKeyCard() {
           )}
         </div>
         {message && (
-          <p role={message.kind === "error" ? "alert" : "status"} className={`text-sm ${message.kind === "error" ? "text-danger-readable" : "text-muted-readable"}`}>
+          <p role={message.kind === "error" ? "alert" : "status"} className={message.kind === "error" ? "field-error" : "field-hint"}>
             {message.text}
           </p>
         )}
       </form>
 
-      <div className="mt-6 flex items-start gap-3 border-t border-border pt-5 text-xs leading-relaxed text-muted-readable">
-        <ShieldCheck size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
-        <p>
-          Your key is kept only in this browser. When you start a report, take a quiz or match a job, it travels over HTTPS through the CareerLens
-          server to {chosen.name} for that request, and is not stored or logged by us. Use a key you can revoke, and remove it on a shared computer.
-          The Chrome extension still uses the shared allowance.
-        </p>
-      </div>
-    </section>
+      <p className="mt-8 max-w-prose border-t border-border pt-5 text-xs leading-relaxed text-muted-readable">
+        Your key is kept only in this browser. When you start a report, take a quiz or match a job, it travels over HTTPS through the CareerLens
+        server to {chosen.name} for that request, and is not stored or logged by us. Use a key you can revoke, and remove it on a shared computer.
+        The Chrome extension still uses the shared allowance.
+      </p>
+    </Section>
   );
 }
 
 export function SettingsScreen() {
   return (
-    <section className="space-y-8">
-      <div>
-        <p className="mb-2 text-xs font-medium text-muted-readable">Your workspace</p>
-        <h1>Settings</h1>
-        <p className="mt-2 max-w-xl text-sm text-muted-readable">Your account and how CareerLens reaches the AI.</p>
-      </div>
-      <div className="grid max-w-3xl gap-6">
-        <AccountCard />
-        <AiKeyCard />
-        <Link
-          href="/extension"
-          className="flex items-center gap-3 rounded-card border border-border bg-surface p-5 text-sm font-semibold text-primary-text shadow-card"
-        >
-          <Puzzle size={20} aria-hidden="true" />
-          Install the Chrome extension
-          <ArrowUpRight className="ml-auto" size={16} aria-hidden="true" />
-        </Link>
-      </div>
+    <section>
+      <PageHeader eyebrow="Your workspace" title="Settings" description="Your account and how CareerLens reaches the AI." />
+      <AccountCard />
+      <AiKeyCard />
+      <Section className="max-w-3xl">
+        <Panel>
+          <p className="text-sm">
+            Want job matches while you browse? <TextLink href="/extension">Install the Chrome extension</TextLink>
+          </p>
+        </Panel>
+      </Section>
     </section>
   );
 }

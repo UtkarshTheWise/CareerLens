@@ -36,7 +36,7 @@ export function StageProgress({
   return (
     <div data-component="StageProgress">
       <div className="mb-5 flex items-center justify-between gap-3">
-        <h3 className="text-sm font-semibold" aria-live="polite">
+        <h3 className="text-[17px] font-medium tracking-[-.02em]" aria-live="polite">
           {labels[status]}
         </h3>
         <span className="text-xs font-medium tabular-nums text-muted-readable">

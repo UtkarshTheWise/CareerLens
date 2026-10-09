@@ -1,6 +1,10 @@
+import { draftErrors, type ResumeDraft } from "./resume-builder";
 export const MAX_DOCUMENT_BYTES = 5 * 1024 * 1024;
+export type ResumeMode = "upload" | "build";
 export type WizardValues = {
   name: string;
+  resumeMode: ResumeMode;
+  resumeDraft: ResumeDraft;
   resume: File | null;
   linkedinMode: "none" | "pdf" | "text";
   linkedinFile: File | null;
@@ -40,8 +44,14 @@ export function validateStep(
   const errors: FieldErrors = {};
   if (step === 0) {
     if (!values.name.trim()) errors.name = "Enter your name to continue.";
-    const resumeError = fileError(values.resume, "resume");
-    if (resumeError) errors.resume = resumeError;
+    if (values.resumeMode === "build") {
+      // The builder shows its own field-level messages; the wizard only needs to know it is not finished.
+      if (Object.keys(draftErrors(values.resumeDraft, values.name)).some((key) => key !== "name"))
+        errors.resume = "Finish the required parts of your resume.";
+    } else {
+      const resumeError = fileError(values.resume, "resume");
+      if (resumeError) errors.resume = resumeError;
+    }
     if (values.linkedinMode === "pdf") {
       const linkedinError = fileError(values.linkedinFile, "linkedin");
       if (linkedinError) errors.linkedinFile = linkedinError;

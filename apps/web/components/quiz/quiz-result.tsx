@@ -14,7 +14,7 @@ import {
   WhyPopover,
 } from "@/components/career";
 import { signed, type Schema } from "@/components/career/shared";
-import { Card } from "@/components/ui/card";
+import { PageHeader } from "@/components/layout/page";
 import { Button } from "@/components/ui/button";
 import { QuizFeedback, SourceLink } from "./quiz-feedback";
 export function QuizResult({
@@ -71,22 +71,17 @@ export function QuizResult({
       className="mx-auto max-w-4xl space-y-6"
       data-component="QuizResult"
     >
-      <header className="space-y-3">
-        <p className="text-xs font-semibold text-primary-text">
-          {result.mode === "practice" ? "Practice complete" : "Verify complete"}
-        </p>
-        <h1
-          ref={heading}
-          tabIndex={-1}
-          className="text-2xl font-semibold outline-none"
-        >
-          Your quiz result
-        </h1>
-        <p className="break-anywhere text-sm text-muted-readable">
-          {quiz.project_title}
-        </p>
-      </header>
-      <Card className="gap-5 p-6">
+      <PageHeader
+        className="pb-2"
+        eyebrow={result.mode === "practice" ? "Practice complete" : "Verify complete"}
+        title={
+          <span ref={heading} tabIndex={-1} className="outline-none">
+            Your quiz result
+          </span>
+        }
+        description={<span className="break-anywhere">{quiz.project_title}</span>}
+      />
+      <div className="panel space-y-5">
         <div className="flex flex-wrap items-center justify-center gap-6">
           <ScoreRing
             label="Quiz score"
@@ -102,7 +97,7 @@ export function QuizResult({
             {result.mode === "verify" && result.understanding ? (
               <UnderstandingBadge understanding={result.understanding} />
             ) : (
-              <span className="status-pill tone-muted">
+              <span className="status-text tone-text-muted">
                 {result.mode === "practice"
                   ? "Practice: no evidence change"
                   : "Understanding result unavailable"}
@@ -124,16 +119,16 @@ export function QuizResult({
             )}
           </div>
         </div>
-      </Card>
+      </div>
       {result.score_update && (
-        <Card className="gap-4 p-6">
+        <div className="panel space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-lg font-semibold">Readiness score update</h2>
+            <h2 className="section-title">Readiness score update</h2>
             <motion.p
               initial={reduced ? false : { opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: reduced ? 0 : 0.3 }}
-              className={`text-2xl font-bold tabular-nums ${result.score_update.delta < 0 ? "text-danger-readable" : "text-success-readable"}`}
+              className={`text-[36px] font-semibold tracking-[-.05em] tabular-nums ${result.score_update.delta < 0 ? "text-danger-readable" : "text-success-readable"}`}
               aria-label={`Readiness change: ${signed(result.score_update.delta)} points`}
             >
               {signed(result.score_update.delta)} pts
@@ -175,12 +170,12 @@ export function QuizResult({
               explanations remain available.
             </p>
           )}
-        </Card>
+        </div>
       )}
       {result.flag && <FlagCard flag={result.flag} />}
       <div className="grid items-start gap-4 md:grid-cols-2">
-        <Card className="gap-4 p-6">
-          <h2 className="text-lg font-semibold">Strengths</h2>
+        <div className="panel space-y-4">
+          <h2 className="section-title">Strengths</h2>
           {result.strengths.length ? (
             <ul className="space-y-3 text-sm leading-relaxed">
               {result.strengths.map((text, i) => (
@@ -192,9 +187,9 @@ export function QuizResult({
               No strengths were returned for this attempt.
             </p>
           )}
-        </Card>
-        <Card className="gap-4 p-6">
-          <h2 className="text-lg font-semibold">Topics to review</h2>
+        </div>
+        <div className="panel space-y-4">
+          <h2 className="section-title">Topics to review</h2>
           {result.review_topics.length ? (
             <ul className="space-y-4">
               {result.review_topics.map((item, i) => (
@@ -209,17 +204,17 @@ export function QuizResult({
               No review topics were returned.
             </p>
           )}
-        </Card>
+        </div>
       </div>
       <section className="space-y-4">
-        <h2 className="text-lg font-semibold">Question-by-question review</h2>
+        <h2 className="section-title">Question-by-question review</h2>
         {!!result.per_question.length && (
           <nav aria-label="Review questions" className="flex flex-wrap gap-2">
             {result.per_question.map((item, i) => (
               <a
                 key={item.question_id}
                 href={"#review-" + encodeURIComponent(item.question_id)}
-                className="inline-flex min-h-11 items-center rounded-control border border-border px-3 text-xs text-primary-text underline"
+                className="text-link inline-flex min-h-11 items-center rounded-control border border-border px-3 no-underline"
               >
                 Question{" "}
                 {quiz.questions.find((q) => q.id === item.question_id)?.order ||
@@ -230,12 +225,12 @@ export function QuizResult({
         )}
         {result.per_question.length ? (
           result.per_question.map((item, i) => (
-            <Card
+            <div
               key={item.question_id}
               id={"review-" + encodeURIComponent(item.question_id)}
-              className="scroll-mt-24 gap-4 p-6"
+              className="panel scroll-mt-24 space-y-4"
             >
-              <h3 className="text-sm font-semibold">
+              <h3 className="text-[15px] font-medium">
                 Question{" "}
                 {quiz.questions.find((q) => q.id === item.question_id)?.order ||
                   i + 1}
@@ -253,16 +248,16 @@ export function QuizResult({
                 feedback={item}
                 question={quiz.questions.find((q) => q.id === item.question_id)}
               />
-            </Card>
+            </div>
           ))
         ) : (
-          <p className="rounded-card bg-surface p-6 text-sm text-muted-readable">
+          <p className="inset-note">
             No per-question feedback was returned.
           </p>
         )}
       </section>
-      <Card className="gap-4 p-6">
-        <h2 className="text-lg font-semibold">Keep practising</h2>
+      <div className="panel space-y-4">
+        <h2 className="section-title">Keep practising</h2>
         {retakeAt && (
           <div className="space-y-2 text-xs text-muted-readable">
             <p className="break-anywhere">
@@ -302,11 +297,11 @@ export function QuizResult({
           </Button>
         </div>
         {create.isError && (
-          <p role="alert" className="text-sm text-danger-readable">
+          <p role="alert" className="field-error">
             {errorMessage(create.error)}
           </p>
         )}
-      </Card>
+      </div>
     </section>
   );
 }

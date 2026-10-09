@@ -21,7 +21,7 @@ import { ApiError, errorMessage } from "@/lib/api/transport";
 import { applicationDraft } from "@/lib/application-draft";
 import { ScoreRing, WhyPopover } from "@/components/career";
 import { safeUrl, type Schema } from "@/components/career/shared";
-import { Card } from "@/components/ui/card";
+import { PageHeader } from "@/components/layout/page";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 const statuses: Schema["ApplicationStatus"][] = [
@@ -38,8 +38,7 @@ const statuses: Schema["ApplicationStatus"][] = [
     offer: "Offer",
     rejected: "Rejected",
   };
-const control =
-  "min-h-11 w-full min-w-0 rounded-control border border-input bg-surface-2 px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
+const control = "field";
 export function TrackerScreen() {
   const me = useGetMe();
   if (me.isPending)
@@ -52,23 +51,23 @@ export function TrackerScreen() {
     );
   if (me.isError && !(me.error instanceof ApiError && me.error.status === 404))
     return (
-      <Card className="gap-4 p-6">
-        <h1>Tracker unavailable</h1>
-        <p role="alert">{errorMessage(me.error)}</p>
+      <div className="panel space-y-4">
+        <h1 className="page-title">Tracker unavailable</h1>
+        <p role="alert" className="field-error">{errorMessage(me.error)}</p>
         <Button onClick={() => me.refetch()}>Retry profile</Button>
-      </Card>
+      </div>
     );
   if (!me.data)
     return (
-      <Card className="gap-4 p-6">
-        <h1 className="text-2xl font-semibold">Your application tracker</h1>
-        <p className="text-sm text-muted-readable">
+      <div className="panel space-y-4">
+        <h1 className="page-title">Your application tracker</h1>
+        <p className="lede">
           Create a profile to save and organise applications.
         </p>
-        <Button asChild>
+        <Button asChild size="lg" trailingArrow>
           <Link href="/onboarding">Create profile</Link>
         </Button>
-      </Card>
+      </div>
     );
   return <ApplicationBoard key={me.data.id} profileId={me.data.id} />;
 }
@@ -179,18 +178,13 @@ function ApplicationBoard({ profileId }: { profileId: string }) {
   }
   return (
     <section className="space-y-6">
-      <header className="flex flex-wrap items-start justify-between gap-4">
-        <div className="space-y-2">
-          <p className="text-xs font-semibold text-primary-text">
-            Application workspace
-          </p>
-          <h1 className="text-2xl font-semibold">Your application tracker</h1>
-          <p className="max-w-xl text-sm text-muted-readable">
-            Move each opportunity as it progresses. Drag a card or use its
-            status menu.
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
+      <PageHeader
+        className="pb-2"
+        eyebrow="Application workspace"
+        title="Your application tracker"
+        description="Move each opportunity as it progresses. Drag a card or use its status menu."
+        actions={
+        <>
           {!query.isPending && !query.isError && (
             <Button
               variant="outline"
@@ -211,15 +205,15 @@ function ApplicationBoard({ profileId }: { profileId: string }) {
             }}
           >
             <Dialog.Trigger asChild>
-              <Button className="min-h-11">
+              <Button className="min-h-11" trailingArrow>
                 <Plus size={16} aria-hidden="true" />
                 Add manually
               </Button>
             </Dialog.Trigger>
             <Dialog.Portal>
               <Dialog.Overlay className="fixed inset-0 z-50 bg-[var(--overlay)]" />
-              <Dialog.Content className="fixed left-1/2 top-1/2 z-50 max-h-[90dvh] w-[calc(100%_-_32px)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-card border border-border bg-surface p-6 shadow-card">
-                <Dialog.Title className="text-lg font-semibold">
+              <Dialog.Content className="panel fixed left-1/2 top-1/2 z-50 max-h-[90dvh] w-[calc(100%_-_32px)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto">
+                <Dialog.Title className="section-title">
                   Add an application
                 </Dialog.Title>
                 <Dialog.Description className="mt-2 pr-6 text-sm text-muted-readable">
@@ -253,7 +247,7 @@ function ApplicationBoard({ profileId }: { profileId: string }) {
                     ].map(([name, label, type, required]) => (
                       <label
                         key={String(name)}
-                        className="block space-y-2 text-xs font-semibold"
+                        className="field-label"
                       >
                         {label}
                         <input
@@ -266,19 +260,19 @@ function ApplicationBoard({ profileId }: { profileId: string }) {
                         />
                       </label>
                     ))}
-                    <label className="block space-y-2 text-xs font-semibold">
+                    <label className="field-label">
                       Notes
                       <textarea
                         name="notes"
                         aria-label="Notes"
                         maxLength={4000}
                         rows={3}
-                        className={control + " py-3"}
+                        className={control + " mt-1.5"}
                       />
                     </label>
                   </fieldset>
                   {addError && (
-                    <p role="alert" className="text-sm text-danger-readable">
+                    <p role="alert" className="field-error">
                       {addError}
                     </p>
                   )}
@@ -289,10 +283,11 @@ function ApplicationBoard({ profileId }: { profileId: string }) {
               </Dialog.Content>
             </Dialog.Portal>
           </Dialog.Root>
-        </div>
-      </header>
+        </>
+        }
+      />
       {message && (
-        <p role="status" className="text-xs text-success-readable">
+        <p role="status" className="status-text tone-text-success">
           {message}
         </p>
       )}
@@ -303,33 +298,33 @@ function ApplicationBoard({ profileId }: { profileId: string }) {
           aria-label="Loading applications"
         />
       ) : query.isError ? (
-        <Card className="gap-3 p-6">
-          <p role="alert" className="text-sm text-danger-readable">
+        <div className="panel space-y-3">
+          <p role="alert" className="field-error">
             {errorMessage(query.error)}
           </p>
           <Button variant="outline" onClick={() => query.refetch()}>
             Retry applications
           </Button>
-        </Card>
+        </div>
       ) : (
         <>
           <div className="flex flex-wrap items-end gap-4">
-            <label className="w-full min-w-0 space-y-2 text-xs font-semibold sm:w-auto sm:flex-1">
+            <label className="field-label mb-0 w-full min-w-0 sm:w-auto sm:flex-1">
               Search applications
               <input
                 type="search"
                 aria-label="Search applications"
                 placeholder="Company or job title"
-                className={control}
+                className={control + " mt-1.5"}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </label>
-            <label className="w-full min-w-0 space-y-2 text-xs font-semibold sm:w-auto">
+            <label className="field-label mb-0 w-full min-w-0 sm:w-auto">
               Sort applications
               <select
                 aria-label="Sort applications"
-                className={control}
+                className={control + " mt-1.5"}
                 value={sort}
                 onChange={(e) => setSort(e.target.value as ApplicationSort)}
               >
@@ -415,11 +410,11 @@ function ApplicationBoard({ profileId }: { profileId: string }) {
                     if (applications.some((a) => a.id === id))
                       void move(id, status);
                   }}
-                  className="min-w-0 rounded-card border border-border bg-surface-2 p-3"
+                  className="min-w-0 rounded-card border border-border bg-surface p-3"
                 >
-                  <header className="mb-4 flex items-center justify-between gap-3 p-2">
-                    <h2 className="text-sm font-semibold">{labels[status]}</h2>
-                    <span className="status-pill tone-muted">
+                  <header className="mb-3 flex items-center justify-between gap-3 border-b border-border p-2 pb-3">
+                    <h2 className="eyebrow">{labels[status]}</h2>
+                    <span className="text-[13px] font-medium text-text [font-variant-numeric:tabular-nums]">
                       {visible.filter((a) => a.status === status).length}
                     </span>
                   </header>
@@ -433,7 +428,7 @@ function ApplicationBoard({ profileId }: { profileId: string }) {
                     {visible
                       .filter((a) => a.status === status)
                       .map((a) => (
-                        <Card
+                        <div
                           key={a.id}
                           data-application-id={a.id}
                           draggable={!pending[a.id]}
@@ -446,14 +441,14 @@ function ApplicationBoard({ profileId }: { profileId: string }) {
                             e.dataTransfer.effectAllowed = "move";
                           }}
                           aria-busy={pending[a.id]}
-                          className="min-w-0 gap-3 p-4"
+                          className="flex min-w-0 flex-col gap-3 rounded-xl border border-border bg-surface-2 p-4"
                         >
                           <div className="flex items-start justify-between gap-2">
                             <div className="min-w-0">
                               <p className="break-anywhere text-xs text-muted-readable">
                                 {a.company}
                               </p>
-                              <h3 className="mt-2 break-anywhere text-sm font-semibold">
+                              <h3 className="mt-2 break-anywhere text-[15px] font-medium">
                                 {a.title}
                               </h3>
                             </div>
@@ -489,8 +484,8 @@ function ApplicationBoard({ profileId }: { profileId: string }) {
                           </div>
                           {a.deadline && <Deadline value={a.deadline} />}
                           {(a.notes || a.description) && (
-                            <details className="rounded-control border border-border px-3 text-xs">
-                              <summary className="cursor-pointer py-3 font-medium text-primary-text">
+                            <details className="border-t border-border text-xs">
+                              <summary className="min-h-11 cursor-pointer py-3 font-medium">
                                 Notes & job details
                               </summary>
                               <div className="space-y-3 pb-3">
@@ -512,18 +507,18 @@ function ApplicationBoard({ profileId }: { profileId: string }) {
                               href={safeUrl(a.url)!}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex min-h-11 items-center text-xs text-primary-text underline"
+                              className="text-link inline-flex min-h-11 items-center"
                             >
-                              View posting
+                              View posting ↗
                             </a>
                           )}
-                          <label className="block space-y-2 text-xs font-semibold">
+                          <label className="field-label mb-0">
                             Status
                             <select
                               aria-label={
                                 "Status for " + a.company + " " + a.title
                               }
-                              className={control}
+                              className={control + " mt-1.5"}
                               value={a.status}
                               disabled={pending[a.id]}
                               onChange={(e) =>
@@ -550,7 +545,7 @@ function ApplicationBoard({ profileId }: { profileId: string }) {
                           )}
                           {errors[a.id] && (
                             <div role="alert" className="space-y-3">
-                              <p className="text-xs text-danger-readable">
+                              <p className="field-error">
                                 {errors[a.id]}
                               </p>
                               <Button
@@ -562,7 +557,7 @@ function ApplicationBoard({ profileId }: { profileId: string }) {
                               </Button>
                             </div>
                           )}
-                        </Card>
+                        </div>
                       ))}
                     {!visible.some((a) => a.status === status) && (
                       <p className="px-2 py-6 text-xs text-muted-readable">

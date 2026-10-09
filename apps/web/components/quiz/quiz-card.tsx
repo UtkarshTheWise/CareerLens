@@ -5,7 +5,6 @@ import { timerNotice } from "@/lib/quiz-presentation";
 import { answerPayload, duration, secondsLeft } from "@/lib/quiz";
 import { errorMessage } from "@/lib/api/transport";
 import type { Schema } from "@/components/career/shared";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CodeSnippet } from "./code-snippet";
 
@@ -128,10 +127,10 @@ export function QuizCard({
       ? Math.min(1, remaining / question.time_limit_s)
       : 0;
   return (
-    <Card className="min-w-0 gap-4 p-5 sm:p-6" data-component="QuizCard">
+    <div className="panel min-w-0 space-y-4" data-component="QuizCard">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold text-primary-text">
+          <p className="eyebrow text-primary-text">
             Question {question.order} of {total}
           </p>
           <p className="mt-2 text-xs text-muted-readable">
@@ -215,7 +214,7 @@ export function QuizCard({
       <h2
         ref={heading}
         tabIndex={-1}
-        className="break-anywhere text-lg font-semibold leading-relaxed outline-none"
+        className="break-anywhere text-[20px] font-medium leading-relaxed tracking-[-.02em] outline-none"
       >
         {question.prompt}
       </h2>
@@ -241,12 +240,12 @@ export function QuizCard({
       >
         {question.type === "mcq" ? (
           <fieldset disabled={disabled} className="space-y-3">
-            <legend className="mb-3 text-xs font-semibold">Your answer</legend>
+            <legend className="field-label">Your answer</legend>
             {question.options?.length ? (
               question.options.map((option) => (
                 <label
                   key={option.id}
-                  className={`flex min-h-14 cursor-pointer items-start gap-3 rounded-control border p-4 text-sm leading-relaxed transition-colors focus-within:ring-2 focus-within:ring-primary ${choice === option.id ? "border-primary bg-primary/5" : "border-input bg-surface-2 hover:border-primary"} ${disabled ? "cursor-not-allowed opacity-70" : ""}`}
+                  className={`flex min-h-14 cursor-pointer items-start gap-3 rounded-lg border p-4 text-sm leading-relaxed transition-colors focus-within:ring-2 focus-within:ring-primary ${choice === option.id ? "border-primary bg-surface-3" : "border-border bg-transparent [@media(hover:hover)]:hover:bg-surface-2"} ${disabled ? "cursor-not-allowed opacity-70" : ""}`}
                 >
                   <input
                     type="radio"
@@ -272,7 +271,7 @@ export function QuizCard({
           <div>
             <label
               htmlFor={`answer-${question.id}`}
-              className="mb-3 block text-xs font-semibold"
+              className="field-label"
             >
               Your answer
             </label>
@@ -292,12 +291,12 @@ export function QuizCard({
                   setPasteNotice(true);
                 }
               }}
-              className="w-full resize-y rounded-control border border-input bg-surface-2 p-4 text-sm leading-relaxed outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-70"
+              className="field resize-y leading-relaxed disabled:opacity-70"
               aria-describedby={`answer-help-${question.id}`}
             />
             <p
               id={`answer-help-${question.id}`}
-              className="mt-2 text-xs text-muted-readable"
+              className="field-hint"
             >
               {text.length}/2000 characters. Graded on understanding, not
               English.
@@ -322,7 +321,7 @@ export function QuizCard({
               {hint ? "Hide hint" : "Show hint"}
             </Button>
             {hint && (
-              <p className="mt-2 rounded-control bg-surface-2 p-4 text-sm text-muted-readable">
+              <p className="inset-note mt-2">
                 {question.hint}
               </p>
             )}
@@ -336,7 +335,7 @@ export function QuizCard({
         )}
         {error ? (
           <div role="alert" className="space-y-3">
-            <p className="text-sm text-danger-readable">{error}</p>
+            <p className="field-error">{error}</p>
             <p className="text-xs text-muted-readable">
               Your answer is held while we check whether it was already
               recorded.
@@ -369,6 +368,6 @@ export function QuizCard({
           </p>
         )}
       </form>
-    </Card>
+    </div>
   );
 }

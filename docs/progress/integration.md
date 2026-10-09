@@ -38,6 +38,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | I5 | `/extension` install page + zip, Settings "your own AI key" (BYOK headers), prod push | done | see git log | extension itself has no key field yet (follow-up) |
 
 ## In-progress detail
+- **I7 wip commit (2026-10-09):** four forks were editing `apps/web` screens when a usage limit hit; they were resumed. This wip commit holds their partial work and `onboarding-wizard.tsx` may not typecheck yet. Untouched at that point: dashboard, analysis-progress, roadmap-screen, dev gallery, DESIGN.md "App screens". New files: `lib/resume-builder.ts`, `components/onboarding/resume-builder.tsx`, `lib/cohort-filters.ts`, `tests/{resume-builder,cohort-filters}.test.ts` (not yet in the `test` script).
 - **Files touched, not finished:** —
 - **What works right now:** —
 - **Stubbed / fake (search `TODO(progress)`):** —

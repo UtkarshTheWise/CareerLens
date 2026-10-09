@@ -1,6 +1,7 @@
 "use client";
 import { useState, type ReactNode } from "react";
-import { Check, Copy, Download } from "lucide-react";
+import { Check, Copy } from "lucide-react";
+import { PageHeader, Section } from "@/components/layout/page";
 import { Button } from "@/components/ui/button";
 
 export const EXTENSION_ZIP = "/downloads/careerlens-extension.zip";
@@ -20,7 +21,7 @@ function CopyText({ text }: { text: string }) {
   return (
     <span className="inline-flex max-w-full items-center gap-2 rounded-control bg-surface-2 px-3 py-1.5 align-middle">
       <code className="min-w-0 break-all text-xs">{text}</code>
-      <button type="button" onClick={() => void copy()} className="shrink-0 text-primary-text" aria-label={`Copy ${text}`}>
+      <button type="button" onClick={() => void copy()} className="inline-flex size-8 shrink-0 items-center justify-center text-primary-text" aria-label={`Copy ${text}`}>
         {copied ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
       </button>
       <span role="status" className="sr-only">
@@ -32,45 +33,58 @@ function CopyText({ text }: { text: string }) {
 
 function Step({ n, title, children }: { n: number; title: string; children: ReactNode }) {
   return (
-    <li className="flex gap-4">
-      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary-soft text-sm font-semibold text-chip-text" aria-hidden="true">
-        {n}
+    <li className="grid grid-cols-[40px_minmax(0,1fr)] gap-x-4 border-t border-border py-6 first:border-t-0 first:pt-0">
+      <span className="font-medium text-muted-readable [font-variant-numeric:tabular-nums]" aria-hidden="true">
+        {String(n).padStart(2, "0")}
       </span>
       <div className="min-w-0 space-y-2">
-        <h3 className="text-base font-semibold">
+        <h3 className="text-[17px] font-medium tracking-[-.02em]">
           <span className="sr-only">Step {n}: </span>
           {title}
         </h3>
-        <div className="space-y-2 text-sm text-muted-readable">{children}</div>
+        <div className="space-y-2 text-sm leading-relaxed text-muted-readable">{children}</div>
       </div>
     </li>
   );
 }
 
-const card = "rounded-card border border-border bg-surface p-6 shadow-card sm:p-8";
+const troubleshooting: Array<{ q: ReactNode; a: ReactNode }> = [
+  {
+    q: "Sign-in says the redirect isn't allowed",
+    a: (
+      <>
+        The extension ID in Chrome must be exactly <code className="break-all">{EXTENSION_ID}</code>. If it differs, you loaded a different build;
+        download the zip above again and remove the old copy.
+      </>
+    ),
+  },
+  { q: <>&ldquo;Signed out&rdquo; or &ldquo;Unauthorized&rdquo; later on</>, a: "Open Options and sign in again; sessions expire after a while." },
+  { q: "It says there is no analysis", a: "Run a report on this site first; the extension compares jobs against your latest finished report." },
+  { q: "The first request is slow or fails", a: "The free server sleeps when idle and takes up to a minute to wake. Wait, then try again." },
+  {
+    q: <>&ldquo;The AI service is busy&rdquo;</>,
+    a: "The shared free allowance is used up. Reading a page that lists no skills is the only thing the extension asks the AI for. Try again in a minute.",
+  },
+];
 
 export function InstallGuide() {
   return (
-    <section className="space-y-8">
-      <div>
-        <p className="mb-2 text-xs font-medium text-muted-readable">Your workspace</p>
-        <h1>Chrome extension</h1>
-        <p className="mt-2 max-w-xl text-sm text-muted-readable">
-          Open a job posting, click the CareerLens icon, and see how your evidence matches what the job asks for. Then save it to your tracker in one
-          click. It takes about two minutes to set up.
-        </p>
-      </div>
+    <section>
+      <PageHeader
+        eyebrow="Your workspace"
+        title="Chrome extension"
+        description="Open a job posting, click the CareerLens icon, and see how your evidence matches what the job asks for. Then save it to your tracker in one click. It takes about two minutes to set up."
+      />
 
-      <div className={`${card} max-w-3xl space-y-6`}>
-        <p className="text-sm text-muted-readable">
+      <Section title="Set it up" className="max-w-3xl">
+        <p className="lede mb-8">
           You need Chrome (or Edge, Brave) version 116 or newer, and a CareerLens profile with at least one finished report. The extension is not in
           the Chrome Web Store yet, so you add it by hand. Chrome will show a &ldquo;developer mode&rdquo; notice afterwards; that is expected.
         </p>
-        <ol className="space-y-6">
+        <ol>
           <Step n={1} title="Download the extension">
-            <Button asChild>
+            <Button asChild trailingArrow>
               <a href={EXTENSION_ZIP} download>
-                <Download size={16} aria-hidden="true" />
                 Download careerlens-extension.zip
               </a>
             </Button>
@@ -114,45 +128,22 @@ export function InstallGuide() {
             </p>
           </Step>
         </ol>
-      </div>
+      </Section>
 
-      <div className={`${card} max-w-3xl space-y-4`}>
-        <h2>If something doesn&apos;t work</h2>
-        <dl className="space-y-4 text-sm">
-          <div>
-            <dt className="font-semibold">Sign-in says the redirect isn&apos;t allowed</dt>
-            <dd className="text-muted-readable">
-              The extension ID in Chrome must be exactly <code className="break-all">{EXTENSION_ID}</code>. If it differs, you loaded a different build;
-              download the zip above again and remove the old copy.
-            </dd>
-          </div>
-          <div>
-            <dt className="font-semibold">&ldquo;Signed out&rdquo; or &ldquo;Unauthorized&rdquo; later on</dt>
-            <dd className="text-muted-readable">Open Options and sign in again; sessions expire after a while.</dd>
-          </div>
-          <div>
-            <dt className="font-semibold">It says there is no analysis</dt>
-            <dd className="text-muted-readable">Run a report on this site first; the extension compares jobs against your latest finished report.</dd>
-          </div>
-          <div>
-            <dt className="font-semibold">The first request is slow or fails</dt>
-            <dd className="text-muted-readable">
-              The free server sleeps when idle and takes up to a minute to wake. Wait, then try again.
-            </dd>
-          </div>
-          <div>
-            <dt className="font-semibold">&ldquo;The AI service is busy&rdquo;</dt>
-            <dd className="text-muted-readable">
-              The shared free allowance is used up. Reading a page that lists no skills is the only thing the extension asks the AI for. Try again in a
-              minute.
-            </dd>
-          </div>
-        </dl>
-        <p className="border-t border-border pt-4 text-xs text-muted-readable">
+      <Section title="If something doesn't work" className="max-w-3xl">
+        <div className="faq">
+          {troubleshooting.map((item, i) => (
+            <details key={i}>
+              <summary>{item.q}</summary>
+              <p>{item.a}</p>
+            </details>
+          ))}
+        </div>
+        <p className="mt-8 max-w-prose text-xs leading-relaxed text-muted-readable">
           Privacy: the extension reads only the page you ask it to analyse, when you click. It sends the job&apos;s text to CareerLens, and nothing else
           from your browser.
         </p>
-      </div>
+      </Section>
     </section>
   );
 }

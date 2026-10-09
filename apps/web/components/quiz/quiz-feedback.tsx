@@ -21,7 +21,7 @@ export function SourceLink({
           href={href}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex min-h-11 items-center text-primary-text underline underline-offset-4"
+          className="text-link inline-flex min-h-11 items-center"
         >
           {source.start_line != null ? "View lines" : "View source"}
         </a>
@@ -44,7 +44,7 @@ export function QuizFeedback({
         </p>
       )}
       {feedback.timed_out && (
-        <p className="text-sm text-warning-readable">
+        <p className="status-text tone-text-warning">
           The server marked this answer as timed out.
         </p>
       )}
@@ -55,7 +55,7 @@ export function QuizFeedback({
       )}
       {feedback.text != null && (
         <div>
-          <h4 className="text-xs font-semibold">Your answer</h4>
+          <h4 className="eyebrow">Your answer</h4>
           <p className="mt-2 whitespace-pre-wrap break-anywhere text-sm text-muted-readable">
             {feedback.text || "No written answer recorded."}
           </p>
@@ -72,7 +72,7 @@ export function QuizFeedback({
           {feedback.key_points.map((point, i) => (
             <li key={i} className="flex items-start gap-3">
               <span
-                className={`status-pill shrink-0 ${point.status === "covered" ? "tone-success" : point.status === "partial" ? "tone-warning" : "tone-danger-outline"}`}
+                className={`status-text shrink-0 ${point.status === "covered" ? "tone-text-success" : point.status === "partial" ? "tone-text-warning" : "tone-text-danger"}`}
               >
                 {point.status}
               </span>
@@ -85,7 +85,7 @@ export function QuizFeedback({
       )}
       {!!feedback.incorrect_statements?.length && (
         <div>
-          <h4 className="text-xs font-semibold">Points to revisit</h4>
+          <h4 className="eyebrow">Points to revisit</h4>
           <ul className="mt-2 space-y-2 text-sm text-muted-readable">
             {feedback.incorrect_statements.map((text, i) => (
               <li key={i}>{text}</li>
@@ -97,8 +97,8 @@ export function QuizFeedback({
         <p className="text-sm leading-relaxed">{feedback.feedback}</p>
       )}
       {feedback.model_answer && (
-        <div className="rounded-control bg-surface-2 p-4">
-          <h4 className="text-xs font-semibold">Model answer</h4>
+        <div className="inset-note">
+          <h4 className="eyebrow">Model answer</h4>
           <p className="mt-2 whitespace-pre-wrap break-anywhere text-sm leading-relaxed text-muted-readable">
             {feedback.model_answer}
           </p>

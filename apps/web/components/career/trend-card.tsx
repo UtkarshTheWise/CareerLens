@@ -37,7 +37,9 @@ export function TrendCard({
   return (
     <CardFrame data-component="TrendCard">
       <div>
-        <h2 id={titleId}>{title}</h2>
+        <h2 id={titleId} className="text-[17px]! font-medium! tracking-[-.02em]!">
+          {title}
+        </h2>
         {description && (
           <p className="mt-2 text-xs text-muted-readable">{description}</p>
         )}

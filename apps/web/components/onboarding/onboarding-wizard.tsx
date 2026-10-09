@@ -1,16 +1,12 @@
 "use client";
-/* Hallmark · pre-emit critique: P4 H4 E4 S4 R5 V3 — DESIGN-locked onboarding flow. */
-import { useRef, useState, type FormEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { displayName, useAuth } from "@/components/auth/auth-provider";
 import {
   ArrowLeft,
   ArrowRight,
   Check,
-  FileText,
-  FolderGit2,
   LoaderCircle,
-  Target,
   Upload,
 } from "lucide-react";
 import {
@@ -30,16 +26,27 @@ import {
   type FieldErrors,
   type WizardValues,
 } from "@/lib/onboarding";
+import {
+  clearDraft,
+  draftErrors,
+  emptyDraft,
+  hasDraftContent,
+  loadDraft,
+  resumeFile,
+  resumeText,
+  saveDraft,
+  type ResumeDraft,
+} from "@/lib/resume-builder";
+import { ResumeBuilder } from "@/components/onboarding/resume-builder";
+import { PageHeader, Panel } from "@/components/layout/page";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 const steps = [
-  { label: "Your documents", icon: FileText },
-  { label: "Your work", icon: FolderGit2 },
-  { label: "Target role", icon: Target },
+  { label: "Your documents" },
+  { label: "Your work" },
+  { label: "Target role" },
 ];
-const control =
-  "w-full min-w-0 rounded-control border border-input bg-surface-2 px-3 py-3 text-sm outline-none transition-colors hover:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger active:border-primary";
+const control = "field";
 function FieldBlock({
   id,
   label,
@@ -56,8 +63,8 @@ function FieldBlock({
   children: ReactNode;
 }) {
   return (
-    <div className="min-w-0 space-y-2">
-      <label htmlFor={id} className="block text-sm font-semibold">
+    <div className="min-w-0">
+      <label htmlFor={id} className="field-label">
         {label}
         {required && (
           <span className="ml-1 text-xs font-normal text-muted-readable">
@@ -66,10 +73,7 @@ function FieldBlock({
         )}
       </label>
       {children}
-      <p
-        id={`${id}-help`}
-        className={`text-xs leading-relaxed ${error ? "text-danger-readable" : "text-muted-readable"}`}
-      >
+      <p id={`${id}-help`} className={error ? "field-error" : "field-hint"}>
         {error || hint}
       </p>
     </div>
@@ -91,6 +95,8 @@ function WizardForm({ initialName }: { initialName: string }) {
   const [step, setStep] = useState(0);
   const [values, setValues] = useState<WizardValues>({
     name: initialName,
+    resumeMode: "upload",
+    resumeDraft: emptyDraft(),
     resume: null,
     linkedinMode: "none",
     linkedinFile: null,
@@ -109,10 +115,36 @@ function WizardForm({ initialName }: { initialName: string }) {
   const locked = useRef(false);
   const savedProfile = useRef<string | undefined>(undefined);
   const savedBody = useRef<string | undefined>(undefined);
-  const uploaded = useRef<{ resume?: File; linkedin?: File }>({});
+  const uploaded = useRef<{ resume?: File; resumeKey?: string; linkedin?: File }>({});
   const form = useRef<HTMLFormElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const roleIds = roles.data?.map((role) => role.id) || [];
+  const draftLoaded = useRef(false);
+  // A draft saved earlier in this browser brings the student back to "Build it here".
+  useEffect(() => {
+    const saved = loadDraft();
+    draftLoaded.current = true;
+    if (saved && hasDraftContent(saved))
+      setValues((old) => ({ ...old, resumeMode: "build", resumeDraft: saved }));
+  }, []);
+  // Debounced: keep the draft in this browser only. Nothing is saved once the resume has been sent.
+  useEffect(() => {
+    if (!draftLoaded.current || busy || uploaded.current.resumeKey) return;
+    if (!hasDraftContent(values.resumeDraft)) return;
+    const timer = setTimeout(() => saveDraft(values.resumeDraft), 500);
+    return () => clearTimeout(timer);
+  }, [values.resumeDraft, busy]);
+  function changeDraft(next: ResumeDraft) {
+    const merged = { ...values, resumeDraft: next };
+    setValues(merged);
+    if (touched.resume)
+      setErrors((old) => ({ ...old, resume: validateStep(merged, 0).resume }));
+    setFailure(undefined);
+  }
+  const builderErrors =
+    values.resumeMode === "build" && touched.resume
+      ? draftErrors(values.resumeDraft, values.name)
+      : {};
   function change<K extends Field>(field: K, value: WizardValues[K]) {
     const next = { ...values, [field]: value };
     setValues(next);
@@ -203,7 +235,19 @@ function WizardForm({ initialName }: { initialName: string }) {
         savedBody.current = JSON.stringify(body);
       }
       const profile_id = savedProfile.current;
-      if (values.resume && uploaded.current.resume !== values.resume) {
+      if (values.resumeMode === "build") {
+        // Same text as last time means the resume is already stored: a retry does not upload it again.
+        const text = resumeText(values.resumeDraft, values.name.trim());
+        if (uploaded.current.resumeKey !== text) {
+          setPhase("Uploading your resume…");
+          await upload.mutateAsync({
+            profile_id,
+            body: documentBody(resumeFile(values.resumeDraft, values.name.trim()), "resume"),
+          });
+          uploaded.current.resumeKey = text;
+          clearDraft();
+        }
+      } else if (values.resume && uploaded.current.resume !== values.resume) {
         setPhase("Uploading your resume…");
         await upload.mutateAsync({
           profile_id,

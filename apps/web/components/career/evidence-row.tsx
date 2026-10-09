@@ -1,6 +1,7 @@
-import { ArrowUpRight, FileCheck } from "lucide-react";
+import { FileCheck } from "lucide-react";
 import { LevelPill } from "./badges";
 import { safeUrl, type Schema } from "./shared";
+import { TextLink } from "@/components/layout/page";
 export function EvidenceRow({
   claim,
   evidence,
@@ -14,8 +15,8 @@ export function EvidenceRow({
       className="grid min-w-0 gap-3 border-t border-border py-4 first:border-t-0 sm:grid-cols-[minmax(120px,1fr)_minmax(0,2fr)]"
     >
       <div className="flex flex-wrap items-center gap-3">
-        <h3 className="text-sm font-semibold">{claim.skill_name}</h3>
-        <LevelPill level={claim.level} />
+        <h3 className="text-sm font-medium">{claim.skill_name}</h3>
+        <LevelPill level={claim.level} variant="text" />
       </div>
       <div className="min-w-0">
         <p className="text-sm leading-relaxed text-muted-readable">
@@ -28,16 +29,11 @@ export function EvidenceRow({
             return (
               <li key={id} className="min-w-0 text-xs">
                 {href ? (
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex min-h-11 max-w-full items-center gap-2 text-primary-text underline underline-offset-4"
-                  >
-                    <ArrowUpRight size={16} aria-hidden="true" />
-                    <span className="truncate">{item?.label}</span>
-                    <span className="sr-only"> (opens in new tab)</span>
-                  </a>
+                  <span className="inline-flex min-h-11 max-w-full items-center">
+                    <TextLink href={href} external>
+                      <span className="break-anywhere">{item?.label}</span>
+                    </TextLink>
+                  </span>
                 ) : (
                   <span className="inline-flex items-center gap-2 text-muted-readable">
                     <FileCheck size={14} aria-hidden="true" />

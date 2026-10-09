@@ -23,26 +23,27 @@ export function LoginScreen() {
 
   return (
     <main id="main-content" className="flex min-h-dvh items-center justify-center p-4">
-      <section className="w-full max-w-md space-y-6 rounded-card border border-border bg-surface p-6 sm:p-8" aria-labelledby="login-title">
+      <section className="panel w-full max-w-md space-y-6 sm:p-8" aria-labelledby="login-title">
         <div className="flex items-center gap-3 text-lg font-bold tracking-tight">
           <BrandMark />
           CareerLens
         </div>
         <div className="space-y-3">
-          <h1 id="login-title" className="text-3xl font-semibold tracking-tight">Sign in to see your evidence</h1>
-          <p className="text-sm leading-relaxed text-muted-readable">
+          <p className="eyebrow">Student sign-in</p>
+          <h1 id="login-title" className="page-title">Sign in to see your evidence</h1>
+          <p className="lede">
             Use your Google account. We use it only to know who you are, so your analyses and quiz results stay
             yours. Your resume and repositories are never sent to Google.
           </p>
         </div>
         {auth.error && (
-          <p role="alert" className="text-sm text-danger-readable">{auth.error}</p>
+          <p role="alert" className="field-error">{auth.error}</p>
         )}
-        <Button className="min-h-11 w-full" onClick={() => void start()} disabled={busy || auth.status === "loading"}>
+        <Button size="lg" trailingArrow className="w-full" onClick={() => void start()} disabled={busy || auth.status === "loading"}>
           {busy ? "Opening Google…" : "Continue with Google"}
         </Button>
         <p className="text-xs leading-relaxed text-muted-readable">
-          Bring your resume and project links. Your work is the starting point. <Link href="/" className="text-primary-text underline underline-offset-4">Back to home</Link>
+          Bring your resume and project links. Your work is the starting point. <Link href="/" className="text-link">Back to home</Link>
         </p>
       </section>
     </main>

@@ -18,7 +18,7 @@ import {
 } from "@/lib/quiz";
 import type { Schema } from "@/components/career/shared";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { PageHeader } from "@/components/layout/page";
 import { Skeleton } from "@/components/ui/skeleton";
 import { QuizCard } from "./quiz-card";
 import { QuizFeedback } from "./quiz-feedback";
@@ -123,9 +123,9 @@ export function QuizScreen({ quizId }: { quizId: string }) {
     );
   if (!quiz)
     return (
-      <Card className="mx-auto max-w-3xl space-y-4 p-6">
-        <h1 className="text-2xl font-semibold">Project check unavailable</h1>
-        <p role="alert" className="text-sm text-danger-readable">
+      <div className="panel mx-auto max-w-3xl space-y-4">
+        <h1 className="page-title">Project check unavailable</h1>
+        <p role="alert" className="field-error">
           {query.error ? errorMessage(query.error) : "No quiz was returned."}
         </p>
         <Button
@@ -136,17 +136,17 @@ export function QuizScreen({ quizId }: { quizId: string }) {
         >
           Retry quiz
         </Button>
-      </Card>
+      </div>
     );
   if (result || quiz.status === "submitted") {
     const final = result || fetchedResult.data;
     if (final) return <QuizResult quiz={quiz} result={final} />;
     return (
-      <Card className="mx-auto max-w-3xl space-y-4 p-6">
-        <h1 className="text-2xl font-semibold">Your quiz result</h1>
+      <div className="panel mx-auto max-w-3xl space-y-4">
+        <h1 className="page-title">Your quiz result</h1>
         {fetchedResult.isError ? (
           <>
-            <p role="alert" className="text-sm text-danger-readable">
+            <p role="alert" className="field-error">
               {errorMessage(fetchedResult.error)}
             </p>
             <Button variant="outline" onClick={() => fetchedResult.refetch()}>
@@ -158,7 +158,7 @@ export function QuizScreen({ quizId }: { quizId: string }) {
             Loading your submitted result…
           </p>
         )}
-      </Card>
+      </div>
     );
   }
   const question =
@@ -173,31 +173,28 @@ export function QuizScreen({ quizId }: { quizId: string }) {
     begun || (quiz.mode === "verify" && question?.time_remaining_s != null);
   return (
     <section className="mx-auto max-w-3xl space-y-6">
-      <header className="space-y-3">
-        <p className="text-xs font-semibold text-primary-text">
-          {quiz.mode === "practice" ? "Practice" : "Verify understanding"}
-        </p>
-        <h1 className="break-anywhere text-2xl font-semibold">
-          Project understanding check
-        </h1>
-        <p className="text-sm text-muted-readable">{quiz.project_title}</p>
-      </header>
+      <PageHeader
+        eyebrow={quiz.mode === "practice" ? "Practice" : "Verify understanding"}
+        title="Project understanding check"
+        description={<span className="break-anywhere">{quiz.project_title}</span>}
+        className="pb-2"
+      />
       {!active ? (
-        <Card className="gap-5 p-6" data-component="QuizIntro">
-          <h2 className="text-lg font-semibold">Explain the work you know.</h2>
+        <div className="panel space-y-5" data-component="QuizIntro">
+          <h2 className="section-title">Explain the work you know.</h2>
           <p className="text-sm leading-relaxed text-muted-readable">
             {quiz.total_questions} questions about your project. Answers are
             graded on understanding, not English. You can answer in any
             language.
           </p>
-          <div className="rounded-control bg-surface-2 p-4 text-sm leading-relaxed">
+          <div className="inset-note text-text">
             {quiz.mode === "practice"
               ? "Practice is untimed. Hints and feedback help you prepare; it does not change your evidence or score."
               : "Verify is timed, one question at a time, with no going back. Paste is disabled. Feedback appears after final submission; the latest verify result can update your evidence."}
           </div>
           {quiz.mode === "verify" && (
             <div>
-              <h3 className="text-xs font-semibold">Time per question</h3>
+              <h3 className="eyebrow">Time per question</h3>
               {quiz.questions.length ? (
                 <ul className="mt-2 space-y-2 text-xs text-muted-readable">
                   {quiz.questions.map((q) => (
@@ -227,19 +224,19 @@ export function QuizScreen({ quizId }: { quizId: string }) {
           >
             {query.isFetching ? "Loading question…" : "Begin check"}
           </Button>
-        </Card>
+        </div>
       ) : submit.isPending ? (
-        <Card className="p-6">
+        <div className="panel">
           <p role="status" className="text-sm text-muted-readable">
             {submit.isPending
               ? "Submitting your quiz…"
               : "Recording your answer…"}
           </p>
-        </Card>
+        </div>
       ) : feedback ? (
-        <Card className="gap-5 p-6">
+        <div className="panel space-y-5">
           <h2
-            className="text-lg font-semibold"
+            className="section-title"
             tabIndex={-1}
             ref={(el) => {
               if (el) el.focus();
@@ -269,7 +266,7 @@ export function QuizScreen({ quizId }: { quizId: string }) {
               ? "Finish practice"
               : "Next question"}
           </Button>
-        </Card>
+        </div>
       ) : question && question.id !== lastRecorded?.id ? (
         <QuizCard
           key={question.id}
@@ -281,8 +278,8 @@ export function QuizScreen({ quizId }: { quizId: string }) {
           onRefresh={retryQuiz}
         />
       ) : (
-        <Card className="gap-4 p-6">
-          <h2 className="text-lg font-semibold">
+        <div className="panel space-y-4">
+          <h2 className="section-title">
             {lastRecorded && lastRecorded.order >= quiz.total_questions
               ? "Ready to submit"
               : "Waiting for the next question"}
@@ -312,12 +309,12 @@ export function QuizScreen({ quizId }: { quizId: string }) {
               Refresh quiz
             </Button>
           )}
-        </Card>
+        </div>
       )}
       {submit.isError && (
         <div
           role="alert"
-          className="space-y-3 rounded-control border border-danger bg-surface p-4"
+          className="space-y-3 rounded-control border border-danger-readable bg-danger-tint p-4"
         >
           <p className="text-sm text-danger-readable">
             {errorMessage(submit.error)}
