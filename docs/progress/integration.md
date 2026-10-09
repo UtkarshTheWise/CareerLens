@@ -10,14 +10,14 @@ Keep under ~150 lines. Commit it together with the code it describes.
 ## Status
 - **Track:** integration · **Owns:** wiring + drift fixes across the repo (Phase 3 only)
 - **Branch / worktree:** `integration` · worktree `../careerlens-integration` (no deny rules; the backend worktree denies apps/web and apps/extension)
-- **Last updated:** 2026-10-08 Claude Code (Sonnet 5.5)
-- **Current task:** I7 IN PROGRESS: (a) homepage style across the app, (b) in-app resume builder (plain-text upload), (c) cohort skill filters. Plan file: ~/.claude/plans/wild-nibbling-feather.md (summary in docs/handoff/integration.md). integration was fast-forwarded to origin/frontend/codex (f506ed2) first.
-- **State:** in progress   <!-- not started | in progress | blocked | done -->
-- **Last green checks:** 2026-10-08, integration worktree (Node 22.16.0, pnpm 10.12.3): backend 683 tests / ruff / `check_contract.py` 29/29 · `apps/api/scripts/smoke_e2e.py` 499 checks (dev + token mode) · web lint, typecheck, build (also configured), native tests incl. ai-key · extension typecheck, build, 24 tests
+- **Last updated:** 2026-10-09 Claude Code (Sonnet 5.5; plan drafted with Opus 5.5)
+- **Current task:** I7 done on `integration`: homepage style across the app, in-app resume builder (plain-text upload), cohort skill filters (CCR-1/CCR-2 approved by the owner). Pushed; fast-forward of `main` follows. Still waiting on the human for Supabase/Google values and the manual checks.
+- **State:** done   <!-- not started | in progress | blocked | done -->
+- **Last green checks:** 2026-10-09, integration worktree: backend 706 tests / ruff / `check_contract.py` 29/29 / `smoke_e2e.py` 539 checks (dev + token) · web lint, typecheck, build, 59 native tests (all 11 test files now in the `test` script) · extension typecheck + 29 tests · desktop screenshots of dashboard, report, onboarding, placement viewed (phone width not verified)
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
-0. **I7 (owner-requested features), in progress.** DONE and pushed: contract CCR-1/CCR-2 + regenerated client, `.txt` resume ingest, cohort filters + smoke (backend 706 tests, smoke 539 checks), web primitives (`apps/web/app/app-style.css`, `components/layout/page.tsx`, `lib/use-reveal.ts`). IN PROGRESS: four forks restyling screens, building the resume builder and the placement "Find students" filters (plan sections 5-7 in the plan file). Next: `git status` to see their files, then `pnpm --filter web typecheck && pnpm --filter web lint && pnpm --filter web build`, wire new tests (`resume-builder`, `cohort-filters`, and any others that pass) into `apps/web/package.json` `test`, run `pnpm --filter extension typecheck build test`, visual check with `apps/api/tests/e2e_server.py` + `pnpm --filter web dev`, commit per feature, push, then fast-forward `main` (owner approved) and note in `docs/handoff/integration.md` that `frontend/codex` is behind.
+0. I7 is finished. Remaining human steps are items 1-3 below. Not verified: the new screens at 390px width and in light theme, the resume builder end to end in a real browser (upload path is covered by backend tests and the smoke script), screen-reader behaviour of the skill suggestions.
 1. Ask the human to follow `docs/AUTH_SETUP.md` (Google Cloud + Supabase), then give you: Supabase URL, anon key, token type (HS256 secret or signing keys), staff emails, deployed web URL. Put them in `apps/web/.env.local`, `apps/extension/.env.local` (rebuild) and the API env (Render). Then the human runs the manual checks in `docs/AUTH_SETUP.md` section 5 and `docs/DEMO_CHECKLIST.md`.
 2. With the human's OK: `cd` to the backend worktree or the integration worktree and fast-forward `main` (`git push origin integration:main` after `git fetch` shows `origin/main` is an ancestor). Update `docs/progress/backend.md` / `frontend.md` only to say integration is done (do not rewrite their history).
 3. Open decisions from the review are listed in `docs/handoff/integration.md` (cohort membership for real students is the important one).
@@ -34,14 +34,11 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | I3 | End-to-end smoke script + demo checklist | done | see git log | green in dev and token mode; found and fixed 3 backend drifts |
 | I4 | Independent review + fixes | done | see git log | 6 fixes + 7 open decisions in docs/handoff/integration.md |
 | I6 | Animated landing page at `/` (Get started -> /login) | done | see git log | `/` is now a bare route in app-shell; respects reduced motion |
-| I7 | Homepage style app-wide, in-app resume builder, cohort skill filters | doing | see git log | contract + backend done; web screens in progress |
+| I7 | Homepage style app-wide, in-app resume builder, cohort skill filters | done | see git log | CCR-1/2 approved; backend + web + docs |
 | I5 | `/extension` install page + zip, Settings "your own AI key" (BYOK headers), prod push | done | see git log | extension itself has no key field yet (follow-up) |
 
 ## In-progress detail
-- **I7 update 3:** dashboard, report, roadmap, analysis progress and career components restyled (badges have `variant="text"`). Only the onboarding resume-builder fork is still running. Then: web typecheck/lint/build/test, wire new tests into `apps/web/package.json`, extension checks, browser check, push, ff main.
-- **I7 update 2:** tracker, quiz, settings, install guide, login, app shell, dev gallery and DESIGN.md "App screens" are done too (not yet viewed in a browser). Only the report/dashboard fork and the onboarding resume-builder fork were still running; `onboarding-wizard.tsx` had unclosed tags mid-edit.
-- **I7 update:** placement "Find students" UI is finished (`placement-screen.tsx`, `lib/cohort-filters.ts`, 8 tests pass). Still running at last check: report/dashboard restyle, onboarding resume builder, tracker/quiz/settings/shell restyle. Not yet rendered in a browser.
-- **I7 wip commit (2026-10-09):** four forks were editing `apps/web` screens when a usage limit hit; they were resumed. This wip commit holds their partial work and `onboarding-wizard.tsx` may not typecheck yet. Untouched at that point: dashboard, analysis-progress, roadmap-screen, dev gallery, DESIGN.md "App screens". New files: `lib/resume-builder.ts`, `components/onboarding/resume-builder.tsx`, `lib/cohort-filters.ts`, `tests/{resume-builder,cohort-filters}.test.ts` (not yet in the `test` script).
+- **Stubbed / nothing half-built for I7.** New web files: `lib/resume-builder.ts`, `components/onboarding/resume-builder.tsx`, `lib/cohort-filters.ts`, `app/app-style.css`, `components/layout/page.tsx`, `lib/use-reveal.ts`.
 - **Files touched, not finished:** —
 - **What works right now:** —
 - **Stubbed / fake (search `TODO(progress)`):** —
