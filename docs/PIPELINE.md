@@ -15,7 +15,7 @@ Design rules:
 
 | # | Stage | LLM? | Output |
 |---|---|---|---|
-| 1 | Ingest | No | Resume text (pdfplumber / python-docx), LinkedIn export text, portfolio URLs + Open Graph metadata |
+| 1 | Ingest | No | Resume text (pdfplumber / python-docx, or a UTF-8 `*.txt` built in the app: page count unknown, not penalised), LinkedIn export text, portfolio URLs + Open Graph metadata |
 | 2 | Extract resume | Yes (fast) | `ResumeProfile` |
 | 3 | Collect GitHub | No | repos, languages, file trees, manifests, contribution calendar, authored-commit counts |
 | 4 | Detect | No | per-repo detected skills + quality signals + rule-based flags |

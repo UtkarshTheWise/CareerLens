@@ -774,8 +774,8 @@ def _component_e(
 
     pages = resume.page_count_hint
     if pages is None:
-        notes.append("The resume's page count is unknown (Word file), so length was not penalised.")
-        item(True, 15, "Page count unknown (Word file); length not penalised", "")
+        notes.append("The resume's page count is unknown (Word or plain-text file), so length was not penalised.")
+        item(True, 15, "Page count unknown (Word or plain-text file); length not penalised", "")
     else:
         item(
             1 <= pages <= 2,

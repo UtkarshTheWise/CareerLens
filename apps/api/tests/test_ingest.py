@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from app.errors import ApiError
-from app.services.ingest import MAX_UPLOAD_BYTES, extract_text, restore_pii, strip_pii
+from app.services.ingest import MAX_TEXT_CHARS, MAX_UPLOAD_BYTES, extract_text, restore_pii, strip_pii
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -32,6 +32,58 @@ def test_type_is_detected_from_content_not_extension():
     with pytest.raises(ApiError) as exc:
         extract_text("resume.pdf", b"just some plain text pretending to be a pdf")
     assert (exc.value.status_code, exc.value.code) == (422, "unsupported_file")
+
+
+BUILT_RESUME = (
+    "Asha Verma\nasha@example.com | +91 98765 43210\nhttps://github.com/ashav\n\n"
+    "SKILLS\nPython, SQL, FastAPI\n\nPROJECTS\nCampus API\nA REST API for hostel requests.\n"
+    "https://github.com/ashav/campus-api\n"
+)
+
+
+def test_plain_text_resume_is_read_with_unknown_page_count():
+    doc = extract_text("resume.txt", BUILT_RESUME.encode())
+    assert doc.page_count is None
+    assert doc.text.startswith("Asha Verma\n")
+    assert "Python, SQL, FastAPI" in doc.text
+
+
+@pytest.mark.parametrize("name", ["resume", "resume.doc", "resume.pdf", None])
+def test_plain_text_needs_a_txt_name(name):
+    with pytest.raises(ApiError) as exc:
+        extract_text(name, BUILT_RESUME.encode())
+    assert (exc.value.status_code, exc.value.code) == (422, "unsupported_file")
+
+
+@pytest.mark.parametrize("data", [b"\xff\xfe\x00\x01 not utf8 " * 10, ("a" * 40 + "\x01").encode()])
+def test_non_utf8_or_control_characters_in_txt_are_refused(data):
+    with pytest.raises(ApiError) as exc:
+        extract_text("resume.txt", data)
+    assert (exc.value.status_code, exc.value.code) == (422, "unsupported_file")
+
+
+def test_short_plain_text_has_no_text_extracted():
+    with pytest.raises(ApiError) as exc:
+        extract_text("resume.txt", b"hello")
+    assert (exc.value.status_code, exc.value.code) == (422, "no_text_extracted")
+
+
+def test_bom_and_crlf_are_normalised():
+    doc = extract_text("resume.txt", b"\xef\xbb\xbf" + BUILT_RESUME.replace("\n", "\r\n").encode())
+    assert "\r" not in doc.text and doc.text.startswith("Asha Verma\n")
+
+
+def test_too_long_plain_text_is_refused():
+    with pytest.raises(ApiError) as exc:
+        extract_text("resume.txt", ("word " * (MAX_TEXT_CHARS // 4)).encode())
+    assert (exc.value.status_code, exc.value.code) == (422, "unsupported_file")
+
+
+def test_builder_layout_loses_name_contact_and_links_before_the_llm():
+    stripped = strip_pii(extract_text("resume.txt", BUILT_RESUME.encode()).text, known_names=["Asha Verma"])
+    for private in ("Asha", "asha@example.com", "98765", "github.com/ashav"):
+        assert private not in stripped.text
+    assert "Python, SQL, FastAPI" in stripped.text
 
 
 def test_rejects_files_over_5_mb():

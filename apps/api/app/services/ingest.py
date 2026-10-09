@@ -6,6 +6,7 @@ No LLM and no network here. Resume text and file bytes are never logged.
 import io
 import logging
 import re
+import unicodedata
 import zipfile
 from dataclasses import dataclass, field, replace
 from typing import Any
@@ -19,16 +20,30 @@ logger = logging.getLogger("careerlens.ingest")
 MAX_UPLOAD_BYTES = 5 * 1024 * 1024
 MAX_PDF_PAGES = 25
 MAX_DOCX_UNPACKED_BYTES = 50 * 1024 * 1024
+MAX_TEXT_CHARS = 60_000  # a resume typed in the app; far above a few pages
 
 
 @dataclass(frozen=True)
 class ExtractedDocument:
     text: str
-    page_count: int | None  # None for DOCX: Word files don't store a page count
+    page_count: int | None  # None for DOCX and plain text: neither stores a page count
+
+
+def _plain_text(filename: str | None, data: bytes) -> str | None:
+    """A resume built in the app, sent as resume.txt. Only a *.txt name, strict UTF-8, no control characters."""
+    if not (filename or "").lower().endswith(".txt"):
+        return None
+    try:
+        text = data.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        return None
+    if any(unicodedata.category(c) == "Cc" and c not in "\t\n\r" for c in text):
+        return None
+    return text.replace("\r\n", "\n").replace("\r", "\n")
 
 
 def _detect_type(filename: str | None, data: bytes) -> str | None:
-    """Magic bytes first, extension second."""
+    """Magic bytes first; plain text only when the file is named *.txt."""
     if data.startswith(b"%PDF-"):
         return "pdf"
     if data.startswith(b"PK\x03\x04"):
@@ -38,6 +53,8 @@ def _detect_type(filename: str | None, data: bytes) -> str | None:
                     return "docx"
         except zipfile.BadZipFile:
             return None
+    if _plain_text(filename, data) is not None:
+        return "text"
     return None
 
 
@@ -70,14 +87,20 @@ def _docx_text(data: bytes) -> ExtractedDocument:
 
 
 def extract_text(filename: str | None, data: bytes) -> ExtractedDocument:
-    """PDF or DOCX bytes -> text. Raises ApiError (contract Error shape) on anything unusable."""
+    """PDF, DOCX or plain-text bytes -> text. Raises ApiError (contract Error shape) on anything unusable."""
     if len(data) > MAX_UPLOAD_BYTES:
         raise ApiError(413, "payload_too_large", "File is larger than 5 MB")
     kind = _detect_type(filename, data)
     if kind is None:
-        raise ApiError(422, "unsupported_file", "Upload a PDF or DOCX file")
+        raise ApiError(422, "unsupported_file", "Upload a PDF, DOCX or plain-text (.txt) file")
     try:
-        doc = _pdf_text(data) if kind == "pdf" else _docx_text(data)
+        if kind == "text":
+            text = _plain_text(filename, data) or ""
+            if len(text) > MAX_TEXT_CHARS:
+                raise ApiError(422, "unsupported_file", "This text resume is too long; a resume is a few pages.")
+            doc = ExtractedDocument(text, None)
+        else:
+            doc = _pdf_text(data) if kind == "pdf" else _docx_text(data)
     except ApiError:
         raise
     except Exception as exc:  # parser libraries raise many unrelated types on damaged files

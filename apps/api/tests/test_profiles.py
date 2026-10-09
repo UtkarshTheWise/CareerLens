@@ -81,6 +81,18 @@ def test_upload_resume_pdf_and_docx(client):
     assert "Aarav" not in res.text  # the profile response never carries document text
 
 
+def test_upload_plain_text_resume_built_in_the_app(client):
+    pid = _create(client)["id"]
+    text = "Asha Verma\nasha@example.com\n\nSKILLS\nPython, SQL\n\nPROJECTS\nCampus API: hostel requests\n"
+    res = _upload(client, pid, "resume.txt", data=text.encode())
+    assert res.status_code == 200 and res.json()["has_resume"] is True
+    with SessionLocal() as db:
+        doc = db.query(models.Document).filter_by(profile_id=pid).one()
+        assert (doc.kind, doc.filename, doc.page_count) == ("resume", "resume.txt", None)
+        assert doc.text == text
+    assert "Asha" not in res.text  # document text never appears in the profile response
+
+
 def test_upload_linkedin_and_pasted_text_both_count(client):
     pid = _create(client)["id"]
     assert _upload(client, pid, "resume.pdf", kind="linkedin").json()["has_linkedin"] is True
@@ -91,7 +103,9 @@ def test_upload_linkedin_and_pasted_text_both_count(client):
 def test_upload_errors_use_the_contract_shape(client):
     pid = _create(client)["id"]
     cases = [
-        (_upload(client, pid, "notes.txt", data=b"plain text, not a document"), 422, "unsupported_file"),
+        (_upload(client, pid, "notes.txt", data=bytes(range(32)) * 4), 422, "unsupported_file"),
+        (_upload(client, pid, "notes", data=b"plain text without a .txt name " * 3), 422, "unsupported_file"),
+        (_upload(client, pid, "notes.txt", data=b"too short"), 422, "no_text_extracted"),
         (_upload(client, pid, "no_text.pdf"), 422, "no_text_extracted"),
         (_upload(client, pid, "big.pdf", data=b"%PDF-" + b"0" * MAX_UPLOAD_BYTES), 413, "payload_too_large"),
         (_upload(client, pid, "resume.pdf", kind="passport"), 422, "validation_error"),
