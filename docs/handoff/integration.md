@@ -53,3 +53,17 @@ Checks run: `npx @redocly/cli lint contracts/openapi.yaml` valid (examples valid
 **Non-contract headers (decision, no Contract Change Request).** `X-LLM-Provider` + `X-LLM-Key`, optional, sent by the web client only on model-calling operations, hidden from OpenAPI. The key lives in browser localStorage; the API uses only that provider for the request, never stores/caches/logs it, skips the hourly limits. Bad pair -> 422 `invalid_llm_key`; rejected key -> 400 `invalid_llm_key`. Stays out of `contracts/openapi.yaml` on purpose; if the humans want it documented there, that is a contract change (regenerates the client).
 **Not done / follow-ups.** The extension has no key field (its model use is rare: reading a page with no listed skills). The zip must be repacked when the extension changes. Quota is still shared for users without a key; consider Gemini billing, fewer calls per analysis, or cached demo flows.
 **Not verified.** A real Gemini/Groq call with a user key, the signed-in Settings UI in a browser, loading the zip into Chrome.
+
+### CCR-1 [2026-10-09] by claude-code (integration)
+Status: APPROVED (owner, explicit request in session 2026-10-09: "let users make their first resume on the platform")
+Endpoint/schema: `POST /v1/profiles/{profile_id}/documents` (`uploadDocument`)
+Change: description and `file` description only; no shape change. The endpoint also accepts a UTF-8 plain-text resume in a file named `*.txt`.
+Why: students without a resume build one in the app; the web sends the generated text as `resume.txt` through the same endpoint.
+Impact: backend accepts `.txt` (strict UTF-8, no control characters, 5 MB / 60k chars); web adds a resume builder; extension none.
+
+### CCR-2 [2026-10-09] by claude-code (integration)
+Status: APPROVED (owner, same session: "filters for searching students on the placement cohort view")
+Endpoint/schema: `GET /v1/cohorts/{cohort_id}/students` (`listCohortStudents`), `GET /v1/cohorts/{cohort_id}/export` (`exportCohort`), `#/components/schemas/CohortStudent`, new `#/components/schemas/MatchedSkill`
+Change: new optional query params `skill` (repeatable, max 10), `skill_match` (all|any), `min_level` (strong|moderate|weak|unverified, default moderate), `min_score`, `band` (repeatable), `sort` (score_asc default|score_desc|coverage_desc|name), `limit`; export also gets `at_risk_only`. `CohortStudent.matched_skills` (optional array of `MatchedSkill`), empty without a skill filter.
+Why: a company asks for e.g. "2 students with a good score who have skill X"; all defaults keep today's behaviour.
+Impact: backend filters in `services/cohorts.py`; web placement screen gets a "Find students" section; extension none (client regenerated, no code change).

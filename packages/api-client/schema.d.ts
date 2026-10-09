@@ -98,7 +98,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** @description Upload a resume (PDF/DOCX) or LinkedIn profile PDF export. Max 5 MB. */
+        /** @description Upload a resume (PDF, DOCX, or UTF-8 plain text in a file named *.txt, e.g. a resume built in the app) or a LinkedIn profile PDF export. Max 5 MB. Plain text must be valid UTF-8 without control characters. 422 unsupported_file or no_text_extracted, 413 payload_too_large. */
         post: operations["uploadDocument"];
         delete?: never;
         options?: never;
@@ -409,6 +409,20 @@ export interface paths {
             query: {
                 role_id: string;
                 at_risk_only?: boolean;
+                /** @description Skill id from the catalogue. Repeat for several (max 10). A student matches a skill when the evidence level for this role is at least min_level. Only the role's skills and skills the student claims can match. */
+                skill?: components["parameters"]["CohortSkill"];
+                /** @description Whether a student needs all of the requested skills or any one of them. */
+                skill_match?: components["parameters"]["CohortSkillMatch"];
+                /** @description Minimum evidence level for a skill match. The default moderate means strong or moderate evidence. */
+                min_level?: components["parameters"]["CohortMinLevel"];
+                /** @description Only students whose readiness score for the role is at least this value. */
+                min_score?: components["parameters"]["CohortMinScore"];
+                /** @description Only students in these bands. Repeat for several. */
+                band?: components["parameters"]["CohortBand"];
+                /** @description Order of the list. The default score_asc puts the weakest first. */
+                sort?: components["parameters"]["CohortSort"];
+                /** @description Return at most this many students, after filtering and sorting. */
+                limit?: components["parameters"]["CohortLimit"];
             };
             header?: never;
             path: {
@@ -416,6 +430,7 @@ export interface paths {
             };
             cookie?: never;
         };
+        /** @description Analysed students for a role. Filters combine with AND; the default order is weakest first. limit applies after sorting. */
         get: operations["listCohortStudents"];
         put?: never;
         post?: never;
@@ -429,6 +444,21 @@ export interface paths {
         parameters: {
             query: {
                 role_id: string;
+                at_risk_only?: boolean;
+                /** @description Skill id from the catalogue. Repeat for several (max 10). A student matches a skill when the evidence level for this role is at least min_level. Only the role's skills and skills the student claims can match. */
+                skill?: components["parameters"]["CohortSkill"];
+                /** @description Whether a student needs all of the requested skills or any one of them. */
+                skill_match?: components["parameters"]["CohortSkillMatch"];
+                /** @description Minimum evidence level for a skill match. The default moderate means strong or moderate evidence. */
+                min_level?: components["parameters"]["CohortMinLevel"];
+                /** @description Only students whose readiness score for the role is at least this value. */
+                min_score?: components["parameters"]["CohortMinScore"];
+                /** @description Only students in these bands. Repeat for several. */
+                band?: components["parameters"]["CohortBand"];
+                /** @description Order of the list. The default score_asc puts the weakest first. */
+                sort?: components["parameters"]["CohortSort"];
+                /** @description Return at most this many students, after filtering and sorting. */
+                limit?: components["parameters"]["CohortLimit"];
             };
             header?: never;
             path: {
@@ -436,6 +466,7 @@ export interface paths {
             };
             cookie?: never;
         };
+        /** @description Same filters as listCohortStudents. */
         get: operations["exportCohort"];
         put?: never;
         post?: never;
@@ -2226,7 +2257,8 @@ export interface components {
          *       "coverage": 62.5,
          *       "top_gap": "CI/CD",
          *       "at_risk": false,
-         *       "understanding": "not_taken"
+         *       "understanding": "not_taken",
+         *       "matched_skills": []
          *     }
          */
         CohortStudent: {
@@ -2248,6 +2280,13 @@ export interface components {
             at_risk: boolean;
             /** @description Latest verify result on the student's top project for this role */
             understanding?: components["schemas"]["Understanding"];
+            /** @description Requested skills this student matched, in request order. Empty when no skill filter is sent. */
+            matched_skills?: components["schemas"]["MatchedSkill"][];
+        };
+        MatchedSkill: {
+            skill_id: string;
+            skill_name: string;
+            level: components["schemas"]["EvidenceLevel"];
         };
     };
     responses: {
@@ -2284,6 +2323,20 @@ export interface components {
         AnalysisId: string;
         CohortId: string;
         QuizId: string;
+        /** @description Skill id from the catalogue. Repeat for several (max 10). A student matches a skill when the evidence level for this role is at least min_level. Only the role's skills and skills the student claims can match. */
+        CohortSkill: string[];
+        /** @description Whether a student needs all of the requested skills or any one of them. */
+        CohortSkillMatch: "all" | "any";
+        /** @description Minimum evidence level for a skill match. The default moderate means strong or moderate evidence. */
+        CohortMinLevel: "strong" | "moderate" | "weak" | "unverified";
+        /** @description Only students whose readiness score for the role is at least this value. */
+        CohortMinScore: number;
+        /** @description Only students in these bands. Repeat for several. */
+        CohortBand: components["schemas"]["Band"][];
+        /** @description Order of the list. The default score_asc puts the weakest first. */
+        CohortSort: "score_asc" | "score_desc" | "coverage_desc" | "name";
+        /** @description Return at most this many students, after filtering and sorting. */
+        CohortLimit: number;
     };
     requestBodies: never;
     headers: never;
@@ -2475,7 +2528,10 @@ export interface operations {
                 "multipart/form-data": {
                     /** @enum {string} */
                     kind: "resume" | "linkedin";
-                    /** Format: binary */
+                    /**
+                     * Format: binary
+                     * @description PDF, DOCX or .txt (UTF-8)
+                     */
                     file: string;
                 };
             };
@@ -3038,6 +3094,20 @@ export interface operations {
             query: {
                 role_id: string;
                 at_risk_only?: boolean;
+                /** @description Skill id from the catalogue. Repeat for several (max 10). A student matches a skill when the evidence level for this role is at least min_level. Only the role's skills and skills the student claims can match. */
+                skill?: components["parameters"]["CohortSkill"];
+                /** @description Whether a student needs all of the requested skills or any one of them. */
+                skill_match?: components["parameters"]["CohortSkillMatch"];
+                /** @description Minimum evidence level for a skill match. The default moderate means strong or moderate evidence. */
+                min_level?: components["parameters"]["CohortMinLevel"];
+                /** @description Only students whose readiness score for the role is at least this value. */
+                min_score?: components["parameters"]["CohortMinScore"];
+                /** @description Only students in these bands. Repeat for several. */
+                band?: components["parameters"]["CohortBand"];
+                /** @description Order of the list. The default score_asc puts the weakest first. */
+                sort?: components["parameters"]["CohortSort"];
+                /** @description Return at most this many students, after filtering and sorting. */
+                limit?: components["parameters"]["CohortLimit"];
             };
             header?: never;
             path: {
@@ -3063,6 +3133,21 @@ export interface operations {
         parameters: {
             query: {
                 role_id: string;
+                at_risk_only?: boolean;
+                /** @description Skill id from the catalogue. Repeat for several (max 10). A student matches a skill when the evidence level for this role is at least min_level. Only the role's skills and skills the student claims can match. */
+                skill?: components["parameters"]["CohortSkill"];
+                /** @description Whether a student needs all of the requested skills or any one of them. */
+                skill_match?: components["parameters"]["CohortSkillMatch"];
+                /** @description Minimum evidence level for a skill match. The default moderate means strong or moderate evidence. */
+                min_level?: components["parameters"]["CohortMinLevel"];
+                /** @description Only students whose readiness score for the role is at least this value. */
+                min_score?: components["parameters"]["CohortMinScore"];
+                /** @description Only students in these bands. Repeat for several. */
+                band?: components["parameters"]["CohortBand"];
+                /** @description Order of the list. The default score_asc puts the weakest first. */
+                sort?: components["parameters"]["CohortSort"];
+                /** @description Return at most this many students, after filtering and sorting. */
+                limit?: components["parameters"]["CohortLimit"];
             };
             header?: never;
             path: {

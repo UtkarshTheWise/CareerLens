@@ -131,7 +131,10 @@ paths:
     post:
       tags: [profiles]
       operationId: uploadDocument
-      description: Upload a resume (PDF/DOCX) or LinkedIn profile PDF export. Max 5 MB.
+      description: >-
+        Upload a resume (PDF, DOCX, or UTF-8 plain text in a file named *.txt, e.g. a resume built in the app)
+        or a LinkedIn profile PDF export. Max 5 MB. Plain text must be valid UTF-8 without control characters.
+        422 unsupported_file or no_text_extracted, 413 payload_too_large.
       requestBody:
         required: true
         content:
@@ -141,7 +144,7 @@ paths:
               required: [kind, file]
               properties:
                 kind: { type: string, enum: [resume, linkedin] }
-                file: { type: string, format: binary }
+                file: { type: string, format: binary, description: "PDF, DOCX or .txt (UTF-8)" }
       responses:
         default: { $ref: "#/components/responses/Error" }
         "200":
@@ -498,9 +501,19 @@ paths:
       - { $ref: "#/components/parameters/CohortId" }
       - { name: role_id, in: query, required: true, schema: { type: string } }
       - { name: at_risk_only, in: query, schema: { type: boolean, default: false } }
+      - { $ref: "#/components/parameters/CohortSkill" }
+      - { $ref: "#/components/parameters/CohortSkillMatch" }
+      - { $ref: "#/components/parameters/CohortMinLevel" }
+      - { $ref: "#/components/parameters/CohortMinScore" }
+      - { $ref: "#/components/parameters/CohortBand" }
+      - { $ref: "#/components/parameters/CohortSort" }
+      - { $ref: "#/components/parameters/CohortLimit" }
     get:
       tags: [cohorts]
       operationId: listCohortStudents
+      description: >-
+        Analysed students for a role. Filters combine with AND; the default order is weakest first.
+        limit applies after sorting.
       responses:
         default: { $ref: "#/components/responses/Error" }
         "200":
@@ -513,9 +526,18 @@ paths:
     parameters:
       - { $ref: "#/components/parameters/CohortId" }
       - { name: role_id, in: query, required: true, schema: { type: string } }
+      - { name: at_risk_only, in: query, schema: { type: boolean, default: false } }
+      - { $ref: "#/components/parameters/CohortSkill" }
+      - { $ref: "#/components/parameters/CohortSkillMatch" }
+      - { $ref: "#/components/parameters/CohortMinLevel" }
+      - { $ref: "#/components/parameters/CohortMinScore" }
+      - { $ref: "#/components/parameters/CohortBand" }
+      - { $ref: "#/components/parameters/CohortSort" }
+      - { $ref: "#/components/parameters/CohortLimit" }
     get:
       tags: [cohorts]
       operationId: exportCohort
+      description: Same filters as listCohortStudents.
       responses:
         default: { $ref: "#/components/responses/Error" }
         "200":
@@ -533,6 +555,47 @@ components:
     AnalysisId: { name: analysis_id, in: path, required: true, schema: { type: string, format: uuid } }
     CohortId: { name: cohort_id, in: path, required: true, schema: { type: string, format: uuid } }
     QuizId: { name: quiz_id, in: path, required: true, schema: { type: string, format: uuid } }
+    CohortSkill:
+      name: skill
+      in: query
+      style: form
+      explode: true
+      description: >-
+        Skill id from the catalogue. Repeat for several (max 10). A student matches a skill when the evidence
+        level for this role is at least min_level. Only the role's skills and skills the student claims can match.
+      schema: { type: array, maxItems: 10, items: { type: string } }
+    CohortSkillMatch:
+      name: skill_match
+      in: query
+      description: Whether a student needs all of the requested skills or any one of them.
+      schema: { type: string, enum: [all, any], default: all }
+    CohortMinLevel:
+      name: min_level
+      in: query
+      description: Minimum evidence level for a skill match. The default moderate means strong or moderate evidence.
+      schema: { type: string, enum: [strong, moderate, weak, unverified], default: moderate }
+    CohortMinScore:
+      name: min_score
+      in: query
+      description: Only students whose readiness score for the role is at least this value.
+      schema: { type: number, minimum: 0, maximum: 100 }
+    CohortBand:
+      name: band
+      in: query
+      style: form
+      explode: true
+      description: Only students in these bands. Repeat for several.
+      schema: { type: array, items: { $ref: "#/components/schemas/Band" } }
+    CohortSort:
+      name: sort
+      in: query
+      description: Order of the list. The default score_asc puts the weakest first.
+      schema: { type: string, enum: [score_asc, score_desc, coverage_desc, name], default: score_asc }
+    CohortLimit:
+      name: limit
+      in: query
+      description: Return at most this many students, after filtering and sorting.
+      schema: { type: integer, minimum: 1, maximum: 500 }
 
   responses:
     NotFound:
@@ -1740,6 +1803,10 @@ components:
         understanding:
           $ref: "#/components/schemas/Understanding"
           description: Latest verify result on the student's top project for this role
+        matched_skills:
+          type: array
+          description: Requested skills this student matched, in request order. Empty when no skill filter is sent.
+          items: { $ref: "#/components/schemas/MatchedSkill" }
       examples:
         - profile_id: 3f2b8c1e-5d47-4a9b-8e21-7c6a0f9d1b34
           name: Demo Student
@@ -1752,3 +1819,12 @@ components:
           top_gap: CI/CD
           at_risk: false
           understanding: not_taken
+          matched_skills: []
+
+    MatchedSkill:
+      type: object
+      required: [skill_id, skill_name, level]
+      properties:
+        skill_id: { type: string }
+        skill_name: { type: string }
+        level: { $ref: "#/components/schemas/EvidenceLevel" }
