@@ -319,7 +319,7 @@ function WizardForm({ initialName }: { initialName: string }) {
                 <h2
                   ref={heading}
                   tabIndex={-1}
-                  className="text-lg font-semibold outline-none"
+                  className="section-title outline-none"
                 >
                   {steps[step].label}
                 </h2>
@@ -565,7 +565,7 @@ function WizardForm({ initialName }: { initialName: string }) {
                         spellCheck={false}
                       />
                     </FieldBlock>
-                    <p className="rounded-control bg-surface-2 p-4 text-xs leading-relaxed text-muted-readable">
+                    <p className="inset-note">
                       You can continue without links. Your analysis will explain
                       where evidence is unavailable.
                     </p>
@@ -755,23 +755,14 @@ function WizardForm({ initialName }: { initialName: string }) {
                 </Button>
               </div>
             </form>
-          </CardContent>
-        </Card>
-        <aside className="rounded-card border border-border bg-surface p-6 text-sm">
-          <span className="icon-chip mb-4">
-            <FileText
-              size={20}
-              strokeWidth={1.75}
-              className="text-primary-text"
-              aria-hidden="true"
-            />
-          </span>
-          <h2 className="font-semibold">Evidence, in context.</h2>
-          <p className="mt-3 leading-relaxed text-muted-readable">
+        </Panel>
+        <aside className="inset-note">
+          <h2 className="text-base font-medium text-text">Evidence, in context.</h2>
+          <p className="mt-3">
             Your resume supplies the claims. Your projects and experience help
             show the work behind them.
           </p>
-          <p className="mt-4 text-xs leading-relaxed text-muted-readable">
+          <p className="mt-4 text-xs">
             Use your own documents and public links. Processing begins only when
             you choose Analyse.
           </p>

@@ -38,3 +38,22 @@ Hover/selection transitions 180–220ms, ease cubic-bezier(.22,1,.36,1). One-tim
 Readiness and components expose reasons; coverage explains its definition. No frontend scoring. Skipping a quiz never lowers a score. Preserve target-role filtering, mutation rollback, stale response cancellation, explicit active-tab extraction and genuine auth. Synthetic data appears only in the labelled homepage example and test fixtures.
 
 Verify text contrast (4.5:1), keyboard focus, mobile 320/375/414px, tablet 768px, desktop 1440px, both themes, empty/error/loading states and reduced motion. Keep rings/charts accessible with textual summaries. Web lint/typecheck/build and extension typecheck/build/test must pass before publication.
+
+## App screens (signed-in workspace)
+
+The homepage language, tuned for data screens. Tokens do not change; the classes live in `apps/web/app/app-style.css` and the React primitives in `apps/web/components/layout/page.tsx`. `/dev/components` shows every one.
+
+| Primitive | Use it for |
+|---|---|
+| `PageHeader` (`.eyebrow`, `.page-title`, `.lede`) | The one h1 of a screen, with optional actions. |
+| `Section` (`.app-section`, `.section-title`) | A hairline-ruled block of a screen. Prefer it to nesting cards. |
+| `Panel` (`.panel`, `.panel-label`, `.panel-footer`) | A flat surface for one idea: a score, a form, a result. Footer holds a muted label and a tabular value. |
+| `Metric` (`.metric`, `.metric-unit`) | A big tabular number with a muted unit, for example `65 / 100`. |
+| `StatusText` (`.status-text`, `.tone-text-*`) | Status as coloured text with a dot, always beside its label. Use the filled `.status-pill` only in dense table or kanban cells. |
+| `SelectRowGroup` (`.select-row`) | A list where choosing a row explains it below (claims, skills, filters). `aria-pressed`, polite live region. |
+| `Disclosure`, `.faq` | A `+` row that opens a region; native `details` for questions and troubleshooting. |
+| `TextLink` (`.text-link`) | Inline links; external ones get an arrow and "opens in a new tab" for screen readers. |
+| `.field`, `.field-label`, `.field-hint`, `.field-error`, `.chip` | Every input, select and textarea; 44px high, visible boundary and focus. |
+| `Button size="lg" trailingArrow` | The one primary action of a screen (48px, arrow 24px from the label). |
+
+Scale: page title 30/38, 36/44 from 900px; section title 22/30; section rhythm 32px, 40px from 1024px; panels 24px, 28px from 640px. Keep data density: the app has no marketing hero, no call-to-action band and no 104px header. Status is never colour alone. Separate with hairlines instead of nested bordered boxes. Hover styles apply only to fine pointers (`@media (hover:hover) and (pointer:fine)`); the one-time reveal (`useReveal`) is limited to read-only overview sections and is skipped under reduced motion.

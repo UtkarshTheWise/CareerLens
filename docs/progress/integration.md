@@ -38,6 +38,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | I5 | `/extension` install page + zip, Settings "your own AI key" (BYOK headers), prod push | done | see git log | extension itself has no key field yet (follow-up) |
 
 ## In-progress detail
+- **I7 update 2:** tracker, quiz, settings, install guide, login, app shell, dev gallery and DESIGN.md "App screens" are done too (not yet viewed in a browser). Only the report/dashboard fork and the onboarding resume-builder fork were still running; `onboarding-wizard.tsx` had unclosed tags mid-edit.
 - **I7 update:** placement "Find students" UI is finished (`placement-screen.tsx`, `lib/cohort-filters.ts`, 8 tests pass). Still running at last check: report/dashboard restyle, onboarding resume builder, tracker/quiz/settings/shell restyle. Not yet rendered in a browser.
 - **I7 wip commit (2026-10-09):** four forks were editing `apps/web` screens when a usage limit hit; they were resumed. This wip commit holds their partial work and `onboarding-wizard.tsx` may not typecheck yet. Untouched at that point: dashboard, analysis-progress, roadmap-screen, dev gallery, DESIGN.md "App screens". New files: `lib/resume-builder.ts`, `components/onboarding/resume-builder.tsx`, `lib/cohort-filters.ts`, `tests/{resume-builder,cohort-filters}.test.ts` (not yet in the `test` script).
 - **Files touched, not finished:** —

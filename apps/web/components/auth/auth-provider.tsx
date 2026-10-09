@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import { useQueryClient } from "@tanstack/react-query";
 import type { User } from "@supabase/supabase-js";
 import { getSupabase, isAuthConfigured } from "@/lib/auth/supabase";
+import { clearDraft } from "@/lib/resume-builder";
 export { displayName } from "@/lib/auth/user";
 
 export type AuthStatus = "disabled" | "loading" | "signed-out" | "signed-in";
@@ -64,6 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       async signOut() {
         await getSupabase()?.auth.signOut();
         queryClient.clear(); // nothing from the previous person stays in memory
+        clearDraft(); // nor an unsent resume draft saved in this browser
       },
     }),
     [status, user, error, queryClient],
