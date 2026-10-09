@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRef } from "react";
 import { useStartAnalysis, useGetAnalysis } from "@/lib/api/hooks";
-import { errorMessage } from "@/lib/api/transport";
+import { ApiError, errorMessage } from "@/lib/api/transport";
 import { useRouter } from "next/navigation";
 import { StageProgress } from "@/components/career";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -47,6 +47,27 @@ export function AnalysisProgress({
         refreshing={analysis.isFetching}
         error={analysis.isError ? errorMessage(analysis.error) : undefined}
       />
+    );
+  }
+  if (analysis.isError && !analysis.data && analysis.error instanceof ApiError && analysis.error.status === 404) {
+    return (
+      <section className="mx-auto max-w-4xl space-y-6">
+        <PageHeader
+          eyebrow="Your evidence analysis"
+          title="We can’t find this report."
+          description="It may have been deleted, or it belongs to a different account than the one you’re signed in with. Reports from your own profile are listed on your dashboard."
+        />
+        <Panel>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button asChild trailingArrow>
+              <Link href="/dashboard">Go to your dashboard</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link href="/onboarding">Start a new analysis</Link>
+            </Button>
+          </div>
+        </Panel>
+      </section>
     );
   }
   return (

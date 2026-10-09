@@ -64,12 +64,24 @@ function Button({
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     >
-      {asChild && arrow ? (
-        <Slot.Slottable>{children}</Slot.Slottable>
-      ) : (
-        children
-      )}
-      {arrow}
+      {
+        // Slot needs one element child, or a Slottable with siblings, never a child plus null.
+        asChild ? (
+          arrow ? (
+            <>
+              <Slot.Slottable>{children}</Slot.Slottable>
+              {arrow}
+            </>
+          ) : (
+            children
+          )
+        ) : (
+          <>
+            {children}
+            {arrow}
+          </>
+        )
+      }
     </Comp>
   )
 }
