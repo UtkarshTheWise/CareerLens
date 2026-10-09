@@ -96,3 +96,24 @@
   .status-text::before { background: CanvasText; }
   .disclosure-row, .app-section { border-color: CanvasText; }
 }
+
+/* Accent hues (design-tokens.css "Terrain accents"). Set one hue class, then use the helpers below it. */
+.hue-citron { --hue: var(--hue-citron); --hue-text: var(--hue-citron-text); }
+.hue-sage { --hue: var(--hue-sage); --hue-text: var(--hue-sage-text); }
+.hue-teal { --hue: var(--hue-teal); --hue-text: var(--hue-teal-text); }
+.hue-ochre { --hue: var(--hue-ochre); --hue-text: var(--hue-ochre-text); }
+.hue-clay { --hue: var(--hue-clay); --hue-text: var(--hue-clay-text); }
+.hue-plum { --hue: var(--hue-plum); --hue-text: var(--hue-plum-text); }
+
+.tint-card { background: linear-gradient(165deg, color-mix(in srgb, var(--hue) 15%, var(--surface)) 0%, var(--surface) 70%); border: 1px solid color-mix(in srgb, var(--hue) 30%, var(--border)); border-top: 3px solid var(--hue); }
+.tint-card .panel-label { color: var(--hue-text); border-bottom-color: color-mix(in srgb, var(--hue) 26%, var(--border)); }
+.tint-card .metric { color: var(--hue-text); }
+.hue-chip { display: inline-flex; flex: none; width: 36px; height: 36px; align-items: center; justify-content: center; border-radius: var(--radius-control); background: color-mix(in srgb, var(--hue) 18%, transparent); color: var(--hue-text); }
+.hue-dot { flex: none; width: 8px; height: 8px; border-radius: 999px; background: var(--hue); }
+.hue-text { color: var(--hue-text); }
+.hue-bar { height: 4px; overflow: hidden; border-radius: 999px; background: color-mix(in srgb, var(--text) 10%, transparent); }
+.hue-bar > span { display: block; height: 100%; border-radius: inherit; background: var(--hue); transition: width 400ms var(--ease); }
+.hue-rule { border-left: 3px solid var(--hue); padding-left: 16px; }
+.hue-inset { background: color-mix(in srgb, var(--hue) 11%, var(--surface-2)); border: 1px solid color-mix(in srgb, var(--hue) 22%, transparent); border-radius: 8px; }
+@media (prefers-reduced-motion: reduce) { .hue-bar > span { transition: none; } }
+@media (forced-colors: active) { .tint-card { border-color: CanvasText; } .hue-bar > span { background: Highlight; } }

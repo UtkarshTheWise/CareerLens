@@ -86,8 +86,8 @@ export function TrendCard({
                         style={{
                           background:
                             index === 0
-                              ? "var(--primary)"
-                              : "var(--primary-soft)",
+                              ? "var(--hue-teal)"
+                              : "var(--hue-sage)",
                         }}
                         aria-hidden="true"
                       />
@@ -147,7 +147,7 @@ export function TrendCard({
                           name={series[1]}
                           type="monotone"
                           dataKey="secondary"
-                          stroke="var(--primary-soft)"
+                          stroke="var(--hue-sage)"
                           strokeWidth={2.5}
                           dot={false}
                           isAnimationActive={!reduced}
@@ -157,7 +157,7 @@ export function TrendCard({
                         name={series[0]}
                         type="monotone"
                         dataKey="primary"
-                        stroke="var(--primary)"
+                        stroke="var(--hue-teal)"
                         strokeWidth={2.5}
                         dot={false}
                         activeDot={{
@@ -172,7 +172,7 @@ export function TrendCard({
                           x={point.label}
                           y={point.primary}
                           r={5}
-                          fill="var(--primary)"
+                          fill="var(--hue-teal)"
                           stroke="var(--surface)"
                           strokeWidth={3}
                         />

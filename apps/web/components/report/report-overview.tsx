@@ -12,6 +12,7 @@ import {
   type Schema,
   type ViewState,
 } from "@/components/career/shared";
+import { GAUGE_HUES } from "@/components/career/segmented-gauge";
 import { Panel, TextLink } from "@/components/layout/page";
 import { useReveal } from "@/lib/use-reveal";
 export const coverageDefinition =
@@ -55,6 +56,8 @@ export function ReportOverview({
   verifiedMessage?: string;
 }) {
   const role = [...report.role_fits].sort((a, b) => b.score - a.score)[0];
+  const bandHue =
+    report.score.band === "ready" ? "sage" : report.score.band === "developing" ? "ochre" : "clay";
   const topRef = useReveal<HTMLDivElement>();
   const whyRef = useReveal<HTMLElement>();
   return (
@@ -64,6 +67,7 @@ export function ReportOverview({
         className="reveal grid items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-4"
       >
         <Panel
+          className={`tint-card hue-${bandHue}`}
           label="Job Readiness"
           footer={
             <>
@@ -95,9 +99,10 @@ export function ReportOverview({
             )}
           </div>
         </Panel>
-        <Panel label="Evidence Coverage">
+        <Panel label="Evidence Coverage" className="tint-card hue-teal">
           <ScoreRing
             value={report.coverage}
+            hue="teal"
             label="Coverage"
             explanation={
               <WhyPopover
@@ -120,6 +125,7 @@ export function ReportOverview({
               : number(verifiedSkills)
           }
           icon={BadgeCheck}
+          hue="citron"
           explanation={
             <div className="space-y-3 text-xs text-muted-readable">
               <p>
@@ -137,11 +143,11 @@ export function ReportOverview({
             </div>
           }
         />
-        <Panel label="Top role fit">
+        <Panel label="Top role fit" className="tint-card hue-plum">
           {role ? (
             <div className="space-y-3">
               <p className="text-sm font-medium">{role.role_name}</p>
-              <ScoreRing value={role.score} label="Role fit" size={144} />
+              <ScoreRing value={role.score} hue="plum" label="Role fit" size={144} />
               <RoleReasons role={role} />
             </div>
           ) : (
@@ -171,17 +177,28 @@ export function ReportOverview({
             }))}
           />
           <div className="hairline-list min-w-0">
-            {report.score.components.map((component) => (
-              <div key={component.key} className="py-4 first:pt-0">
+            {report.score.components.map((component, index) => (
+              <div
+                key={component.key}
+                className={`hue-${GAUGE_HUES[index % GAUGE_HUES.length]} py-4 first:pt-0`}
+              >
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="text-sm font-medium">{component.label}</h3>
+                  <h3 className="flex items-center gap-2 text-sm font-medium">
+                    <span className="hue-dot" aria-hidden="true" />
+                    {component.label}
+                  </h3>
                   <WhyPopover
                     label={component.label}
                     reasons={component.reasons}
                     evidence={report.evidence}
                   />
                 </div>
-                <dl className="mt-2 grid grid-cols-3 gap-2 text-xs">
+                {component.score !== null && (
+                  <div className="hue-bar mt-3" aria-hidden="true">
+                    <span style={{ width: `${Math.min(100, Math.max(0, component.score))}%` }} />
+                  </div>
+                )}
+                <dl className="mt-3 grid grid-cols-3 gap-2 text-xs">
                   <div>
                     <dt className="text-muted-readable">Score</dt>
                     <dd className="mt-1 font-medium tabular-nums">

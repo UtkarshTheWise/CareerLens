@@ -9,8 +9,10 @@ export function KpiCard({
   explanation,
   state = "ready",
   message,
+  hue,
 }: {
   label: string;
+  hue?: "citron" | "sage" | "teal" | "ochre" | "clay" | "plum";
   value: ReactNode;
   icon: LucideIcon;
   delta?: {
@@ -30,17 +32,23 @@ export function KpiCard({
         ? ArrowUp
         : Minus;
   return (
-    <CardFrame data-component="KpiCard">
-      <div className="flex items-start justify-between gap-3 border-b border-border pb-3">
-        <h2 className="text-xs! font-medium! tracking-[.025em]! text-muted-readable">
+    <CardFrame data-component="KpiCard" className={hue ? `tint-card hue-${hue}` : undefined}>
+      <div className="flex items-center justify-between gap-3 border-b border-border pb-3">
+        <h2 className={`text-xs! font-medium! tracking-[.025em]! ${hue ? "hue-text" : "text-muted-readable"}`}>
           {label}
         </h2>
-        <Icon
-          size={16}
-          strokeWidth={1.75}
-          aria-hidden="true"
-          className="shrink-0 text-muted-readable"
-        />
+        {hue ? (
+          <span className="hue-chip" aria-hidden="true">
+            <Icon size={18} strokeWidth={1.75} />
+          </span>
+        ) : (
+          <Icon
+            size={16}
+            strokeWidth={1.75}
+            aria-hidden="true"
+            className="shrink-0 text-muted-readable"
+          />
+        )}
       </div>
       <CardState state={state} message={message}>
         <div className="metric">{value ?? "—"}</div>

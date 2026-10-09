@@ -177,7 +177,7 @@ export function StudentDashboard() {
               {report.gaps.slice(0, 3).map((gap) => (
                 <div
                   key={gap.gap_id}
-                  className="space-y-1 py-4 first:pt-0"
+                  className="hue-clay hue-rule my-3 space-y-1 py-1"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <h3 className="text-sm font-medium">{gap.skill_name}</h3>
@@ -188,7 +188,7 @@ export function StudentDashboard() {
                       ? "Claimed skill needs stronger evidence."
                       : "Not claimed for this target role."}
                   </p>
-                  <p className="text-xs font-medium tabular-nums text-success-readable">
+                  <p className="hue-sage hue-text text-xs font-medium tabular-nums">
                     Estimated gain: {signed(gap.estimated_gain)} pts
                   </p>
                 </div>
@@ -208,7 +208,7 @@ export function StudentDashboard() {
           actions={<TextLink href="/roadmap">Full roadmap</TextLink>}
         >
           {next ? (
-            <div className="space-y-3">
+            <div className="hue-citron space-y-3">
               <MilestoneCard milestone={next} disabled />
               <p className="text-xs text-muted-readable">
                 Suggested next step from this analysis.

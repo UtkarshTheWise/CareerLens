@@ -38,6 +38,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | I5 | `/extension` install page + zip, Settings "your own AI key" (BYOK headers), prod push | done | see git log | extension itself has no key field yet (follow-up) |
 
 ## In-progress detail
+- **I7 follow-up (2026-10-09):** hotfix `fix(web): Button asChild crashed without trailingArrow` (Slot got a child plus null; screens with `<Button asChild>` and no arrow threw) and a clear 404 state for a missing report; then a colour pass (terrain accent tokens in both `design-tokens.css`, `tint-card`/`hue-*` classes, rings/gauge/KPI/report/dashboard). Not verified: light theme rendering, phone width.
 - **Stubbed / nothing half-built for I7.** New web files: `lib/resume-builder.ts`, `components/onboarding/resume-builder.tsx`, `lib/cohort-filters.ts`, `app/app-style.css`, `components/layout/page.tsx`, `lib/use-reveal.ts`.
 - **Files touched, not finished:** —
 - **What works right now:** —

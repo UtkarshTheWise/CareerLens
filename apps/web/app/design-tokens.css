@@ -27,3 +27,20 @@
   --success-tint: #253020; --warning-tint: #332e21; --danger-tint: #35221f;
   --code-warm: #d2c4a2;
 }
+/* Terrain accents: earthy hues that sit with citron and olive. -text variants meet 4.5:1 on the surface. */
+:root {
+  --hue-citron: #7f8e2c; --hue-citron-text: #535f32;
+  --hue-sage: #4f8f4a; --hue-sage-text: #2f6b34;
+  --hue-teal: #2f8f84; --hue-teal-text: #1f6b62;
+  --hue-ochre: #b87a10; --hue-ochre-text: #7d5710;
+  --hue-clay: #c9573a; --hue-clay-text: #a23f26;
+  --hue-plum: #7b6bb8; --hue-plum-text: #5a4a98;
+}
+:root[data-theme="dark"] {
+  --hue-citron: #d1d59c; --hue-citron-text: #d1d59c;
+  --hue-sage: #9fcf8f; --hue-sage-text: #9fcf8f;
+  --hue-teal: #7cc4b4; --hue-teal-text: #7cc4b4;
+  --hue-ochre: #e3b765; --hue-ochre-text: #e3b765;
+  --hue-clay: #e08d6f; --hue-clay-text: #eba48a;
+  --hue-plum: #b7a9e6; --hue-plum-text: #b7a9e6;
+}

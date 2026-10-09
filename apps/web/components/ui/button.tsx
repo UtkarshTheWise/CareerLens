@@ -65,22 +65,13 @@ function Button({
       {...props}
     >
       {
-        // Slot needs one element child, or a Slottable with siblings, never a child plus null.
-        asChild ? (
-          arrow ? (
-            <>
-              <Slot.Slottable>{children}</Slot.Slottable>
-              {arrow}
-            </>
-          ) : (
-            children
-          )
-        ) : (
-          <>
-            {children}
-            {arrow}
-          </>
-        )
+        // Slot needs one element child, or a Slottable that is a direct child with its siblings.
+        // A fragment would hide the Slottable, and a child plus null counts as two children.
+        asChild
+          ? arrow
+            ? [<Slot.Slottable key="child">{children}</Slot.Slottable>, <React.Fragment key="arrow">{arrow}</React.Fragment>]
+            : children
+          : [<React.Fragment key="child">{children}</React.Fragment>, <React.Fragment key="arrow">{arrow}</React.Fragment>]
       }
     </Comp>
   )

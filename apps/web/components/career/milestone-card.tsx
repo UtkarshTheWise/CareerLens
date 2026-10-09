@@ -23,7 +23,7 @@ export function MilestoneCard({
   const id = useId();
   const messageId = `${id}-status`;
   return (
-    <CardFrame data-component="MilestoneCard" aria-busy={saving}>
+    <CardFrame data-component="MilestoneCard" aria-busy={saving} className="tint-card hue-citron">
       <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border pb-3 text-[11px] tracking-[.025em] text-muted-readable">
         <span>Milestone {milestone.order}</span>
         <span className="tabular-nums">{milestone.effort_hours} hours estimated effort</span>

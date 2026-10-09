@@ -8,26 +8,24 @@ export function ScoreRing({
   band,
   explanation,
   size = 160,
+  hue,
 }: {
   value: number | null;
   label: string;
   band?: Schema["Band"];
   explanation?: ReactNode;
   size?: number;
+  /** A fixed accent for rings that are not a readiness band, such as coverage. */
+  hue?: "citron" | "sage" | "teal" | "ochre" | "clay" | "plum";
 }) {
   const reduced = useReducedMotion();
   const compact = size < 120;
   const valid =
     value !== null && Number.isFinite(value) && value >= 0 && value <= 100;
   const circumference = 2 * Math.PI * 58;
-  const color =
-    band === "ready"
-      ? "var(--success-readable)"
-      : band === "developing"
-        ? "var(--warning-readable)"
-        : band === "not_ready"
-          ? "var(--danger-readable)"
-          : "var(--primary)";
+  const bandHue = band === "ready" ? "sage" : band === "developing" ? "ochre" : band === "not_ready" ? "clay" : "citron";
+  const color = `var(--hue-${hue ?? bandHue})`;
+  const textColor = `var(--hue-${hue ?? bandHue}-text)`;
   return (
     <div
       data-component="ScoreRing"
@@ -49,7 +47,7 @@ export function ScoreRing({
             cy="72"
             r="58"
             fill="none"
-            stroke="var(--control)"
+            stroke="color-mix(in srgb, var(--text) 13%, transparent)"
             strokeWidth="7"
           />
           <motion.circle
@@ -73,6 +71,7 @@ export function ScoreRing({
           className={`absolute inset-0 flex flex-col items-center justify-center gap-1 text-center ${compact ? "px-3" : "px-7"}`}
         >
           <span
+            style={{ color: textColor }}
             className={`${compact ? "text-xl" : "text-4xl"} font-semibold tracking-tight tabular-nums`}
           >
             {valid ? number(value!) : "—"}

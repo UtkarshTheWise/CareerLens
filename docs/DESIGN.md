@@ -57,3 +57,11 @@ The homepage language, tuned for data screens. Tokens do not change; the classes
 | `Button size="lg" trailingArrow` | The one primary action of a screen (48px, arrow 24px from the label). |
 
 Scale: page title 30/38, 36/44 from 900px; section title 22/30; section rhythm 32px, 40px from 1024px; panels 24px, 28px from 640px. Keep data density: the app has no marketing hero, no call-to-action band and no 104px header. Status is never colour alone. Separate with hairlines instead of nested bordered boxes. Hover styles apply only to fine pointers (`@media (hover:hover) and (pointer:fine)`); the one-time reveal (`useReveal`) is limited to read-only overview sections and is skipped under reduced motion.
+
+## Terrain accents (colour on data screens)
+The olive base is kept, and six earthy hues sit on top of it so score screens are not one grey-green: citron, sage, teal, ochre, clay and plum (`--hue-*` and `--hue-*-text` in both `design-tokens.css` files, which stay identical). Fills and rings meet 3:1 and the `-text` variants meet 4.5:1 on the surface in both themes.
+
+- Set one `hue-<name>` class, then use `tint-card` (soft gradient wash, hue border and 3px top rule), `hue-chip`, `hue-dot`, `hue-bar`, `hue-rule`, `hue-inset` or `hue-text` from `app/app-style.css`. This is the one place a gradient is allowed; other surfaces stay flat.
+- Meaning first: readiness ring and card follow the band (ready sage, developing ochre, not ready clay); coverage is teal; verified skills and milestones are citron; role fit is plum; skill gaps use a clay rule with the estimated gain in sage.
+- The five score components keep the same order and hue everywhere (`GAUGE_HUES`): citron, sage, teal, ochre, clay.
+- Colour never carries meaning alone: every status keeps its text label.
