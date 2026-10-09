@@ -1,7 +1,7 @@
 import { number } from "./shared";
 export type GaugeSegment = { label: string; value: number };
 /** One hue per score component, in order. report-overview uses the same list for its rows. */
-export const GAUGE_HUES = ["citron", "sage", "teal", "ochre", "clay", "plum"] as const;
+export const GAUGE_HUES = ["violet", "emerald", "fuchsia", "amber", "rose", "indigo"] as const;
 const colors = GAUGE_HUES.map((hue) => `var(--hue-${hue})`);
 export function SegmentedGauge({
   segments,

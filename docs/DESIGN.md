@@ -1,29 +1,30 @@
-# CareerLens design system — Carbon & Citron
+# CareerLens design system: Indigo & Violet on black
 
-The user-approved homepage prototype supersedes the earlier indigo/violet reference palette. Apply this system to the homepage, authenticated app and Chrome extension. Preserve every API workflow, explanation, accessibility feature and stored preference.
+The layout, type, spacing and motion of the approved homepage prototype apply to the homepage, the signed-in app and the Chrome extension. The colours are the original indigo (light) and violet on near-black (dark) palette, restored on 2026-10-09 after the olive "Carbon & Citron" trial. Preserve every API workflow, explanation, accessibility feature and stored preference.
 
 ## Source of truth
 apps/web/app/design-tokens.css and apps/extension/src/design-tokens.css contain identical semantic tokens. Never inline a second accent palette in product components.
 
 | Token | Dark | Light |
 |---|---|---|
-| Canvas | #0c0e0c | #f2f0e6 |
-| Surface | #151914 | #faf9f3 |
-| Nested surface | #1e241b | #e9eadc |
-| Selected surface | #262e21 | #dde2cb |
-| Main text | #f2f0e6 | #1c2115 |
-| Secondary text | #a6ad9e | #606650 |
-| Accent | #d1d59c | #535f32 |
-| Accent ink | #1c2115 | #faf9f3 |
-| Structural border | #333b2e | #d2d6c4 |
-| Control boundary | #77806a | #7a826b |
+| Canvas | #0a0a0c | #f3f4f8 |
+| Surface | #141418 | #ffffff |
+| Nested surface | #1c1c22 | #f7f8fc |
+| Selected surface | #25252e | #e6e9fb |
+| Main text | #f4f4f5 | #111827 |
+| Secondary text | #a1a1aa | #626a79 |
+| Accent (fills, buttons) | #7c3aed | #4157e0 |
+| Accent text | #a78bfa | #3347c9 |
+| Accent ink | #ffffff | #ffffff |
+| Structural border | #2a2a32 | #e5e7f0 |
+| Control boundary | #71717a | #7e86a0 |
 
-Dark is the new web default; retain Light and System options and existing saved preference. Status colours are restrained sage/ochre, with red reserved for errors/destructive actions. Pair every status with a label. Readable status/tint and chart tokens live in the token files. Structural borders are decorative; control boundaries and focus rings must remain perceivable.
+Dark is the web default; retain Light and System options and the saved preference. Status colours are emerald (success), amber (warning) and red (errors and destructive actions), as in the original palette. Pair every status with a label. Readable status/tint and chart tokens live in the token files; `--highlight-gradient` (orange to fuchsia to violet) is available for a selected-item highlight. Structural borders are decorative; control boundaries and focus rings must remain perceivable.
 
 ## Rhythm and components
 - Plus Jakarta Sans, locally packaged. Body 14–16px/1.6; page headings 28px/600 with -.045em tracking; card headings 16px/600; KPI 36px/600 with tabular numbers. Homepage retains its larger expressive display scale.
 - 4/8px spacing grid. Cards 18px radius, controls 10px radius, labelled status tags 6px radius. Cards have 20–24px padding and 16–24px gaps. Flat surface layers with strokes; no decorative shadows, gradients or glows.
-- Workspace sidebar 240px; sticky header 72px with modest blur. Navigation uses a quiet selected surface and citron text, and aria-current. Mobile navigation remains a keyboard-operable sheet.
+- Workspace sidebar 240px; sticky header 72px with modest blur. Navigation uses a quiet selected surface and accent text, and aria-current. Mobile navigation remains a keyboard-operable sheet.
 - Buttons and ordinary form controls use 44px minimum height. Primary fills use accent with accent ink; secondary controls use surface and the control-boundary token. Clear hover, pressed, focus, pending, disabled and error states.
 - Rings use 7px strokes and 400ms ease-out; honour reduced motion. The homepage example ring has no centre arrow. Real scores keep their central values and explanations. Segmented gauges, legends and charts use labelled semantic tokens.
 - Popovers, sheets, dialogs, empty/error/loading states, tables, roadmap, tracker, quiz and extension share these surfaces. Keep useful density for data screens; do not turn them into marketing layouts.
@@ -58,10 +59,10 @@ The homepage language, tuned for data screens. Tokens do not change; the classes
 
 Scale: page title 30/38, 36/44 from 900px; section title 22/30; section rhythm 32px, 40px from 1024px; panels 24px, 28px from 640px. Keep data density: the app has no marketing hero, no call-to-action band and no 104px header. Status is never colour alone. Separate with hairlines instead of nested bordered boxes. Hover styles apply only to fine pointers (`@media (hover:hover) and (pointer:fine)`); the one-time reveal (`useReveal`) is limited to read-only overview sections and is skipped under reduced motion.
 
-## Terrain accents (colour on data screens)
-The olive base is kept, and six earthy hues sit on top of it so score screens are not one grey-green: citron, sage, teal, ochre, clay and plum (`--hue-*` and `--hue-*-text` in both `design-tokens.css` files, which stay identical). Fills and rings meet 3:1 and the `-text` variants meet 4.5:1 on the surface in both themes.
+## Accent hues (colour on data screens)
+Six hues from the original palette sit on top of the violet base so score screens are not one colour: violet, indigo, emerald, amber, rose and fuchsia (`--hue-*` and `--hue-*-text` in both `design-tokens.css` files, which stay identical). Fills and rings meet 3:1 and the `-text` variants meet 4.5:1 on the surface in both themes (checked with a script on 2026-10-09).
 
 - Set one `hue-<name>` class, then use `tint-card` (soft gradient wash, hue border and 3px top rule), `hue-chip`, `hue-dot`, `hue-bar`, `hue-rule`, `hue-inset` or `hue-text` from `app/app-style.css`. This is the one place a gradient is allowed; other surfaces stay flat.
-- Meaning first: readiness ring and card follow the band (ready sage, developing ochre, not ready clay); coverage is teal; verified skills and milestones are citron; role fit is plum; skill gaps use a clay rule with the estimated gain in sage.
-- The five score components keep the same order and hue everywhere (`GAUGE_HUES`): citron, sage, teal, ochre, clay.
+- Meaning first: the readiness ring and card follow the band (ready emerald, developing amber, not ready rose); coverage is indigo; verified skills and milestones are violet; role fit is fuchsia; skill gaps use a rose rule with the estimated gain in emerald.
+- The five score components keep the same order and hue everywhere (`GAUGE_HUES`): violet, emerald, fuchsia, amber, rose.
 - Colour never carries meaning alone: every status keeps its text label.

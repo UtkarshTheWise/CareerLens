@@ -1,46 +1,48 @@
-/* Carbon & Citron. Keep web and extension token files identical. */
+/* Indigo & Violet on black. Keep web and extension token files identical. */
 :root {
   color-scheme: light;
-  --bg: #f2f0e6; --surface: #faf9f3; --surface-2: #e9eadc; --surface-3: #dde2cb;
-  --border: #d2d6c4; --control: #7a826b; --text: #1c2115; --muted: #606650;
-  --primary: #535f32; --primary-soft: #dde2cb; --primary-deep: #343f24;
-  --primary-text: #485528; --on-primary: #faf9f3; --chip-text: #343f24;
-  --data-1: #426346; --data-2: #6c7042; --data-3: #a9b48d;
-  --success: #426346; --warning: #84661f; --danger: #ad3d40; --tag: #e2dbb7;
-  --success-readable: #365639; --warning-readable: #705719; --danger-readable: #a03437;
-  --success-tint: #e4ecdd; --warning-tint: #eee6cc; --danger-tint: #f4e3df;
-  --code-warm: #775324; --overlay: rgb(12 14 12 / .65);
+  --bg: #f3f4f8; --surface: #ffffff; --surface-2: #f7f8fc; --surface-3: #e6e9fb;
+  --border: #e5e7f0; --control: #7e86a0; --text: #111827; --muted: #6b7280;
+  --primary: #4157e0; --primary-soft: #d6dbff; --primary-deep: #2e2a9e;
+  --primary-text: #3347c9; --on-primary: #ffffff; --chip-text: #2e2a9e;
+  --data-1: #0b6b4f; --data-2: #0e9f6e; --data-3: #a7f0d2;
+  --success: #12a150; --warning: #f5a524; --danger: #e5484d; --tag: #fde047;
+  --success-readable: #087a39; --warning-readable: #8b5900; --danger-readable: #b42332;
+  --success-tint: #ecfdf3; --warning-tint: #fff7df; --danger-tint: #fff1f2;
+  --code-warm: #92400e; --overlay: rgb(10 10 12 / .55);
   --radius-card: 18px; --radius-control: 10px; --shadow-card: none;
-  --font-body: "Plus Jakarta Sans", sans-serif; --muted-readable: var(--muted);
-  --design-shadow-card: var(--shadow-card); --chart-grid: var(--border); --chart-axis: var(--muted);
+  --font-body: "Plus Jakarta Sans", sans-serif; --muted-readable: #626a79;
+  --design-shadow-card: var(--shadow-card); --chart-grid: var(--border); --chart-axis: var(--muted-readable);
   --ease: cubic-bezier(.22,1,.36,1); --duration: 220ms;
+  --highlight-gradient: linear-gradient(135deg, #f97316 0%, #c026d3 55%, #6d28d9 100%);
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #0c0e0c; --surface: #151914; --surface-2: #1e241b; --surface-3: #262e21;
-  --border: #333b2e; --control: #77806a; --text: #f2f0e6; --muted: #a6ad9e;
-  --primary: #d1d59c; --primary-soft: #333d27; --primary-deep: #899568;
-  --primary-text: #d1d59c; --on-primary: #1c2115; --chip-text: #d1d59c;
-  --data-1: #c0d4a9; --data-2: #a8b687; --data-3: #77856a;
-  --success: #c0d4a9; --warning: #c5b996; --danger: #ad3d40; --tag: #3e3926;
-  --success-readable: #c0d4a9; --warning-readable: #d2c4a2; --danger-readable: #eeb4ab;
-  --success-tint: #253020; --warning-tint: #332e21; --danger-tint: #35221f;
-  --code-warm: #d2c4a2;
+  --bg: #0a0a0c; --surface: #141418; --surface-2: #1c1c22; --surface-3: #25252e;
+  --border: #2a2a32; --control: #71717a; --text: #f4f4f5; --muted: #a1a1aa;
+  --primary: #7c3aed; --primary-soft: #2a2150; --primary-deep: #5b21b6;
+  --primary-text: #a78bfa; --on-primary: #ffffff; --chip-text: #c4b5fd;
+  --data-1: #34d399; --data-2: #10b981; --data-3: #065f46;
+  --success: #34d399; --warning: #f5a524; --danger: #e5484d; --tag: #facc15;
+  --success-readable: #6ee7b7; --warning-readable: #fcd34d; --danger-readable: #fda4af;
+  --success-tint: #103329; --warning-tint: #342a15; --danger-tint: #351c24;
+  --code-warm: #fcd34d; --muted-readable: #a1a1aa;
 }
-/* Terrain accents: earthy hues that sit with citron and olive. -text variants meet 4.5:1 on the surface. */
+/* Accent hues for data screens: violet, indigo, emerald, amber, rose and fuchsia, all from the original palette.
+   -text variants meet 4.5:1 on the surface, fills meet 3:1. */
 :root {
-  --hue-citron: #7f8e2c; --hue-citron-text: #535f32;
-  --hue-sage: #4f8f4a; --hue-sage-text: #2f6b34;
-  --hue-teal: #2f8f84; --hue-teal-text: #1f6b62;
-  --hue-ochre: #b87a10; --hue-ochre-text: #7d5710;
-  --hue-clay: #c9573a; --hue-clay-text: #a23f26;
-  --hue-plum: #7b6bb8; --hue-plum-text: #5a4a98;
+  --hue-violet: #7c3aed; --hue-violet-text: #5b21b6;
+  --hue-indigo: #4157e0; --hue-indigo-text: #2e2a9e;
+  --hue-emerald: #0e9f6e; --hue-emerald-text: #087a39;
+  --hue-amber: #d97706; --hue-amber-text: #8b5900;
+  --hue-rose: #e5484d; --hue-rose-text: #b42332;
+  --hue-fuchsia: #c026d3; --hue-fuchsia-text: #86198f;
 }
 :root[data-theme="dark"] {
-  --hue-citron: #d1d59c; --hue-citron-text: #d1d59c;
-  --hue-sage: #9fcf8f; --hue-sage-text: #9fcf8f;
-  --hue-teal: #7cc4b4; --hue-teal-text: #7cc4b4;
-  --hue-ochre: #e3b765; --hue-ochre-text: #e3b765;
-  --hue-clay: #e08d6f; --hue-clay-text: #eba48a;
-  --hue-plum: #b7a9e6; --hue-plum-text: #b7a9e6;
+  --hue-violet: #a78bfa; --hue-violet-text: #a78bfa;
+  --hue-indigo: #818cf8; --hue-indigo-text: #a5b4fc;
+  --hue-emerald: #34d399; --hue-emerald-text: #6ee7b7;
+  --hue-amber: #fbbf24; --hue-amber-text: #fcd34d;
+  --hue-rose: #fb7185; --hue-rose-text: #fda4af;
+  --hue-fuchsia: #e879f9; --hue-fuchsia-text: #f0abfc;
 }

@@ -12,7 +12,7 @@ export function KpiCard({
   hue,
 }: {
   label: string;
-  hue?: "citron" | "sage" | "teal" | "ochre" | "clay" | "plum";
+  hue?: "violet" | "emerald" | "indigo" | "amber" | "rose" | "fuchsia";
   value: ReactNode;
   icon: LucideIcon;
   delta?: {

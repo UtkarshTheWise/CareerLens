@@ -98,12 +98,12 @@
 }
 
 /* Accent hues (design-tokens.css "Terrain accents"). Set one hue class, then use the helpers below it. */
-.hue-citron { --hue: var(--hue-citron); --hue-text: var(--hue-citron-text); }
-.hue-sage { --hue: var(--hue-sage); --hue-text: var(--hue-sage-text); }
-.hue-teal { --hue: var(--hue-teal); --hue-text: var(--hue-teal-text); }
-.hue-ochre { --hue: var(--hue-ochre); --hue-text: var(--hue-ochre-text); }
-.hue-clay { --hue: var(--hue-clay); --hue-text: var(--hue-clay-text); }
-.hue-plum { --hue: var(--hue-plum); --hue-text: var(--hue-plum-text); }
+.hue-violet { --hue: var(--hue-violet); --hue-text: var(--hue-violet-text); }
+.hue-emerald { --hue: var(--hue-emerald); --hue-text: var(--hue-emerald-text); }
+.hue-indigo { --hue: var(--hue-indigo); --hue-text: var(--hue-indigo-text); }
+.hue-amber { --hue: var(--hue-amber); --hue-text: var(--hue-amber-text); }
+.hue-rose { --hue: var(--hue-rose); --hue-text: var(--hue-rose-text); }
+.hue-fuchsia { --hue: var(--hue-fuchsia); --hue-text: var(--hue-fuchsia-text); }
 
 .tint-card { background: linear-gradient(165deg, color-mix(in srgb, var(--hue) 15%, var(--surface)) 0%, var(--surface) 70%); border: 1px solid color-mix(in srgb, var(--hue) 30%, var(--border)); border-top: 3px solid var(--hue); }
 .tint-card .panel-label { color: var(--hue-text); border-bottom-color: color-mix(in srgb, var(--hue) 26%, var(--border)); }

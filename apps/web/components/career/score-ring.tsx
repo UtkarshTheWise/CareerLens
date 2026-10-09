@@ -16,14 +16,14 @@ export function ScoreRing({
   explanation?: ReactNode;
   size?: number;
   /** A fixed accent for rings that are not a readiness band, such as coverage. */
-  hue?: "citron" | "sage" | "teal" | "ochre" | "clay" | "plum";
+  hue?: "violet" | "emerald" | "indigo" | "amber" | "rose" | "fuchsia";
 }) {
   const reduced = useReducedMotion();
   const compact = size < 120;
   const valid =
     value !== null && Number.isFinite(value) && value >= 0 && value <= 100;
   const circumference = 2 * Math.PI * 58;
-  const bandHue = band === "ready" ? "sage" : band === "developing" ? "ochre" : band === "not_ready" ? "clay" : "citron";
+  const bandHue = band === "ready" ? "emerald" : band === "developing" ? "amber" : band === "not_ready" ? "rose" : "violet";
   const color = `var(--hue-${hue ?? bandHue})`;
   const textColor = `var(--hue-${hue ?? bandHue}-text)`;
   return (

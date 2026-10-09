@@ -57,7 +57,7 @@ export function ReportOverview({
 }) {
   const role = [...report.role_fits].sort((a, b) => b.score - a.score)[0];
   const bandHue =
-    report.score.band === "ready" ? "sage" : report.score.band === "developing" ? "ochre" : "clay";
+    report.score.band === "ready" ? "emerald" : report.score.band === "developing" ? "amber" : "rose";
   const topRef = useReveal<HTMLDivElement>();
   const whyRef = useReveal<HTMLElement>();
   return (
@@ -99,10 +99,10 @@ export function ReportOverview({
             )}
           </div>
         </Panel>
-        <Panel label="Evidence Coverage" className="tint-card hue-teal">
+        <Panel label="Evidence Coverage" className="tint-card hue-indigo">
           <ScoreRing
             value={report.coverage}
-            hue="teal"
+            hue="indigo"
             label="Coverage"
             explanation={
               <WhyPopover
@@ -125,7 +125,7 @@ export function ReportOverview({
               : number(verifiedSkills)
           }
           icon={BadgeCheck}
-          hue="citron"
+          hue="violet"
           explanation={
             <div className="space-y-3 text-xs text-muted-readable">
               <p>
@@ -143,11 +143,11 @@ export function ReportOverview({
             </div>
           }
         />
-        <Panel label="Top role fit" className="tint-card hue-plum">
+        <Panel label="Top role fit" className="tint-card hue-fuchsia">
           {role ? (
             <div className="space-y-3">
               <p className="text-sm font-medium">{role.role_name}</p>
-              <ScoreRing value={role.score} hue="plum" label="Role fit" size={144} />
+              <ScoreRing value={role.score} hue="fuchsia" label="Role fit" size={144} />
               <RoleReasons role={role} />
             </div>
           ) : (

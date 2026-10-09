@@ -38,7 +38,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | I5 | `/extension` install page + zip, Settings "your own AI key" (BYOK headers), prod push | done | see git log | extension itself has no key field yet (follow-up) |
 
 ## In-progress detail
-- **I7 follow-up (2026-10-09):** hotfix `fix(web): Button asChild crashed without trailingArrow` (Slot got a child plus null; screens with `<Button asChild>` and no arrow threw) and a clear 404 state for a missing report; then a colour pass (terrain accent tokens in both `design-tokens.css`, `tint-card`/`hue-*` classes, rings/gauge/KPI/report/dashboard). Not verified: light theme rendering, phone width.
+- **I7 follow-up (2026-10-09):** hotfix `fix(web): Button asChild crashed without trailingArrow` + a clear 404 state for a missing report; then the colour pass. On the owner's request the olive Carbon & Citron colours were reverted to the original indigo (light) / violet on black (dark) palette; layout, type, motion and the gradient `tint-card` boxes on the report/dashboard were kept. Accent hues are now violet, indigo, emerald, amber, rose, fuchsia (`--hue-*` in both `design-tokens.css`). Checked with a CDP screenshot script at 1440px and 390px (mobile emulation) in light and dark: no horizontal page overflow; contrast script: 0 failures. Not verified: tracker/quiz/settings/install screens in light mode beyond the tracker, extension UI in a browser.
 - **Stubbed / nothing half-built for I7.** New web files: `lib/resume-builder.ts`, `components/onboarding/resume-builder.tsx`, `lib/cohort-filters.ts`, `app/app-style.css`, `components/layout/page.tsx`, `lib/use-reveal.ts`.
 - **Files touched, not finished:** —
 - **What works right now:** —
