@@ -11,8 +11,8 @@ Keep under ~150 lines. Commit it together with the code it describes.
 - **Track:** integration · **Owns:** wiring + drift fixes across the repo (Phase 3 only)
 - **Branch / worktree:** `integration` · worktree `../careerlens-integration` (no deny rules; the backend worktree denies apps/web and apps/extension)
 - **Last updated:** 2026-10-08 Claude Code (Sonnet 5.5)
-- **Current task:** I5 (extension install page, bring-your-own AI key) done on `integration`, ready to fast-forward to `main`. Before that, I1-I4 done: merge, baseline, smoke test, Google sign-in (web + extension), independent review and its fixes. Waiting on the human for Supabase/Google values and the manual checks, then fast-forward `main` to `integration`.
-- **State:** done   <!-- not started | in progress | blocked | done -->
+- **Current task:** I7 IN PROGRESS: (a) homepage style across the app, (b) in-app resume builder (plain-text upload), (c) cohort skill filters. Plan file: ~/.claude/plans/wild-nibbling-feather.md (summary in docs/handoff/integration.md). integration was fast-forwarded to origin/frontend/codex (f506ed2) first.
+- **State:** in progress   <!-- not started | in progress | blocked | done -->
 - **Last green checks:** 2026-10-08, integration worktree (Node 22.16.0, pnpm 10.12.3): backend 683 tests / ruff / `check_contract.py` 29/29 · `apps/api/scripts/smoke_e2e.py` 499 checks (dev + token mode) · web lint, typecheck, build (also configured), native tests incl. ai-key · extension typecheck, build, 24 tests
 
 ## Resume here (exact next step)
