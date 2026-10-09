@@ -418,6 +418,36 @@ def walk(mode: str, base: str, secure: bool) -> None:
         query={"role_id": "sde-backend", "at_risk_only": "true"},
     ).json()
     check(students and all(s["at_risk"] for s in students), "the at-risk filter works")
+    best = staff.call(
+        "listCohortStudents",
+        path={"cohort_id": cid},
+        query={"role_id": "sde-backend", "skill": ["python"], "min_level": "strong", "sort": "score_desc",
+               "limit": 2},
+    ).json()  # fmt: skip
+    check(
+        0 < len(best) <= 2 and [s["score"] for s in best] == sorted((s["score"] for s in best), reverse=True),
+        "skill + evidence + sort + limit returns the best students first, at most two",
+    )
+    check(
+        all(m["skill_id"] == "python" and m["level"] == "strong" for s in best for m in s["matched_skills"])
+        and all(s["matched_skills"] for s in best),
+        "each student shown carries the evidence that matched the skill filter",
+    )
+    filtered_csv = staff.call(
+        "exportCohort",
+        path={"cohort_id": cid},
+        query={"role_id": "sde-backend", "skill": ["python"], "min_level": "strong", "sort": "score_desc",
+               "limit": 2},
+    )  # fmt: skip
+    check(
+        filtered_csv.text.strip().count("\n") == len(best), "the CSV export applies the same filters"
+    )
+    staff.call(
+        "listCohortStudents",
+        422,
+        path={"cohort_id": cid},
+        query={"role_id": "sde-backend", "skill": ["not-a-skill"]},
+    )
     csv = staff.call("exportCohort", path={"cohort_id": cid}, query={"role_id": "sde-backend"})
     check(
         csv.headers["content-type"].startswith("text/csv") and csv.text.count("\n") >= 40,
@@ -436,6 +466,34 @@ def walk(mode: str, base: str, secure: bool) -> None:
         other.call("getAnalysis", 404, path={"analysis_id": started["id"]})
         other.call("getQuiz", 404, path={"quiz_id": practice["id"]})
         check(True, "another user cannot read this student's profile, analysis or quiz")
+    print("a resume built in the app (plain text)")
+    built = (
+        "Smoke Student\nsmoke@example.com | +91 98765 43210\n\nSKILLS\nPython, SQL\n\n"
+        "PROJECTS\nCampus API\nA REST API for hostel requests built with FastAPI.\n"
+    )
+    student.call(
+        "uploadDocument",
+        422,
+        path={"profile_id": pid},
+        data={"kind": "resume"},
+        files={"file": ("resume.txt", bytes(range(32)) * 4)},
+    )
+    uploaded = student.call(
+        "uploadDocument",
+        200,
+        path={"profile_id": pid},
+        data={"kind": "resume"},
+        files={"file": ("resume.txt", built.encode())},
+    ).json()
+    check(uploaded["has_resume"] is True, "a plain-text resume built in the app is accepted")
+    built_run = student.call(
+        "startAnalysis", 202, path={"profile_id": pid}, body={"role_id": "sde-backend"}
+    ).json()
+    check(
+        poll_analysis(student, built_run["id"])["status"] == "done",
+        "a plain-text resume is analysed like a PDF",
+    )
+
     student.call("deleteProfile", 204, path={"profile_id": pid})
 
 

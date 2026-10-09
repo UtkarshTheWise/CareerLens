@@ -10,7 +10,9 @@ import csv
 import io
 import statistics
 from collections import defaultdict
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
+from typing import Literal
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -27,6 +29,7 @@ from app.schemas.api import (
     DepartmentStat,
     EvidenceLevel,
     HistogramBucket,
+    MatchedSkill,
     MissingSkillCount,
     ProjectAudit,
     SkillClaim,
@@ -43,6 +46,14 @@ TOP_N = 10
 MIN_CLAIMANTS = 2  # a rate over a single student says nothing about the cohort
 VERIFIED = {EvidenceLevel.strong, EvidenceLevel.moderate}
 UNBACKED = {EvidenceLevel.weak, EvidenceLevel.unverified}
+LEVEL_RANK = {
+    EvidenceLevel.missing: 0,
+    EvidenceLevel.unverified: 1,
+    EvidenceLevel.weak: 2,
+    EvidenceLevel.moderate: 3,
+    EvidenceLevel.strong: 4,
+}
+StudentSort = Literal["score_asc", "score_desc", "coverage_desc", "name"]
 BUCKETS = [f"{lo}-{lo + 9}" for lo in range(0, 90, 10)] + ["90-100"]
 
 
@@ -246,10 +257,66 @@ def aggregate(
 # ---------------------------------------------------------------- students and export
 
 
-def students(rows: list[Row], *, at_risk_only: bool = False) -> list[CohortStudent]:
-    """Weakest first, so the students who need help are at the top."""
-    picked = [r for r in rows if r.at_risk or not at_risk_only]
-    picked.sort(key=lambda r: (r.score, r.profile.name, r.profile.id))
+@dataclass(frozen=True)
+class StudentQuery:
+    """Filters for the student list (docs/SCORING.md section 8). Defaults reproduce the unfiltered list."""
+
+    at_risk_only: bool = False
+    skills: tuple[str, ...] = ()
+    skill_match: Literal["all", "any"] = "all"
+    min_level: EvidenceLevel = EvidenceLevel.moderate  # moderate = strong or moderate evidence
+    min_score: float | None = None
+    bands: frozenset[Band] = frozenset()
+    sort: StudentSort = "score_asc"
+    limit: int | None = None
+
+
+def matched_skills(row: Row, skills: Sequence[str], min_level: EvidenceLevel) -> list[MatchedSkill]:
+    """The requested skills this student has at `min_level` or better, in request order.
+
+    Only skills the role requires or the student claims have a claim row, so any other id never matches.
+    """
+    by_id = {c.skill_id: c for c in row.claims}
+    found = []
+    for skill_id in skills:
+        claim = by_id.get(skill_id)
+        if claim is not None and LEVEL_RANK[claim.level] >= LEVEL_RANK[min_level]:
+            found.append(MatchedSkill(skill_id=skill_id, skill_name=claim.skill_name, level=claim.level))
+    return found
+
+
+def _passes(row: Row, query: StudentQuery, matched: list[MatchedSkill]) -> bool:
+    if query.at_risk_only and not row.at_risk:
+        return False
+    if query.min_score is not None and row.score < query.min_score:
+        return False
+    if query.bands and row.band not in query.bands:
+        return False
+    if query.skills:
+        needed = len(query.skills) if query.skill_match == "all" else 1
+        if len(matched) < needed:
+            return False
+    return True
+
+
+def _sort_key(sort: StudentSort) -> Callable[[Row], tuple]:
+    if sort == "score_desc":
+        return lambda r: (-r.score, r.profile.name, r.profile.id)
+    if sort == "coverage_desc":
+        return lambda r: (-r.coverage, -r.score, r.profile.name, r.profile.id)
+    if sort == "name":
+        return lambda r: (r.profile.name.casefold(), r.profile.id)
+    return lambda r: (r.score, r.profile.name, r.profile.id)  # score_asc: weakest first, the default
+
+
+def students(rows: list[Row], query: StudentQuery = StudentQuery()) -> list[CohortStudent]:
+    """Filtered, sorted, limited. Weakest first by default, so the students who need help are at the top."""
+    skills = tuple(dict.fromkeys(query.skills))  # request order, no repeats
+    matches = {r.profile.id: matched_skills(r, skills, query.min_level) for r in rows}
+    picked = [r for r in rows if _passes(r, query, matches[r.profile.id])]
+    picked.sort(key=_sort_key(query.sort))
+    if query.limit is not None:
+        picked = picked[: query.limit]
     return [
         CohortStudent(
             profile_id=r.profile.id,
@@ -263,6 +330,7 @@ def students(rows: list[Row], *, at_risk_only: bool = False) -> list[CohortStude
             top_gap=r.gaps[0].skill_name if r.gaps else None,
             at_risk=r.at_risk,
             understanding=r.understanding,
+            matched_skills=matches[r.profile.id],
         )
         for r in picked
     ]
@@ -270,7 +338,7 @@ def students(rows: list[Row], *, at_risk_only: bool = False) -> list[CohortStude
 
 CSV_COLUMNS = [
     "profile_id", "name", "github_username", "department", "score", "band", "coverage", "top_gap", "at_risk",
-    "understanding",
+    "understanding", "matched_skills",
 ]  # fmt: skip
 
 
@@ -286,5 +354,7 @@ def to_csv(rows: list[CohortStudent]) -> str:
     writer.writerow(CSV_COLUMNS)
     for s in rows:
         data = s.model_dump(mode="json")
+        matched = data["matched_skills"]
+        data["matched_skills"] = "; ".join(f"{m['skill_name']} ({m['level']})" for m in matched)
         writer.writerow([_safe(data[c]) for c in CSV_COLUMNS])
     return out.getvalue()

@@ -30,7 +30,7 @@ class ExtractedDocument:
 
 
 def _plain_text(filename: str | None, data: bytes) -> str | None:
-    """A resume built in the app, sent as resume.txt. Only a *.txt name, strict UTF-8, no control characters."""
+    """A resume built in the app, sent as resume.txt: a *.txt name, strict UTF-8, no control characters."""
     if not (filename or "").lower().endswith(".txt"):
         return None
     try:
@@ -97,7 +97,7 @@ def extract_text(filename: str | None, data: bytes) -> ExtractedDocument:
         if kind == "text":
             text = _plain_text(filename, data) or ""
             if len(text) > MAX_TEXT_CHARS:
-                raise ApiError(422, "unsupported_file", "This text resume is too long; a resume is a few pages.")
+                raise ApiError(422, "unsupported_file", "This text resume is too long for a resume.")
             doc = ExtractedDocument(text, None)
         else:
             doc = _pdf_text(data) if kind == "pdf" else _docx_text(data)

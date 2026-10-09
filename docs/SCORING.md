@@ -189,4 +189,10 @@ For a cohort and a target role:
 - median readiness by department (`by_department[]`) when departments are set
 - CSV export of the above
 
+**Finding students** (`listCohortStudents`, `exportCohort`; for a company asking "2 students with a good score who have skill X"). All filters are optional and combine with AND; with none, the list is as before (weakest first).
+
+- `skill` (repeat, max 10) with `min_level` (default `moderate`): a student matches a skill when the evidence level for the chosen role is at least `min_level`, so the default means `strong` or `moderate`. `skill_match=all|any`. Only skills the role requires or the student claims have a level, so other skills never match. The reason a student matched is returned in `matched_skills[]`.
+- `min_score`, `band` (repeat), `at_risk_only`.
+- `sort` = `score_asc` (default) | `score_desc` | `coverage_desc` | `name`; `limit` applies after filtering and sorting.
+
 All computed in SQL / Python from stored analyses; no LLM.

@@ -654,6 +654,12 @@ class CohortInsights(ApiModel):
     by_department: list[DepartmentStat] = Field(default_factory=list)
 
 
+class MatchedSkill(ApiModel):
+    skill_id: str
+    skill_name: str
+    level: EvidenceLevel
+
+
 class CohortStudent(ApiModel):
     profile_id: UUID
     name: str
@@ -666,3 +672,4 @@ class CohortStudent(ApiModel):
     top_gap: str | None = None
     at_risk: bool
     understanding: Understanding | None = None
+    matched_skills: list[MatchedSkill] = Field(default_factory=list)

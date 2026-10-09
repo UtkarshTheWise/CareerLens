@@ -36,6 +36,9 @@ Build and load: `pnpm --filter extension build`, then `chrome://extensions` → 
 - [ ] **LinkedIn job page** (a single selected job, not the feed or a profile): same. Profiles and unselected listings are refused on purpose.
 - [ ] Tailor (P2): from the web tracker, "Tailor resume" on a saved job with a description: bullets stay the student's own words, unsupported numbers are listed, nothing is invented. (CLI: `tailorResume`, rewrites that add a skill or number are rejected.)
 
+- [ ] Build a resume in the app: onboarding step 1, choose "Build it here", add a name, contact, a few skills from the suggestions, one project; the analysis starts from the generated text.
+- [ ] Placement cell, "Find students": pick `Python` with strong or moderate evidence, minimum score 65, best first, show 2; the table shows the matched evidence and the CSV export has the same rows.
+
 ## Say it out loud
 
 - A weak quiz result never means "you didn't build this". The flag is `understanding_gap`, the copy says "not demonstrated yet", skipping a quiz never lowers a score.

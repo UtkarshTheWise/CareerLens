@@ -1,5 +1,6 @@
 import csv
 import io
+from pathlib import Path
 from uuid import NAMESPACE_DNS, uuid4, uuid5
 
 from app.db import models
@@ -182,7 +183,80 @@ def test_students_are_weakest_first_and_filterable():
     assert everyone[0].top_gap == "CI/CD" and everyone[1].top_gap is None
     assert everyone[2].understanding == Understanding.demonstrated
     assert everyone[5].understanding == Understanding.not_taken
-    assert [s.name for s in cohorts.students(rows, at_risk_only=True)] == ["A", "B", "C", "E"]
+    assert [s.name for s in cohorts.students(rows, cohorts.StudentQuery(at_risk_only=True))] == [
+        "A", "B", "C", "E",
+    ]  # fmt: skip
+
+
+# ---------------------------------------------------------------- finding students (filters)
+
+
+def finder_rows() -> list[cohorts.Row]:
+    return [
+        row("Asha", 82, claims=[claim("python", "strong"), claim("docker", "strong")]),
+        row("Bela", 71, claims=[claim("python", "strong"), claim("docker", "moderate")]),
+        row("Chen", 90, claims=[claim("python", "moderate"), claim("docker", "weak")]),
+        row("Dev", 40, claims=[claim("python", "strong"), claim("docker", "unverified")]),
+        row("Esha", 66, claims=[claim("docker", "strong")]),
+        row("Farid", 55),  # no claims at all
+    ]
+
+
+def names(found) -> list[str]:
+    return [s.name for s in found]
+
+
+def test_skill_filter_needs_verified_evidence_by_default():
+    found = cohorts.students(finder_rows(), cohorts.StudentQuery(skills=("docker",)))
+    assert names(found) == ["Esha", "Bela", "Asha"]  # strong or moderate; weakest score first
+    assert {s.name: [m.level for m in s.matched_skills] for s in found}["Bela"] == [EvidenceLevel.moderate]
+
+
+def test_min_level_widens_or_narrows_the_match():
+    strong = cohorts.StudentQuery(skills=("docker",), min_level=EvidenceLevel.strong)
+    assert names(cohorts.students(finder_rows(), strong)) == ["Esha", "Asha"]
+    weak = cohorts.StudentQuery(skills=("docker",), min_level=EvidenceLevel.weak)
+    assert names(cohorts.students(finder_rows(), weak)) == ["Esha", "Bela", "Asha", "Chen"]
+    unverified = cohorts.StudentQuery(skills=("docker",), min_level=EvidenceLevel.unverified)
+    assert names(cohorts.students(finder_rows(), unverified)) == ["Dev", "Esha", "Bela", "Asha", "Chen"]
+
+
+def test_skill_match_all_vs_any():
+    both = cohorts.StudentQuery(skills=("python", "docker"))
+    assert names(cohorts.students(finder_rows(), both)) == ["Bela", "Asha"]  # Chen's docker is only weak
+    either = cohorts.StudentQuery(skills=("python", "docker"), skill_match="any")
+    assert names(cohorts.students(finder_rows(), either)) == ["Dev", "Esha", "Bela", "Asha", "Chen"]
+    only = cohorts.students(finder_rows(), cohorts.StudentQuery(skills=("python", "docker")))
+    assert [m.skill_id for m in only[0].matched_skills] == ["python", "docker"]  # request order
+
+
+def test_a_skill_nobody_has_matches_nobody():
+    assert cohorts.students(finder_rows(), cohorts.StudentQuery(skills=("terraform",))) == []
+
+
+def test_min_score_band_sort_and_limit():
+    rows = finder_rows()
+    assert names(cohorts.students(rows, cohorts.StudentQuery(min_score=66))) == ["Esha", "Bela", "Asha", "Chen"]
+    ready = cohorts.StudentQuery(bands=frozenset({Band.ready}))
+    assert names(cohorts.students(rows, ready)) == ["Asha", "Chen"]
+    assert names(cohorts.students(rows, cohorts.StudentQuery(sort="score_desc"))) == [
+        "Chen", "Asha", "Bela", "Esha", "Farid", "Dev",
+    ]  # fmt: skip
+    assert names(cohorts.students(rows, cohorts.StudentQuery(sort="name"))) == [
+        "Asha", "Bela", "Chen", "Dev", "Esha", "Farid",
+    ]  # fmt: skip
+    assert names(cohorts.students(rows, cohorts.StudentQuery(sort="coverage_desc", limit=2))) == ["Chen", "Asha"]
+
+
+def test_company_asks_for_two_good_students_with_a_skill():
+    query = cohorts.StudentQuery(skills=("docker",), min_score=65, sort="score_desc", limit=2)
+    found = cohorts.students(finder_rows(), query)
+    assert names(found) == ["Asha", "Bela"]
+    assert all(s.score >= 65 and s.matched_skills for s in found)
+
+
+def test_matched_skills_is_empty_without_a_skill_filter():
+    assert all(s.matched_skills == [] for s in cohorts.students(finder_rows()))
 
 
 def test_csv_has_a_header_one_row_per_student_and_neutralises_formulas():
@@ -277,6 +351,73 @@ def test_students_route_sorts_weakest_first_and_filters_at_risk(client):
         f"/v1/cohorts/{cid}/students", params={"role_id": "sde-backend", "at_risk_only": "true"}
     ).json()
     assert [s["name"] for s in risky] == [s["name"] for s in students if s["at_risk"]]
+
+
+def test_students_route_filters_by_repeated_skills_score_and_limit(client):
+    cid = _cohort()
+    path = f"/v1/cohorts/{cid}/students"
+    both = client.get(path, params=[("role_id", "sde-backend"), ("skill", "python"), ("skill", "docker")]).json()
+    assert [s["name"] for s in both] == ["Strong Student"]
+    assert [(m["skill_id"], m["level"]) for m in both[0]["matched_skills"]] == [
+        ("python", "strong"), ("docker", "strong"),
+    ]  # fmt: skip
+    top = client.get(
+        path, params={"role_id": "sde-backend", "sort": "score_desc", "limit": 1, "min_score": 0}
+    ).json()
+    assert [s["name"] for s in top] == ["Strong Student"]
+    nobody = client.get(path, params={"role_id": "sde-backend", "skill": "kubernetes"}).json()
+    assert nobody == []  # kubernetes is only an unverified claim
+    weak_ok = client.get(
+        path, params={"role_id": "sde-backend", "skill": "kubernetes", "min_level": "unverified"}
+    ).json()
+    assert [s["name"] for s in weak_ok] == ["Strong Student"]
+    bands = client.get(path, params=[("role_id", "sde-backend"), ("band", "not_ready")]).json()
+    assert all(s["band"] == "not_ready" for s in bands)
+
+
+def test_students_route_rejects_bad_filters(client):
+    cid = _cohort()
+    path = f"/v1/cohorts/{cid}/students"
+    many = [("role_id", "sde-backend")] + [("skill", "python")] * 11
+    bad = [
+        {"role_id": "sde-backend", "skill": "not-a-skill"},
+        {"role_id": "sde-backend", "min_score": 101},
+        {"role_id": "sde-backend", "limit": 0},
+        {"role_id": "sde-backend", "band": "excellent"},
+        {"role_id": "sde-backend", "sort": "random"},
+        {"role_id": "sde-backend", "min_level": "missing"},
+        many,
+    ]
+    for params in bad:
+        res = client.get(path, params=params)
+        assert res.status_code == 422, params
+        assert_error_shape(res.json())
+
+
+def test_export_route_applies_the_same_filters(client):
+    cid = _cohort()
+    res = client.get(
+        f"/v1/cohorts/{cid}/export", params={"role_id": "sde-backend", "skill": "docker", "limit": 5}
+    )
+    rows = list(csv.DictReader(io.StringIO(res.text)))
+    assert [r["name"] for r in rows] == ["Strong Student"]
+    assert rows[0]["matched_skills"] == "Docker (strong)"
+
+
+def test_filter_params_are_in_the_contract_and_the_app():
+    import yaml
+
+    from app.main import app
+
+    contract = yaml.safe_load((Path(__file__).parents[3] / "contracts" / "openapi.yaml").read_text("utf-8"))
+    for path, op in (("/v1/cohorts/{cohort_id}/students", "get"), ("/v1/cohorts/{cohort_id}/export", "get")):
+        in_contract = set()
+        for param in contract["paths"][path].get("parameters", []):
+            param = contract["components"]["parameters"][param["$ref"].split("/")[-1]] if "$ref" in param else param
+            if param["in"] == "query":
+                in_contract.add(param["name"])
+        in_app = {p["name"] for p in app.openapi()["paths"][path][op].get("parameters", []) if p["in"] == "query"}
+        assert in_contract == in_app, path
 
 
 def test_export_route_returns_a_csv_attachment(client):
