@@ -17,6 +17,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 
 ## Resume here (exact next step)
 <!-- Precise enough for a model with zero context: file, function, what's left, the next command to run. -->
+0. **I7 (owner-requested features), in progress.** DONE and pushed: contract CCR-1/CCR-2 + regenerated client, `.txt` resume ingest, cohort filters + smoke (backend 706 tests, smoke 539 checks), web primitives (`apps/web/app/app-style.css`, `components/layout/page.tsx`, `lib/use-reveal.ts`). IN PROGRESS: four forks restyling screens, building the resume builder and the placement "Find students" filters (plan sections 5-7 in the plan file). Next: `git status` to see their files, then `pnpm --filter web typecheck && pnpm --filter web lint && pnpm --filter web build`, wire new tests (`resume-builder`, `cohort-filters`, and any others that pass) into `apps/web/package.json` `test`, run `pnpm --filter extension typecheck build test`, visual check with `apps/api/tests/e2e_server.py` + `pnpm --filter web dev`, commit per feature, push, then fast-forward `main` (owner approved) and note in `docs/handoff/integration.md` that `frontend/codex` is behind.
 1. Ask the human to follow `docs/AUTH_SETUP.md` (Google Cloud + Supabase), then give you: Supabase URL, anon key, token type (HS256 secret or signing keys), staff emails, deployed web URL. Put them in `apps/web/.env.local`, `apps/extension/.env.local` (rebuild) and the API env (Render). Then the human runs the manual checks in `docs/AUTH_SETUP.md` section 5 and `docs/DEMO_CHECKLIST.md`.
 2. With the human's OK: `cd` to the backend worktree or the integration worktree and fast-forward `main` (`git push origin integration:main` after `git fetch` shows `origin/main` is an ancestor). Update `docs/progress/backend.md` / `frontend.md` only to say integration is done (do not rewrite their history).
 3. Open decisions from the review are listed in `docs/handoff/integration.md` (cohort membership for real students is the important one).
@@ -33,6 +34,7 @@ Keep under ~150 lines. Commit it together with the code it describes.
 | I3 | End-to-end smoke script + demo checklist | done | see git log | green in dev and token mode; found and fixed 3 backend drifts |
 | I4 | Independent review + fixes | done | see git log | 6 fixes + 7 open decisions in docs/handoff/integration.md |
 | I6 | Animated landing page at `/` (Get started -> /login) | done | see git log | `/` is now a bare route in app-shell; respects reduced motion |
+| I7 | Homepage style app-wide, in-app resume builder, cohort skill filters | doing | see git log | contract + backend done; web screens in progress |
 | I5 | `/extension` install page + zip, Settings "your own AI key" (BYOK headers), prod push | done | see git log | extension itself has no key field yet (follow-up) |
 
 ## In-progress detail
